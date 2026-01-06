@@ -11,14 +11,14 @@ export const metadata: Metadata = {
   title: "01 Maktab",
   description: "01 Maktab",
   generator: "01 Maktab",
-  icons: {
-    icon: [
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+  // icons: {
+  //   icon: [
+  //     {
+  //       url: "/icon.svg",
+  //       type: "image/svg+xml",
+  //     },
+  //   ],
+  //   apple: "/apple-icon.png",
   },
 }
 
