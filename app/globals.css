@@ -1,16 +1,17 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "plyr/dist/plyr.css";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.96 0 0);
+  --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -23,12 +24,12 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --radius: 0.75rem;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -75,7 +76,7 @@
 }
 
 @theme inline {
-  --font-sans: "Inter", "Inter Fallback", system-ui, sans-serif;
+  --font-sans: "Geist", "Geist Fallback";
   --font-mono: "Geist Mono", "Geist Mono Fallback";
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -113,6 +114,11 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-base-dark: #18181a;
+  --color-text-dark: #121212;
+  --color-text-gray: #878787;
+  --color-primary-blue: #3361FF;
+  --color-bg-dark: #0A0A0A;
 }
 
 @layer base {
@@ -121,30 +127,43 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-color: #F4F4F6;
   }
+  /* p tag margin override - Tailwind preflight margin: 0 ni bekor qilish */
+  /* p {
+    margin: auto;
+  } */
 }
 
 @layer utilities {
-  .container {
-    width: 100%;
-    max-width: 1440px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
+  .custom-container {
+    @apply mx-auto w-full max-w-7xl px-4 md:px-8 lg:px-12;
   }
-  
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
+  /* .container{
+    @apply mx-auto w-full max-w-[1440px] px-4 md:px-8 lg:px-12 ;
+  } */
+
+ 
+}
+
+.container {
+  max-width: 1400px !important;
+  padding: 0 40px;
+  margin: 0 auto;
+  width: 100%;
+  @media (max-width: 1200px) {
+    padding: 0 20px;
   }
-  
-  @media (min-width: 768px) {
-    .container {
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
+  @media (max-width: 992px) {
+    padding: 0 10px;
   }
+  @media (max-width: 768px) {
+    padding: 0 5px;
+  }
+}
+
+.outer-container {
+  max-width: 1580px;
+  margin: 0 auto;
+  width: 100%;
 }

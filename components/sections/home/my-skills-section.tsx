@@ -1,0 +1,92 @@
+"use client";
+
+import useEmblaCarousel from "embla-carousel-react";
+import { motion } from "framer-motion";
+
+import { SkillCard } from "@/components/cards/skill-card";
+import { CarouselNavigation } from "@/components/ui/carousel-navigation";
+import { MainTitle } from "@/components/ui/main-title";
+import { useCarouselNavigation } from "@/hooks/use-carousel-navigation";
+import { Subtitle } from "@/components/ui/subtitle";
+
+const skills = [
+  {
+    id: 1,
+    image: "/images/skills/1.webp",
+    title: "Python",
+  },
+  {
+    id: 2,
+    image: "/data-science-abstract-pink-paper-fold-3d.jpg",
+    title: "Data Science",
+  },
+  {
+    id: 3,
+    image: "/images/skills/2.webp",
+    title: "SQL",
+  },
+  {
+    id: 4,
+    image: "/python-coding-robot-mechanical-blue-3d.jpg",
+    title: "Prompt Engineering",
+  },
+  {
+    id: 5,
+    image: "/machine-learning-ai-neural-3d.jpg",
+    title: "Machine Learning",
+  },
+];
+
+export function MySkillsSection() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: false,
+    align: "start",
+    slidesToScroll: 2,
+  });
+
+  const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } =
+    useCarouselNavigation(emblaApi);
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="py-8! container"
+    >
+      <MainTitle align="center" className="mt-4 md:mt-6 lg:mt-8" animated>
+        Skillarim
+      </MainTitle>
+      <Subtitle align="center" className="mb-8 md:mb-10 lg:mb-12 mt-4 md:mt-6 lg:mt-8 max-w-2xl mx-auto" animated animationDelay={0.1}>
+        Bilimingizdagi bo'shliqlarni to'ldiring. Tez va amaliy mini-kurslar
+        orqali Python, SQL, Prompt yozish kabi ko'nikmalarni o'rganing.
+      </Subtitle>
+
+      <div className="overflow-hidden " ref={emblaRef}>
+        <div className="flex gap-3">
+          {skills.map((skill) => (
+            <div 
+              key={skill.id} 
+              className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_calc(50%-6px)] md:flex-[0_0_calc(33.333%-8px)] lg:flex-[0_0_calc(25%-9px)]"
+            >
+              <SkillCard {...skill} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-center mt-6">
+        <CarouselNavigation
+          onPrevClick={scrollPrev}
+          onNextClick={scrollNext}
+          canScrollPrev={canScrollPrev}
+          canScrollNext={canScrollNext}
+          variant="gray"
+          iconType="arrow"
+          size="md"
+        />
+      </div>
+    </motion.section>
+  );
+}

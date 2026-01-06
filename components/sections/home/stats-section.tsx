@@ -85,31 +85,6 @@ export function StatsSection() {
           <span className="text-7xl font-bold">83%</span>
         </motion.div>
 
-        {/* Row 3 */}
-        {/* 3D Illustration card */}
-        <motion.div
-          variants={itemVariants}
-          className="bg-[#e8e8e8] rounded-3xl p-6 flex items-center justify-center min-h-[200px]"
-        >
-          <Image
-            src="/images/3d-cylinder.jpg"
-            alt="3D illustration"
-            width={200}
-            height={200}
-            className="object-contain max-h-[180px]"
-          />
-        </motion.div>
-
-        {/* Motivational text card */}
-        <motion.div variants={itemVariants} className="bg-[#e8e8e8] rounded-3xl p-8 flex items-center min-h-[200px]">
-          <p className="text-lg md:text-xl font-medium text-foreground leading-relaxed">
-            {"Siz ham ularning orasida bo'lishingiz mumkin."}
-            <br />
-            <strong>Bizdan sharoit - sizdan harakat.</strong>
-            <br />
-            {'Harakatni "01Maktab"da davom eting!'}
-          </p>
-        </motion.div>
       </motion.div>
     </section>
   )

@@ -3,8 +3,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { GraduateCard } from '@/components/ui/graduate-card';
+import { GraduateCard } from '@/components/cards/graduate-card';
+import { MainTitle } from '@/components/ui/main-title';
+import { Subtitle } from '@/components/ui/subtitle';
+import { CarouselNavigation } from '@/components/ui/carousel-navigation';
 
 const graduatesRow1 = [
   { name: 'Aziz Gafurov', company: 'TBC Bank', image: '/images/graduates/1.png' },
@@ -76,14 +78,34 @@ export function GraduatesSection() {
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
-      <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8 text-balance">Bizning Bitiruvchilarimiz</h2>
+      <div className="container">
+        <MainTitle 
+          align="center" 
+          color="foreground"
+          className="mb-4 md:mb-6 lg:mb-8"
+          animated
+        >
+          Bizning Bitiruvchilarimiz
+        </MainTitle>
+        <Subtitle
+          align="center"
+          color="muted"
+          className="mb-8 md:mb-10 lg:mb-12 max-w-72  mx-auto"
+          animated
+          animationDelay={0.1}
+        >
+          Xozirda ish topgan studentlarimiz bir nechasi va ularning hikoyalari.
+        </Subtitle>
 
-      <div className="space-y-4">
+        <div className="space-y-4">
         {/* Row 1 */}
         <div className="overflow-hidden" ref={emblaRef1}>
-          <div className="flex gap-4">
+          <div className="flex gap-3 md:gap-4">
             {graduatesRow1.map((graduate, index) => (
-              <div key={index} className="flex-[0_0_calc(25%-12px)] min-w-0">
+              <div 
+                key={index} 
+                className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_calc(50%-6px)] md:flex-[0_0_calc(33.333%-8px)] lg:flex-[0_0_calc(25%-9px)]"
+              >
                 <GraduateCard name={graduate.name} company={graduate.company} image={graduate.image} />
               </div>
             ))}
@@ -92,34 +114,31 @@ export function GraduatesSection() {
 
         {/* Row 2 */}
         <div className="overflow-hidden" ref={emblaRef2}>
-          <div className="flex gap-4">
+          <div className="flex gap-3 md:gap-4">
             {graduatesRow2.map((graduate, index) => (
-              <div key={index} className="flex-[0_0_calc(25%-12px)] min-w-0">
+              <div 
+                key={index} 
+                className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_calc(50%-6px)] md:flex-[0_0_calc(33.333%-8px)] lg:flex-[0_0_calc(25%-9px)]"
+              >
                 <GraduateCard name={graduate.name} company={graduate.company} image={graduate.image} />
               </div>
             ))}
           </div>
         </div>
-      </div>
+        </div>
 
-      {/* Navigation */}
-      <div className="flex items-center justify-center gap-2 mt-8">
-        <motion.button
-          onClick={scrollPrev}
-          className="w-10 h-10 rounded-full border border-border bg-background flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-colors disabled:opacity-50"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </motion.button>
-        <motion.button
-          onClick={scrollNext}
-          className="w-10 h-10 rounded-full border border-border bg-background flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-colors disabled:opacity-50"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <ChevronRight className="w-5 h-5" />
-        </motion.button>
+        {/* Navigation */}
+        <div className="flex items-center justify-center mt-8">
+          <CarouselNavigation
+            onPrevClick={scrollPrev}
+            onNextClick={scrollNext}
+            canScrollPrev={canScrollPrev}
+            canScrollNext={canScrollNext}
+            variant="gray"
+            iconType="arrow"
+            size="md"
+          />
+        </div>
       </div>
     </motion.section>
   );

@@ -1,0 +1,93 @@
+"use client"
+
+import { motion } from "framer-motion"
+import { ArrowRight } from "lucide-react"
+import { MainTitle } from "@/components/ui/main-title"
+import { MainButton } from "@/components/ui/main-button"
+import { useState } from "react"
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
+}
+
+export function ContactSection() {
+  const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Handle form submission here
+    console.log({ name, phone })
+  }
+
+  return (
+    <section className="container py-8 md:py-12 my-12!  ">
+      <motion.div
+        variants={itemVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="bg-[#E6E6E7] rounded-3xl p-6 md:p-8 lg:p-10"
+      >
+          <MainTitle
+            className="mb-6 md:mb-8 text-black"
+            align="left"
+            animated
+            animationDelay={0.2}
+          >
+            Savollaringiz bo'yicha bog'lanamiz
+          </MainTitle>
+
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+              {/* Name Input */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Ismingiz</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Ism Familiya"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue outline-none transition-all bg-white"
+                  required
+                />
+              </div>
+
+              {/* Phone Input */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Telefoningiz</label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+998 XX XXX XX XX"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue outline-none transition-all bg-white"
+                  required
+                />
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex items-end">
+                <MainButton
+                  type="submit"
+                  variant="gradient"
+                  size="default"
+                  icon={<ArrowRight className="w-5 h-5" />}
+                  iconPosition="right"
+                  className="w-full md:w-auto"
+                >
+                  Yuborish
+                </MainButton>
+              </div>
+            </div>
+          </form>
+      </motion.div>
+    </section>
+  )
+}
+

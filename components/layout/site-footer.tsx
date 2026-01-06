@@ -1,0 +1,319 @@
+"use client"
+
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { Send, Instagram, Linkedin, ArrowLeft, ArrowRight } from "lucide-react"
+import { useState } from "react"
+
+const footerLinks = [
+  { label: "Bosh Sahifa", href: "/" },
+  { label: "Skillar", href: "/skillar" },
+  { label: "Kurslar", href: "/kurslar" },
+  { label: "Kasblar", href: "/kasblar" },
+]
+
+const socialLinks = [
+  {
+    label: "Telegram",
+    href: "https://t.me/01maktab",
+    icon: <Send className="w-5 h-5" />,
+  },
+  {
+    label: "Instagram",
+    href: "https://instagram.com/01maktab",
+    icon: <Instagram className="w-5 h-5" />,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://linkedin.com/company/01maktab",
+    icon: <Linkedin className="w-5 h-5" />,
+  },
+]
+
+export function SiteFooter() {
+  const [hoveredLogoIndex, setHoveredLogoIndex] = useState<number | null>(null)
+
+  return (
+    <footer className="container pt-8 pb-12">
+      {/* Top section with links */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="flex flex-col md:flex-row items-center justify-between gap-4 py-6 border-b border-border/50"
+      >
+        {/* Navigation links */}
+        <nav className="flex items-center gap-4 md:gap-6">
+          {footerLinks.map((link, index) => (
+            <motion.div
+              key={link.href}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <motion.div
+                whileHover={{ scale: 1.05, x: 2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Link
+                  href={link.href}
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors relative group"
+                >
+                  {link.label}
+                  <motion.span
+                    className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground group-hover:w-full transition-all duration-300"
+                    initial={{ width: 0 }}
+                    whileHover={{ width: "100%" }}
+                  />
+                </Link>
+              </motion.div>
+            </motion.div>
+          ))}
+        </nav>
+
+        {/* Navigation Buttons */}
+        <div className="flex items-center gap-2">
+          <motion.button
+            whileHover={{ scale: 1.1, x: -2 }}
+            whileTap={{ scale: 0.9 }}
+            className="w-10 h-10 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
+            aria-label="Previous"
+          >
+            <ArrowLeft className="w-4 h-4 text-foreground" />
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1, x: 2 }}
+            whileTap={{ scale: 0.9 }}
+            className="w-10 h-10 rounded-lg bg-foreground hover:bg-foreground/90 flex items-center justify-center transition-colors"
+            aria-label="Next"
+          >
+            <ArrowRight className="w-4 h-4 text-background" />
+          </motion.button>
+        </div>
+
+        {/* Privacy Policy */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <motion.div
+            whileHover={{ scale: 1.05, x: 4 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Link
+              href="/privacy"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 group"
+            >
+              Privacy Policy
+              <motion.span
+                initial={{ x: 0 }}
+                whileHover={{ x: 4 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <ArrowRight className="w-3 h-3" />
+              </motion.span>
+            </Link>
+          </motion.div>
+        </motion.div>
+
+        {/* Social links */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex items-center gap-4"
+        >
+          {socialLinks.map((social, index) => (
+            <motion.a
+              key={social.label}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+              whileHover={{ scale: 1.2, rotate: 5 }}
+              whileTap={{ scale: 0.9 }}
+              aria-label={social.label}
+            >
+              {social.icon}
+            </motion.a>
+          ))}
+        </motion.div>
+      </motion.div>
+
+      {/* Large logo text with multiple variants */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="pt-8 md:pt-12 overflow-hidden"
+      >
+        <div className="flex flex-col gap-4 md:gap-6">
+          {/* First Row */}
+    
+
+          {/* Second Row */}
+          <div className="flex items-center gap-4 md:gap-8 flex-wrap">
+            <motion.h2
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              onHoverStart={() => setHoveredLogoIndex(3)}
+              onHoverEnd={() => setHoveredLogoIndex(null)}
+              className="text-[clamp(3rem,15vw,12rem)] md:text-[clamp(5rem,20vw,18rem)] font-bold leading-[0.85] tracking-tighter text-black cursor-pointer relative"
+            >
+              <motion.span
+                animate={
+                  hoveredLogoIndex === 3
+                    ? {
+                        y: [0, -8, 4, -4, 2, 0],
+                        rotate: [0, -5, 5, -3, 3, 0],
+                      }
+                    : {}
+                }
+                transition={{
+                  duration: 0.6,
+                  ease: "easeInOut",
+                }}
+                className="inline-block"
+              >
+                0
+              </motion.span>
+              <motion.span
+                animate={
+                  hoveredLogoIndex === 3
+                    ? {
+                        y: [0, -10, 5, -5, 3, 0],
+                        scale: [1, 1.1, 1, 1.05, 1, 1],
+                      }
+                    : {}
+                }
+                transition={{
+                  duration: 0.6,
+                  ease: "easeInOut",
+                  delay: 0.05,
+                }}
+                className="inline-block"
+              >
+                1
+              </motion.span>
+              <motion.span
+                animate={
+                  hoveredLogoIndex === 3
+                    ? {
+                        y: [0, -6, 3, -3, 1, 0],
+                        rotate: [0, 3, -3, 2, -2, 0],
+                      }
+                    : {}
+                }
+                transition={{
+                  duration: 0.6,
+                  ease: "easeInOut",
+                  delay: 0.1,
+                }}
+                className="inline-block"
+              >
+                M
+              </motion.span>
+              <motion.span
+                animate={
+                  hoveredLogoIndex === 3
+                    ? {
+                        y: [0, -7, 4, -4, 2, 0],
+                      }
+                    : {}
+                }
+                transition={{
+                  duration: 0.6,
+                  ease: "easeInOut",
+                  delay: 0.15,
+                }}
+                className="inline-block"
+              >
+                a
+              </motion.span>
+              <motion.span
+                animate={
+                  hoveredLogoIndex === 3
+                    ? {
+                        y: [0, -9, 5, -5, 3, 0],
+                      }
+                    : {}
+                }
+                transition={{
+                  duration: 0.6,
+                  ease: "easeInOut",
+                  delay: 0.2,
+                }}
+                className="inline-block"
+              >
+                k
+              </motion.span>
+              <motion.span
+                animate={
+                  hoveredLogoIndex === 3
+                    ? {
+                        y: [0, -8, 4, -4, 2, 0],
+                      }
+                    : {}
+                }
+                transition={{
+                  duration: 0.6,
+                  ease: "easeInOut",
+                  delay: 0.25,
+                }}
+                className="inline-block"
+              >
+                t
+              </motion.span>
+              <motion.span
+                animate={
+                  hoveredLogoIndex === 3
+                    ? {
+                        y: [0, -6, 3, -3, 1, 0],
+                      }
+                    : {}
+                }
+                transition={{
+                  duration: 0.6,
+                  ease: "easeInOut",
+                  delay: 0.3,
+                }}
+                className="inline-block"
+              >
+                a
+              </motion.span>
+              <motion.span
+                animate={
+                  hoveredLogoIndex === 3
+                    ? {
+                        y: [0, -7, 4, -4, 2, 0],
+                      }
+                    : {}
+                }
+                transition={{
+                  duration: 0.6,
+                  ease: "easeInOut",
+                  delay: 0.35,
+                }}
+                className="inline-block"
+              >
+                b
+              </motion.span>
+            </motion.h2>
+          </div>
+        </div>
+      </motion.div>
+    </footer>
+  )
+}
