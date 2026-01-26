@@ -4,24 +4,83 @@ import { ArrowLeft, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import api from "@/lib/api"
+import { useAuthStore } from "@/store/auth-store"
 
 interface ProfileSetupProps {
   onBack: () => void
-  onComplete: (data: any) => void
+  onComplete: () => void
   isModal?: boolean
 }
 
 export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps) {
+  const { setUser } = useAuthStore()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    phone: "",
+    // phone: "",
     birthDay: "",
     birthMonth: "",
     birthYear: "",
     gender: "",
-    region: "",
+    // region: "",
   })
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setIsSubmitting(true)
+
+    try {
+      // Format birthday if all parts are provided
+      let birthday = undefined
+      if (formData.birthYear && formData.birthMonth && formData.birthDay) {
+        birthday = new Date(
+          parseInt(formData.birthYear),
+          parseInt(formData.birthMonth) - 1,
+          parseInt(formData.birthDay),
+        ).toISOString()
+      }
+
+      // Prepare API payload
+      const payload: any = {
+        firstname: formData.firstName,
+        lastname: formData.lastName,
+      }
+
+      // Add optional fields only if they have values
+      if (formData.gender) {
+        payload.gender = formData.gender.toUpperCase()
+      }
+      if (birthday) {
+        payload.birthday = birthday
+      }
+      // if (formData.phone) {
+      //   payload.phone = formData.phone
+      // }
+      // if (formData.region) {
+      //   payload.region = formData.region
+      // }
+
+      // Send to API
+      const response = await api.patch("/user/me", payload)
+
+      // Update user in store
+      if (response.data?.data) {
+        setUser(response.data.data)
+      }
+
+      // Call onComplete callback
+      onComplete()
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Ma'lumotlarni saqlashda xatolik yuz berdi")
+      console.error("Profile setup failed", err)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   const regions = [
     "Toshkent shahri",
@@ -74,13 +133,9 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
         <p className="text-sm text-gray-400">Pastdagi ma'lumotlarni to'ldiring</p>
       </div>
 
-      <form
-        className="w-full space-y-6"
-        onSubmit={(e) => {
-          e.preventDefault()
-          onComplete(formData)
-        }}
-      >
+      {error && <p className="text-sm text-red-500 font-medium mb-4 text-center">{error}</p>}
+
+      <form className="w-full space-y-6" onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="text-[13px] font-medium text-gray-600 ml-1">Ism *</label>
@@ -104,7 +159,7 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
           </div>
         </div>
 
-        <div className="space-y-1.5">
+        {/* <div className="space-y-1.5">
           <label className="text-[13px] font-medium text-gray-600 ml-1">Telefon raqami *</label>
           <div className="relative flex items-center bg-gray-50 border border-transparent rounded-xl p-3 focus-within:bg-white focus-within:border-gray-200 transition-all">
             <div className="flex items-center gap-2 pr-3 border-r border-gray-200 mr-3">
@@ -118,7 +173,7 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
               required
             />
           </div>
-        </div>
+        </div> */}
 
         <div className="space-y-1.5">
           <label className="text-[13px] font-medium text-gray-600 ml-1">Tug'ilgan kuningiz</label>
@@ -180,14 +235,14 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
               onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
             >
               <option value="">Jins</option>
-              <option value="male">Erkak</option>
-              <option value="female">Ayol</option>
+              <option value="MALE">Erkak</option>
+              <option value="FEMALE">Ayol</option>
             </select>
             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           </div>
         </div>
 
-        <div className="space-y-1.5">
+        {/* <div className="space-y-1.5">
           <label className="text-[13px] font-medium text-gray-600 ml-1">Viloyat</label>
           <div className="relative">
             <select
@@ -204,13 +259,14 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
             </select>
             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           </div>
-        </div>
+        </div> */}
 
         <Button
           type="submit"
-          className="w-full bg-[#E5E7EB] hover:bg-gray-300 text-gray-600 font-semibold py-7 rounded-2xl shadow-none mt-4 transition-colors"
+          disabled={isSubmitting}
+          className="w-full bg-[#E5E7EB] hover:bg-gray-300 text-gray-600 font-semibold py-7 rounded-2xl shadow-none mt-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Boshlash
+          {isSubmitting ? "Saqlanmoqda..." : "Boshlash"}
         </Button>
       </form>
     </div>
