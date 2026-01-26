@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, Suspense } from "react"
 import { ArrowRight, Send } from "lucide-react"
 import api from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -12,7 +12,7 @@ import { useAuthStore } from "@/store/auth-store"
 type AuthStep = "INITIAL" | "OTP" | "TELEGRAM_OTP"
 type LoginMethod = "phone" | "email"
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams()
   const { setTokens, setUser } = useAuthStore()
   const [step, setStep] = useState<AuthStep>("INITIAL")
@@ -116,8 +116,6 @@ export default function LoginPage() {
     } catch (err) {
       setError("Noto'g'ri kod")
       console.log("Verification failed", err)
-      // For demo purposes, we still move forward
-      setStep("PROFILE")
     }
   }
 
@@ -382,5 +380,17 @@ export default function LoginPage() {
           </>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   )
 }
