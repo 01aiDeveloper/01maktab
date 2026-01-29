@@ -5,12 +5,13 @@ import { motion } from "framer-motion";
 import { Code2, Grid2X2, Database, ArrowUpRight } from "lucide-react";
 
 interface SkillCardProps {
+  id?: number;
   image: string;
   title: string;
   icon?: "code" | "grid" | "database";
 }
 
-export function SkillCard({ image, title, icon = "code" }: SkillCardProps) {
+export function SkillCard({ id, image, title, icon = "code" }: SkillCardProps) {
   const IconComponent =
     icon === "code" ? Code2 : icon === "grid" ? Grid2X2 : Database;
 

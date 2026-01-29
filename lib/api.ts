@@ -1,9 +1,12 @@
 import axios from "axios"
 import { useAuthStore } from "@/store/auth-store"
 
+// Get API base URL from environment variable
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://dev-api.01maktab.uz/api/v1"
+
 // Global axios instance for API
 const api = axios.create({
-  baseURL: "https://dev-api.01maktab.uz/api/v1",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -43,7 +46,7 @@ api.interceptors.response.use(
         if (refreshToken) {
           // Call refresh token endpoint
           const response = await axios.post(
-            "https://dev-api.01maktab.uz/api/v1/auth/refresh",
+            `${API_BASE_URL}/auth/refresh`,
             { refreshToken },
           )
 

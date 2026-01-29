@@ -5,6 +5,16 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'maktab01-dev-files.s3.eu-north-1.amazonaws.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'upload.ustozai-app.uz',
+      },
+    ],
   },
 }
 

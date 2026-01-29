@@ -29,12 +29,17 @@ interface AuthState {
   clearAuth: () => void
 }
 
-// Cookie storage implementation for Zustand
+// Cookie storage implementation for Zustand (Next.js compatible)
 const cookieStorage = {
   getItem: (name: string): string | null => {
+    // Check if we're in browser environment
+    if (typeof window === "undefined") return null
     return Cookies.get(name) || null
   },
   setItem: (name: string, value: string): void => {
+    // Check if we're in browser environment
+    if (typeof window === "undefined") return
+
     Cookies.set(name, value, {
       expires: 30, // 30 kun
       path: "/",
@@ -43,6 +48,8 @@ const cookieStorage = {
     })
   },
   removeItem: (name: string): void => {
+    // Check if we're in browser environment
+    if (typeof window === "undefined") return
     Cookies.remove(name, { path: "/" })
   },
 }

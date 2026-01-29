@@ -8,6 +8,7 @@ import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
 import { courseService } from "@/services/course.service"
 import { useApi } from "@/hooks/use-api"
+import { getMediaUrl } from "@/lib/utils"
 
 // Fallback data if API fails
 const FALLBACK_COURSES = [
@@ -54,7 +55,7 @@ export function CoursesSection() {
     id: course.id,
     title: course.name || course.title,
     description: course.description?.replace(/<[^>]*>/g, "") || "", // Strip HTML tags
-    imageUrl: course.photo ? `https://dev-api.01maktab.uz/uploads/${course.photo}` : "/images/courses/1.webp",
+    imageUrl: course.photo ? getMediaUrl(course.photo) : "/images/courses/1.webp",
     difficulty: course.difficulty,
     duration: course.duration,
     price: course.price,
