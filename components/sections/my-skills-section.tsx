@@ -2,40 +2,49 @@
 
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
-import { ProfessionCard } from "@/components/cards/profession-card"
+import { SkillCard } from "@/components/cards/skill-card"
 
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
 
-const professions = [
+const skills = [
   {
     id: 1,
-    image: "/data-analytics-dashboard-dark-finance-chart-3d.jpg",
-    title: "Data Analitik Kasbi",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 3/10",
+    image: "/python-programming-robot-3d-metallic-blue.jpg",
+    title: "Python Dasturlash Tili",
+    icon: "plus" as const,
   },
   {
     id: 2,
-    image: "/programmer-keyboard-dark-blue-coding-3d.jpg",
-    title: "Data Analitik Kasbi",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 3/10",
+    image: "/data-science-abstract-pink-paper-fold-3d.jpg",
+    title: "Data Science",
+    icon: "layers" as const,
   },
   {
     id: 3,
-    image: "/backend-developer-server-dark-3d.jpg",
-    title: "Backend Developer",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 4/12",
+    image: "/sql-database-server-gray-minimal-3d.jpg",
+    title: "SQL va Ma'lumotlar Bazasi",
+    icon: "grid" as const,
+  },
+  {
+    id: 4,
+    image: "/python-coding-robot-mechanical-blue-3d.jpg",
+    title: "Python Dasturlash Tili",
+    icon: "plus" as const,
+  },
+  {
+    id: 5,
+    image: "/machine-learning-ai-neural-3d.jpg",
+    title: "Machine Learning",
+    icon: "layers" as const,
   },
 ]
 
-export function MyProfessionsSection() {
+export function MySkillsSection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
-    slidesToScroll: 1,
+    slidesToScroll: 2,
   })
 
   const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } = useCarouselNavigation(emblaApi)
@@ -46,20 +55,17 @@ export function MyProfessionsSection() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="py-8 px-6 bg-[#1a1a1a] rounded-3xl"
+      className="py-8"
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">Kasblarim</h2>
+        <h2 className="text-2xl font-bold text-foreground">Skillarim</h2>
       </div>
 
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-3 md:gap-4">
-          {professions.map((profession) => (
-            <div 
-              key={profession.id} 
-              className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_280px] md:flex-[0_0_320px]"
-            >
-              <ProfessionCard {...profession} />
+        <div className="flex gap-3">
+          {skills.map((skill) => (
+             <div key={skill.id} className="flex-[0_0_calc(25%-12px)] min-w-0">
+              <SkillCard {...skill} />
             </div>
           ))}
         </div>
@@ -71,7 +77,7 @@ export function MyProfessionsSection() {
           onNextClick={scrollNext}
           canScrollPrev={canScrollPrev}
           canScrollNext={canScrollNext}
-          variant="dark"
+          variant="light"
         />
       </div>
     </motion.section>

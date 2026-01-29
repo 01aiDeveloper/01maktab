@@ -53,12 +53,9 @@ export function MyProfessionsSection() {
       </div>
 
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-3 md:gap-4">
+        <div className="flex gap-4">
           {professions.map((profession) => (
-            <div 
-              key={profession.id} 
-              className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_280px] md:flex-[0_0_320px]"
-            >
+            <div key={profession.id} className="flex-none w-[280px] md:w-[320px]">
               <ProfessionCard {...profession} />
             </div>
           ))}

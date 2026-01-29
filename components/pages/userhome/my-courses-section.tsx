@@ -1,37 +1,42 @@
 "use client"
-
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
-import { ProfessionCard } from "@/components/cards/profession-card"
-
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
+import { CourseCard } from "@/components/cards/course-card"
 
-const professions = [
+const courses = [
   {
     id: 1,
-    image: "/data-analytics-dashboard-dark-finance-chart-3d.jpg",
-    title: "Data Analitik Kasbi",
+    image: "/images/course1.png",
+    title: "Data Science",
     instructor: "Ustoz: Khikmatilla Pulatov",
     progress: "Dars: 3/10",
   },
   {
     id: 2,
-    image: "/programmer-keyboard-dark-blue-coding-3d.jpg",
-    title: "Data Analitik Kasbi",
+    image: "/python-programming-dark-blue-laptop-keyboard-3d.jpg",
+    title: "Python Dasturlash Tili",
     instructor: "Ustoz: Khikmatilla Pulatov",
     progress: "Dars: 3/10",
   },
   {
     id: 3,
-    image: "/backend-developer-server-dark-3d.jpg",
-    title: "Backend Developer",
+    image: "/web-development-blue-gradient-code-3d.jpg",
+    title: "Web Development",
     instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 4/12",
+    progress: "Dars: 5/12",
+  },
+  {
+    id: 4,
+    image: "/machine-learning-neural-network-blue-3d.jpg",
+    title: "Machine Learning",
+    instructor: "Ustoz: Khikmatilla Pulatov",
+    progress: "Dars: 2/8",
   },
 ]
 
-export function MyProfessionsSection() {
+export function MyCoursesSection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
@@ -46,20 +51,17 @@ export function MyProfessionsSection() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="py-8 px-6 bg-[#1a1a1a] rounded-3xl"
+      className="py-8"
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">Kasblarim</h2>
+        <h2 className="text-2xl font-bold text-foreground">Kurslarim</h2>
       </div>
 
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-3 md:gap-4">
-          {professions.map((profession) => (
-            <div 
-              key={profession.id} 
-              className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_280px] md:flex-[0_0_320px]"
-            >
-              <ProfessionCard {...profession} />
+        <div className="flex gap-4">
+          {courses.map((course) => (
+            <div key={course.id} className="flex-[0_0_calc(25%-12px)] min-w-0">
+              <CourseCard {...course} />
             </div>
           ))}
         </div>
@@ -71,7 +73,7 @@ export function MyProfessionsSection() {
           onNextClick={scrollNext}
           canScrollPrev={canScrollPrev}
           canScrollNext={canScrollNext}
-          variant="dark"
+          variant="light"
         />
       </div>
     </motion.section>
