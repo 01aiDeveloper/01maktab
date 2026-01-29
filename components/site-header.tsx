@@ -1,11 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, Settings, User, LogOut } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useAuthStore } from "@/store/auth-store"
+import api from "@/lib/api"
 
 const navLinks = [
   { label: "Darsxona", href: "/darsxona" },
@@ -16,6 +18,24 @@ const navLinks = [
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false)
+  const { user, setUser, logout } = useAuthStore()
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await api.get("/user/me")
+        if (response.data?.data) {
+          setUser(response.data.data)
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error)
+      }
+    }
+
+    if (!user) {
+      fetchUserData()
+    }
+  }, [user, setUser])
 
   return (
     <motion.header
@@ -55,10 +75,15 @@ export function SiteHeader() {
               className="flex items-center gap-2 bg-white rounded-full pl-1 pr-3 py-1 cursor-pointer"
             >
               <Avatar className="h-7 w-7">
-                <AvatarImage src="/diverse-user-avatars.png" />
-                <AvatarFallback className="bg-gray-200 text-xs">AG</AvatarFallback>
+                <AvatarImage src={user?.avatar || "/diverse-user-avatars.png"} />
+                <AvatarFallback className="bg-gray-200 text-xs">
+                  {user?.firstname?.[0]?.toUpperCase() || "U"}
+                  {user?.lastname?.[0]?.toUpperCase() || ""}
+                </AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-gray-900">Aziz Gafurov</span>
+              <span className="text-sm font-medium text-gray-900">
+                {user?.firstname} {user?.lastname}
+              </span>
               <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
                 <ChevronDown className="h-4 w-4 text-gray-600" />
               </motion.div>
@@ -81,7 +106,13 @@ export function SiteHeader() {
                     <User className="h-4 w-4 text-gray-500" />
                     <span>Profil</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={() => {
+                      logout()
+                      window.location.href = "/"
+                    }}
+                    className="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer"
+                  >
                     <LogOut className="h-4 w-4 text-gray-500" />
                     <span>Chiqish</span>
                   </DropdownMenuItem>

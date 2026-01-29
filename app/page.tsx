@@ -1,13 +1,13 @@
+import GuestHomePage from "@/components/pages/guesthome"
+import PrivateHomePage from "@/components/pages/userhome"
+import { getAuthFromCookie } from "@/lib/auth-utils"
 
-import  GuestHomePage  from "@/components/pages/guesthome"
-import  PrivateHomePage  from "@/components/pages/userhome"
+export default async function Home() {
+  const auth = await getAuthFromCookie()
 
-export default function Home() {
-
-  if (true) {
-    return <GuestHomePage/>
+  if (!auth.isAuthenticated) {
+    return <GuestHomePage />
   }
-  return (
-  <PrivateHomePage/>
-  )
+
+  return <PrivateHomePage />
 }

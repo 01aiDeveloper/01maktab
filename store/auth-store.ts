@@ -1,12 +1,18 @@
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { persist, createJSONStorage } from "zustand/middleware"
+import Cookies from "js-cookie"
 
 interface User {
-  id?: string
-  name?: string
+  id?: number
+  firstname?: string
+  lastname?: string
   email?: string
   phone?: string
   avatar?: string
+  coins?: number
+  birthday?: string
+  gender?: "MALE" | "FEMALE"
+  createdAt?: string
 }
 
 interface AuthState {
@@ -21,6 +27,24 @@ interface AuthState {
   setUser: (user: User) => void
   logout: () => void
   clearAuth: () => void
+}
+
+// Cookie storage implementation for Zustand
+const cookieStorage = {
+  getItem: (name: string): string | null => {
+    return Cookies.get(name) || null
+  },
+  setItem: (name: string, value: string): void => {
+    Cookies.set(name, value, {
+      expires: 30, // 30 kun
+      path: "/",
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    })
+  },
+  removeItem: (name: string): void => {
+    Cookies.remove(name, { path: "/" })
+  },
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -64,7 +88,8 @@ export const useAuthStore = create<AuthState>()(
         }),
     }),
     {
-      name: "auth-storage", // localStorage key
+      name: "auth-storage", // Cookie key nomi
+      storage: createJSONStorage(() => cookieStorage),
       partialize: (state) => ({
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,

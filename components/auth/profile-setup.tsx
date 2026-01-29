@@ -74,6 +74,11 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
 
       // Call onComplete callback
       onComplete()
+
+      // Redirect to home page to show PrivateHomePage
+      if (typeof window !== "undefined") {
+        window.location.href = "/"
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || "Ma'lumotlarni saqlashda xatolik yuz berdi")
       console.error("Profile setup failed", err)
