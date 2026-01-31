@@ -66,8 +66,10 @@ export function MySkillsSection() {
           <h2 className="text-2xl font-bold text-foreground">Skillarim</h2>
         </div>
         <NoData
-          message="Hali skillga yozilmagansiz"
-          description="Yangi skilllarni o'rganishni boshlash uchun barcha skilllar bo'limiga o'ting"
+          message="Bu yer hozircha bo'sh, skilllar qo'shishni boshlang"
+          description="Pastdagi ma'lumotlarni to'ldiring"
+          buttonText="Skillarni ko'rish"
+          buttonLink="/skilllar"
         />
       </section>
     )

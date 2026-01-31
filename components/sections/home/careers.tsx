@@ -1,41 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { MainTitle } from "@/components/ui/main-title";
 import { Subtitle } from "@/components/ui/subtitle";
 import { MainButton } from "@/components/ui/main-button";
+import { getMediaUrl } from "@/lib/utils";
+import type { Career } from "@/types/api.types";
 
-const CAREERS = [
-  {
-    id: "data",
-    label: "Data Analitik",
-    title: "Data Analitik Kasbi",
-    description:
-      "Build advanced machine learning models and deploy them to production. Master deep learning, neural networks, and advanced data processing techniques.",
-    cardColor: "bg-[#3361FF]",
-    textColor: "text-white",
-    buttonVariant: "white" as const,
-    imageUrl: "/images/course_icon.png",
-  },
-  {
-    id: "ml",
-    label: "ML Engineer",
-    title: "ML Engineer Kasbi",
-    description:
-      "Build advanced machine learning models and deploy them to production. Master deep learning, neural networks, and advanced data processing techniques.",
-    cardColor: "bg-gray-100",
-    textColor: "text-black",
-    buttonVariant: "black" as const,
-    imageUrl: "/images/course_icon.png",
-  },
-];
+interface DisplayCareer {
+  id: string;
+  label: string;
+  title: string;
+  description: string;
+  cardColor: string;
+  textColor: string;
+  buttonVariant: "white" | "black";
+  imageUrl: string;
+}
 
-export function CareersSection() {
-  const [activeTab, setActiveTab] = useState(CAREERS[0].id);
-  const activeData = CAREERS.find((c) => c.id === activeTab)!;
+interface CareersSectionProps {
+  careers: Career[];
+}
+
+export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
+  // Transform API careers to display format
+  const careers = useMemo(() => {
+    return apiCareers.map((career: Career, index: number) => ({
+      id: career.id.toString(),
+      label: career.title || career.name,
+      title: career.title || career.name,
+      description: career.description || "Build advanced machine learning models and deploy them to production.",
+      cardColor: index % 2 === 0 ? "bg-[#3361FF]" : "bg-gray-100",
+      textColor: index % 2 === 0 ? "text-white" : "text-black",
+      buttonVariant: (index % 2 === 0 ? "white" : "black") as const,
+      imageUrl: getMediaUrl(career.photo),
+    }));
+  }, [apiCareers]);
+
+  const [activeTab, setActiveTab] = useState<string>(careers[0]?.id || "");
+
+  // Agar ma'lumot bo'lmasa, hech narsa ko'rsatmaydi
+  if (careers.length === 0) {
+    return null;
+  }
+
+  const activeData = careers.find((c) => c.id === activeTab)!;
 
   return (
     <section className="bg-base-dark py-12 md:py-16 rounded-[40px] ">
@@ -62,7 +74,7 @@ export function CareersSection() {
           </Subtitle>
 
           <div className="mt-8 md:mt-12 flex justify-center gap-2 md:gap-3 flex-wrap">
-            {CAREERS.map((career) => (
+            {careers.map((career) => (
               <button
                 key={career.id}
                 onClick={() => setActiveTab(career.id)}
@@ -103,12 +115,14 @@ export function CareersSection() {
 
                 {/* Content */}
                 <div className="relative z-20 flex-1 p-4 md:p-10 text-left lg:p-16">
-                  <h3 className={`text-2xl md:text-4xl font-bold ${activeData.textColor} md:text-5xl lg:text-7xl leading-tight`}>
-                    {activeData.title}
-                  </h3>
-                  <p className={`mt-4 md:mt-8 max-w-lg ml-0 text-sm md:text-base lg:text-lg leading-relaxed ${activeData.textColor === "text-white" ? "text-white/90" : "text-black/90"}`}>
-                    {activeData.description}
-                  </p>
+                  <div
+                    className={`text-2xl md:text-4xl font-bold ${activeData.textColor} md:text-5xl lg:text-7xl leading-tight`}
+                    dangerouslySetInnerHTML={{ __html: activeData.title }}
+                  />
+                  <div
+                    className={`mt-4 md:mt-8 max-w-lg ml-0 text-sm md:text-base lg:text-lg leading-relaxed ${activeData.textColor === "text-white" ? "text-white/90" : "text-black/90"}`}
+                    dangerouslySetInnerHTML={{ __html: activeData.description }}
+                  />
               
                   <MainButton
                     variant={activeData.buttonVariant}

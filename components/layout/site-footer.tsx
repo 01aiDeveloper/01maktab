@@ -73,25 +73,7 @@ export function SiteFooter() {
           ))}
         </nav>
 
-        {/* Navigation Buttons */}
-        <div className="flex items-center gap-2">
-          <motion.button
-            whileHover={{ scale: 1.1, x: -2 }}
-            whileTap={{ scale: 0.9 }}
-            className="w-10 h-10 rounded-lg bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
-            aria-label="Previous"
-          >
-            <ArrowLeft className="w-4 h-4 text-foreground" />
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.1, x: 2 }}
-            whileTap={{ scale: 0.9 }}
-            className="w-10 h-10 rounded-lg bg-foreground hover:bg-foreground/90 flex items-center justify-center transition-colors"
-            aria-label="Next"
-          >
-            <ArrowRight className="w-4 h-4 text-background" />
-          </motion.button>
-        </div>
+    
 
         {/* Privacy Policy */}
         <motion.div
@@ -109,13 +91,7 @@ export function SiteFooter() {
               className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 group"
             >
               Privacy Policy
-              <motion.span
-                initial={{ x: 0 }}
-                whileHover={{ x: 4 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                <ArrowRight className="w-3 h-3" />
-              </motion.span>
+            
             </Link>
           </motion.div>
         </motion.div>

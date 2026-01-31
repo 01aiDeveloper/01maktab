@@ -1,33 +1,54 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { SiteHeader } from "@/components/site-header"
-import { HeroSection } from "@/components/hero-section"
-import { FeatureCards } from "@/components/feature-cards"
-import { MyCoursesSection } from "@/components/sections/my-courses-section"
-import { MyProfessionsSection } from "@/components/sections/my-professions-section"
-import { MySkillsSection } from "@/components/sections/my-skills-section"
-import { GraduatesSection } from "@/components/sections/graduates-section"
-import { StatsSection } from "@/components/sections/stats-section"
-import { SiteFooter } from "@/components/site-footer"
-import { ProfileSetupModal } from "@/components/auth/profile-setup-modal"
-import { useAuthStore } from "@/store/auth-store"
+import { useState, useEffect } from 'react';
+import { SiteHeader } from '@/components/site-header';
+import { HeroSection } from '@/components/hero-section';
+import { FeatureCards } from '@/components/feature-cards';
+import { MyCoursesSection } from '@/components/sections/my-courses-section';
+import { MyProfessionsSection } from '@/components/sections/my-professions-section';
+import { MySkillsSection } from '@/components/sections/my-skills-section';
+import { GraduatesSection } from '@/components/sections/graduates-section';
+import { StatsSection } from '@/components/sections/stats-section';
+import { ProfileSetupModal } from '@/components/auth/profile-setup-modal';
+import { useAuthStore } from '@/store/auth-store';
+import { SiteFooter } from '@/components/layout/site-footer';
+import api from '@/lib/api';
 
 export default function PrivateHomePage() {
-  const { user, prompt } = useAuthStore()
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
+  const { user, setUser, isAuthenticated } = useAuthStore();
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
-  // Check if user needs to complete profile setup
+  // Fetch user data from API and check if profile is complete
   useEffect(() => {
-    // Agar user signup qilgan bo'lsa va hali firstname/lastname bo'lmasa
-    if (prompt === "signup" && (!user?.firstname || !user?.lastname)) {
-      setIsProfileModalOpen(true)
-    }
-  }, [prompt, user])
+    const fetchUserData = async () => {
+      if (!isAuthenticated) {
+        return;
+      }
+
+      try {
+        const response = await api.get('/user/me');
+        if (response.data?.data) {
+          const userData = response.data.data;
+          setUser(userData);
+
+          // Agar user firstname yoki lastname bo'lmasa, modal ochiladi
+          if (!userData.firstname || !userData.lastname) {
+            setIsProfileModalOpen(true);
+          } else {
+            console.log('✅ User ma\'lumotlari to\'liq, modal ochilmaydi');
+          }
+        }
+      } catch (error) {
+        console.error('❌ Failed to fetch user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [isAuthenticated, setUser]);
 
   const handleProfileComplete = () => {
-    setIsProfileModalOpen(false)
-  }
+    setIsProfileModalOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -37,23 +58,23 @@ export default function PrivateHomePage() {
         </div>
       </div>
       <main>
-        <HeroSection userName={user?.firstname || "Foydalanuvchi"} />
+        <HeroSection userName={user?.firstname || 'Foydalanuvchi'} />
         <FeatureCards />
 
         <div className="container space-y-8 pb-16">
           <MyCoursesSection />
           <MyProfessionsSection />
           <MySkillsSection />
-          <GraduatesSection />
         </div>
+        
+        <GraduatesSection />
 
         <StatsSection />
       </main>
 
       <SiteFooter />
-
       {/* Profile Setup Modal */}
       <ProfileSetupModal isOpen={isProfileModalOpen} onClose={handleProfileComplete} />
     </div>
-  )
+  );
 }

@@ -1,13 +1,21 @@
 import Image from "next/image"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
 interface NoDataProps {
   message?: string
   description?: string
+  buttonText?: string
+  buttonLink?: string
+  isDark?: boolean
 }
 
 export function NoData({
   message = "Ma'lumot topilmadi",
-  description = "Bu yerda hozircha hech qanday ma'lumot yo'q"
+  description = "Bu yerda hozircha hech qanday ma'lumot yo'q",
+  buttonText,
+  buttonLink,
+  isDark = false
 }: NoDataProps) {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4">
@@ -16,11 +24,28 @@ export function NoData({
           src="/images/common/nodata.png"
           alt="No data"
           fill
-          className="object-contain opacity-60"
+          className={`object-contain ${isDark ? "opacity-40" : "opacity-60"}`}
         />
       </div>
-      <h3 className="text-lg font-semibold text-gray-700 mb-2">{message}</h3>
-      <p className="text-sm text-gray-500 text-center max-w-md">{description}</p>
+      <h3 className={`text-lg font-semibold mb-2 ${isDark ? "text-gray-200" : "text-gray-700"}`}>
+        {message}
+      </h3>
+      <p className={`text-sm text-center max-w-md mb-6 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+        {description}
+      </p>
+      {buttonText && buttonLink && (
+        <Link
+          href={buttonLink}
+          className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-colors ${
+            isDark
+              ? "bg-white text-gray-900 hover:bg-gray-100"
+              : "bg-gray-900 text-white hover:bg-gray-800"
+          }`}
+        >
+          {buttonText}
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      )}
     </div>
   )
 }

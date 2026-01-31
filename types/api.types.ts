@@ -59,3 +59,34 @@ export interface AuthResponse {
   prompt: "signin" | "signup"
   user?: User
 }
+
+// Partner Types
+export interface Partner {
+  id: number
+  name: string
+  logo: string
+  description: string
+  website: string
+}
+
+// Career/Profession Types
+export interface Career {
+  id: number
+  format: string
+  name: string
+  title: string
+  description: string
+  photo: string
+  icon: string | null
+}
+
+// Skill Types
+export interface Skill {
+  id: number
+  format: string
+  name: string
+  title: string
+  description: string
+  photo: string
+  icon: string | null
+}

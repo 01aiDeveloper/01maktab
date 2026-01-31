@@ -73,17 +73,11 @@ export function MyCoursesSection() {
           <h2 className="text-2xl font-bold text-foreground">Kurslarim</h2>
         </div>
         <NoData
-          message="Hali kursga yozilmagansiz"
-          description="Yangi kurslarni boshlash uchun barcha kurslar bo'limiga o'ting"
+          message="Bu yer hozircha bo'sh, kurslar qo'shishni boshlang"
+          description="Pastdagi ma'lumotlarni to'ldiring"
+          buttonText="Kurslarni ko'rish"
+          buttonLink="/kurslar"
         />
-        <div className="flex justify-center mt-6">
-          <Link
-            href="/kurslar"
-            className="inline-flex items-center justify-center rounded-xl bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800 transition-colors"
-          >
-            Barcha kurslar
-          </Link>
-        </div>
       </section>
     )
   }

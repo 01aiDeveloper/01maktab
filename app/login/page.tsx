@@ -161,8 +161,8 @@ function LoginContent() {
         }
       }
 
-      // Redirect to profile setup page
-      window.location.href = "/profile-setup"
+      // Redirect to home page - modal will handle profile setup if needed
+      window.location.href = "/"
     } catch (err: any) {
       setError(err.response?.data?.message || "Noto'g'ri kod yoki kod muddati tugagan")
       console.log("Telegram verification failed", err)

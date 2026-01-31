@@ -1,9 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
-import axios from "axios"
 
 import { SkillCard } from "@/components/cards/skill-card"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
@@ -12,23 +10,13 @@ import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
 import { Subtitle } from "@/components/ui/subtitle"
 import { NoData } from "@/components/shared/no-data"
 import { getMediaUrl } from "@/lib/utils"
+import type { Skill } from "@/types/api.types"
 
-interface Skill {
-  id: number
-  format: string
-  name: string
-  title: string
-  description: string
-  photo: string
-  icon: string
+interface MySkillsSectionProps {
+  skills: Skill[]
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://dev-api.01maktab.uz/api/v1"
-
-export function MySkillsSection() {
-  const [skills, setSkills] = useState<Skill[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
+export function MySkillsSection({ skills }: MySkillsSectionProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
@@ -37,38 +25,6 @@ export function MySkillsSection() {
 
   const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } =
     useCarouselNavigation(emblaApi)
-
-  useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/course/public?format=SKILL`)
-        console.log("Skills API Response:", response.data)
-        if (response.data?.data?.data) {
-          const skillsData = response.data.data.data
-          console.log("Skills data:", skillsData)
-          console.log("First skill photo:", skillsData[0]?.photo)
-          console.log("Media URL for first skill:", getMediaUrl(skillsData[0]?.photo))
-          setSkills(skillsData)
-        }
-      } catch (error) {
-        console.error("Failed to fetch skills:", error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchSkills()
-  }, [])
-
-  if (isLoading) {
-    return (
-      <section className="py-8 container">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-        </div>
-      </section>
-    )
-  }
 
   if (skills.length === 0) {
     return (

@@ -1,37 +1,30 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
+import axios from "axios"
 import { ProfessionCard } from "@/components/cards/profession-card"
-
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
+import { getMediaUrl } from "@/lib/utils"
 
-const professions = [
-  {
-    id: 1,
-    image: "/data-analytics-dashboard-dark-finance-chart-3d.jpg",
-    title: "Data Analitik Kasbi",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 3/10",
-  },
-  {
-    id: 2,
-    image: "/programmer-keyboard-dark-blue-coding-3d.jpg",
-    title: "Data Analitik Kasbi",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 3/10",
-  },
-  {
-    id: 3,
-    image: "/backend-developer-server-dark-3d.jpg",
-    title: "Backend Developer",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 4/12",
-  },
-]
+interface Profession {
+  id: number
+  format: string
+  name: string
+  title: string
+  description: string
+  photo: string
+  icon: string | null
+}
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://dev-api.01maktab.uz/api/v1"
 
 export function MyProfessionsSection() {
+  const [professions, setProfessions] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
@@ -39,6 +32,35 @@ export function MyProfessionsSection() {
   })
 
   const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } = useCarouselNavigation(emblaApi)
+
+  useEffect(() => {
+    const fetchProfessions = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/course/public?format=PROFESSION`)
+        if (response.data?.data?.data && response.data.data.data.length > 0) {
+          const apiProfessions = response.data.data.data.map((prof: Profession) => ({
+            id: prof.id,
+            image: getMediaUrl(prof.photo),
+            title: prof.title || prof.name,
+            instructor: "Ustoz: Khikmatilla Pulatov", // Default value
+            progress: "Dars: 0/10", // Default value
+          }))
+          setProfessions(apiProfessions)
+        }
+      } catch (error) {
+        console.error("Failed to fetch professions:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchProfessions()
+  }, [])
+
+  // Agar loading yoki ma'lumot bo'lmasa, hech narsa ko'rsatmaydi
+  if (isLoading || professions.length === 0) {
+    return null
+  }
 
   return (
     <motion.section
@@ -55,8 +77,8 @@ export function MyProfessionsSection() {
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-3 md:gap-4">
           {professions.map((profession) => (
-            <div 
-              key={profession.id} 
+            <div
+              key={profession.id}
               className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_280px] md:flex-[0_0_320px]"
             >
               <ProfessionCard {...profession} />

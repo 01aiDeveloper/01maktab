@@ -109,8 +109,8 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop - shaffof va yopib bo'lmaydigan */}
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      {/* Backdrop - shaffof va yopib bo'lmaydigan (click qilganda hech narsa bo'lmaydi) */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={(e) => e.preventDefault()} />
 
       {/* Modal content */}
       <div className="relative z-10 w-full max-w-md mx-4 bg-white rounded-3xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto">

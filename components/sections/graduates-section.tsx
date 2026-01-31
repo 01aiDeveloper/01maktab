@@ -4,33 +4,27 @@ import { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import axios from 'axios';
 import { GraduateCard } from '../cards/graduate-card';
+import { getMediaUrl } from '@/lib/utils';
+import { MainTitle } from '../ui/main-title';
+import { Subtitle } from '../ui/subtitle';
+import { CarouselNavigation } from '../ui/carousel-navigation';
 
-const graduatesRow1 = [
-  { name: 'Aziz Gafurov', company: 'TBC Bank', image: '/images/graduates/1.png' },
-  {
-    name: 'Madina Latipova',
-    company: 'Uzum Technologies',
-    image: '/images/graduates/2.png',
-  },
-  { name: 'Lola Sharipova', company: 'TBC Bank', image: '/images/graduates/3.png' },
-  { name: 'Aziz Gafurov', company: 'TBC Bank', image: '/images/graduates/4.png' },
-  { name: 'Nilufar Karimova', company: 'Click', image: '/images/graduates/5.png' },
-  { name: 'Sardor Alimov', company: 'Humans', image: '/images/graduates/1.png' },
-  { name: 'Dilnoza Rahimova', company: 'EPAM', image: '/images/graduates/2.png' },
-];
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://dev-api.01maktab.uz/api/v1';
 
-const graduatesRow2 = [
-  { name: 'Aziz Gafurov', company: 'TBC Bank', image: '/images/graduates/5.png' },
-  { name: 'Jasur Umarov', company: 'Uzum Technologies', image: '/images/graduates/4.png' },
-  { name: 'Lola Sharipova', company: 'TBC Bank', image: '/images/graduates/2.png' },
-  { name: 'Aziz Gafurov', company: 'TBC Bank', image: '/images/graduates/3.png' },
-  { name: 'Zarina Usmonova', company: 'Beeline', image: '/images/graduates/1.png' },
-  { name: 'Farrux Sodiqov', company: 'Ucell', image: '/images/graduates/4.png' },
-  { name: 'Laylo Norova', company: 'Kapitalbank', image: '/images/graduates/2.png' },
-];
+interface Graduate {
+  id: number;
+  fullname: string;
+  photo: string;
+  company: string | null;
+  position: string;
+}
 
 export function GraduatesSection() {
+  const [graduates, setGraduates] = useState<Graduate[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [emblaRef1, emblaApi1] = useEmblaCarousel({
     loop: true,
     align: 'start',
@@ -43,6 +37,23 @@ export function GraduatesSection() {
   });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
+
+  useEffect(() => {
+    const fetchGraduates = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/graduate/public`);
+        if (response.data?.data?.data) {
+          setGraduates(response.data.data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch graduates:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchGraduates();
+  }, []);
 
   // Sync both carousels
   const scrollPrev = useCallback(() => {
@@ -68,6 +79,24 @@ export function GraduatesSection() {
     emblaApi1.on('reInit', onSelect);
   }, [emblaApi1, onSelect]);
 
+  // Agar loading yoki ma'lumot bo'lmasa, hech narsa ko'rsatmaydi
+  if (isLoading || graduates.length === 0) {
+    return null;
+  }
+
+  // Split graduates into two rows
+  const midpoint = Math.ceil(graduates.length / 2);
+  const graduatesRow1 = graduates.slice(0, midpoint).map((grad) => ({
+    name: grad.fullname,
+    company: grad.company || 'Kompaniya',
+    image: getMediaUrl(grad.photo),
+  }));
+  const graduatesRow2 = graduates.slice(midpoint).map((grad) => ({
+    name: grad.fullname,
+    company: grad.company || 'Kompaniya',
+    image: getMediaUrl(grad.photo),
+  }));
+
   return (
     <motion.section
       className="py-12"
@@ -76,50 +105,49 @@ export function GraduatesSection() {
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
-      <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8 text-balance">Bizning Bitiruvchilarimiz</h2>
+      <div className="container">
+        <MainTitle align="center" color="foreground" className="mb-4 md:mb-6 lg:mb-8" animated>
+          Bizning Bitiruvchilarimiz
+        </MainTitle>
+        <Subtitle align="center" color="muted" className="mb-8 md:mb-10 lg:mb-12 max-w-72  mx-auto" animated animationDelay={0.1}>
+          Xozirda ish topgan studentlarimiz bir nechasi va ularning hikoyalari.
+        </Subtitle>
+        <div className="space-y-4">
+          {/* Row 1 */}
+          <div className="overflow-hidden" ref={emblaRef1}>
+            <div className="flex gap-4">
+              {graduatesRow1.map((graduate, index) => (
+                <div key={index} className="flex-[0_0_calc(25%-12px)] min-w-0">
+                  <GraduateCard name={graduate.name} company={graduate.company} image={graduate.image} />
+                </div>
+              ))}
+            </div>
+          </div>
 
-      <div className="space-y-4">
-        {/* Row 1 */}
-        <div className="overflow-hidden" ref={emblaRef1}>
-          <div className="flex gap-4">
-            {graduatesRow1.map((graduate, index) => (
-              <div key={index} className="flex-[0_0_calc(25%-12px)] min-w-0">
-                <GraduateCard name={graduate.name} company={graduate.company} image={graduate.image} />
-              </div>
-            ))}
+          {/* Row 2 */}
+          <div className="overflow-hidden" ref={emblaRef2}>
+            <div className="flex gap-4">
+              {graduatesRow2.map((graduate, index) => (
+                <div key={index} className="flex-[0_0_calc(25%-12px)] min-w-0">
+                  <GraduateCard name={graduate.name} company={graduate.company} image={graduate.image} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Row 2 */}
-        <div className="overflow-hidden" ref={emblaRef2}>
-          <div className="flex gap-4">
-            {graduatesRow2.map((graduate, index) => (
-              <div key={index} className="flex-[0_0_calc(25%-12px)] min-w-0">
-                <GraduateCard name={graduate.name} company={graduate.company} image={graduate.image} />
-              </div>
-            ))}
-          </div>
+        {/* Navigation */}
+        <div className="flex items-center justify-center mt-8">
+          <CarouselNavigation
+            onPrevClick={scrollPrev}
+            onNextClick={scrollNext}
+            canScrollPrev={canScrollPrev}
+            canScrollNext={canScrollNext}
+            variant="gray"
+            iconType="arrow"
+            size="md"
+          />
         </div>
-      </div>
-
-      {/* Navigation */}
-      <div className="flex items-center justify-center gap-2 mt-8">
-        <motion.button
-          onClick={scrollPrev}
-          className="w-10 h-10 rounded-full border border-border bg-background flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-colors disabled:opacity-50"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </motion.button>
-        <motion.button
-          onClick={scrollNext}
-          className="w-10 h-10 rounded-full border border-border bg-background flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-colors disabled:opacity-50"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <ChevronRight className="w-5 h-5" />
-        </motion.button>
       </div>
     </motion.section>
   );

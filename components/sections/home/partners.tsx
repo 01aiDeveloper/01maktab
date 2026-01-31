@@ -5,21 +5,18 @@ import Image from "next/image"
 import { MainTitle } from "@/components/ui/main-title"
 import { Subtitle } from "@/components/ui/subtitle"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
+import { getMediaUrl } from "@/lib/utils"
+import type { Partner } from "@/types/api.types"
 
-const PARTNERS = [
-  {
-    name: "ipak yuli bank",
-    logo: "/images/partnors/ipak-yoli.png",
-    // activeLogo: "/images/partnors/ipak-yoli.png", // Faqat bitta active image
-  },
-  ...Array(5).fill({
-    name: "ipak yuli bank",
-    logo: "/images/partnors/ipak-yoli.png",
-    // activeLogo yo'q - faqat logo
-  }),
-]
+interface PartnersSectionProps {
+  partners: Partner[]
+}
 
-export function PartnersSection() {
+export function PartnersSection({ partners }: PartnersSectionProps) {
+  // Agar ma'lumot bo'lmasa, hech narsa ko'rsatmaydi
+  if (!partners || partners.length === 0) {
+    return null
+  }
 
   return (
     <section className="bg-white px-4 pb-20 mx-auto w-full  overflow-hidden rounded-[80px]  py-24 text-center border border-gray-100 shadow-sm">
@@ -48,38 +45,25 @@ export function PartnersSection() {
           <div className="flex gap-6  py-6 whitespace-nowrap">
             <motion.div
               animate={{ x: ["0%", "-50%"] }}
-              transition={{ 
-                repeat: Number.POSITIVE_INFINITY, 
-                duration: 30, 
-                ease: "linear" 
+              transition={{
+                repeat: Number.POSITIVE_INFINITY,
+                duration: 30,
+                ease: "linear"
               }}
               className="flex gap-6 pr-6"
             >
-              {[...PARTNERS, ...PARTNERS].map((partner, index) => (
+              {[...partners, ...partners].map((partner, index) => (
                 <div
-                  key={index}
+                  key={`${partner.id}-${index}`}
                   className="group relative flex h-[160px] w-[280px] shrink-0 items-center justify-center rounded-[32px] bg-[#F8F9FB] p-10 transition-all hover:bg-white hover:shadow-xl hover:shadow-gray-200/50"
                 >
                   <Image
-                    src={partner.logo || "/placeholder.svg"}
+                    src={getMediaUrl(partner.logo)}
                     alt={partner.name}
                     width={180}
                     height={80}
-                    className={`object-contain transition-all duration-300 ${
-                      partner.activeLogo 
-                        ? 'group-hover:opacity-0' 
-                        : 'brightness-0 group-hover:brightness-100'
-                    }`}
+                    className="object-contain transition-all duration-300 brightness-0 group-hover:brightness-100"
                   />
-                  {partner.activeLogo && (
-                    <Image
-                      src={partner.activeLogo}
-                      alt={partner.name}
-                      width={180}
-                      height={80}
-                      className="absolute object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                    />
-                  )}
                 </div>
               ))}
             </motion.div>
