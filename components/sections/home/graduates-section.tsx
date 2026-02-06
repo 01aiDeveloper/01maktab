@@ -32,7 +32,11 @@ const graduatesRow2 = [
   { name: 'Laylo Norova', company: 'Kapitalbank', image: '/images/graduates/2.png' },
 ];
 
-export function GraduatesSection() {
+type GraduatesSectionProps = {
+  rows?: 1 | 2;
+};
+
+export function GraduatesSection({ rows = 2 }: GraduatesSectionProps) {
   const [emblaRef1, emblaApi1] = useEmblaCarousel({
     loop: true,
     align: 'start',
@@ -49,13 +53,17 @@ export function GraduatesSection() {
   // Sync both carousels
   const scrollPrev = useCallback(() => {
     emblaApi1?.scrollPrev();
-    emblaApi2?.scrollPrev();
-  }, [emblaApi1, emblaApi2]);
+    if (rows === 2) {
+      emblaApi2?.scrollPrev();
+    }
+  }, [emblaApi1, emblaApi2, rows]);
 
   const scrollNext = useCallback(() => {
     emblaApi1?.scrollNext();
-    emblaApi2?.scrollNext();
-  }, [emblaApi1, emblaApi2]);
+    if (rows === 2) {
+      emblaApi2?.scrollNext();
+    }
+  }, [emblaApi1, emblaApi2, rows]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi1) return;
@@ -113,18 +121,20 @@ export function GraduatesSection() {
         </div>
 
         {/* Row 2 */}
-        <div className="overflow-hidden" ref={emblaRef2}>
-          <div className="flex gap-3 md:gap-4">
-            {graduatesRow2.map((graduate, index) => (
-              <div 
-                key={index} 
-                className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_calc(50%-6px)] md:flex-[0_0_calc(33.333%-8px)] lg:flex-[0_0_calc(25%-9px)]"
-              >
-                <GraduateCard name={graduate.name} company={graduate.company} image={graduate.image} />
-              </div>
-            ))}
+        {rows === 2 ? (
+          <div className="overflow-hidden" ref={emblaRef2}>
+            <div className="flex gap-3 md:gap-4">
+              {graduatesRow2.map((graduate, index) => (
+                <div 
+                  key={index} 
+                  className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_calc(50%-6px)] md:flex-[0_0_calc(33.333%-8px)] lg:flex-[0_0_calc(25%-9px)]"
+                >
+                  <GraduateCard name={graduate.name} company={graduate.company} image={graduate.image} />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : null}
         </div>
 
         {/* Navigation */}

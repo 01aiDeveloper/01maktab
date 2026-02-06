@@ -1,26 +1,31 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Code2, Grid2X2, Database, ArrowUpRight } from "lucide-react";
 
 interface SkillCardProps {
   id?: number;
+  slug?: string;
   image: string;
   title: string;
   icon?: "code" | "grid" | "database";
 }
 
-export function SkillCard({ id, image, title, icon = "code" }: SkillCardProps) {
+export function SkillCard({ id, slug, image, title, icon = "code" }: SkillCardProps) {
   const IconComponent =
     icon === "code" ? Code2 : icon === "grid" ? Grid2X2 : Database;
 
+  const cardSlug = slug || id?.toString() || "skill";
+
   return (
-    <motion.div
-      whileHover={{ scale: 1.01, y: -1 }}
-      transition={{ type: "spring", stiffness: 300 }}
-      className="relative overflow-hidden rounded-3xl aspect-3/4 min-w-[160px] cursor-pointer group"
-    >
+    <Link href={`/skills/${cardSlug}`}>
+      <motion.div
+        whileHover={{ scale: 1.01, y: -1 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="relative overflow-hidden rounded-3xl aspect-3/4 min-w-[160px] cursor-pointer group"
+      >
       <Image
         src={image || "/placeholder.svg"}
         alt={title}
@@ -47,5 +52,6 @@ export function SkillCard({ id, image, title, icon = "code" }: SkillCardProps) {
         </div>
       </div>
     </motion.div>
+    </Link>
   );
 }

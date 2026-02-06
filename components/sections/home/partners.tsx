@@ -7,14 +7,46 @@ import { Subtitle } from "@/components/ui/subtitle"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { getMediaUrl } from "@/lib/utils"
 import type { Partner } from "@/types/api.types"
+import { useEffect, useState } from "react"
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://dev-api.01maktab.uz/api/v1"
 
 interface PartnersSectionProps {
-  partners: Partner[]
+  partners?: Partner[]
+  useMediaUrl?: boolean
 }
 
-export function PartnersSection({ partners }: PartnersSectionProps) {
-  // Agar ma'lumot bo'lmasa, hech narsa ko'rsatmaydi
-  if (!partners || partners.length === 0) {
+export function PartnersSection({ partners: partnersProp, useMediaUrl = true }: PartnersSectionProps) {
+  const [partners, setPartners] = useState<Partner[]>(partnersProp || [])
+  const [loading, setLoading] = useState(!partnersProp)
+
+  useEffect(() => {
+    // Agar props orqali partners berilgan bo'lsa, fetch qilmaymiz
+    if (partnersProp) {
+      setPartners(partnersProp)
+      setLoading(false)
+      return
+    }
+
+    // Props orqali berilmagan bo'lsa, API dan fetch qilamiz
+    async function fetchPartners() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/partner/public?pageSize=20`)
+        const data = await response.json()
+        setPartners(data?.data?.data || [])
+      } catch (error) {
+        console.error("Failed to fetch partners:", error)
+        setPartners([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPartners()
+  }, [partnersProp])
+
+  // Agar yuklanayotgan bo'lsa yoki ma'lumot bo'lmasa, hech narsa ko'rsatmaydi
+  if (loading || !partners || partners.length === 0) {
     return null
   }
 
@@ -58,7 +90,7 @@ export function PartnersSection({ partners }: PartnersSectionProps) {
                   className="group relative flex h-[160px] w-[280px] shrink-0 items-center justify-center rounded-[32px] bg-[#F8F9FB] p-10 transition-all hover:bg-white hover:shadow-xl hover:shadow-gray-200/50"
                 >
                   <Image
-                    src={getMediaUrl(partner.logo)}
+                    src={useMediaUrl ? getMediaUrl(partner.logo) : partner.logo}
                     alt={partner.name}
                     width={180}
                     height={80}

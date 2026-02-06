@@ -1,20 +1,26 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowUpRight } from "lucide-react"
 
 interface CourseCardProps {
+  id?: number | string
+  slug?: string
   title: string
   description: string
   imageUrl: string
 }
 
-export function CourseCard({ title, description, imageUrl }: CourseCardProps) {
+export function CourseCard({ id, slug, title, description, imageUrl }: CourseCardProps) {
+  const courseSlug = slug || id?.toString() || "course"
+  
   return (
-    <motion.div
-      className="group relative min-h-[380px] md:h-[500px] w-full overflow-hidden rounded-xl   sm:rounded-[40px] shadow-sm"
-    >
+    <Link href={`/courses/${courseSlug}`}>
+      <motion.div
+        className="group relative min-h-[380px] md:h-[500px] w-full overflow-hidden rounded-xl   sm:rounded-[40px] shadow-sm"
+      >
       <Image
         src={imageUrl || "/placeholder.svg"}
         alt={title}
@@ -37,5 +43,6 @@ export function CourseCard({ title, description, imageUrl }: CourseCardProps) {
         </div>
       </div>
     </motion.div>
+    </Link>
   )
 }

@@ -19,6 +19,7 @@ interface DisplayCareer {
   textColor: string;
   buttonVariant: "white" | "black";
   imageUrl: string;
+  slug: string;
 }
 
 interface CareersSectionProps {
@@ -37,6 +38,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
       textColor: index % 2 === 0 ? "text-white" : "text-black",
       buttonVariant: (index % 2 === 0 ? "white" : "black") as const,
       imageUrl: getMediaUrl(career.photo),
+      slug: career.slug || career.name.toLowerCase().replace(/\s+/g, '-'),
     }));
   }, [apiCareers]);
 
@@ -130,6 +132,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                     icon={<ArrowRight className="h-4 w-4 md:h-6 md:w-6" />}
                     iconPosition="right"
                     className="group mt-6 md:mt-12"
+                    href={`/professions/${activeData.slug}`}
                   >
                     Batafsil
                   </MainButton>

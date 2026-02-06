@@ -1,43 +1,132 @@
 "use client"
 
-import { motion } from "framer-motion"
 import Image from "next/image"
-import { ArrowUpRight } from "lucide-react"
+import { motion } from "framer-motion"
+import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface GraduateCardProps {
   name: string
-  company: string
+  age: number
+  previousRole: string
+  currentRole: string
+  story: string
   image: string
 }
 
-export function GraduateCard({ name, company, image }: GraduateCardProps) {
+export function GraduateCard({
+  name,
+  age,
+  previousRole,
+  currentRole,
+  story,
+  image,
+}: GraduateCardProps) {
   return (
-    <motion.div
-      className="group relative aspect-3/4 w-full overflow-hidden rounded-xl sm:rounded-[40px] shadow-sm"
-    >
-      {/* Background Image */}
-      <Image 
-        src={image || "/placeholder.svg"} 
-        alt={name} 
-        fill 
-        className="object-cover transition-transform duration-700 group-hover:scale-105" 
-      />
-      
-      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
+    <>
+      {/* Desktop Layout: 2 columns */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="hidden lg:grid lg:grid-cols-[280px_1fr] gap-6"
+      >
+        {/* Left: Portrait Image */}
+        <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-gray-800">
+          <Image
+            src={image}
+            alt={name}
+            fill
+            className="object-cover"
+          />
+        </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 md:p-8 lg:p-10 flex flex-col justify-center min-h-24 bg-linear-to-t from-white/50 via-white/30 to-transparent backdrop-blur-sm max-h-[110px] rounded-t-xl sm:rounded-t-3xl">
-        <div className="relative">
-          <div className="absolute -top-2 right-0 text-white opacity-80 group-hover:opacity-100 transition-opacity z-10">
-            <ArrowUpRight size={40} strokeWidth={1.5} />
-          </div>
-          <div className="pr-12">
-            <h3 className="text-base sm:text-base md:text-lg lg:text-xl font-bold text-white tracking-tight">{name}</h3>
-            <p className="mt-3 text-white/90 text-sm lg:text-base font-normal leading-relaxed max-w-[90%]">
-              {company}
+        {/* Right: Content Card */}
+        <div className="bg-[#1a1a1d] rounded-3xl p-8 flex flex-col">
+          <div className="flex-1">
+            <h3 className="text-white font-bold text-2xl mb-2">
+              {name}, {age} лет
+            </h3>
+            <p className="text-white/60 text-sm mb-4">
+              {previousRole}
             </p>
+            <p className="text-white text-base mb-6">
+              {currentRole}
+            </p>
+            
+            <div className="mb-4">
+              <h4 className="text-white font-semibold text-base mb-3">
+                История:
+              </h4>
+              <p className="text-white/70 text-sm leading-relaxed">
+                {story}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <Button 
+              variant="secondary"
+              size="sm"
+              className="bg-white hover:bg-gray-100 text-black font-medium rounded-full flex items-center gap-2 h-10 px-5"
+            >
+              Batafsil
+              <ArrowRight className="w-4 h-4" />
+            </Button>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+
+      {/* Mobile Layout: Vertical Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="lg:hidden bg-[#1a1a1d] rounded-3xl overflow-hidden"
+      >
+        {/* Image on Top */}
+        <div className="relative aspect-[3/4] w-full">
+          <Image
+            src={image}
+            alt={name}
+            fill
+            className="object-cover"
+          />
+        </div>
+
+        {/* Content Below */}
+        <div className="p-6">
+          <h3 className="text-white font-bold text-xl mb-2">
+            {name}, {age} лет
+          </h3>
+          <p className="text-white/60 text-sm mb-3">
+            {previousRole}
+          </p>
+          <p className="text-white text-sm mb-5">
+            {currentRole}
+          </p>
+          
+          <div className="mb-5">
+            <h4 className="text-white font-semibold text-sm mb-2">
+              История:
+            </h4>
+            <p className="text-white/70 text-sm leading-relaxed">
+              {story}
+            </p>
+          </div>
+
+          <Button 
+            variant="secondary"
+            size="sm"
+            className="bg-white hover:bg-gray-100 text-black font-medium rounded-full flex items-center gap-2 h-10 px-5"
+          >
+            Batafsil
+            <ArrowRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </motion.div>
+    </>
   )
 }

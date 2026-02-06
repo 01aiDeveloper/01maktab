@@ -74,6 +74,7 @@ export interface Career {
   id: number
   format: string
   name: string
+  slug?: string
   title: string
   description: string
   photo: string
