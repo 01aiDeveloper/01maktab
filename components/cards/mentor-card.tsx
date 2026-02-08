@@ -68,12 +68,12 @@ export function MentorCard({
             }}
           />
           {/* Fallback initials */}
-          <div className={cn(
+          {/* <div className={cn(
             "absolute inset-0 flex items-center justify-center text-6xl font-bold",
             isDark ? "text-white/20" : "text-gray-300"
           )}>
             {getInitials(name)}
-          </div>
+          </div> */}
         </div>
       </div>
 

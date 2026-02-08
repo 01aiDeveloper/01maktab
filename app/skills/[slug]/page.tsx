@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MainButton } from '@/components/ui/main-button';
 import { Badge } from '@/components/ui/badge';
-import { CourseModulesAccordion } from '@/components/sections/course-modules-accordion';
+import { ModuleAccordion } from '@/components/shared/module-accordion';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MentorCard } from '@/components/cards/mentor-card';
@@ -122,11 +122,7 @@ export default function SkillDetailPage() {
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
       {/* Header */}
-      <div className="pt-4">
-        <div className="container mx-auto px-4">
-          <SiteHeader />
-        </div>
-      </div>
+      <SiteHeader />
 
       {/* Hero Section - Matching private homepage layout */}
       <section className="w-full py-6">
@@ -290,12 +286,18 @@ export default function SkillDetailPage() {
       </section>
 
       {/* Course Program Section */}
-      <CourseModulesAccordion
-        modules={modules}
-        title="Kurs dasturi"
-        freeBadgeColor="bg-orange-500"
-        actionButtonColor="bg-gradient-to-r from-[#1ebb4a] to-[#1ebb4a] hover:from-[#19a842] hover:to-[#19a842]"
-      />
+      <section className="w-full py-8">
+        <div className="container mx-auto px-4">
+          <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">Kurs dasturi</h2>
+
+          <ModuleAccordion
+            variant="light"
+            modules={modules}
+            freeBadgeClassName="bg-orange-500 hover:bg-orange-500 text-white"
+            actionButtonClassName="bg-[#1ebb4a] hover:bg-[#19a842] text-white"
+          />
+        </div>
+      </section>
 
       {/* Mentor Section */}
       <section className="w-full py-8">

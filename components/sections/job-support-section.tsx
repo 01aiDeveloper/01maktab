@@ -7,27 +7,28 @@ const jobSupportData = [
     id: 1,
     title: "Резюме",
     tagText: "Создание профессионального CV",
-    illustration: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-taupGofkaYaBj3JvLyT6dYStfHBnbX.png",
+    illustration: "/icons/professions/support1.webp",
   },
   {
     id: 2,
     title: "Портфолио",
     tagText: "GitHub и проекты",
-    illustration: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-taupGofkaYaBj3JvLyT6dYStfHBnbX.png",
+    illustration: "/icons/professions/support2.webp",
   },
   {
     id: 3,
     title: "Interview",
     tagText: "Подготовка и тренировка",
-    illustration: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-taupGofkaYaBj3JvLyT6dYStfHBnbX.png",
+    illustration: "/icons/professions/support3.webp",
   },
   {
     id: 4,
     title: "Mock Interview",
     tagText: "Реальная симуляция собеседования",
-    illustration: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-taupGofkaYaBj3JvLyT6dYStfHBnbX.png",
+    illustration: "/icons/professions/support4.webp",
   },
 ]
+
 
 export function JobSupportSection() {
   return (

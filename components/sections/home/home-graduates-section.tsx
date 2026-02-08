@@ -1,42 +1,31 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
-import { GraduateCard } from '@/components/cards/graduate-card';
+import { GraduateCarouselCard } from '@/components/cards/graduate-carousel-card';
 import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
 import { CarouselNavigation } from '@/components/ui/carousel-navigation';
+import api from '@/lib/api';
+import { getMediaUrl } from '@/lib/utils';
 
-const graduatesRow1 = [
-  { name: 'Aziz Gafurov', company: 'TBC Bank', image: '/images/graduates/1.png' },
-  {
-    name: 'Madina Latipova',
-    company: 'Uzum Technologies',
-    image: '/images/graduates/2.png',
-  },
-  { name: 'Lola Sharipova', company: 'TBC Bank', image: '/images/graduates/3.png' },
-  { name: 'Aziz Gafurov', company: 'TBC Bank', image: '/images/graduates/4.png' },
-  { name: 'Nilufar Karimova', company: 'Click', image: '/images/graduates/5.png' },
-  { name: 'Sardor Alimov', company: 'Humans', image: '/images/graduates/1.png' },
-  { name: 'Dilnoza Rahimova', company: 'EPAM', image: '/images/graduates/2.png' },
-];
-
-const graduatesRow2 = [
-  { name: 'Aziz Gafurov', company: 'TBC Bank', image: '/images/graduates/5.png' },
-  { name: 'Jasur Umarov', company: 'Uzum Technologies', image: '/images/graduates/4.png' },
-  { name: 'Lola Sharipova', company: 'TBC Bank', image: '/images/graduates/2.png' },
-  { name: 'Aziz Gafurov', company: 'TBC Bank', image: '/images/graduates/3.png' },
-  { name: 'Zarina Usmonova', company: 'Beeline', image: '/images/graduates/1.png' },
-  { name: 'Farrux Sodiqov', company: 'Ucell', image: '/images/graduates/4.png' },
-  { name: 'Laylo Norova', company: 'Kapitalbank', image: '/images/graduates/2.png' },
-];
+type Graduate = {
+  id: number;
+  fullname: string;
+  photo: string;
+  company: string;
+  position: string;
+};
 
 type GraduatesSectionProps = {
   rows?: 1 | 2;
 };
 
-export function GraduatesSection({ rows = 2 }: GraduatesSectionProps) {
+export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
+  const [graduates, setGraduates] = useState<Graduate[]>([]);
+  const [loading, setLoading] = useState(true);
   const [emblaRef1, emblaApi1] = useEmblaCarousel({
     loop: true,
     align: 'start',
@@ -49,6 +38,34 @@ export function GraduatesSection({ rows = 2 }: GraduatesSectionProps) {
   });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
+
+  useEffect(() => {
+    const fetchGraduates = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get('/graduate/public', {
+          params: { pageSize: 20 }
+        });
+
+        // API returns nested data: response.data.data.data
+        const graduatesData = response.data?.data?.data || response.data?.data || [];
+
+        if (Array.isArray(graduatesData)) {
+          setGraduates(graduatesData);
+        } else {
+          console.error('Graduates data is not an array:', graduatesData);
+          setGraduates([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch graduates:', error);
+        setGraduates([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGraduates();
+  }, []);
 
   // Sync both carousels
   const scrollPrev = useCallback(() => {
@@ -78,6 +95,41 @@ export function GraduatesSection({ rows = 2 }: GraduatesSectionProps) {
     emblaApi1.on('reInit', onSelect);
   }, [emblaApi1, onSelect]);
 
+  // Split graduates into two rows
+  const midpoint = Math.ceil(graduates.length / 2);
+  const graduatesRow1 = graduates.slice(0, midpoint);
+  const graduatesRow2 = graduates.slice(midpoint);
+
+  if (loading) {
+    return (
+      <motion.section
+        className="py-12"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="container">
+          <MainTitle
+            align="center"
+            color="foreground"
+            className="mb-4 md:mb-6 lg:mb-8"
+            animated
+          >
+            Bizning Bitiruvchilarimiz
+          </MainTitle>
+          <div className="flex items-center justify-center py-12">
+            <div className="w-12 h-12 border-4 border-gray-200 border-t-[#5d7bf5] rounded-full animate-spin"></div>
+          </div>
+        </div>
+      </motion.section>
+    );
+  }
+
+  if (graduates.length === 0) {
+    return null;
+  }
+
   return (
     <motion.section
       className="py-12"
@@ -87,8 +139,8 @@ export function GraduatesSection({ rows = 2 }: GraduatesSectionProps) {
       transition={{ duration: 0.5 }}
     >
       <div className="container">
-        <MainTitle 
-          align="center" 
+        <MainTitle
+          align="center"
           color="foreground"
           className="mb-4 md:mb-6 lg:mb-8"
           animated
@@ -109,27 +161,41 @@ export function GraduatesSection({ rows = 2 }: GraduatesSectionProps) {
         {/* Row 1 */}
         <div className="overflow-hidden" ref={emblaRef1}>
           <div className="flex gap-3 md:gap-4">
-            {graduatesRow1.map((graduate, index) => (
-              <div 
-                key={index} 
+            {graduatesRow1.map((graduate) => (
+              <div
+                key={graduate.id}
                 className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_calc(50%-6px)] md:flex-[0_0_calc(33.333%-8px)] lg:flex-[0_0_calc(25%-9px)]"
               >
-                <GraduateCard name={graduate.name} company={graduate.company} image={graduate.image} />
+                <Link href={`/graduates/${graduate.id}`}>
+                  <GraduateCarouselCard
+                    name={graduate.fullname}
+                    company={graduate.company}
+                    position={graduate.position}
+                    image={getMediaUrl(graduate.photo)}
+                  />
+                </Link>
               </div>
             ))}
           </div>
         </div>
 
         {/* Row 2 */}
-        {rows === 2 ? (
+        {rows === 2 && graduatesRow2.length > 0 ? (
           <div className="overflow-hidden" ref={emblaRef2}>
             <div className="flex gap-3 md:gap-4">
-              {graduatesRow2.map((graduate, index) => (
-                <div 
-                  key={index} 
+              {graduatesRow2.map((graduate) => (
+                <div
+                  key={graduate.id}
                   className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_calc(50%-6px)] md:flex-[0_0_calc(33.333%-8px)] lg:flex-[0_0_calc(25%-9px)]"
                 >
-                  <GraduateCard name={graduate.name} company={graduate.company} image={graduate.image} />
+                  <Link href={`/graduates/${graduate.id}`}>
+                    <GraduateCarouselCard
+                      name={graduate.fullname}
+                      company={graduate.company}
+                      position={graduate.position}
+                      image={getMediaUrl(graduate.photo)}
+                    />
+                  </Link>
                 </div>
               ))}
             </div>

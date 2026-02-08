@@ -9,8 +9,7 @@ import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { FAQAccordion } from '@/components/sections/faq-accordion';
+import { FAQAccordion } from '@/components/shared/faq-accordion';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MentorCard } from '@/components/cards/mentor-card';
@@ -19,13 +18,14 @@ import { JourneySection } from '@/components/sections/journey-section';
 import { MentorCommunicationSection } from '@/components/sections/mentor-communication-section';
 import { SupportCardsSection } from '@/components/sections/support-cards-section';
 import { CertificatesSection } from '@/components/sections/certificates-section';
-import { PartnersSection } from '@/components/sections/home/partners';
 import { InternshipStatsSection } from '@/components/sections/internship-stats-section';
 import { JobSupportSection } from '@/components/sections/job-support-section';
 import { RefundSection } from '@/components/sections/refund-section';
 import { GraduatesSection } from '@/components/sections/graduates-section';
 import { PaymentOptionsSection } from '@/components/sections/payment-options-section';
 import { EnrollmentCtaCountdown } from '@/components/sections/enrollment-cta-countdown';
+import { PartnersSection } from '@/components/sections/home/partners';
+import { ModuleAccordion } from '@/components/shared/module-accordion';
 
 // Mock data - replace with actual data fetching
 const professionData = {
@@ -35,7 +35,7 @@ const professionData = {
   enrollmentOpen: true,
   remainingSeats: "Qolgan o'rinlar 15/20",
   startDate: 'Start: 6 iyuldan 2025',
-  image: '/images/professions/ml-engineer-hero.png',
+  image: '/images/hero3.webp',
   features: [
     {
       id: 1,
@@ -118,7 +118,7 @@ const professionData = {
       badgeText: 'Международный сертификат',
       badgeColor: 'bg-[#5d7bf5] text-white',
       bullets: ['Признается по всему миру', 'Добавьте в LinkedIn', 'Для международных компаний'],
-      image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-w2DkEqKDQnhS30pPfuiCxoXtzpe5Bq.png',
+      image: '/images/professions/certificate.png',
     },
     {
       id: 2,
@@ -126,7 +126,7 @@ const professionData = {
       badgeText: 'Аккредитованный AICA',
       badgeColor: 'bg-[#5d7bf5] text-white',
       bullets: ['Центрально-Азиатская Ассоциация ИИ', 'Признается государственными и частными организациями', 'Официальный документ'],
-      image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-w2DkEqKDQnhS30pPfuiCxoXtzpe5Bq.png',
+      image: '/images/professions/certificate.png',
     },
   ],
   certificatesFootnote:
@@ -222,27 +222,12 @@ const professionData = {
   ],
 };
 
-// Folder icon component
-function FolderIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M6 12C6 9.79086 7.79086 8 10 8H18L22 12H38C40.2091 12 42 13.7909 42 16V36C42 38.2091 40.2091 40 38 40H10C7.79086 40 6 38.2091 6 36V12Z"
-        fill="#E5E7EB"
-      />
-      <path d="M6 16H42V36C42 38.2091 40.2091 40 38 40H10C7.79086 40 6 38.2091 6 36V16Z" fill="#D1D5DB" />
-      <rect x="10" y="20" width="16" height="2" rx="1" fill="#9CA3AF" />
-      <rect x="10" y="26" width="12" height="2" rx="1" fill="#9CA3AF" />
-    </svg>
-  );
-}
-
 export default function ProfessionPage({ params }: { params: { slug: string } }) {
   const [openModule, setOpenModule] = React.useState<string>('module-1');
   return (
-    <>
-      <SiteHeader />
-      <main className="min-h-screen bg-[#f5f5f5]">
+    <div className="min-h-screen bg-[#101010]">
+      <SiteHeader variant="dark" />
+      <main className="">
         {/* Hero Section */}
         <section className="w-full py-6">
           <div className="container mx-auto px-4">
@@ -250,70 +235,52 @@ export default function ProfessionPage({ params }: { params: { slug: string } })
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="bg-gradient-to-br from-gray-100 via-gray-50 to-white rounded-[40px] overflow-hidden relative min-h-[500px] lg:min-h-[600px]"
+              className="rounded-[40px] overflow-hidden relative min-h-[500px] lg:min-h-[600px]"
             >
-              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-                {/* Left Column - Content */}
-                <div className="p-8 lg:p-12 flex flex-col justify-center relative z-10">
-                  {/* Back Button */}
-                  <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit">
-                    <ArrowLeft className="w-4 h-4" />
-                    <span className="text-sm font-medium">Orqaga</span>
-                  </Link>
+              {/* Background Image */}
+              <Image src={professionData.image} alt={professionData.title} fill className="object-cover" priority />
 
-                  {/* Enrollment Badge */}
-                  {professionData.enrollmentOpen && (
-                    <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-xs w-fit mb-6">
-                      <span className="w-2 h-2 bg-white rounded-full mr-2 inline-block" />
-                      Набор открыт
-                    </Badge>
-                  )}
+              {/* Content Overlay */}
+              <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center min-h-[500px] lg:min-h-[600px]">
+                {/* Back Button */}
+                <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit">
+                  <ArrowLeft className="w-4 h-4" />
+                  <span className="text-sm font-medium">Orqaga</span>
+                </Link>
 
-                  {/* Title */}
-                  <MainTitle className="mb-4 !leading-tight">{professionData.title}</MainTitle>
+                {/* Enrollment Badge */}
+                {professionData.enrollmentOpen && (
+                  <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-xs w-fit mb-6">
+                    <span className="w-2 h-2 bg-white rounded-full mr-2 inline-block" />
+                    Набор открыт
+                  </Badge>
+                )}
 
-                  {/* Subtitle */}
-                  <Subtitle className="mb-8 max-w-xl">{professionData.subtitle}</Subtitle>
+                {/* Title */}
+                <MainTitle className="mb-4 !leading-tight max-w-2xl">{professionData.title}</MainTitle>
 
-                  {/* CTA Button */}
-                  <Button
-                    size="lg"
-                    className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit mb-8"
-                  >
-                    Оставить заявку
-                    <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />
-                  </Button>
+                {/* Subtitle */}
+                <Subtitle className="mb-8 max-w-xl">{professionData.subtitle}</Subtitle>
 
-                  {/* Meta Info Pills */}
-                  <div className="flex flex-wrap gap-3">
-                    <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-xs">
-                      <Users className="w-4 h-4 mr-2" />
-                      {professionData.remainingSeats}
-                    </Badge>
-                    <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-xs">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      {professionData.startDate}
-                    </Badge>
-                  </div>
-                </div>
+                {/* CTA Button */}
+                <Button
+                  size="lg"
+                  className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit mb-8"
+                >
+                  Оставить заявку
+                  <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />
+                </Button>
 
-                {/* Right Column - Image with Decorative Elements */}
-                <div className="relative h-[400px] lg:h-auto">
-                  {/* Main Person Image */}
-                  <div className="absolute bottom-0 right-0 w-full h-full">
-                    <Image
-                      src={professionData.image}
-                      alt={professionData.title}
-                      fill
-                      className="object-contain object-bottom object-right"
-                      priority
-                    />
-                  </div>
-
-                  {/* Decorative 3D Elements */}
-                  <div className="absolute top-16 right-12 w-32 h-32 bg-gradient-to-br from-blue-400 to-blue-600 rounded-3xl transform rotate-12 opacity-80 blur-sm" />
-                  <div className="absolute top-32 right-32 w-24 h-24 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full opacity-60" />
-                  <div className="absolute top-8 right-64 w-20 h-20 bg-gradient-to-br from-green-400 to-green-500 rounded-2xl transform -rotate-12 opacity-70" />
+                {/* Meta Info Pills */}
+                <div className="flex flex-wrap gap-3">
+                  <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-xs">
+                    <Users className="w-4 h-4 mr-2" />
+                    {professionData.remainingSeats}
+                  </Badge>
+                  <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-xs">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    {professionData.startDate}
+                  </Badge>
                 </div>
               </div>
             </motion.div>
@@ -337,12 +304,12 @@ export default function ProfessionPage({ params }: { params: { slug: string } })
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.1 * index }}
-                  className="bg-white rounded-3xl p-6 flex items-center gap-4"
+                  className="bg-[#282828] rounded-3xl p-6 flex items-center gap-4"
                 >
                   <div className="w-12 h-12 bg-[#5d7bf5] rounded-2xl flex items-center justify-center shrink-0">
                     <feature.icon className="w-6 h-6 text-white" />
                   </div>
-                  <span className="font-medium text-gray-900 text-sm lg:text-base">{feature.label}</span>
+                  <span className="font-medium text-white text-sm lg:text-base">{feature.label}</span>
                 </motion.div>
               ))}
             </motion.div>
@@ -357,7 +324,7 @@ export default function ProfessionPage({ params }: { params: { slug: string } })
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-[#18181a] text-white rounded-3xl p-8 lg:p-12"
+              className="bg-[#282828] text-white rounded-3xl p-8 lg:p-12"
             >
               <h2 className="font-suisse text-2xl lg:text-3xl font-bold mb-4">{professionData.intro.title}</h2>
               <p className="text-gray-300 text-sm lg:text-base leading-relaxed max-w-4xl">{professionData.intro.description}</p>
@@ -398,7 +365,7 @@ export default function ProfessionPage({ params }: { params: { slug: string } })
         <CertificatesSection certificates={professionData.certificates} footnote={professionData.certificatesFootnote} />
 
         {/* Partners Section */}
-        <PartnersSection partners={professionData.partners} />
+        <PartnersSection variant="dark" showSubtitle={false} />
 
         {/* Internship Statistics Section */}
         <InternshipStatsSection />
@@ -413,70 +380,11 @@ export default function ProfessionPage({ params }: { params: { slug: string } })
         <GraduatesSection />
 
         {/* Course Program Section */}
-        <section className="w-full bg-white py-16 lg:py-24">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 className="text-gray-900 font-bold text-3xl lg:text-4xl mb-8 lg:mb-12">Kurs dasturi</h2>
+        <section className="w-full bg-[#101010] py-16 lg:py-24">
+          <div className="container mx-auto px-4">
+            <h2 className="text-white font-bold text-3xl lg:text-4xl mb-8 lg:mb-12">Kurs dasturi</h2>
 
-              <Accordion type="single" collapsible value={openModule} onValueChange={setOpenModule} className="space-y-3">
-                {professionData.modules.map((module, moduleIndex) => (
-                  <motion.div
-                    key={module.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: moduleIndex * 0.1 }}
-                  >
-                    <AccordionItem value={module.id} className="bg-gray-50 border-0 rounded-3xl overflow-hidden">
-                      <AccordionTrigger className="px-5 lg:px-6 py-5 hover:no-underline hover:bg-gray-100/50 [&[data-state=open]]:bg-gray-50 transition-colors">
-                        <div className="flex items-center gap-4 flex-1">
-                          <FolderIcon className="w-12 h-12 lg:w-14 lg:h-14 shrink-0" />
-                          <div className="text-left">
-                            <h3 className="font-semibold text-gray-900 text-base lg:text-lg">{module.title}</h3>
-                            <div className="flex items-center gap-3 mt-2">
-                              <span className="text-xs text-gray-500">Dars: {module.darsCount}</span>
-                              <span className="text-xs text-gray-500">Test: {module.testCount}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </AccordionTrigger>
-
-                      <AccordionContent className="px-0 pb-0">
-                        {module.lessons.length > 0 && (
-                          <div className="border-t border-gray-200">
-                            {module.lessons.map((lesson, index) => (
-                              <div
-                                key={lesson.id}
-                                className="flex items-center justify-between px-5 lg:px-6 py-4 border-b border-gray-200 last:border-b-0 hover:bg-gray-50/50 transition-colors"
-                              >
-                                <div className="flex items-center gap-4 flex-1 min-w-0">
-                                  <span className="text-gray-400 text-sm w-14 shrink-0">Dars {index + 1}</span>
-                                  <span className="text-gray-700 text-sm truncate">{lesson.title}</span>
-                                </div>
-                              </div>
-                            ))}
-
-                            {module.test && (
-                              <div className="flex items-center justify-between px-5 lg:px-6 py-4 hover:bg-gray-50/50 transition-colors">
-                                <div className="flex items-center gap-4 flex-1 min-w-0">
-                                  <span className="text-gray-400 text-sm w-14 shrink-0">Test</span>
-                                  <span className="text-gray-700 text-sm truncate">{module.test.title}</span>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </motion.div>
-                ))}
-              </Accordion>
-            </motion.div>
+            <ModuleAccordion variant="dark" modules={professionData.modules} value={openModule} onValueChange={setOpenModule} />
           </div>
         </section>
 
@@ -487,9 +395,9 @@ export default function ProfessionPage({ params }: { params: { slug: string } })
         <EnrollmentCtaCountdown />
 
         {/* FAQ Section */}
-        <FAQAccordion faqs={professionData.faqs} />
+        <FAQAccordion variant="dark" faqs={professionData.faqs} />
       </main>
-      <SiteFooter />
-    </>
+      <SiteFooter variant="dark" />
+    </div>
   );
 }

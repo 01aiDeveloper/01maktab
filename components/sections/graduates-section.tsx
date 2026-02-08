@@ -26,7 +26,7 @@ const graduatesData = [
 export function GraduatesSection() {
   return (
     <section className="w-full bg-black py-16 lg:py-24">
-      <div className="container mx-auto px-4 max-w-7xl">
+      <div className="container mx-auto px-4">
         {/* Section Header */}
         <h2 className="text-white font-bold text-3xl lg:text-4xl mb-12 lg:mb-16">
           Наши выпускники

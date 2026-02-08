@@ -32,7 +32,7 @@ export function RefundSection() {
             <div className="absolute inset-0 flex items-center justify-center p-12">
               <div className="relative w-full h-full">
                 <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/01Maktab__online_education___Copy_-Y0gD9A5EExiLMI3U3loR8SaP5ubQGE.png"
+                  src="/icons/professions/refund-icon.webp"
                   alt="Investment return"
                   fill
                   className="object-contain"
@@ -127,7 +127,7 @@ export function RefundSection() {
               <div className="absolute inset-0 flex items-center justify-center p-12">
                 <div className="relative w-full h-full">
                   <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/01Maktab__online_education___Copy_-Y0gD9A5EExiLMI3U3loR8SaP5ubQGE.png"
+                    src="/icons/professions/refund-icon.webp"
                     alt="Investment return"
                     fill
                     className="object-contain"

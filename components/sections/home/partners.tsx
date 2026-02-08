@@ -14,11 +14,25 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://dev-api.01
 interface PartnersSectionProps {
   partners?: Partner[]
   useMediaUrl?: boolean
+  variant?: 'light' | 'dark'
+  showSubtitle?: boolean
 }
 
-export function PartnersSection({ partners: partnersProp, useMediaUrl = true }: PartnersSectionProps) {
+export function PartnersSection({
+  partners: partnersProp,
+  useMediaUrl = true,
+  variant = 'light',
+  showSubtitle = true
+}: PartnersSectionProps) {
   const [partners, setPartners] = useState<Partner[]>(partnersProp || [])
   const [loading, setLoading] = useState(!partnersProp)
+
+  const isDark = variant === 'dark'
+  const sectionBg = isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]'
+  const cardBg = isDark ? 'bg-[#282828]' : 'bg-[#F4F4F6]'
+  const cardHoverBg = isDark ? 'hover:bg-[#F4F4F6]' : 'hover:bg-white'
+  const titleColor = isDark ? '#FFFFFF' : '#18181A'
+  const borderColor = isDark ? 'border-gray-800' : 'border-gray-100'
 
   useEffect(() => {
     // Agar props orqali partners berilgan bo'lsa, fetch qilmaymiz
@@ -51,26 +65,28 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true }: 
   }
 
   return (
-    <section className="bg-white px-4 pb-20 mx-auto w-full  overflow-hidden rounded-[80px]  py-24 text-center border border-gray-100 shadow-sm">
+    <section className={`${sectionBg} px-4 pb-20 mx-auto w-full overflow-hidden rounded-[80px] py-24 text-center border ${borderColor} ${isDark ? '' : 'shadow-sm'}`}>
       <div className="container">
         <div className="px-4">
-          <MainTitle 
-            align="center" 
-            color="text-dark"
+          <MainTitle
+            align="center"
+            textColor={titleColor}
             animated
           >
             Bizning Hamkorlar
           </MainTitle>
-          <Subtitle
-            align="center"
-            textColor="rgb(156, 163, 175)"
-            className="mx-auto mt-4 md:mt-6 max-w-2xl text-gray-400"
-            animated
-            animationDelay={0.1}
-          >
-            Hamkorlarimiz sizga stajerovka, o'qish jarayonida ularning ofisida ekspertlar bilan master-klasslar, birga
-            yaratilgan o'qish dasturlari va boshqa imkoniyatni beradilar.
-          </Subtitle>
+          {showSubtitle && (
+            <Subtitle
+              align="center"
+              textColor={isDark ? 'rgb(156, 163, 175)' : 'rgb(156, 163, 175)'}
+              className="mx-auto mt-4 md:mt-6 max-w-2xl text-gray-400"
+              animated
+              animationDelay={0.1}
+            >
+              Hamkorlarimiz sizga stajerovka, o'qish jarayonida ularning ofisida ekspertlar bilan master-klasslar, birga
+              yaratilgan o'qish dasturlari va boshqa imkoniyatni beradilar.
+            </Subtitle>
+          )}
         </div>
 
         <div className="mt-20 overflow-hidden">
@@ -87,14 +103,14 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true }: 
               {[...partners, ...partners].map((partner, index) => (
                 <div
                   key={`${partner.id}-${index}`}
-                  className="group relative flex h-[160px] w-[280px] shrink-0 items-center justify-center rounded-[32px] bg-[#F8F9FB] p-10 transition-all hover:bg-white hover:shadow-xl hover:shadow-gray-200/50"
+                  className={`group relative flex h-[160px] w-[280px] shrink-0 items-center justify-center rounded-[32px] ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? '' : 'hover:shadow-xl hover:shadow-gray-200/50'}`}
                 >
                   <Image
                     src={useMediaUrl ? getMediaUrl(partner.logo) : partner.logo}
                     alt={partner.name}
                     width={180}
                     height={80}
-                    className="object-contain transition-all duration-300 brightness-0 group-hover:brightness-100"
+                    className={`object-contain transition-all duration-300 brightness-50 group-hover:brightness-100`}
                   />
                 </div>
               ))}
@@ -103,7 +119,7 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true }: 
         </div>
 
         {/* Navigation Buttons */}
-        <div className="mt-12 flex justify-center">
+        {/* <div className="mt-12 flex justify-center">
           <CarouselNavigation
             onPrevClick={() => {}}
             onNextClick={() => {}}
@@ -113,7 +129,7 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true }: 
             iconType="arrow"
             size="md"
           />
-        </div>
+        </div> */}
       </div>
     </section>
   )

@@ -5,15 +5,15 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Clock, Users, BookOpen, CheckCircle2, FileText, Heart } from 'lucide-react';
 import { MainButton } from '@/components/ui/main-button';
 import { Badge } from '@/components/ui/badge';
-import { GraduatesSection } from '@/components/sections/home/graduates-section';
+import { HomeGraduatesSection } from '@/components/sections/home/home-graduates-section';
 import { PartnersSection } from '@/components/sections/home/partners';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MentorCard } from '@/components/cards/mentor-card';
-import { CourseModulesAccordion } from '@/components/sections/course-modules-accordion';
+import { ModuleAccordion } from '@/components/shared/module-accordion';
 import { SkillsList } from '@/components/sections/skills-list';
 import { InstrumentsGrid } from '@/components/sections/instruments-grid';
-import { FAQAccordion } from '@/components/sections/faq-accordion';
+import { FAQAccordion } from '@/components/shared/faq-accordion';
 import { CourseHeroSection } from '@/components/sections/courses/course-hero-section';
 import { CourseDescriptionSection } from '@/components/sections/courses/course-description-section';
 import { LearningOutcomesSection } from '@/components/sections/courses/learning-outcomes-section';
@@ -310,11 +310,7 @@ export default function CoursePage() {
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
       {/* Header */}
-      <div className="pt-4">
-        <div className="container mx-auto px-4">
-          <SiteHeader />
-        </div>
-      </div>
+      <SiteHeader variant="light" />
 
       {/* Hero Section */}
       <CourseHeroSection
@@ -353,17 +349,25 @@ export default function CoursePage() {
       <ProjectsCarouselSection projects={courseData.projects} />
 
       {/* Trial Video Section */}
-      <TrialVideoSection
-        title={trialVideoData.title}
-        subtitle={trialVideoData.subtitle}
-        videoImage="/images/courses/bg.webp"
-      />
+      <TrialVideoSection title={trialVideoData.title} subtitle={trialVideoData.subtitle} videoImage="/images/courses/bg.webp" />
 
       {/* Full Curriculum Section */}
-      <CourseModulesAccordion modules={courseData.modules} subtitle="45 ta modullar, 120 soat materiallar" />
+      <section className="w-full py-8">
+        <div className="container mx-auto px-4">
+          <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-2">To'liq kurs dasturi</h2>
+          <p className="text-gray-500 mb-6">45 ta modullar, 120 soat materiallar</p>
+
+          <ModuleAccordion
+            variant="light"
+            modules={courseData.modules}
+            freeBadgeClassName="bg-green-500 hover:bg-green-500 text-white"
+            actionButtonClassName="bg-[#5d7bf5] hover:bg-[#5d7bf5] text-white"
+          />
+        </div>
+      </section>
 
       {/* Graduates Section */}
-      <GraduatesSection rows={1} />
+      <HomeGraduatesSection rows={1} />
 
       {/* Stats Section */}
       <CourseStatsSection stats={courseData.stats} />
@@ -403,7 +407,7 @@ export default function CoursePage() {
       <PartnersSection />
 
       {/* FAQ Section */}
-      <FAQAccordion faqs={courseData.faqs} />
+      <FAQAccordion variant="light" faqs={courseData.faqs} />
 
       {/* Final CTA Section */}
       <EnrollmentCTASection />

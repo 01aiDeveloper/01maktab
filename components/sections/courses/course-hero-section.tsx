@@ -41,37 +41,47 @@ export function CourseHeroSection({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-gradient-to-br from-gray-100 via-gray-50 to-white rounded-3xl p-6 lg:p-10 overflow-hidden relative"
+          className="rounded-[40px] overflow-hidden relative min-h-[500px] lg:min-h-[600px]"
         >
-          {/* Back button */}
-          <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 mb-6 transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            <span>Orqaga</span>
-          </Link>
+          {/* Background Image */}
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover"
+            priority
+          />
 
-          {/* Stats badges */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-sm">
-              <BookOpen className="w-4 h-4 mr-2" />
-              {videosCount} soat video darslar
-            </Badge>
-            <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-sm">
-              <CheckCircle2 className="w-4 h-4 mr-2" />
-              {tasksCount} ta mavzu
-            </Badge>
-            <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-sm">
-              <Users className="w-4 h-4 mr-2" />
-              {projectsCount} ta loyiha
-            </Badge>
-          </div>
+          {/* Content Overlay */}
+          <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center min-h-[500px] lg:min-h-[600px]">
+            {/* Back button */}
+            <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit">
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm font-medium">Orqaga</span>
+            </Link>
 
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            {/* Left Content */}
-            <div className="space-y-6">
+            {/* Stats badges */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-sm">
+                <BookOpen className="w-4 h-4 mr-2" />
+                {videosCount} soat video darslar
+              </Badge>
+              <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-sm">
+                <CheckCircle2 className="w-4 h-4 mr-2" />
+                {tasksCount} ta mavzu
+              </Badge>
+              <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-sm">
+                <Users className="w-4 h-4 mr-2" />
+                {projectsCount} ta loyiha
+              </Badge>
+            </div>
+
+            {/* Content */}
+            <div className="space-y-6 max-w-2xl">
               <h1 className="font-suisse text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight text-balance text-gray-900">
                 {title}
               </h1>
-              <p className="text-gray-600 text-lg lg:text-xl leading-relaxed max-w-xl">{description}</p>
+              <p className="text-gray-600 text-lg lg:text-xl leading-relaxed">{description}</p>
               <MainButton
                 variant="gradient"
                 size="lg"
@@ -83,26 +93,21 @@ export function CourseHeroSection({
               </MainButton>
             </div>
 
-            {/* Right Image */}
-            <div className="relative aspect-square max-w-md mx-auto lg:max-w-none">
-              <Image src={image} alt={title} fill className="object-contain" priority />
+            {/* Bottom stats badges */}
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-sm">
+                <Clock className="w-4 h-4 mr-2" />
+                {level}
+              </Badge>
+              <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-sm">
+                <FileText className="w-4 h-4 mr-2" />
+                Kreativlik talab etmaz
+              </Badge>
+              <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-sm">
+                <Heart className="w-4 h-4 mr-2 text-red-500 fill-red-500" />
+                {stats.graduates.toLocaleString()} talaba boshlagan
+              </Badge>
             </div>
-          </div>
-
-          {/* Bottom stats badges */}
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-sm">
-              <Clock className="w-4 h-4 mr-2" />
-              {level}
-            </Badge>
-            <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-sm">
-              <FileText className="w-4 h-4 mr-2" />
-              Kreativlik talab etmaz
-            </Badge>
-            <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-sm">
-              <Heart className="w-4 h-4 mr-2 text-red-500 fill-red-500" />
-              {stats.graduates.toLocaleString()} talaba boshlagan
-            </Badge>
           </div>
         </motion.div>
       </div>

@@ -45,7 +45,7 @@ export function EnrollmentCtaCountdown({ deadline }: EnrollmentCtaCountdownProps
 
   return (
     <section className="w-full bg-black py-16 lg:py-24">
-      <div className="container mx-auto px-4 max-w-7xl">
+      <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -66,12 +66,13 @@ export function EnrollmentCtaCountdown({ deadline }: EnrollmentCtaCountdownProps
           </div>
 
           {/* Media Preview Block */}
-          <div className="relative w-full aspect-[16/9] lg:aspect-[21/9] rounded-2xl lg:rounded-3xl overflow-hidden mb-6 lg:mb-8 bg-black/20">
+          <div className="relative w-full rounded-2xl lg:rounded-3xl overflow-hidden mb-6 lg:mb-8">
             <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-wuuhBVBPVKmJD6C6hv7WjQm5NsTNGc.png"
+              src="/images/courses/try-now.png"
               alt="Course preview"
-              fill
-              className="object-cover"
+              width={1920}
+              height={1080}
+              className="w-full h-auto"
             />
           </div>
 

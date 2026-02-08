@@ -13,7 +13,7 @@ interface EnrollmentCTASectionProps {
 export function EnrollmentCTASection({
   title = "Hoziroq sinab ko'ring",
   subtitle = 'Birinchi darslarni bepul boshlang',
-  previewImage = '/images/courses/try-now.png',
+  previewImage = '',
 }: EnrollmentCTASectionProps) {
   return (
     <section className="w-full py-12 lg:py-16">
@@ -32,7 +32,7 @@ export function EnrollmentCTASection({
           {/* Image preview container - larger */}
           <div className="relative max-w-[856px] mx-auto rounded-[40px] overflow-hidden shadow-2xl mb-16">
             <div className="aspect-video relative bg-gray-900">
-              <Image src={previewImage} alt="Course preview" fill className="object-cover" />
+              <Image src={'/images/courses/try-now.png'} alt="Course preview" fill className="object-contain" />
             </div>
           </div>
 

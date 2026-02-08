@@ -30,19 +30,30 @@ const socialLinks = [
   },
 ]
 
-export function SiteFooter() {
+interface SiteFooterProps {
+  variant?: 'light' | 'dark'
+}
+
+export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
   const [hoveredLogoIndex, setHoveredLogoIndex] = useState<number | null>(null)
 
+  const isDark = variant === 'dark'
+  const bgColor = isDark ? 'bg-[#101010]' : 'bg-[#F4F4F6]'
+  const textColor = isDark ? 'text-[#FFFFFF]' : 'text-[#18181A]'
+  const logoTextColor = isDark ? 'text-white' : 'text-black'
+  const borderColor = isDark ? 'border-white/20' : 'border-border/50'
+
   return (
-    <footer className="container pt-8 pb-12">
-      {/* Top section with links */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="flex flex-col md:flex-row items-center justify-between gap-4 py-6 border-b border-border/50"
-      >
+    <footer className={`w-full ${bgColor} pt-8 pb-12`}>
+      <div className="container mx-auto px-4">
+        {/* Top section with links */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className={`flex flex-col md:flex-row items-center justify-between gap-4 py-6 border-b ${borderColor}`}
+        >
         {/* Navigation links */}
         <nav className="flex items-center gap-4 md:gap-6">
           {footerLinks.map((link, index) => (
@@ -59,11 +70,11 @@ export function SiteFooter() {
               >
                 <Link
                   href={link.href}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors relative group"
+                  className={`text-sm ${isDark ? 'text-white/70 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors relative group`}
                 >
                   {link.label}
                   <motion.span
-                    className="absolute bottom-0 left-0 w-0 h-0.5 bg-foreground group-hover:w-full transition-all duration-300"
+                    className={`absolute bottom-0 left-0 w-0 h-0.5 ${isDark ? 'bg-white' : 'bg-foreground'} group-hover:w-full transition-all duration-300`}
                     initial={{ width: 0 }}
                     whileHover={{ width: "100%" }}
                   />
@@ -88,10 +99,10 @@ export function SiteFooter() {
           >
             <Link
               href="/privacy"
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 group"
+              className={`text-sm ${isDark ? 'text-white/70 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors flex items-center gap-1 group`}
             >
               Privacy Policy
-            
+
             </Link>
           </motion.div>
         </motion.div>
@@ -110,7 +121,7 @@ export function SiteFooter() {
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className={`${isDark ? 'text-white/70 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors`}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -125,14 +136,14 @@ export function SiteFooter() {
         </motion.div>
       </motion.div>
 
-      {/* Large logo text with multiple variants */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className="pt-8 md:pt-12 overflow-hidden"
-      >
+        {/* Large logo text with multiple variants */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="pt-8 md:pt-12 overflow-hidden"
+        >
         <div className="flex flex-col gap-4 md:gap-6">
           {/* First Row */}
     
@@ -146,7 +157,7 @@ export function SiteFooter() {
               transition={{ duration: 0.6, delay: 0.6 }}
               onHoverStart={() => setHoveredLogoIndex(3)}
               onHoverEnd={() => setHoveredLogoIndex(null)}
-              className="text-[clamp(3rem,15vw,12rem)] md:text-[clamp(5rem,20vw,18rem)] font-bold leading-[0.85] tracking-tighter text-black cursor-pointer relative"
+              className={`text-[clamp(3rem,15vw,12rem)] md:text-[clamp(5rem,20vw,18rem)] font-bold leading-[0.85] tracking-tighter ${logoTextColor} cursor-pointer relative`}
             >
               <motion.span
                 animate={
@@ -289,7 +300,8 @@ export function SiteFooter() {
             </motion.h2>
           </div>
         </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </footer>
   )
 }

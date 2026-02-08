@@ -54,7 +54,7 @@ const paymentOptions = [
 export function PaymentOptionsSection() {
   return (
     <section className="w-full bg-black py-16 lg:py-24">
-      <div className="container mx-auto px-4 max-w-7xl">
+      <div className="container mx-auto px-4">
         {/* Section Header */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}

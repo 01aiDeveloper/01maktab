@@ -7,7 +7,8 @@ import { FeatureCards } from '@/components/feature-cards';
 import { MyCoursesSection } from '@/components/sections/my-courses-section';
 import { MyProfessionsSection } from '@/components/sections/my-professions-section';
 import { MySkillsSection } from '@/components/sections/my-skills-section';
-import { GraduatesSection } from '@/components/sections/graduates-section';
+import { HomeGraduatesSection } from '@/components/sections/home/home-graduates-section';
+
 import { StatsSection } from '@/components/sections/stats-section';
 import { ProfileSetupModal } from '@/components/auth/profile-setup-modal';
 import { useAuthStore } from '@/store/auth-store';
@@ -35,7 +36,7 @@ export default function PrivateHomePage() {
           if (!userData.firstname || !userData.lastname) {
             setIsProfileModalOpen(true);
           } else {
-            console.log('✅ User ma\'lumotlari to\'liq, modal ochilmaydi');
+            console.log("✅ User ma'lumotlari to'liq, modal ochilmaydi");
           }
         }
       } catch (error) {
@@ -52,11 +53,7 @@ export default function PrivateHomePage() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
-      <div className="pt-4">
-        <div className="container">
-          <SiteHeader />
-        </div>
-      </div>
+      <SiteHeader />
       <main>
         <HeroSection userName={user?.firstname || 'Foydalanuvchi'} />
         <FeatureCards />
@@ -66,8 +63,8 @@ export default function PrivateHomePage() {
           <MyProfessionsSection />
           <MySkillsSection />
         </div>
-        
-        <GraduatesSection />
+
+        <HomeGraduatesSection />
 
         <StatsSection />
       </main>
