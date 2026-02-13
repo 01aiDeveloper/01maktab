@@ -13,7 +13,6 @@ const EVENT_DATA = {
   description: 'Соревнуйся с сильнейшими, решай реальные задачи и получи шанс на стажировку, призы и признание индустрии.',
   date: '02.12.2025',
   location: 'IT Park, Muminov Street 4',
-  heroImage: '/images/events/ml-contest-hero.jpg',
   about: {
     title: 'О мероприятии',
     content: 'ML Contest — это практический конкурс для начинающих и junior-специалистов в IT. Участники решают реальные кейсы, работают в командах и получают опыт, который ценится работодателями.',
@@ -67,7 +66,7 @@ export default function EventPage() {
       <main className="min-h-screen bg-[#0b0b0b]">
         <EventHero event={EVENT_DATA} onBack={() => router.back()} />
 
-        <div className="container mx-auto  my-12 lg:my-16 max-w-[1200px] space-y-8 lg:space-y-12">
+        <div className="container mx-auto my-12 lg:my-16 max-w-[1200px] space-y-8 lg:space-y-12">
           <EventAbout title={EVENT_DATA.about.title} content={EVENT_DATA.about.content} />
           <EventProgram program={EVENT_DATA.program} />
           <EventBenefits benefits={EVENT_DATA.benefits} />

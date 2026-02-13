@@ -9,7 +9,6 @@ interface EventHeroProps {
     description: string;
     date: string;
     location: string;
-    heroImage: string;
   };
   onBack: () => void;
 }

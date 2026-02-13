@@ -195,7 +195,7 @@ export default function GraduateStoryPage() {
         {otherStories.length > 0 && (
           <section className="w-full py-16 lg:py-24 bg-gray-50">
             <div className="container mx-auto px-4">
-              <h2 className="font-bold text-3xl lg:text-4xl text-gray-900 mb-8 lg:mb-12">Смотреть другие истории</h2>
+              <h2 className="font-bold text-3xl lg:text-4xl text-gray-900 mb-8 lg:mb-12">Boshqa hikoyalar</h2>
 
               <div className="overflow-hidden" ref={emblaRef}>
                 <div className="flex gap-4">
