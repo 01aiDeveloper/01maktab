@@ -6,10 +6,10 @@ import { Send, Instagram, Linkedin, ArrowLeft, ArrowRight } from "lucide-react"
 import { useState } from "react"
 
 const footerLinks = [
-  { label: "Bosh Sahifa", href: "/" },
-  { label: "Skillar", href: "/skillar" },
-  { label: "Kurslar", href: "/kurslar" },
-  { label: "Kasblar", href: "/kasblar" },
+  { label: "Darsxona", href: "/" },
+  { label: "Barcha Kurslar", href: "/catalog" },
+  { label: "Hamjamiyat", href: "/community" },
+  { label: "Market", href: "#" },
 ]
 
 const socialLinks = [

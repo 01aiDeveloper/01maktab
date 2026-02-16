@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Cloud } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/api';
+import { NoData } from '@/components/ui/no-data';
 
 interface Certificate {
   id: number;
@@ -11,24 +11,14 @@ interface Certificate {
 }
 
 export function TabCertificates() {
-  const [items, setItems] = useState<Certificate[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCertificates = async () => {
-      try {
-        const response = await api.get('/user/me/certificates');
-        const data = response.data?.data?.data || response.data?.data || [];
-        setItems(Array.isArray(data) ? data : []);
-      } catch {
-        setItems([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCertificates();
-  }, []);
+  const { data: items = [], isLoading: loading } = useQuery<Certificate[]>({
+    queryKey: ['my-certificates'],
+    queryFn: async () => {
+      const response = await api.get('/user/me/certificates');
+      const data = response.data?.data?.data || response.data?.data || [];
+      return Array.isArray(data) ? data : [];
+    },
+  });
 
   if (loading) {
     return (
@@ -43,11 +33,11 @@ export function TabCertificates() {
   if (items.length === 0) {
     return (
       <div className="max-w-300 mx-auto px-4 pb-8">
-        <div className="bg-white rounded-[22px] p-16 shadow-[0_1px_4px_rgba(0,0,0,0.04)] text-center">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Cloud className="w-8 h-8 text-gray-300" />
-          </div>
-          <p className="text-gray-400 text-sm">Sertifikatlar mavjud emas</p>
+        <div className="bg-white rounded-[22px] shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+          <NoData
+            title="Здесь пока ничего нет"
+            description="Пройдите курс и получите профессиональный сертификат"
+          />
         </div>
       </div>
     );

@@ -11,12 +11,10 @@ import { useAuthStore } from "@/store/auth-store"
 import api from "@/lib/api"
 
 const navLinks = [
-  { label: "Nima o'rganasiz?", href: "/courses" },
-  { label: "Bepul sinov darslari", href: "/skills" },
-  { label: "Kurs dasturi", href: "/professions" },
-  { label: "Bitiruvchilar", href: "/graduates" },
-  { label: "Sertifikat", href: "/certificate" },
-  { label: "Hamkorlar", href: "/partners" },
+  { label: "Darsxona", href: "/" },
+  { label: "Barcha Kurslar", href: "/catalog" },
+  { label: "Hamjamiyat", href: "/community" },
+  { label: "Market", href: "#" },
 ]
 
 interface SiteHeaderProps {
@@ -115,13 +113,17 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <DropdownMenuItem className="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer">
-                        <Settings className="h-4 w-4 text-gray-500" />
-                        <span>Sozlash</span>
+                      <DropdownMenuItem asChild className="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer">
+                        <Link href="/profile">
+                          <Settings className="h-4 w-4 text-gray-500" />
+                          <span>Sozlash</span>
+                        </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer">
-                        <User className="h-4 w-4 text-gray-500" />
-                        <span>Profil</span>
+                      <DropdownMenuItem asChild className="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer">
+                        <Link href="/profile">
+                          <User className="h-4 w-4 text-gray-500" />
+                          <span>Profil</span>
+                        </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => {

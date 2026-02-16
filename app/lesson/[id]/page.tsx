@@ -30,6 +30,7 @@ export default async function LessonPage({ params }: { params: Promise<{ id: str
   const { id } = await params;
   const { lesson, requiresAuth } = await getLesson(id);
 
+  console.log(lesson)
   if (!lesson && !requiresAuth) {
     notFound();
   }

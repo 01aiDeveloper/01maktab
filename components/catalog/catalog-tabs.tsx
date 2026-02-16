@@ -1,16 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { CatalogCard } from '@/components/cards/catalog-card';
+import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
+import { SkillCard } from '@/components/cards/skill-card';
+import { NoData } from '@/components/ui/no-data';
 import api from '@/lib/api';
 
 type TabKey = 'skills' | 'courses' | 'professions';
 
-const TABS: { key: TabKey; label: string }[] = [
-  { key: 'skills', label: 'Skilllar' },
-  { key: 'courses', label: 'Kurslar' },
-  { key: 'professions', label: 'Kasblar' },
+const TABS: { key: TabKey; label: string; icon: string }[] = [
+  { key: 'skills', label: 'Skillar', icon: '/icons/catalog/1.svg' },
+  { key: 'courses', label: 'Kurslar', icon: '/icons/catalog/2.svg' },
+  { key: 'professions', label: 'Kasblar', icon: '/icons/catalog/3.svg' },
 ];
 
 interface CatalogItem {
@@ -31,35 +33,26 @@ export function CatalogTabs() {
   const tabParam = searchParams.get('tab') as TabKey | null;
   const activeTab: TabKey = tabParam && TABS.some((t) => t.key === tabParam) ? tabParam : 'skills';
 
-  const [items, setItems] = useState<CatalogItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const formats: Record<TabKey, string> = {
+    skills: 'SKILL',
+    courses: 'COURSE',
+    professions: 'PROFESSION',
+  };
+
+  const { data: items = [], isLoading: loading } = useQuery<CatalogItem[]>({
+    queryKey: ['catalog', activeTab],
+    queryFn: async () => {
+      const response = await api.get('/course/public', {
+        params: { format: formats[activeTab], pageSize: 20 },
+      });
+      const data = response.data?.data?.data || response.data?.data || [];
+      return Array.isArray(data) ? data : [];
+    },
+  });
 
   const setTab = (tab: TabKey) => {
     router.push(`/catalog?tab=${tab}`, { scroll: false });
   };
-
-  useEffect(() => {
-    const fetchItems = async () => {
-      setLoading(true);
-      try {
-        let endpoint = '';
-        if (activeTab === 'skills') endpoint = '/course/public/skills';
-        if (activeTab === 'courses') endpoint = '/course/public/courses';
-        if (activeTab === 'professions') endpoint = '/course/public/professions';
-
-        const response = await api.get(endpoint, { params: { pageSize: 20 } });
-        const data = response.data?.data?.data || response.data?.data || [];
-        setItems(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error('Failed to fetch catalog items:', error);
-        setItems([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchItems();
-  }, [activeTab]);
 
   const getItemHref = (item: CatalogItem) => {
     const slug = item.slug || item.id.toString();
@@ -72,32 +65,28 @@ export function CatalogTabs() {
     return item.image || item.photo || '/placeholder.svg';
   };
 
-  const getItemSubtitle = (item: CatalogItem) => {
-    return item.mentor || item.mentorName || item.instructorName || 'Mentor: Kursni Ko\'ring';
-  };
-
   return (
-    <section className="max-w-300 mx-auto px-4 py-6 lg:py-10">
+    <section className="container  py-6! lg:py-10!">
       {/* Tab Navigation */}
-      <div className="flex items-center justify-center mb-8">
-        <div className="inline-flex gap-1">
-          {TABS.map((tab) => (
+      <div className="flex items-center w-full mb-8">
+        {TABS.map((tab) => {
+          const isActive = activeTab === tab.key;
+          return (
             <button
               key={tab.key}
               onClick={() => setTab(tab.key)}
-              className={`relative px-5 py-2.5 text-sm font-medium transition-colors ${
-                activeTab === tab.key
-                  ? 'text-[#3B5BFF]'
-                  : 'text-gray-400 hover:text-gray-600'
+              className={`relative flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
+                isActive ? 'text-[#1A1A1A]' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
+              <Image src={tab.icon} alt={tab.label} width={32} height={32} className={`w-8 h-8 object-contain ${!isActive ? 'grayscale opacity-50' : ''}`} />
               {tab.label}
-              {activeTab === tab.key && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-[3px] bg-[#3B5BFF] rounded-full" />
+              {isActive && (
+                <span className="absolute bottom-0 left-4 right-4 h-[2.5px] bg-[#3B5BFF] rounded-full" />
               )}
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
       {/* Grid */}
@@ -106,21 +95,17 @@ export function CatalogTabs() {
           <div className="w-10 h-10 border-4 border-gray-200 border-t-[#3B5BFF] rounded-full animate-spin" />
         </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16">
-          <p className="text-gray-400 text-base">Hozircha ma&apos;lumot yo&apos;q</p>
-        </div>
+        <NoData title="Здесь пока ничего нет" description="Hozircha ma'lumot yo'q" />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {items.map((item) => (
-            <CatalogCard
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {items.map((item: CatalogItem) => (
+            <SkillCard
               key={item.id}
               id={item.id}
               slug={item.slug}
               title={item.title}
-              subtitle={getItemSubtitle(item)}
               image={getItemImage(item)}
               badge="Bepul"
-              badgeColor="green"
               href={getItemHref(item)}
             />
           ))}
