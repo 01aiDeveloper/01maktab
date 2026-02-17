@@ -1,83 +1,92 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { Play } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import Plyr from 'plyr';
+import 'plyr/dist/plyr.css';
 import { getYoutubeEmbedUrl } from '@/lib/lesson-utils';
 
 interface UniversalVideoPlayerProps {
   sourceUrl: string;
   sourceType: 'YOU_TUBE' | 'BUNNY_STREAM' | 'UNKNOWN';
   poster?: string;
+  isFirst?: boolean;
 }
 
-export function UniversalVideoPlayer({ sourceUrl, sourceType, poster }: UniversalVideoPlayerProps) {
+export function UniversalVideoPlayer({ sourceUrl, sourceType, poster, isFirst = false }: UniversalVideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [hlsLoaded, setHlsLoaded] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (sourceType !== 'BUNNY_STREAM' || !videoRef.current) return;
+    if (!containerRef.current) return;
 
-    const video = videoRef.current;
-    let hlsInstance: any = null;
+    try {
+      if (sourceType === 'YOU_TUBE') {
+        // YouTube with Plyr iframe support
+        if (iframeRef.current) {
+          const embedUrl = getYoutubeEmbedUrl(sourceUrl);
+          iframeRef.current.src = embedUrl;
 
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = sourceUrl;
-      setHlsLoaded(true);
-    } else {
-      import('hls.js').then(({ default: Hls }) => {
-        if (Hls.isSupported() && videoRef.current) {
-          hlsInstance = new Hls();
-          hlsInstance.loadSource(sourceUrl);
-          hlsInstance.attachMedia(videoRef.current);
-          hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
-            setHlsLoaded(true);
+          // Initialize Plyr on iframe
+          setTimeout(() => {
+            if (iframeRef.current) {
+              new Plyr(iframeRef.current, {
+                controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+              });
+            }
+          }, 100);
+        }
+      } else if (sourceType === 'BUNNY_STREAM') {
+        // HLS Stream with Plyr
+        if (videoRef.current) {
+          const video = videoRef.current;
+
+          // Check if browser supports HLS natively (Safari)
+          if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = sourceUrl;
+          } else if (window.Hls && window.Hls.isSupported()) {
+            // Use HLS.js for other browsers
+            const hls = new (window.Hls as any)();
+            hls.loadSource(sourceUrl);
+            hls.attachMedia(video);
+          }
+
+          // Initialize Plyr on video
+          new Plyr(video, {
+            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'fullscreen'],
+            poster,
           });
         }
-      });
-    }
-
-    return () => {
-      if (hlsInstance) {
-        hlsInstance.destroy();
       }
-    };
-  }, [sourceUrl, sourceType]);
+    } catch (error) {
+      console.error('[Player] Error initializing player:', error);
+    }
+  }, [sourceUrl, sourceType, poster]);
 
   if (sourceType === 'YOU_TUBE') {
-    const embedUrl = getYoutubeEmbedUrl(sourceUrl);
     return (
-      <div className="relative w-full aspect-video bg-black rounded-3xl overflow-hidden shadow-lg">
-        {!isPlaying && (
-          <div
-            className="absolute inset-0 bg-black/50 flex items-center justify-center cursor-pointer z-10"
-            onClick={() => setIsPlaying(true)}
-          >
-            <div className="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors">
-              <Play className="w-10 h-10 text-black ml-1" fill="currentColor" />
-            </div>
-          </div>
-        )}
-        {isPlaying ? (
-          <iframe
-            src={`${embedUrl}?autoplay=1`}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        ) : (
-          <img src={poster || `https://img.youtube.com/vi/${embedUrl.split('/').pop()}/maxresdefault.jpg`} alt="Video thumbnail" className="w-full h-full object-cover" />
-        )}
+      <div ref={containerRef} className="relative w-full bg-black rounded-3xl overflow-hidden shadow-lg" style={{ aspectRatio: '16/9' }}>
+        <iframe
+          ref={iframeRef}
+          className="plyr__iframe w-full h-full"
+          title="YouTube video player"
+          allowFullScreen
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        />
       </div>
     );
   }
 
   if (sourceType === 'BUNNY_STREAM') {
     return (
-      <div className="relative w-full aspect-video bg-black rounded-3xl overflow-hidden shadow-lg">
-        <video ref={videoRef} controls className="w-full h-full" poster={poster}>
-          {!hlsLoaded && <source src={sourceUrl} type="application/x-mpegURL" />}
-        </video>
+      <div ref={containerRef} className="relative w-full bg-black rounded-3xl overflow-hidden shadow-lg" style={{ aspectRatio: '16/9' }}>
+        <video
+          ref={videoRef}
+          className="plyr-video w-full h-full"
+          poster={poster}
+          controls
+          crossOrigin="anonymous"
+        />
       </div>
     );
   }
