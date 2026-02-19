@@ -310,6 +310,7 @@ export default function CoursePage() {
         description={course.description.replace(/<[^>]*>/g, '')}
       />
 
+
       {/* Learning Outcomes Section */}
       <LearningOutcomesSection outcomes={staticLearningOutcomes} />
 
