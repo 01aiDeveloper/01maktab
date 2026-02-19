@@ -32,11 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-        <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-        <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-      </head>
+      <head></head>
       <body className={`${inter.variable} font-sans antialiased overflow-x-hidden`}>
         <Providers>
           {children}
