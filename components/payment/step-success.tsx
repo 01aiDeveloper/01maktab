@@ -1,12 +1,62 @@
-import { ArrowRight, Check } from 'lucide-react';
-import Link from 'next/link';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { ArrowRight, Check, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { StepIndicator } from './step-indicator';
+import api from '@/lib/api';
 
 interface StepSuccessProps {
   courseId: string;
 }
 
 export function StepSuccess({ courseId }: StepSuccessProps) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lessonUrl, setLessonUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const enroll = async () => {
+      try {
+        // Kursga yozilish
+        await api.post(`/course/${courseId}/enroll`);
+
+        // Birinchi modul va darsni olish
+        const res = await api.get(`/course/${courseId}/modules`);
+        const modules: Array<{
+          id: number;
+          lessons?: Array<{ id: number }>;
+        }> = res.data?.data ?? res.data ?? [];
+
+        const firstModule = modules[0];
+        const firstLesson = firstModule?.lessons?.[0];
+
+        if (firstModule && firstLesson) {
+          const params = new URLSearchParams({
+            lessonId: String(firstLesson.id),
+            courseType: 'course',
+            courseId: String(courseId),
+          });
+          setLessonUrl(`/module/${firstModule.id}?${params.toString()}`);
+        } else {
+          setLessonUrl(`/courses/${courseId}`);
+        }
+      } catch {
+        setError("Kursga ulanishda xatolik. Iltimos, qayta urinib ko'ring.");
+        setLessonUrl(`/courses/${courseId}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    enroll();
+  }, [courseId]);
+
+  const handleStart = () => {
+    if (lessonUrl) router.push(lessonUrl);
+  };
+
   return (
     <>
       <StepIndicator currentStep={3} />
@@ -25,14 +75,28 @@ export function StepSuccess({ courseId }: StepSuccessProps) {
         Siz endi to&apos;liq kursga kirishingiz mumkin. Barcha darslar va materiallar ochiq
       </p>
 
+      {error && (
+        <p className="text-red-500 text-xs text-center mb-4">{error}</p>
+      )}
+
       <div className="flex justify-center">
-        <Link
-          href={`/courses/${courseId}`}
-          className="inline-flex items-center gap-2 h-12 px-8 rounded-xl bg-[#3B5BFF] hover:bg-[#2d4ae6] text-white font-medium text-sm transition-colors"
+        <button
+          onClick={handleStart}
+          disabled={loading}
+          className="inline-flex items-center gap-2 h-12 px-8 rounded-xl bg-[#3B5BFF] hover:bg-[#2d4ae6] text-white font-medium text-sm transition-colors disabled:opacity-70"
         >
-          Kursni boshlash
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+          {loading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Tayyorlanmoqda...
+            </>
+          ) : (
+            <>
+              Kursni boshlash
+              <ArrowRight className="w-4 h-4" />
+            </>
+          )}
+        </button>
       </div>
     </>
   );

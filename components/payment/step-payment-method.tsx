@@ -2,21 +2,36 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Check } from 'lucide-react';
+import { Check, Loader2 } from 'lucide-react';
 import { StepIndicator } from './step-indicator';
+import api from '@/lib/api';
 
 interface StepPaymentMethodProps {
+  courseId: number;
   coursePrice: number;
   onNext: () => void;
   onBack: () => void;
+  promocodeId?: number;
 }
 
 type PaymentPlan = 'full' | 'installment';
 type PaymentProvider = 'click' | 'payme' | 'uzum';
 
-export function StepPaymentMethod({ coursePrice, onNext, onBack }: StepPaymentMethodProps) {
+interface ClickResponse {
+  statusCode: number;
+  data: { link: string };
+}
+
+interface PaymeResponse {
+  statusCode: number;
+  data: { link: string };
+}
+
+export function StepPaymentMethod({ courseId, coursePrice, onNext, onBack, promocodeId }: StepPaymentMethodProps) {
   const [paymentPlan, setPaymentPlan] = useState<PaymentPlan>('full');
   const [paymentProvider, setPaymentProvider] = useState<PaymentProvider>('click');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const discount = 0.1;
   const discountedPrice = coursePrice * (1 - discount);
@@ -24,6 +39,44 @@ export function StepPaymentMethod({ coursePrice, onNext, onBack }: StepPaymentMe
   const monthlyPayment = Math.ceil(coursePrice / installmentMonths);
 
   const fmt = (price: number) => new Intl.NumberFormat('uz-UZ').format(price);
+
+  const handlePay = async () => {
+    if (paymentProvider === 'uzum') {
+      // Uzum API yo'q, keyinroq qo'shiladi
+      onNext();
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const body: { courseId: number; promocodeId?: number } = { courseId };
+      if (promocodeId) body.promocodeId = promocodeId;
+
+      let link: string;
+
+      if (paymentProvider === 'click') {
+        const res = await api.post<ClickResponse>('/click/course', body);
+        link = res.data.data.link;
+        // Click link to'liq URL bo'lmasligi mumkin
+        if (!link.startsWith('http')) {
+          link = `https://my.click.uz/services/pay?${link}`;
+        }
+      } else {
+        // payme
+        const res = await api.post<PaymeResponse>('/payme/course', body);
+        link = res.data.data.link;
+      }
+
+      window.location.href = link;
+    } catch (err) {
+      console.error('Payment error:', err);
+      setError("To'lov amalga oshmadi. Qayta urinib ko'ring.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -130,19 +183,33 @@ export function StepPaymentMethod({ coursePrice, onNext, onBack }: StepPaymentMe
         ))}
       </div>
 
+      {/* Error message */}
+      {error && (
+        <p className="text-red-500 text-sm text-center mb-4">{error}</p>
+      )}
+
       {/* Buttons */}
       <div className="flex gap-3">
         <button
           onClick={onBack}
-          className="flex-1 h-12 rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 font-medium text-sm transition-colors"
+          disabled={loading}
+          className="flex-1 h-12 rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 font-medium text-sm transition-colors disabled:opacity-50"
         >
           Orqaga
         </button>
         <button
-          onClick={onNext}
-          className="flex-1 h-12 rounded-xl bg-[#3B5BFF] hover:bg-[#2d4ae6] text-white font-medium text-sm transition-colors"
+          onClick={handlePay}
+          disabled={loading}
+          className="flex-1 h-12 rounded-xl bg-[#3B5BFF] hover:bg-[#2d4ae6] text-white font-medium text-sm transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
         >
-          To&apos;lovga o&apos;tish
+          {loading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Yuklanmoqda...
+            </>
+          ) : (
+            "To'lovga o'tish"
+          )}
         </button>
       </div>
     </>

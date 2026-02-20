@@ -1,18 +1,16 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
-import { ProfessionCard } from "@/components/cards/profession-card"
+import { MyCourseCard } from "@/components/cards/my-course-card"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
 import { NoData } from "@/components/shared/no-data"
-import { getMediaUrl } from "@/lib/utils"
-import api from "@/lib/api"
+import { PageLoader } from "@/components/ui/page-loader"
+import { useMyProfessions } from "@/hooks/use-my-courses"
 
 export function MyProfessionsSection() {
-  const [professions, setProfessions] = useState<any[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: professions, isLoading } = useMyProfessions()
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
@@ -22,48 +20,27 @@ export function MyProfessionsSection() {
 
   const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } = useCarouselNavigation(emblaApi)
 
-  useEffect(() => {
-    const fetchMyProfessions = async () => {
-      try {
-        const response = await api.get("/course/my/professions")
-        if (response.data?.data && response.data.data.length > 0) {
-          const apiProfessions = response.data.data.map((prof: any) => ({
-            id: prof.id,
-            image: getMediaUrl(prof.photo),
-            title: prof.title || prof.name,
-            instructor: prof.mentor?.fullname ? `Ustoz: ${prof.mentor.fullname}` : "Ustoz: Noma'lum",
-            progress: `Dars: ${prof.completedLessons || 0}/${prof.totalLessons || 0}`,
-          }))
-          setProfessions(apiProfessions)
-        }
-      } catch (error) {
-        console.error("Failed to fetch my professions:", error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchMyProfessions()
-  }, [])
-
   if (isLoading) {
-    return null
+    return (
+      <section className="py-8">
+        <PageLoader />
+      </section>
+    )
   }
 
-  if (professions.length === 0) {
+  if (!professions || professions.length === 0) {
     return (
-      <div>
+      <section className="py-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold ">Kasblarim</h2>
+          <h2 className="text-2xl font-bold text-foreground">Kasblarim</h2>
         </div>
         <NoData
           message="Bu yer hozircha bo'sh, kasblar qo'shishni boshlang"
           description="Pastdagi ma'lumotlarni to'ldiring"
           buttonText="Kasblarni ko'rish"
-          buttonLink="/kasblar"
-          isDark={false}
+          buttonLink="/catalog?tab=professions"
         />
-      </div>
+      </section>
     )
   }
 
@@ -82,8 +59,8 @@ export function MyProfessionsSection() {
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-4">
           {professions.map((profession) => (
-            <div key={profession.id} className="flex-none w-[280px] md:w-[320px]">
-              <ProfessionCard {...profession} />
+            <div key={profession.id} className="flex-[0_0_calc(25%-12px)] min-w-0">
+              <MyCourseCard item={profession} href={`/professions/${profession.id}`} dark />
             </div>
           ))}
         </div>

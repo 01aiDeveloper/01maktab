@@ -35,7 +35,7 @@ export function TrialVideoSection({
             iconPosition="right"
             className="bg-gradient-to-r from-[#0066FF] to-[#0066FF] hover:from-[#0052CC] hover:to-[#0052CC] shadow-lg"
           >
-            Batal
+            Batavsil
           </MainButton>
         </div>
       </div>

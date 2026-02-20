@@ -1,35 +1,16 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
-import { CourseCard } from "../cards/course-card"
+import { MyCourseCard } from "@/components/cards/my-course-card"
 import { NoData } from "@/components/shared/no-data"
-import { getMediaUrl } from "@/lib/utils"
-import api from "@/lib/api"
-import Link from "next/link"
-
-interface Course {
-  id: number
-  name: string
-  title: string
-  photo: string
-  icon: string
-  moduleTitle: string
-  mentor: {
-    id: number
-    fullname: string
-    photo: string
-  }
-  totalLessons: number
-  completedLessons: number
-}
+import { PageLoader } from "@/components/ui/page-loader"
+import { useMyCourses } from "@/hooks/use-my-courses"
 
 export function MyCoursesSection() {
-  const [courses, setCourses] = useState<Course[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: courses, isLoading } = useMyCourses()
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
@@ -39,34 +20,15 @@ export function MyCoursesSection() {
 
   const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } = useCarouselNavigation(emblaApi)
 
-  useEffect(() => {
-    const fetchMyCourses = async () => {
-      try {
-        const response = await api.get("/course/my/courses")
-        if (response.data?.data) {
-          setCourses(response.data.data)
-        }
-      } catch (error) {
-        console.error("Failed to fetch my courses:", error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchMyCourses()
-  }, [])
-
   if (isLoading) {
     return (
       <section className="py-8">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
-        </div>
+        <PageLoader />
       </section>
     )
   }
 
-  if (courses.length === 0) {
+  if (!courses || courses.length === 0) {
     return (
       <section className="py-8">
         <div className="flex items-center justify-between mb-6">
@@ -76,20 +38,11 @@ export function MyCoursesSection() {
           message="Bu yer hozircha bo'sh, kurslar qo'shishni boshlang"
           description="Pastdagi ma'lumotlarni to'ldiring"
           buttonText="Kurslarni ko'rish"
-          buttonLink="/kurslar"
+          buttonLink="/catalog?tab=courses"
         />
       </section>
     )
   }
-
-  // Transform API data to CourseCard format
-  const displayCourses = courses.map((course) => ({
-    id: course.id,
-    image: getMediaUrl(course.photo),
-    title: course.title || course.name,
-    instructor: `Ustoz: ${course.mentor?.fullname || "Noma'lum"}`,
-    progress: `Dars: ${course.completedLessons}/${course.totalLessons}`,
-  }))
 
   return (
     <motion.section
@@ -105,9 +58,9 @@ export function MyCoursesSection() {
 
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-4">
-          {displayCourses.map((course) => (
+          {courses.map((course) => (
             <div key={course.id} className="flex-[0_0_calc(25%-12px)] min-w-0">
-              <CourseCard {...course} />
+              <MyCourseCard item={course} href={`/courses/${course.id}`} />
             </div>
           ))}
         </div>
