@@ -1,7 +1,8 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useState, useCallback } from 'react';
+import api from '@/lib/api';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MentorCard } from '@/components/cards/mentor-card';
@@ -22,89 +23,12 @@ import { CertificateSection } from '@/components/sections/courses/certificate-se
 import { EnrollmentCTASection } from '@/components/sections/courses/enrollment-cta-section';
 import { HomeGraduatesSection } from '@/components/sections/home/home-graduates-section';
 import { PartnersSection } from '@/components/sections/home/partners';
-import api from '@/lib/api';
+import { useCourse } from '@/hooks/use-course';
+import { useCourseModules } from '@/hooks/use-course-modules';
 import { baseMediaUrl } from '@/lib/utils';
-
-// ─── API Types ────────────────────────────────────────────────────────────────
-
-interface ApiLesson {
-  id: number;
-  title: string;
-}
-
-interface ApiModule {
-  id: number;
-  title: string;
-  description: string;
-  lessons: ApiLesson[];
-}
-
-interface ApiPartner {
-  id: number;
-  name: string;
-  logo: string;
-  description: string;
-  website: string;
-}
-
-interface ApiMentor {
-  id: number;
-  fullname: string;
-  photo: string;
-  position: string;
-  about: string;
-  decorImage: string | null;
-}
-
-interface ApiSkill {
-  name: string;
-  icon: string | null;
-}
-
-interface ApiTechnology {
-  name: string;
-  icon: string | null;
-}
-
-interface ApiProject {
-  id: number;
-  title: string;
-  description: string;
-}
-
-interface ApiCertificate {
-  id: number;
-  title: string;
-  template: string;
-  description: string;
-}
-
-interface ApiCourse {
-  id: number;
-  name: string;
-  title: string;
-  description: string;
-  photo: string | null;
-  icon: string | null;
-  decorImage: string | null;
-  price: number;
-  pricingType: 'FREE' | 'PAID';
-  publishDate: string | null;
-  partners: ApiPartner[];
-  modules: ApiModule[];
-  mentor: ApiMentor | null;
-  skills: ApiSkill[];
-  technologies: ApiTechnology[];
-  projects: ApiProject[];
-  certificates: ApiCertificate[];
-  enrollmentCount: number;
-}
-
-interface ApiResponse {
-  statusCode: number;
-  message: string;
-  data: ApiCourse;
-}
+import type { ApiCourseModule, ApiProject } from '@/types/api';
+import { PageLoader } from '@/components/ui/page-loader';
+import { PageError } from '@/components/ui/page-error';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -114,7 +38,7 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`;
 }
 
-function toModuleItem(m: ApiModule): ModuleItem {
+function toModuleItem(m: ApiCourseModule): ModuleItem {
   return {
     id: String(m.id),
     title: m.title,
@@ -228,43 +152,50 @@ const staticFaqs = [
 
 export default function CoursePage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params?.slug as string;
 
-  const [course, setCourse] = useState<ApiCourse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: course, isLoading, isError } = useCourse(slug);
+  const { data: courseModules } = useCourseModules(course?.id);
   const [openModule, setOpenModule] = useState<string>('');
+  const [startLoading, setStartLoading] = useState(false);
 
-  useEffect(() => {
-    if (!slug) return;
-    setLoading(true);
-    api
-      .get<ApiResponse>(`/course/${slug}/public`)
-      .then((res) => {
-        setCourse(res.data.data);
-        if (res.data.data.modules.length > 0) {
-          setOpenModule(String(res.data.data.modules[0].id));
-        }
-      })
-      .catch((err) => {
-        console.error('Course fetch error:', err);
-      })
-      .finally(() => setLoading(false));
-  }, [slug]);
+  const handleStart = useCallback(async () => {
+    if (!course) return;
+    setStartLoading(true);
+    try {
+      await api.post(`/course/${course.id}/enroll`);
+    } catch {
+      // Allaqachon yozilgan bo'lsa ham davom etamiz
+    }
+    const modules = courseModules?.modules ?? [];
+    const firstModule = modules[0];
+    const firstLesson = firstModule?.lessons?.[0];
+    if (firstModule && firstLesson) {
+      router.push(`/module/${firstModule.id}?lessonId=${firstLesson.id}&courseType=course&courseId=${course.id}`);
+      return;
+    }
+    setStartLoading(false);
+  }, [course, courseModules, router]);
 
-  if (loading) {
+  if (course && !openModule && course.modules.length > 0) {
+    setOpenModule(String(course.modules[0].id));
+  }
+
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f5f5f7]">
         <SiteHeader variant="light" />
-        <div className="flex items-center justify-center py-32 text-gray-400 text-sm">Yuklanmoqda...</div>
+        <PageLoader />
       </div>
     );
   }
 
-  if (!course) {
+  if (isError || !course) {
     return (
       <div className="min-h-screen bg-[#f5f5f7]">
         <SiteHeader variant="light" />
-        <div className="flex items-center justify-center py-32 text-gray-400 text-sm">Ma'lumot topilmadi.</div>
+        <PageError />
         <SiteFooter />
       </div>
     );
@@ -286,6 +217,10 @@ export default function CoursePage() {
 
   const totalLessons = course.modules.reduce((acc, m) => acc + m.lessons.length, 0);
 
+  const handleLessonClick = (lesson: { id: string | number }, ctx: { module: ModuleItem }) => {
+    router.push(`/module/${ctx.module.id}?lessonId=${lesson.id}&courseType=course&courseId=${course.id}`);
+  };
+
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
       <SiteHeader variant="light" />
@@ -302,6 +237,8 @@ export default function CoursePage() {
         level="Boshlang'ich"
         price={priceLabel}
         stats={{ graduates: course.enrollmentCount }}
+        onStart={handleStart}
+        startLoading={startLoading}
       />
 
       {/* Course Description Section */}
@@ -310,6 +247,7 @@ export default function CoursePage() {
         description={course.description.replace(/<[^>]*>/g, '')}
       />
 
+
       {/* Learning Outcomes Section */}
       <LearningOutcomesSection outcomes={staticLearningOutcomes} />
 
@@ -317,7 +255,7 @@ export default function CoursePage() {
       {(skillNames.length > 0 || instruments.length > 0) && (
         <section className="w-full py-8">
           <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-4 items-stretch">
               {skillNames.length > 0 && <SkillsList skills={skillNames} />}
               {instruments.length > 0 && <InstrumentsGrid instruments={instruments} />}
             </div>
@@ -345,6 +283,7 @@ export default function CoursePage() {
             onValueChange={setOpenModule}
             freeBadgeClassName="bg-green-500 hover:bg-green-500 text-white"
             actionButtonClassName="bg-[#5d7bf5] hover:bg-[#5d7bf5] text-white"
+            onLessonClick={handleLessonClick}
           />
         </div>
       </section>

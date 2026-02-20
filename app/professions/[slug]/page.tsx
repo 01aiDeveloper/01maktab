@@ -1,11 +1,12 @@
 'use client';
 
-import * as React from 'react';
+import { useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, Users, BookCheck, Award, Briefcase } from 'lucide-react';
+import { ArrowLeft, Calendar, Users, BookCheck, Award, Briefcase, Loader2 } from 'lucide-react';
+import api from '@/lib/api';
 import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
 import { Button } from '@/components/ui/button';
@@ -28,83 +29,12 @@ import { EnrollmentCtaCountdown } from '@/components/sections/enrollment-cta-cou
 import { PartnersSection } from '@/components/sections/home/partners';
 import { ModuleAccordion } from '@/components/shared/module-accordion';
 import type { ModuleItem } from '@/components/shared/module-accordion';
-import api from '@/lib/api';
+import { useProfession } from '@/hooks/use-profession';
+import { useProfessionModules } from '@/hooks/use-course-modules';
 import { baseMediaUrl } from '@/lib/utils';
-
-// ─── API Types ────────────────────────────────────────────────────────────────
-
-interface ApiLesson {
-  id: number;
-  title: string;
-}
-
-interface ApiModule {
-  id: number;
-  title: string;
-  description: string;
-  lessons: ApiLesson[];
-}
-
-interface ApiPartner {
-  id: number;
-  name: string;
-  logo: string;
-  description: string;
-  website: string;
-}
-
-interface ApiMentor {
-  id: number;
-  fullname: string;
-  photo: string;
-  position: string;
-  about: string;
-  decorImage: string | null;
-}
-
-interface ApiSkill {
-  name: string;
-  icon: string;
-}
-
-interface ApiTechnology {
-  name: string;
-  icon: string;
-}
-
-interface ApiProject {
-  id: number;
-  title: string;
-  description: string;
-}
-
-interface ApiProfession {
-  id: number;
-  name: string;
-  title: string;
-  description: string;
-  photo: string | null;
-  icon: string | null;
-  decorImage: string | null;
-  price: number;
-  pricingType: 'FREE' | 'PAID';
-  publishDate: string | null;
-  partners: ApiPartner[];
-  modules: ApiModule[];
-  mentor: ApiMentor | null;
-  skills: ApiSkill[];
-  technologies: ApiTechnology[];
-  projects: ApiProject[];
-  certificates: unknown[];
-  graduates: unknown[];
-  enrollmentCount: number;
-}
-
-interface ApiResponse {
-  statusCode: number;
-  message: string;
-  data: ApiProfession;
-}
+import type { ApiCourseModule } from '@/types/api';
+import { PageLoader } from '@/components/ui/page-loader';
+import { PageError } from '@/components/ui/page-error';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -114,7 +44,7 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`;
 }
 
-function toModuleItem(m: ApiModule): ModuleItem {
+function toModuleItem(m: ApiCourseModule): ModuleItem {
   return {
     id: String(m.id),
     title: m.title,
@@ -243,43 +173,50 @@ const staticFaqs = [
 
 export default function ProfessionPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params?.slug as string;
 
-  const [profession, setProfession] = React.useState<ApiProfession | null>(null);
-  const [loading, setLoading] = React.useState(true);
-  const [openModule, setOpenModule] = React.useState<string>('');
+  const { data: profession, isLoading, isError } = useProfession(slug);
+  const { data: professionModules } = useProfessionModules(profession?.id);
+  const [openModule, setOpenModule] = useState<string>('');
+  const [startLoading, setStartLoading] = useState(false);
 
-  React.useEffect(() => {
-    if (!slug) return;
-    setLoading(true);
-    api
-      .get<ApiResponse>(`/course/profession/${slug}/public`)
-      .then((res) => {
-        setProfession(res.data.data);
-        if (res.data.data.modules.length > 0) {
-          setOpenModule(String(res.data.data.modules[0].id));
-        }
-      })
-      .catch((err) => {
-        console.error('Profession fetch error:', err);
-      })
-      .finally(() => setLoading(false));
-  }, [slug]);
+  const handleStart = useCallback(async () => {
+    if (!profession) return;
+    setStartLoading(true);
+    try {
+      await api.post(`/course/${profession.id}/enroll`);
+    } catch {
+      // Allaqachon yozilgan bo'lsa ham davom etamiz
+    }
+    const modules = professionModules?.modules ?? [];
+    const firstModule = modules[0];
+    const firstLesson = firstModule?.lessons?.[0];
+    if (firstModule && firstLesson) {
+      router.push(`/module/${firstModule.id}?lessonId=${firstLesson.id}&courseType=profession&courseId=${profession.id}`);
+      return;
+    }
+    setStartLoading(false);
+  }, [profession, professionModules, router]);
 
-  if (loading) {
+  if (profession && !openModule && profession.modules.length > 0) {
+    setOpenModule(String(profession.modules[0].id));
+  }
+
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-[#101010]">
         <SiteHeader variant="dark" />
-        <div className="flex items-center justify-center py-32 text-gray-400 text-sm">Yuklanmoqda...</div>
+        <PageLoader />
       </div>
     );
   }
 
-  if (!profession) {
+  if (isError || !profession) {
     return (
       <div className="min-h-screen bg-[#101010]">
         <SiteHeader variant="dark" />
-        <div className="flex items-center justify-center py-32 text-gray-400 text-sm">Ma'lumot topilmadi.</div>
+        <PageError />
         <SiteFooter variant="dark" />
       </div>
     );
@@ -287,6 +224,10 @@ export default function ProfessionPage() {
 
   const modules: ModuleItem[] = profession.modules.map(toModuleItem);
   const mentor = profession.mentor;
+
+  const handleLessonClick = (lesson: { id: string | number }, ctx: { module: ModuleItem }) => {
+    router.push(`/module/${ctx.module.id}?lessonId=${lesson.id}&courseType=profession&courseId=${profession.id}`);
+  };
   const courseImage = mediaUrl(profession.photo);
 
   const startDateLabel = profession.publishDate
@@ -339,10 +280,21 @@ export default function ProfessionPage() {
                 {/* CTA Button */}
                 <Button
                   size="lg"
-                  className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit mb-8"
+                  className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit mb-8 flex items-center gap-2"
+                  onClick={handleStart}
+                  disabled={startLoading}
                 >
-                  Ostavit zayavku
-                  <ArrowLeft className="w-5 h-5 ml-2 rotate-180" />
+                  {startLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Yuklanmoqda...
+                    </>
+                  ) : (
+                    <>
+                      Boshlash
+                      <ArrowLeft className="w-5 h-5 rotate-180" />
+                    </>
+                  )}
                 </Button>
 
                 {/* Meta Info Pills */}
@@ -471,6 +423,7 @@ export default function ProfessionPage() {
               modules={modules}
               value={openModule}
               onValueChange={setOpenModule}
+              onLessonClick={handleLessonClick}
             />
           </div>
         </section>

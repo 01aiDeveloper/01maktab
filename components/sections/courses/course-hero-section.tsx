@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, Clock, Users, FileText, Heart } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, Clock, Users, FileText, Heart, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { MainButton } from '@/components/ui/main-button';
@@ -20,6 +20,8 @@ interface CourseHeroSectionProps {
   stats: {
     graduates: number;
   };
+  onStart?: () => void;
+  startLoading?: boolean;
 }
 
 export function CourseHeroSection({
@@ -33,6 +35,8 @@ export function CourseHeroSection({
   level,
   price,
   stats,
+  onStart,
+  startLoading = false,
 }: CourseHeroSectionProps) {
   return (
     <section className="w-full py-6">
@@ -85,11 +89,13 @@ export function CourseHeroSection({
               <MainButton
                 variant="gradient"
                 size="lg"
-                icon={<ArrowRight className="w-5 h-5" />}
+                icon={startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
                 iconPosition="right"
                 className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5]"
+                onClick={onStart}
+                disabled={startLoading}
               >
-                Batafsil
+                {startLoading ? 'Yuklanmoqda...' : 'Boshlash'}
               </MainButton>
             </div>
 

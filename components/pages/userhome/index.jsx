@@ -53,7 +53,7 @@ export default function PrivateHomePage() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
-      <SiteHeader />
+      <SiteHeader variant='light' />
       <main>
         <HeroSection userName={user?.firstname || 'Foydalanuvchi'} />
         <FeatureCards />

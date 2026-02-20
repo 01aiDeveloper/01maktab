@@ -2,83 +2,64 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { getMediaUrl } from '@/lib/utils';
 
 interface CatalogCardProps {
-  id: number | string;
+  id?: number;
   slug?: string;
   title: string;
-  subtitle: string;
   image: string;
   badge?: string;
-  badgeColor?: 'blue' | 'green' | 'yellow';
+  icon?: string;
+  mentorName?: string;
   href: string;
 }
 
-const BADGE_COLORS = {
-  blue: 'bg-blue-500 text-white',
-  green: 'bg-emerald-500 text-white',
-  yellow: 'bg-yellow-400 text-black',
-};
+export function CatalogCard({ title, image, badge, icon, mentorName, href }: CatalogCardProps) {
+  const imgSrc = getMediaUrl(image) || '/placeholder.svg';
 
-export function CatalogCard({
-  title,
-  subtitle,
-  image,
-  badge,
-  badgeColor = 'green',
-  href,
-}: CatalogCardProps) {
   return (
-    <Link href={href}>
-      <motion.div
-        whileHover={{ y: -4 }}
-        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-        className="bg-white rounded-[22px] overflow-hidden cursor-pointer group shadow-[0_1px_4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] transition-shadow h-full"
-      >
-        {/* Image Area */}
-        <div className="relative aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 p-5">
-          {/* Badge */}
-          {badge && (
-            <div className={`absolute top-4 left-4 z-10 px-2.5 py-1 rounded-md text-[11px] font-semibold ${BADGE_COLORS[badgeColor]}`}>
-              {badge}
-            </div>
-          )}
+    <Link href={href} className="block group">
+      <div className="relative  rounded-3xl cursor-pointer h-102 border-0">
+        {/* Full-cover image */}
+        <Image src={imgSrc} alt={title} fill className="object-cover rounded-[20px] overflow-hidden transition-transform duration-300 " />
 
-          {/* Menu icon top right */}
-          <div className="absolute top-4 right-4 z-10 w-7 h-7 bg-white/80 backdrop-blur-sm rounded-lg flex items-center justify-center">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-gray-400">
-              <rect x="0.5" y="0.5" width="4.5" height="4.5" rx="1" stroke="currentColor" strokeWidth="1.2" />
-              <rect x="7" y="0.5" width="4.5" height="4.5" rx="1" stroke="currentColor" strokeWidth="1.2" />
-              <rect x="0.5" y="7" width="4.5" height="4.5" rx="1" stroke="currentColor" strokeWidth="1.2" />
-              <rect x="7" y="7" width="4.5" height="4.5" rx="1" stroke="currentColor" strokeWidth="1.2" />
-            </svg>
+        {/* Badge — top left */}
+        {badge && (
+          <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">
+            <Image src="/images/skills/icon.png" alt="" width={14} height={14} className="w-3.5 h-3.5" />
+            {badge}
           </div>
+        )}
 
-          {/* Course Image */}
-          <div className="relative w-full h-full flex items-center justify-center">
-            <Image
-              src={getMediaUrl(image)}
-              alt={title}
-              fill
-              className="object-contain p-2"
-            />
+        {/* Icon circle — top right */}
+        {icon && (
+          <div className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+            <Image src={getMediaUrl(icon) || '/placeholder.svg'} alt="" width={20} height={20} className="w-5 h-5 object-contain" />
+          </div>
+        )}
+
+        {/* Glassmorphism overlay — image ustida, barcha burchagi yumaloq, fixed height */}
+        <div
+          className="absolute  z-10 rounded-[20px] flex items-center justify-between gap-2 px-4 bg-white"
+          style={{
+            bottom: '-4px',
+            left: '-2px',
+            right: '-2px',
+            height: '126px',
+            
+          }}
+        >
+          <div className="min-w-0">
+            <h3 className="text-[#1a1a1a] font-bold text-base leading-snug line-clamp-2">{title}</h3>
+            {mentorName && <p className="text-gray-500 text-sm mt-1 truncate">Mentor: {mentorName}</p>}
+          </div>
+          <div className="shrink-0">
+            <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-[#3B5BFF] transition-colors" />
           </div>
         </div>
-
-        {/* Content */}
-        <div className="px-4 py-3.5 flex items-center justify-between gap-3">
-          <div className="min-w-0 flex-1">
-            <h3 className="font-bold text-[15px] text-gray-900 truncate leading-tight">{title}</h3>
-            <p className="text-xs text-gray-400 truncate mt-0.5">{subtitle}</p>
-          </div>
-          <div className="w-7 h-7 rounded-full bg-gray-50 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-50 transition-colors">
-            <ArrowUpRight className="w-3.5 h-3.5 text-gray-400 group-hover:text-[#3B5BFF] transition-colors" />
-          </div>
-        </div>
-      </motion.div>
+      </div>
     </Link>
   );
 }

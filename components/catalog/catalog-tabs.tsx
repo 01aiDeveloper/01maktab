@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
-import { SkillCard } from '@/components/cards/skill-card';
+import { CatalogCard } from '@/components/cards/catalog-card';
 import { NoData } from '@/components/ui/no-data';
 import api from '@/lib/api';
 
@@ -21,9 +21,9 @@ interface CatalogItem {
   slug?: string;
   image?: string;
   photo?: string;
-  mentor?: string;
+  icon?: string;
+  mentor?: { fullname?: string } | string;
   mentorName?: string;
-  instructorName?: string;
 }
 
 export function CatalogTabs() {
@@ -99,13 +99,19 @@ export function CatalogTabs() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {items.map((item: CatalogItem) => (
-            <SkillCard
+            <CatalogCard
               key={item.id}
               id={item.id}
               slug={item.slug}
               title={item.title}
               image={getItemImage(item)}
+              icon={item.icon}
               badge="Bepul"
+              mentorName={
+                typeof item.mentor === 'object'
+                  ? item.mentor?.fullname
+                  : item.mentorName
+              }
               href={getItemHref(item)}
             />
           ))}

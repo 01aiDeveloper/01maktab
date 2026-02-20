@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -16,10 +16,11 @@ import { CarouselNavigation } from '@/components/ui/carousel-navigation';
 import { GraduateStory, GraduateStoryCard } from '@/types/story';
 import { getMediaUrl } from '@/lib/utils';
 import api from '@/lib/api';
+import { PageLoader } from '@/components/ui/page-loader';
+import { PageError } from '@/components/ui/page-error';
 
 export default function GraduateStoryPage() {
   const params = useParams();
-  const router = useRouter();
   const [story, setStory] = useState<GraduateStory | null>(null);
   const [otherStories, setOtherStories] = useState<GraduateStoryCard[]>([]);
   const [loading, setLoading] = useState(true);
@@ -96,12 +97,7 @@ export default function GraduateStoryPage() {
     return (
       <>
         <SiteHeader variant="light" />
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-gray-200 border-t-[#5d7bf5] rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-500">Yuklanmoqda...</p>
-          </div>
-        </div>
+        <PageLoader fullPage />
         <SiteFooter />
       </>
     );
@@ -111,15 +107,11 @@ export default function GraduateStoryPage() {
     return (
       <>
         <SiteHeader variant="light" />
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center max-w-md mx-auto px-4">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Hikoya topilmadi</h2>
-            <p className="text-gray-600 mb-6">Kechirasiz, bu hikoya mavjud emas yoki o'chirilgan.</p>
-            <Button onClick={() => router.push('/graduates')} className="bg-[#5d7bf5] hover:bg-[#4c6ae4] text-white rounded-xl">
-              Barcha hikoyalar
-            </Button>
-          </div>
-        </div>
+        <PageError
+          title="Hikoya topilmadi"
+          description="Kechirasiz, bu hikoya mavjud emas yoki o'chirilgan."
+          showBack={false}
+        />
         <SiteFooter />
       </>
     );

@@ -298,7 +298,7 @@ export function UniversalVideoPlayer({
         backgroundColor: '#000',
         position: 'relative',
         '& .plyr--full-ui': {
-          '--plyr-color-main': '#CB5280',
+          '--plyr-color-main': '#3B5BFF',
         },
         '& .plyr': { width: '100%', height: '100%' },
       }}

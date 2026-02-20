@@ -1,94 +1,119 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useCallback } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import type { AxiosError } from 'axios';
 import { LessonHeaderActions } from '@/components/lesson/lesson-header-actions';
 import { UniversalVideoPlayer } from '@/components/lesson/universal-video-player';
 import { LessonBlockRenderer } from '@/components/lesson/lesson-block-renderer';
 import { AuthRequiredCard } from '@/components/lesson/auth-required-card';
-import { Lesson } from '@/types/lesson';
 import { sortByOrder } from '@/lib/lesson-utils';
-import api from '@/lib/api';
+import { useLesson } from '@/hooks/use-lesson';
+import { useCourseModules, useSkillModules, useProfessionModules } from '@/hooks/use-course-modules';
+import { PageLoader } from '@/components/ui/page-loader';
+import { PageError } from '@/components/ui/page-error';
+
+// ─── Re-exported types (used by lesson-header-actions) ───────────────────────
+
+export type CourseType = 'course' | 'skill' | 'profession';
+export type { ApiModule as CourseModule, ApiModuleLesson as ModuleLesson } from '@/types/api';
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+export function buildLessonUrl(
+  moduleId: number,
+  lessonId: number,
+  courseType: string,
+  courseId: string,
+): string {
+  const params = new URLSearchParams({ lessonId: String(lessonId), courseType, courseId });
+  return `/module/${moduleId}?${params.toString()}`;
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export function LessonContent() {
-  const params = useParams();
-  const id = params.id as string;
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const [lesson, setLesson] = useState<Lesson | null>(null);
-  const [requiresAuth, setRequiresAuth] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+  const lessonId = searchParams.get('lessonId') ?? '';
+  const courseType = (searchParams.get('courseType') ?? 'course') as 'course' | 'skill' | 'profession';
+  const courseId = searchParams.get('courseId') ?? '';
 
-  useEffect(() => {
-    const fetchLesson = async () => {
-      try {
-        console.log(`[Lesson] Fetching lesson with ID: ${id}`);
-        const response = await api.get(`/lesson/${id}`);
-        const lessonData = response.data?.data || null;
-        console.log(`[Lesson] Successfully fetched lesson:`, { id, title: lessonData?.title, status: 'success' });
-        setLesson(lessonData);
-      } catch (error: any) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || error.message;
-        console.error(`[Lesson] Error fetching lesson ${id}:`, { status, message });
+  const {
+    data: lesson,
+    isLoading,
+    isError,
+    error,
+  } = useLesson(lessonId);
 
-        if (status === 401) {
-          console.log(`[Lesson] Authentication required for lesson ${id}`);
-          setRequiresAuth(true);
-        } else {
-          console.log(`[Lesson] Lesson not found`);
-          setNotFound(true);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
+  const courseModules = useCourseModules(courseType === 'course' ? courseId : undefined);
+  const skillModules = useSkillModules(courseType === 'skill' ? courseId : undefined);
+  const professionModules = useProfessionModules(courseType === 'profession' ? courseId : undefined);
 
-    fetchLesson();
-  }, [id]);
+  const courseData =
+    courseType === 'skill' ? skillModules.data :
+    courseType === 'profession' ? professionModules.data :
+    courseModules.data;
 
-  if (loading) {
+  const modules = courseData?.modules ?? [];
+
+  // Flat list of all lessons for prev/next navigation
+  const flatLessons = modules.flatMap((m) =>
+    (m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id, moduleTitle: m.title }))
+  );
+
+  const goToLesson = useCallback(
+    (targetModuleId: number, targetLessonId: number) => {
+      router.push(buildLessonUrl(targetModuleId, targetLessonId, courseType, courseId));
+    },
+    [router, courseType, courseId],
+  );
+
+  const currentIndex = flatLessons.findIndex((l) => String(l.id) === String(lessonId));
+  const prevLesson = currentIndex > 0 ? flatLessons[currentIndex - 1] : null;
+  const nextLesson =
+    currentIndex >= 0 && currentIndex < flatLessons.length - 1 ? flatLessons[currentIndex + 1] : null;
+
+  if (!lessonId) {
     return (
-      <div className="flex items-center justify-center py-16">
-        <div className="w-10 h-10 border-4 border-gray-200 border-t-[#3B5BFF] rounded-full animate-spin" />
+      <div className="py-16 text-center text-gray-400 text-sm">
+        Dars tanlanmagan. URL da lessonId ko&apos;rsating.
       </div>
     );
   }
 
-  if (notFound) {
-    return (
-      <div className="py-16 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Dars topilmadi</h2>
-        <p className="text-gray-500">Kechirasiz, bu dars mavjud emas</p>
-      </div>
-    );
-  }
+  if (isLoading) return <PageLoader />;
 
-  if (requiresAuth) {
-    return <AuthRequiredCard />;
-  }
+  // 401 → auth required
+  const status = (error as AxiosError)?.response?.status;
+  if (status === 401) return <AuthRequiredCard />;
 
-  if (!lesson) {
-    return null;
+  if (isError || !lesson) {
+    return <PageError title="Dars topilmadi" description="Kechirasiz, bu dars mavjud emas" showBack={false} />;
   }
 
   return (
     <>
-      <LessonHeaderActions isPublic={lesson.isPublic} />
+      <LessonHeaderActions
+        isPublic={lesson.isPublic}
+        modules={modules}
+        currentLessonId={Number(lessonId)}
+        courseType={courseType}
+        courseId={courseId}
+        prevLesson={prevLesson}
+        nextLesson={nextLesson}
+        onLessonSelect={(targetModuleId, targetLessonId) => goToLesson(targetModuleId, targetLessonId)}
+      />
 
       <div className="bg-white rounded-3xl p-8 lg:p-12 mb-6">
         <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
           Dars {lesson.orderId}. {lesson.title}
         </h1>
         {lesson.description && (
-          <p className="text-muted-foreground mb-8">
-            {lesson.description}
-          </p>
+          <p className="text-muted-foreground mb-8">{lesson.description}</p>
         )}
 
-        {/* Videos */}
         {lesson.videos && lesson.videos.length > 0 && (
           <div className="space-y-6 mb-8">
             {sortByOrder(lesson.videos).map((video, index) => (
@@ -102,20 +127,7 @@ export function LessonContent() {
           </div>
         )}
 
-        {/* Content Blocks */}
         {lesson.blocks && lesson.blocks.length > 0 && <LessonBlockRenderer blocks={lesson.blocks} />}
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className="flex items-center justify-center gap-4 max-w-[520px] mx-auto">
-        <Button size="lg" variant="outline" className="flex-1 rounded-xl" disabled>
-          <ArrowLeft className="w-4 h-4" />
-          Oldingi dars
-        </Button>
-        <Button size="lg" className="flex-1 rounded-xl">
-          Keyingi dars
-          <ArrowRight className="w-4 h-4" />
-        </Button>
       </div>
 
       <div className="h-12" />
