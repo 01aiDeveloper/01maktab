@@ -3,36 +3,44 @@ import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
-import { CourseCard } from "@/components/cards/course-card"
+import { MyEnrolledCard } from "@/components/cards/my-enrolled-card"
 
 const courses = [
   {
     id: 1,
     image: "/images/course1.png",
     title: "Data Science",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 3/10",
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-1",
+    lessonLabel: "Дарс: 3/10",
+    href: "/courses/data-science",
   },
   {
     id: 2,
     image: "/python-programming-dark-blue-laptop-keyboard-3d.jpg",
     title: "Python Dasturlash Tili",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 3/10",
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-1",
+    lessonLabel: "Дарс: 3/10",
+    href: "/courses/python",
   },
   {
     id: 3,
     image: "/web-development-blue-gradient-code-3d.jpg",
     title: "Web Development",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 5/12",
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-2",
+    lessonLabel: "Дарс: 5/12",
+    href: "/courses/web-development",
   },
   {
     id: 4,
     image: "/machine-learning-neural-network-blue-3d.jpg",
     title: "Machine Learning",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 2/8",
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-1",
+    lessonLabel: "Дарс: 2/8",
+    href: "/courses/machine-learning",
   },
 ]
 
@@ -61,7 +69,15 @@ export function MyCoursesSection() {
         <div className="flex gap-4">
           {courses.map((course) => (
             <div key={course.id} className="flex-[0_0_calc(25%-12px)] min-w-0">
-              <CourseCard {...course} />
+              <MyEnrolledCard
+                image={course.image}
+                title={course.title}
+                mentorName={course.instructor}
+                moduleLabel={course.moduleLabel}
+                lessonLabel={course.lessonLabel}
+                href={course.href}
+                variant="light"
+              />
             </div>
           ))}
         </div>

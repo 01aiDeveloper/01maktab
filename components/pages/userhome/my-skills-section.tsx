@@ -4,38 +4,53 @@ import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
-import { SkillCard } from "@/components/cards/skill-card"
+import { MyEnrolledCard } from "@/components/cards/my-enrolled-card"
 
 const skills = [
   {
     id: 1,
     image: "/python-programming-robot-3d-metallic-blue.jpg",
     title: "Python Dasturlash Tili",
-    icon: "plus" as const,
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-1",
+    lessonLabel: "Дарс: 3/10",
+    href: "/skills/python",
   },
   {
     id: 2,
     image: "/data-science-abstract-pink-paper-fold-3d.jpg",
     title: "Data Science",
-    icon: "layers" as const,
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-1",
+    lessonLabel: "Дарс: 4/8",
+    href: "/skills/data-science",
   },
   {
     id: 3,
     image: "/sql-database-server-gray-minimal-3d.jpg",
     title: "SQL va Ma'lumotlar Bazasi",
-    icon: "grid" as const,
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-2",
+    lessonLabel: "Дарс: 2/6",
+    href: "/skills/sql",
   },
   {
     id: 4,
     image: "/python-coding-robot-mechanical-blue-3d.jpg",
     title: "Python Dasturlash Tili",
-    icon: "plus" as const,
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-1",
+    lessonLabel: "Дарс: 1/5",
+    href: "/skills/python-2",
   },
   {
     id: 5,
     image: "/machine-learning-ai-neural-3d.jpg",
     title: "Machine Learning",
-    icon: "layers" as const,
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-3",
+    lessonLabel: "Дарс: 6/10",
+    href: "/skills/machine-learning",
   },
 ]
 
@@ -63,8 +78,16 @@ export function MySkillsSection() {
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-3">
           {skills.map((skill) => (
-             <div key={skill.id} className="flex-[0_0_calc(25%-12px)] min-w-0">
-              <SkillCard {...skill} />
+            <div key={skill.id} className="flex-[0_0_calc(25%-12px)] min-w-0">
+              <MyEnrolledCard
+                image={skill.image}
+                title={skill.title}
+                mentorName={skill.instructor}
+                moduleLabel={skill.moduleLabel}
+                lessonLabel={skill.lessonLabel}
+                href={skill.href}
+                variant="light"
+              />
             </div>
           ))}
         </div>

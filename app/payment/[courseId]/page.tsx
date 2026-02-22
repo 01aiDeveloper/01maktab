@@ -8,6 +8,8 @@ import { StepConfirmInfo } from '@/components/payment/step-confirm-info';
 import { StepPaymentMethod } from '@/components/payment/step-payment-method';
 import { StepSuccess } from '@/components/payment/step-success';
 import { useAuthStore } from '@/store/auth-store';
+import { useProfile } from '@/hooks/use-profile';
+import { useCourseInfo } from '@/hooks/use-course-info';
 import { PageLoader } from '@/components/ui/page-loader';
 
 function PaymentContent() {
@@ -16,7 +18,12 @@ function PaymentContent() {
   const searchParams = useSearchParams();
   const courseId = params.courseId as string;
 
-  const user = useAuthStore((state) => state.user);
+  const { data: profileData } = useProfile();
+  const storeUser = useAuthStore((state) => state.user);
+  const user = profileData ?? storeUser;
+
+  const courseType = searchParams.get('courseType') ?? 'course';
+  const { data: courseInfo, isLoading: courseLoading } = useCourseInfo(courseId, courseType);
 
   const stepParam = searchParams.get('step');
   const currentStep = stepParam ? parseInt(stepParam, 10) : 1;
@@ -25,11 +32,19 @@ function PaymentContent() {
   const userInfo = {
     firstName: searchParams.get('firstName') ?? user?.firstname ?? '',
     lastName:  searchParams.get('lastName')  ?? user?.lastname  ?? '',
-    phone:     searchParams.get('phone')     ?? user?.phone     ?? '',
+    phone:     searchParams.get('phone')     ?? String(user?.phone ?? ''),
     email:     searchParams.get('email')     ?? user?.email     ?? '',
   };
 
-  const coursePrice = 1_500_000;
+  const coursePrice = courseInfo?.price ?? 0;
+
+  if (courseLoading) {
+    return (
+      <div className="bg-white rounded-[28px] p-12 shadow-[0_2px_20px_rgba(0,0,0,0.06)] flex justify-center">
+        <PageLoader />
+      </div>
+    );
+  }
 
   const goToStep = (step: number, extra?: Record<string, string>) => {
     const next = new URLSearchParams(searchParams.toString());
@@ -43,14 +58,7 @@ function PaymentContent() {
       {currentStep === 1 && (
         <StepConfirmInfo
           userInfo={userInfo}
-          onNext={(data) =>
-            goToStep(2, {
-              firstName: data.firstName,
-              lastName: data.lastName,
-              phone: data.phone,
-              email: data.email,
-            })
-          }
+          onNext={() => goToStep(2)}
           onBack={() => router.back()}
         />
       )}

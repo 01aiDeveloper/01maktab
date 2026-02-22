@@ -3,87 +3,82 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Layers, BookMarked, Play, Pause } from 'lucide-react';
-import { cn, getMediaUrl } from '@/lib/utils';
+import { getMediaUrl } from '@/lib/utils';
 import type { MyCourseItem } from '@/hooks/use-my-courses';
 
 interface MyCourseCardProps {
   item: MyCourseItem;
-  /** Where to navigate on click */
   href: string;
-  /** Dark card variant (for Kasblarim section) */
   dark?: boolean;
 }
 
 export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
   const photoUrl = getMediaUrl(item.photo);
-  const progress = item.totalLessons > 0
-    ? Math.round((item.completedLessons / item.totalLessons) * 100)
-    : 0;
 
   return (
     <Link href={href} className="block group">
-      <div
-        className={cn(
-          'relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer',
-          dark ? 'bg-[#2a2a2a]' : 'bg-gray-100',
-        )}
-      >
-        {/* Background image */}
-        {photoUrl && (
+      <div className="relative rounded-3xl cursor-pointer h-102 border-0">
+        {/* Full-cover image */}
+        {photoUrl ? (
           <Image
             src={photoUrl}
             alt={item.title || item.name}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover rounded-[20px] overflow-hidden transition-transform duration-300 "
           />
+        ) : (
+          <div className="absolute inset-0 rounded-[20px] bg-gray-200" />
         )}
 
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
-
-        {/* Top badges */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5">
+        {/* Top badges: Module + Dars */}
+        <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
           {item.moduleTitle && (
-            <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white text-[11px] font-medium px-2 py-1 rounded-full">
+            <span className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white text-[11px] font-medium px-2.5 py-1 rounded-lg">
               <Layers className="w-3 h-3" />
-              <span>{item.moduleTitle}</span>
-            </div>
+              {item.moduleTitle}
+            </span>
           )}
-          <div className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white text-[11px] font-medium px-2 py-1 rounded-full">
+          <span className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white text-[11px] font-medium px-2.5 py-1 rounded-lg">
             <BookMarked className="w-3 h-3" />
-            <span>Dars: {item.completedLessons}/{item.totalLessons}</span>
-          </div>
+            Dars: {item.completedLessons}/{item.totalLessons}
+          </span>
         </div>
 
-        {/* Play/Pause button top-right */}
-        <div className="absolute top-3 right-3">
+        {/* Play/Pause — top right */}
+        {/* <div className="absolute top-3 right-3 z-10">
           <div className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-            {item.isOpen ? (
-              <Pause className="w-3.5 h-3.5 text-white fill-white" />
-            ) : (
-              <Play className="w-3.5 h-3.5 text-white fill-white" />
+            {item.isOpen ? <Pause className="w-3.5 h-3.5 text-white fill-white" /> : <Play className="w-3.5 h-3.5 text-white fill-white" />}
+          </div>
+        </div> */}
+
+        {/* Bottom info box — catalog-card bilan bir xil */}
+        <div
+          className="absolute z-10 rounded-[20px] flex items-center justify-between gap-2 px-4"
+          style={{
+            bottom: '-4px',
+            left: '-2px',
+            right: '-2px',
+            height: '126px',
+            background: dark ? '#1a1a1a' : '#ffffff',
+          }}
+        >
+          <div className="min-w-0">
+            <h3 className="font-bold text-base leading-snug line-clamp-2" style={{ color: dark ? '#ffffff' : '#1a1a1a' }}>
+              {item.title || item.name}
+            </h3>
+            {item.mentor?.fullname && (
+              <p className="text-sm mt-1 truncate" style={{ color: dark ? 'rgba(255,255,255,0.5)' : '#6b7280' }}>
+                Mentor: {item.mentor.fullname}
+              </p>
             )}
           </div>
-        </div>
-
-        {/* Bottom content */}
-        <div className="absolute bottom-0 left-0 right-0 p-3">
-          {/* Progress bar */}
-          <div className="w-full h-[3px] bg-white/20 rounded-full mb-2.5 overflow-hidden">
-            <div
-              className="h-full bg-white rounded-full transition-all"
-              style={{ width: `${progress}%` }}
-            />
+          {/* Pause icon — circle */}
+          <div
+            className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
+            style={{ background: dark ? '#ffffff' : '#1a1a1a' }}
+          >
+            <Pause className="w-4 h-4" style={{ color: dark ? '#1a1a1a' : '#ffffff' }} />
           </div>
-
-          <h3 className="text-white font-semibold text-sm leading-tight mb-0.5 line-clamp-1">
-            {item.title || item.name}
-          </h3>
-          {item.mentor?.fullname && (
-            <p className="text-white/60 text-xs">
-              Mentor: {item.mentor.fullname}
-            </p>
-          )}
         </div>
       </div>
     </Link>

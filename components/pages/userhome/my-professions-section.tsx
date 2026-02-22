@@ -4,29 +4,35 @@ import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
-import { ProfessionCard } from "@/components/cards/profession-card"
+import { MyEnrolledCard } from "@/components/cards/my-enrolled-card"
 
 const professions = [
   {
     id: 1,
     image: "/data-analytics-dashboard-dark-finance-chart-3d.jpg",
     title: "Data Analitik Kasbi",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 3/10",
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-1",
+    lessonLabel: "Дарс: 3/10",
+    href: "/professions/data-analitik-kasbi",
   },
   {
     id: 2,
     image: "/programmer-keyboard-dark-blue-coding-3d.jpg",
-    title: "Data Analitik Kasbi",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 3/10",
+    title: "ML Engineer Kasbi",
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-1",
+    lessonLabel: "Дарс: 3/10",
+    href: "/professions/ml-engineer-kasbi",
   },
   {
     id: 3,
     image: "/backend-developer-server-dark-3d.jpg",
     title: "Backend Developer",
-    instructor: "Ustoz: Khikmatilla Pulatov",
-    progress: "Dars: 4/12",
+    instructor: "Khikmatilla Pulatov",
+    moduleLabel: "Модуль-2",
+    lessonLabel: "Дарс: 4/12",
+    href: "/professions/backend-developer",
   },
 ]
 
@@ -55,7 +61,15 @@ export function MyProfessionsSection() {
         <div className="flex gap-4">
           {professions.map((profession) => (
             <div key={profession.id} className="flex-none w-[280px] md:w-[320px]">
-              <ProfessionCard {...profession} />
+              <MyEnrolledCard
+                image={profession.image}
+                title={profession.title}
+                mentorName={profession.instructor}
+                moduleLabel={profession.moduleLabel}
+                lessonLabel={profession.lessonLabel}
+                href={profession.href}
+                variant="dark"
+              />
             </div>
           ))}
         </div>

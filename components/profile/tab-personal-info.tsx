@@ -3,13 +3,12 @@
 import { useState } from 'react';
 import { Pencil } from 'lucide-react';
 import { useAuthStore } from '@/store/auth-store';
-import api from '@/lib/api';
+import { useUpdateProfile } from '@/hooks/use-update-profile';
 
 export function TabPersonalInfo() {
   const user = useAuthStore((state) => state.user);
-  const setUser = useAuthStore((state) => state.setUser);
+  const { updateProfile, isLoading: saving } = useUpdateProfile();
   const [editing, setEditing] = useState(false);
-  const [saving, setSaving] = useState(false);
 
   const [form, setForm] = useState({
     firstname: user?.firstname || '',
@@ -28,22 +27,16 @@ export function TabPersonalInfo() {
   };
 
   const handleSave = async () => {
-    setSaving(true);
     try {
-      const response = await api.patch('/user/me', {
+      await updateProfile({
         firstname: form.firstname,
         lastname: form.lastname,
         birthday: form.birthday || undefined,
         gender: form.gender || undefined,
       });
-      if (response.data?.data) {
-        setUser(response.data.data);
-      }
       setEditing(false);
-    } catch (error) {
-      console.error('Failed to update profile:', error);
-    } finally {
-      setSaving(false);
+    } catch {
+      // error is handled inside hook
     }
   };
 

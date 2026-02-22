@@ -62,14 +62,14 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
           </Link>
 
           {/* Navigation */}
-          <nav className="hidden lg:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-10">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={`text-sm font-medium transition-colors ${
                   !isDark
-                    ? 'text-white/70 hover:text-white'
+                    ? 'text-white/80 hover:text-white'
                     : 'text-[#18181A]/70 hover:text-[#18181A]'
                 }`}
               >

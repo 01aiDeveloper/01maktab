@@ -1,12 +1,13 @@
+import React from 'react';
 import { AlertCircle, Info, Lightbulb } from 'lucide-react';
 import DOMPurify from 'isomorphic-dompurify';
 
 interface InfoBlockProps {
   text: string;
-  status: 'Important' | 'Tip' | 'Attention';
+  status: string;
 }
 
-const STATUS_CONFIG = {
+const STATUS_CONFIG: Record<string, { icon: React.ElementType; title: string; bgColor: string; borderColor: string; iconColor: string; textColor: string }> = {
   Important: {
     icon: AlertCircle,
     title: 'Важно',
@@ -23,6 +24,14 @@ const STATUS_CONFIG = {
     iconColor: 'text-green-600',
     textColor: 'text-green-900',
   },
+  Advice: {
+    icon: Lightbulb,
+    title: 'Maslahat',
+    bgColor: 'bg-green-50',
+    borderColor: 'border-green-200',
+    iconColor: 'text-green-600',
+    textColor: 'text-green-900',
+  },
   Attention: {
     icon: Info,
     title: 'Внимание',
@@ -34,7 +43,7 @@ const STATUS_CONFIG = {
 };
 
 export function InfoBlock({ text, status }: InfoBlockProps) {
-  const config = STATUS_CONFIG[status];
+  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG['Important'];
   const Icon = config.icon;
 
   return (

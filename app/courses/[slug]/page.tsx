@@ -165,8 +165,12 @@ export default function CoursePage() {
     setStartLoading(true);
     try {
       await api.post(`/course/${course.id}/enroll`);
-    } catch {
-      // Allaqachon yozilgan bo'lsa ham davom etamiz
+    } catch (err: unknown) {
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      if (status === 400) {
+        router.push(`/payment/${course.id}?courseType=course`);
+        return;
+      }
     }
     const modules = courseModules?.modules ?? [];
     const firstModule = modules[0];

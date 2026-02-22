@@ -186,8 +186,12 @@ export default function ProfessionPage() {
     setStartLoading(true);
     try {
       await api.post(`/course/${profession.id}/enroll`);
-    } catch {
-      // Allaqachon yozilgan bo'lsa ham davom etamiz
+    } catch (err: unknown) {
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      if (status === 400) {
+        router.push(`/payment/${profession.id}?courseType=profession`);
+        return;
+      }
     }
     const modules = professionModules?.modules ?? [];
     const firstModule = modules[0];

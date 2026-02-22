@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
 import { StepIndicator } from './step-indicator';
+import { useUpdateProfile } from '@/hooks/use-update-profile';
 
 interface UserInfo {
   firstName: string;
@@ -12,12 +14,27 @@ interface UserInfo {
 
 interface StepConfirmInfoProps {
   userInfo: UserInfo;
-  onNext: (data: UserInfo) => void;
+  onNext: () => void;
   onBack: () => void;
 }
 
 export function StepConfirmInfo({ userInfo, onNext, onBack }: StepConfirmInfoProps) {
   const [form, setForm] = useState<UserInfo>(userInfo);
+  const { updateProfile, isLoading } = useUpdateProfile();
+
+  const handleNext = async () => {
+    try {
+      await updateProfile({
+        firstname: form.firstName,
+        lastname: form.lastName,
+        phone: form.phone,
+        email: form.email,
+      });
+      onNext();
+    } catch {
+      // error handled in hook
+    }
+  };
 
   return (
     <>
@@ -75,10 +92,11 @@ export function StepConfirmInfo({ userInfo, onNext, onBack }: StepConfirmInfoPro
           Orqaga
         </button>
         <button
-          onClick={() => onNext(form)}
-          className="flex-1 h-12 rounded-xl bg-[#3B5BFF] hover:bg-[#2d4ae6] text-white font-medium text-sm transition-colors"
+          onClick={handleNext}
+          disabled={isLoading}
+          className="flex-1 h-12 rounded-xl bg-[#3B5BFF] hover:bg-[#2d4ae6] text-white font-medium text-sm transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
         >
-          Davom etish
+          {isLoading ? <><Loader2 className="w-4 h-4 animate-spin" /> Saqlanmoqda...</> : 'Davom etish'}
         </button>
       </div>
     </>

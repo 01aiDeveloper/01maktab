@@ -38,7 +38,7 @@ export function StepPaymentMethod({ courseId, coursePrice, onNext, onBack, promo
   const installmentMonths = 3;
   const monthlyPayment = Math.ceil(coursePrice / installmentMonths);
 
-  const fmt = (price: number) => new Intl.NumberFormat('uz-UZ').format(price);
+  const fmt = (price: number) => price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
   const handlePay = async () => {
     if (paymentProvider === 'uzum') {
@@ -59,17 +59,14 @@ export function StepPaymentMethod({ courseId, coursePrice, onNext, onBack, promo
       if (paymentProvider === 'click') {
         const res = await api.post<ClickResponse>('/click/course', body);
         link = res.data.data.link;
-        // Click link to'liq URL bo'lmasligi mumkin
-        if (!link.startsWith('http')) {
-          link = `https://my.click.uz/services/pay?${link}`;
-        }
+     
       } else {
         // payme
         const res = await api.post<PaymeResponse>('/payme/course', body);
         link = res.data.data.link;
       }
 
-      window.location.href = link;
+      window.open(link, '_blank', 'noopener,noreferrer');
     } catch (err) {
       console.error('Payment error:', err);
       setError("To'lov amalga oshmadi. Qayta urinib ko'ring.");
@@ -173,7 +170,7 @@ export function StepPaymentMethod({ courseId, coursePrice, onNext, onBack, promo
             }`}
           >
             <Image
-              src={`/images/payment/${provider}.svg`}
+              src={`/icons/payment/${provider}.svg`}
               alt={provider}
               width={72}
               height={28}

@@ -72,8 +72,12 @@ export default function SkillDetailPage() {
     setStartLoading(true);
     try {
       await api.post(`/course/${skill.id}/enroll`);
-    } catch {
-      // Allaqachon yozilgan bo'lsa ham davom etamiz
+    } catch (err: unknown) {
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      if (status === 400) {
+        router.push(`/payment/${skill.id}?courseType=skill`);
+        return;
+      }
     }
     const modules = skillModules?.modules ?? [];
     const firstModule = modules[0];

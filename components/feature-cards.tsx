@@ -12,6 +12,7 @@ const featureCards = [
     bgColor: 'bg-[#ff6b35]',
     borderColor: 'border-[#ff8c5a]',
     image: '/images/hero-info-image1.png',
+    imagePosition: 'object-right-bottom',
   },
   {
     id: 2,
@@ -19,6 +20,7 @@ const featureCards = [
     bgColor: 'bg-[#3b82f6]',
     borderColor: 'border-[#60a5fa]',
     image: '/images/hero-info-image2.png',
+    imagePosition: 'object-right-top',
   },
   {
     id: 3,
@@ -26,6 +28,7 @@ const featureCards = [
     bgColor: 'bg-[#84cc16]',
     borderColor: 'border-[#a3e635]',
     image: '/images/hero-info-image3.png',
+    imagePosition: 'object-right-bottom',
   },
   {
     id: 4,
@@ -33,6 +36,7 @@ const featureCards = [
     bgColor: 'bg-[#a855f7]',
     borderColor: 'border-[#c084fc]',
     image: '/images/hero-info-image4.png',
+    imagePosition: 'object-right-bottom',
   },
 ];
 
@@ -86,7 +90,7 @@ export function FeatureCards() {
                     src={card.image}
                     alt={card.title}
                     fill
-                    className="object-contain object-right-bottom"
+                    className={`object-contain ${card.imagePosition}`}
                   />
                 </div>
               </motion.button>
@@ -98,8 +102,19 @@ export function FeatureCards() {
       <AnimatePresence>
         {activeStory && (
           <StoryModal
+            key={activeStory.id}
             story={activeStory}
             onClose={() => setActiveStoryId(null)}
+            onPrev={() => {
+              const idx = STORIES.findIndex((s) => s.id === activeStoryId);
+              if (idx > 0) setActiveStoryId(STORIES[idx - 1].id);
+            }}
+            onNext={() => {
+              const idx = STORIES.findIndex((s) => s.id === activeStoryId);
+              if (idx < STORIES.length - 1) setActiveStoryId(STORIES[idx + 1].id);
+            }}
+            hasPrev={STORIES.findIndex((s) => s.id === activeStoryId) > 0}
+            hasNext={STORIES.findIndex((s) => s.id === activeStoryId) < STORIES.length - 1}
           />
         )}
       </AnimatePresence>

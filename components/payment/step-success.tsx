@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ArrowRight, Check, Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { StepIndicator } from './step-indicator';
 import api from '@/lib/api';
 
@@ -10,8 +10,16 @@ interface StepSuccessProps {
   courseId: string;
 }
 
+function getModuleEndpoint(courseType: string, courseId: string) {
+  if (courseType === 'skill') return `/course/skill/${courseId}/module`;
+  if (courseType === 'profession') return `/course/profession/${courseId}/module`;
+  return `/course/${courseId}/module`;
+}
+
 export function StepSuccess({ courseId }: StepSuccessProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const courseType = searchParams.get('courseType') ?? 'course';
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lessonUrl, setLessonUrl] = useState<string | null>(null);
@@ -23,11 +31,13 @@ export function StepSuccess({ courseId }: StepSuccessProps) {
         await api.post(`/course/${courseId}/enroll`);
 
         // Birinchi modul va darsni olish
-        const res = await api.get(`/course/${courseId}/modules`);
+        const endpoint = getModuleEndpoint(courseType, courseId);
+        const res = await api.get(endpoint);
+        const data = res.data?.data ?? res.data ?? {};
         const modules: Array<{
           id: number;
           lessons?: Array<{ id: number }>;
-        }> = res.data?.data ?? res.data ?? [];
+        }> = data.modules ?? data ?? [];
 
         const firstModule = modules[0];
         const firstLesson = firstModule?.lessons?.[0];
@@ -35,7 +45,7 @@ export function StepSuccess({ courseId }: StepSuccessProps) {
         if (firstModule && firstLesson) {
           const params = new URLSearchParams({
             lessonId: String(firstLesson.id),
-            courseType: 'course',
+            courseType,
             courseId: String(courseId),
           });
           setLessonUrl(`/module/${firstModule.id}?${params.toString()}`);
@@ -51,7 +61,7 @@ export function StepSuccess({ courseId }: StepSuccessProps) {
     };
 
     enroll();
-  }, [courseId]);
+  }, [courseId, courseType]);
 
   const handleStart = () => {
     if (lessonUrl) router.push(lessonUrl);

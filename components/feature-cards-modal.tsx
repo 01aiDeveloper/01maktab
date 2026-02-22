@@ -14,6 +14,7 @@ interface SlideImage {
   title: string;
   description: string;
   image: string;
+  imagePosition?: string; // e.g. 'object-right-bottom', 'object-right-top'
   button?: { label: string; href: string };
 }
 
@@ -44,6 +45,7 @@ export const STORIES: StoryData[] = [
         description:
           "Bu O'zbekistonda karyerani boshlash va rivojlantirish onlayn platformasi. Biz yang kasblarni o'rgatamiz: raqamli ko'nikmalarni rivojlantiramsiz, yo'lingizni tanlashga va zamonaviy karyeraga qurishga yordam beramiz.",
         image: '/images/hero-info-image1.png',
+        imagePosition: 'object-right-bottom',
       },
     ],
   },
@@ -57,6 +59,7 @@ export const STORIES: StoryData[] = [
         description:
           "Platformaga ro'yxatdan o'ting va minglab o'quvchilar bilan birga o'rganing. Hamjamiyatimizda mentor yordami, loyiha muhokamasi va karyera imkoniyatlari mavjud.",
         image: '/images/hero-info-image2.png',
+        imagePosition: 'object-right-top',
       },
       {
         type: 'list',
@@ -82,7 +85,8 @@ export const STORIES: StoryData[] = [
         description:
           "Talab yuqori bo'lgan IT-kasbni egallang va bozorga ishonch bilan kiring. Amaliyot, real loyihalar va zamonaviy texnologiyalar.",
         image: '/images/hero-info-image3.png',
-        button: { label: 'Batafsil', href: '/professions' },
+        imagePosition: 'object-right-bottom',
+        button: { label: 'Batafsil', href: '/catalog?tab=professions' },
       },
     ],
   },
@@ -96,6 +100,7 @@ export const STORIES: StoryData[] = [
         description:
           "Skilllar - bu siz egallagan aniq ko'nikmalar. Ish beruvchilar ko'nikmalaringizni ko'rib, sizni tanlaydi. Skilllarni rivojlantiring va karyerangizni tezlashtiring.",
         image: '/images/hero-info-image4.png',
+        imagePosition: 'object-right-bottom',
         button: { label: 'Skilllarni ko\'rish', href: '/skills' },
       },
     ],
@@ -107,11 +112,15 @@ export const STORIES: StoryData[] = [
 interface StoryModalProps {
   story: StoryData;
   onClose: () => void;
+  onPrev?: () => void;
+  onNext?: () => void;
+  hasPrev?: boolean;
+  hasNext?: boolean;
 }
 
 const SLIDE_DURATION = 5000; // ms
 
-export function StoryModal({ story, onClose }: StoryModalProps) {
+export function StoryModal({ story, onClose, onPrev, onNext, hasPrev, hasNext }: StoryModalProps) {
   const [slideIndex, setSlideIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const pausedRef = useRef(false);
@@ -147,6 +156,8 @@ export function StoryModal({ story, onClose }: StoryModalProps) {
         if (pct >= 1) {
           if (slideIndex < slides.length - 1) {
             setSlideIndex((i) => i + 1);
+          } else if (hasNext) {
+            onNext?.();
           } else {
             onClose();
           }
@@ -170,9 +181,11 @@ export function StoryModal({ story, onClose }: StoryModalProps) {
 
   const prev = () => {
     if (slideIndex > 0) setSlideIndex((i) => i - 1);
+    else onPrev?.();
   };
   const next = () => {
     if (slideIndex < slides.length - 1) setSlideIndex((i) => i + 1);
+    else if (hasNext) onNext?.();
     else onClose();
   };
 
@@ -185,17 +198,22 @@ export function StoryModal({ story, onClose }: StoryModalProps) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
       onClick={onClose}
     >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.92 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.92 }}
-        transition={{ duration: 0.22, ease: 'easeOut' }}
+      {/* Prev story arrow */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onPrev?.(); }}
+        disabled={!hasPrev}
+        className="hidden md:flex w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 items-center justify-center mr-4 transition-colors disabled:opacity-0 shrink-0"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12 15l-5-5 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+
+      <div
         onClick={(e) => e.stopPropagation()}
         onPointerDown={() => setPaused(true)}
         onPointerUp={() => setPaused(false)}
         onPointerLeave={() => setPaused(false)}
-        className={`relative w-full max-w-[480px] rounded-3xl overflow-hidden shadow-2xl ${slide.bg} select-none`}
-        style={{ minHeight: 460 }}
+        className={`relative w-full max-w-[760px] rounded-3xl overflow-hidden shadow-2xl ${slide.bg} select-none`}
+        style={{ minHeight: 380 }}
       >
         {/* Progress bars */}
         <div className="absolute top-4 left-4 right-4 flex gap-1.5 z-20">
@@ -236,14 +254,15 @@ export function StoryModal({ story, onClose }: StoryModalProps) {
           >
             {slide.type === 'image' ? (
               /* Image slide — matn chap pastda, rasm o'ng tomonda absolute */
-              <div className="relative flex flex-col justify-end p-7 pt-14" style={{ minHeight: 460 }}>
+              <div className="relative flex flex-col justify-end p-7 pt-14" style={{ minHeight: 380 }}>
                 {/* Image — o'ng tomonda vertikal to'liq */}
                 <div className="absolute right-0 top-0 bottom-0 w-[52%] pointer-events-none">
                   <Image
                     src={slide.image}
                     alt={slide.title}
                     fill
-                    className="object-contain object-right-bottom"
+                    quality={100}
+                    className={`object-contain ${slide.imagePosition ?? 'object-right-bottom'}`}
                     priority
                   />
                 </div>
@@ -260,7 +279,7 @@ export function StoryModal({ story, onClose }: StoryModalProps) {
                     <Link
                       href={slide.button.href}
                       onClick={onClose}
-                      className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-900 transition-colors"
+                      className="relative z-20 inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-black text-white text-sm font-medium hover:bg-gray-900 transition-colors"
                     >
                       {slide.button.label}
                       <ArrowRight className="w-4 h-4" />
@@ -270,7 +289,7 @@ export function StoryModal({ story, onClose }: StoryModalProps) {
               </div>
             ) : (
               /* List slide — oq bg, icon + label + description */
-              <div className="p-7 pt-14 pb-8" style={{ minHeight: 460 }}>
+              <div className="p-7 pt-14 pb-8" style={{ minHeight: 380 }}>
                 <h2 className={`text-2xl font-bold mb-5 ${textColor}`}>{slide.title}</h2>
                 <div className="space-y-4">
                   {slide.items.map((item, i) => (
@@ -299,15 +318,24 @@ export function StoryModal({ story, onClose }: StoryModalProps) {
           onClick={prev}
           onPointerDown={(e) => e.stopPropagation()}
           onPointerUp={(e) => e.stopPropagation()}
-          className="absolute left-0 top-0 h-full w-1/3 z-10"
+          className="absolute left-0 top-0 h-full w-1/3 z-[5]"
         />
         <button
           onClick={next}
           onPointerDown={(e) => e.stopPropagation()}
           onPointerUp={(e) => e.stopPropagation()}
-          className="absolute right-0 top-0 h-full w-1/3 z-10"
+          className="absolute right-0 top-0 h-full w-1/3 z-[5]"
         />
-      </motion.div>
+      </div>
+
+      {/* Next story arrow */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onNext?.(); }}
+        disabled={!hasNext}
+        className="hidden md:flex w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 items-center justify-center ml-4 transition-colors disabled:opacity-0 shrink-0"
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M8 5l5 5-5 5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
     </div>
   );
 }

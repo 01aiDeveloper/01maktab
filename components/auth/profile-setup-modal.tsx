@@ -4,8 +4,7 @@ import { useState, useEffect } from "react"
 import { X, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import api from "@/lib/api"
-import { useAuthStore } from "@/store/auth-store"
+import { useUpdateProfile } from "@/hooks/use-update-profile"
 
 interface ProfileSetupModalProps {
   isOpen: boolean
@@ -13,9 +12,7 @@ interface ProfileSetupModalProps {
 }
 
 export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
-  const { setUser, user, prompt, setTokens } = useAuthStore()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { updateProfile, isLoading: isSubmitting, error, setError } = useUpdateProfile()
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -43,48 +40,28 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
-    setIsSubmitting(true)
+
+    let birthday: string | undefined
+    if (formData.birthYear && formData.birthMonth && formData.birthDay) {
+      birthday = new Date(
+        parseInt(formData.birthYear),
+        parseInt(formData.birthMonth) - 1,
+        parseInt(formData.birthDay),
+      ).toISOString()
+    }
+
+    const payload: Record<string, string> = {
+      firstname: formData.firstName,
+      lastname: formData.lastName,
+    }
+    if (formData.gender) payload.gender = formData.gender.toUpperCase()
+    if (birthday) payload.birthday = birthday
 
     try {
-      // Format birthday if all parts are provided
-      let birthday = undefined
-      if (formData.birthYear && formData.birthMonth && formData.birthDay) {
-        birthday = new Date(
-          parseInt(formData.birthYear),
-          parseInt(formData.birthMonth) - 1,
-          parseInt(formData.birthDay),
-        ).toISOString()
-      }
-
-      // Prepare API payload
-      const payload: any = {
-        firstname: formData.firstName,
-        lastname: formData.lastName,
-      }
-
-      // Add optional fields only if they have values
-      if (formData.gender) {
-        payload.gender = formData.gender.toUpperCase()
-      }
-      if (birthday) {
-        payload.birthday = birthday
-      }
-
-      // Send to API
-      const response = await api.patch("/user/me", payload)
-
-      // Update user in store
-      if (response.data?.data) {
-        setUser(response.data.data)
-      }
-
-      // Close modal
+      await updateProfile(payload)
       onClose()
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Ma'lumotlarni saqlashda xatolik yuz berdi")
-      console.error("Profile setup failed", err)
-    } finally {
-      setIsSubmitting(false)
+    } catch {
+      // error is handled inside hook
     }
   }
 
