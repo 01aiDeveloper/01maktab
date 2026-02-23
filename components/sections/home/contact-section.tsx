@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react"
 import { MainTitle } from "@/components/ui/main-title"
 import { MainButton } from "@/components/ui/main-button"
 import { useState } from "react"
+import { sendMessage } from "@/lib/telegram"
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -18,11 +19,17 @@ const itemVariants = {
 export function ContactSection() {
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
+  const [sent, setSent] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log({ name, phone })
+    const result = sendMessage({ name, phone })
+    if (result.success) {
+      setSent(true)
+      setName("")
+      setPhone("")
+      setTimeout(() => setSent(false), 4000)
+    }
   }
 
   return (
@@ -79,9 +86,9 @@ export function ContactSection() {
                   size="default"
                   icon={<ArrowRight className="w-5 h-5" />}
                   iconPosition="right"
-                  className="w-full md:w-auto"
+                  className="w-full"
                 >
-                  Yuborish
+                  {sent ? "Yuborildi ✓" : "Yuborish"}
                 </MainButton>
               </div>
             </div>

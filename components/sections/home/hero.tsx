@@ -98,7 +98,7 @@ export function Hero() {
                           }}
                         >
                           <h2
-                            className={`text-4xl sm:text-5xl md:text-6xl lg:text-[120px] font-black leading-[0.9] md:leading-[0.85] tracking-tighter text-balance ${
+                            className={`text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-semibold lg:leading-17.5 tracking-[-0.05em] text-balance ${
                               slide.isDark ? "text-white" : "text-foreground"
                             }`}
                           >
@@ -130,15 +130,8 @@ export function Hero() {
                                 <br />
                                 yaratilgan:
                               </span>
-                              <div className="flex items-center gap-2 md:gap-3">
-                                <div className="w-8 h-8 md:w-10 md:h-10 bg-[#0052ff] rounded-xl flex items-center justify-center p-2 md:p-2.5">
-                                  <div className="w-full h-full border-2 border-white rounded-sm transform rotate-45" />
-                                </div>
-                                <span
-                                  className={`font-black tracking-tighter text-lg md:text-2xl uppercase text-white`}
-                                >
-                                  TBC BANK
-                                </span>
+                              <div className="flex items-center">
+                                <Image src="/icons/tbc_bank_logo.svg" alt="TBC Bank" width={120} height={40} className="object-contain" />
                               </div>
                             </div>
 
