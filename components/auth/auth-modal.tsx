@@ -1,59 +1,59 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
-import { ProfileSetup } from "./profile-setup"
-import { Send, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { useState } from 'react';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { ProfileSetup } from './profile-setup';
+import { Send, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export function AuthModal({ isOpen, onOpenChange }: { isOpen: boolean; onOpenChange: (open: boolean) => void }) {
-  const [step, setStep] = useState<"INITIAL" | "OTP" | "PROFILE">("INITIAL")
-  const [method, setMethod] = useState<"phone" | "email">("phone")
-  const [otp, setOtp] = useState(["", "", "", "", "", ""])
+  const [step, setStep] = useState<'INITIAL' | 'OTP' | 'PROFILE'>('INITIAL');
+  const [method, setMethod] = useState<'phone' | 'email'>('phone');
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
 
   const handleOtpSubmit = () => {
-    setStep("PROFILE")
-  }
+    setStep('PROFILE');
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px] p-8 md:p-12 rounded-[40px] border-none">
-        {step === "PROFILE" ? (
-          <ProfileSetup isModal onBack={() => setStep("OTP")} onComplete={() => onOpenChange(false)} />
+        {step === 'PROFILE' ? (
+          <ProfileSetup isModal onBack={() => setStep('OTP')} onComplete={() => onOpenChange(false)} />
         ) : (
           <div className="flex flex-col items-center">
             <div className="mb-8">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">01MAKTAB</h1>
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900">01AI</h1>
             </div>
 
-            {step === "INITIAL" ? (
+            {step === 'INITIAL' ? (
               <>
                 <h2 className="text-xl font-medium text-gray-800 mb-6 text-center w-full">
-                  {method === "phone" ? "Telefon orqali kirish" : "Pochta orqali kirish"}
+                  {method === 'phone' ? 'Telefon orqali kirish' : 'Pochta orqali kirish'}
                 </h2>
                 <div className="w-full bg-gray-100 rounded-xl p-1 flex mb-8">
                   <button
-                    onClick={() => setMethod("phone")}
+                    onClick={() => setMethod('phone')}
                     className={cn(
-                      "flex-1 py-2 text-sm font-medium rounded-lg transition-all",
-                      method === "phone" ? "bg-white shadow-sm text-gray-900" : "text-gray-500",
+                      'flex-1 py-2 text-sm font-medium rounded-lg transition-all',
+                      method === 'phone' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'
                     )}
                   >
                     Telefon
                   </button>
                   <button
-                    onClick={() => setMethod("email")}
+                    onClick={() => setMethod('email')}
                     className={cn(
-                      "flex-1 py-2 text-sm font-medium rounded-lg transition-all",
-                      method === "email" ? "bg-white shadow-sm text-gray-900" : "text-gray-500",
+                      'flex-1 py-2 text-sm font-medium rounded-lg transition-all',
+                      method === 'email' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'
                     )}
                   >
                     Pochta
                   </button>
                 </div>
                 <Button
-                  onClick={() => setStep("OTP")}
+                  onClick={() => setStep('OTP')}
                   className="w-full bg-gray-200 text-gray-600 hover:bg-gray-300 py-6 rounded-2xl shadow-none"
                 >
                   Kirish
@@ -90,5 +90,5 @@ export function AuthModal({ isOpen, onOpenChange }: { isOpen: boolean; onOpenCha
         )}
       </DialogContent>
     </Dialog>
-  )
+  );
 }

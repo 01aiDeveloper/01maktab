@@ -123,11 +123,7 @@ const staticCertificates = [
     title: 'Сертификат MLC',
     badgeText: 'Аккредитованный AICA',
     badgeColor: 'bg-[#5d7bf5] text-white',
-    bullets: [
-      'Центрально-Азиатская Ассоциация ИИ',
-      'Признается государственными и частными организациями',
-      'Официальный документ',
-    ],
+    bullets: ['Центрально-Азиатская Ассоциация ИИ', 'Признается государственными и частными организациями', 'Официальный документ'],
     image: '/images/professions/certificate.png',
   },
 ];
@@ -144,8 +140,8 @@ const staticFaqs = [
   },
   {
     id: '2',
-    question: 'Почему мне стоит выбрать именно 01Maktab?',
-    answer: '01Maktab предлагает уникальную методологию обучения с реальными проектами и поддержкой менторов.',
+    question: 'Почему мне стоит выбрать именно 01AI?',
+    answer: '01AI предлагает уникальную методологию обучения с реальными проектами и поддержкой менторов.',
   },
   {
     id: '3',
@@ -252,9 +248,7 @@ export default function ProfessionPage() {
               className="rounded-[40px] overflow-hidden relative min-h-[500px] lg:min-h-[600px]"
             >
               {/* Background Image */}
-              {courseImage && (
-                <Image src={courseImage} alt={profession.title} fill className="object-cover" priority />
-              )}
+              {courseImage && <Image src={courseImage} alt={profession.title} fill className="object-cover" priority />}
 
               {/* Content Overlay */}
               <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center min-h-[500px] lg:min-h-[600px]">

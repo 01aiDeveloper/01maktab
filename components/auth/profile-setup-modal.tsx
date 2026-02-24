@@ -1,88 +1,71 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { X, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { useUpdateProfile } from "@/hooks/use-update-profile"
+import { useState, useEffect } from 'react';
+import { X, ChevronDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useUpdateProfile } from '@/hooks/use-update-profile';
 
 interface ProfileSetupModalProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
-  const { updateProfile, isLoading: isSubmitting, error, setError } = useUpdateProfile()
+  const { updateProfile, isLoading: isSubmitting, error, setError } = useUpdateProfile();
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    birthDay: "",
-    birthMonth: "",
-    birthYear: "",
-    gender: "",
-  })
+    firstName: '',
+    lastName: '',
+    birthDay: '',
+    birthMonth: '',
+    birthYear: '',
+    gender: '',
+  });
 
   // Reset form when modal closes
   useEffect(() => {
     if (!isOpen) {
       setFormData({
-        firstName: "",
-        lastName: "",
-        birthDay: "",
-        birthMonth: "",
-        birthYear: "",
-        gender: "",
-      })
-      setError(null)
+        firstName: '',
+        lastName: '',
+        birthDay: '',
+        birthMonth: '',
+        birthYear: '',
+        gender: '',
+      });
+      setError(null);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
+    e.preventDefault();
+    setError(null);
 
-    let birthday: string | undefined
+    let birthday: string | undefined;
     if (formData.birthYear && formData.birthMonth && formData.birthDay) {
-      birthday = new Date(
-        parseInt(formData.birthYear),
-        parseInt(formData.birthMonth) - 1,
-        parseInt(formData.birthDay),
-      ).toISOString()
+      birthday = new Date(parseInt(formData.birthYear), parseInt(formData.birthMonth) - 1, parseInt(formData.birthDay)).toISOString();
     }
 
     const payload: Record<string, string> = {
       firstname: formData.firstName,
       lastname: formData.lastName,
-    }
-    if (formData.gender) payload.gender = formData.gender.toUpperCase()
-    if (birthday) payload.birthday = birthday
+    };
+    if (formData.gender) payload.gender = formData.gender.toUpperCase();
+    if (birthday) payload.birthday = birthday;
 
     try {
-      await updateProfile(payload)
-      onClose()
+      await updateProfile(payload);
+      onClose();
     } catch {
       // error is handled inside hook
     }
-  }
+  };
 
-  const months = [
-    "Yanvar",
-    "Fevral",
-    "Mart",
-    "Aprel",
-    "May",
-    "Iyun",
-    "Iyul",
-    "Avgust",
-    "Sentabr",
-    "Oktabr",
-    "Noyabr",
-    "Dekabr",
-  ]
-  const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString())
-  const years = Array.from({ length: 100 }, (_, i) => (2024 - i).toString())
+  const months = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'];
+  const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
+  const years = Array.from({ length: 100 }, (_, i) => (2024 - i).toString());
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -92,12 +75,10 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
       {/* Modal content */}
       <div className="relative z-10 w-full max-w-md mx-4 bg-white rounded-3xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto">
         <div className="w-full flex flex-col items-center">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-8">01MAKTAB</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-8">01AI</h1>
 
           <div className="text-center mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-1 flex items-center justify-center gap-2">
-              Keling tanishamiz 👋
-            </h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-1 flex items-center justify-center gap-2">Keling tanishamiz 👋</h2>
             <p className="text-sm text-gray-400">Pastdagi ma'lumotlarni to'ldiring</p>
           </div>
 
@@ -199,11 +180,11 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
               disabled={isSubmitting}
               className="w-full bg-[#E5E7EB] hover:bg-gray-300 text-gray-600 font-semibold py-7 rounded-2xl shadow-none mt-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? "Saqlanmoqda..." : "Boshlash"}
+              {isSubmitting ? 'Saqlanmoqda...' : 'Boshlash'}
             </Button>
           </form>
         </div>
       </div>
     </div>
-  )
+  );
 }

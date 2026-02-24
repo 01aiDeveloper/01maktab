@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { motion } from "framer-motion"
-import { Users, Briefcase } from "lucide-react"
-import Image from "next/image"
+import { motion } from 'framer-motion';
+import { Users, Briefcase } from 'lucide-react';
+import Image from 'next/image';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -12,7 +12,7 @@ const containerVariants = {
       staggerChildren: 0.1,
     },
   },
-}
+};
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -21,7 +21,7 @@ const itemVariants = {
     y: 0,
     transition: { duration: 0.5 },
   },
-}
+};
 
 export function StatsSection() {
   return (
@@ -30,15 +30,12 @@ export function StatsSection() {
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: '-100px' }}
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
         {/* Row 1 */}
         {/* Black card - Graduates count */}
-        <motion.div
-          variants={itemVariants}
-          className="bg-black rounded-3xl p-6 text-white flex flex-col justify-between min-h-[220px]"
-        >
+        <motion.div variants={itemVariants} className="bg-black rounded-3xl p-6 text-white flex flex-col justify-between min-h-[220px]">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
               <Users className="w-4 h-4" />
@@ -50,32 +47,17 @@ export function StatsSection() {
 
         {/* Team photo 1 - right side of row 1 */}
         <motion.div variants={itemVariants} className="rounded-3xl overflow-hidden min-h-[220px]">
-          <Image
-            src="/images/team1.png"
-            alt="01Maktab jamoasi"
-            width={600}
-            height={400}
-            className="w-full h-full object-cover"
-          />
+          <Image src="/images/team1.png" alt="01AI jamoasi" width={600} height={400} className="w-full h-full object-cover" />
         </motion.div>
 
         {/* Row 2 */}
         {/* Team photo 2 - left side of row 2 */}
         <motion.div variants={itemVariants} className="rounded-3xl overflow-hidden min-h-[220px]">
-          <Image
-            src="/images/team2.png"
-            alt="Jamoa ishlayapti"
-            width={600}
-            height={400}
-            className="w-full h-full object-cover"
-          />
+          <Image src="/images/team2.png" alt="Jamoa ishlayapti" width={600} height={400} className="w-full h-full object-cover" />
         </motion.div>
 
         {/* Blue card - Employment rate - right side of row 2 */}
-        <motion.div
-          variants={itemVariants}
-          className="bg-[#4361ee] rounded-3xl p-6 text-white flex flex-col justify-between min-h-[220px]"
-        >
+        <motion.div variants={itemVariants} className="bg-[#4361ee] rounded-3xl p-6 text-white flex flex-col justify-between min-h-[220px]">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
               <Briefcase className="w-4 h-4" />
@@ -87,17 +69,8 @@ export function StatsSection() {
 
         {/* Row 3 */}
         {/* 3D Illustration card */}
-        <motion.div
-          variants={itemVariants}
-          className="bg-[#e8e8e8] rounded-3xl p-6 flex items-center justify-center min-h-[200px]"
-        >
-          <Image
-            src="/images/3d-cylinder.jpg"
-            alt="3D illustration"
-            width={200}
-            height={200}
-            className="object-contain max-h-[180px]"
-          />
+        <motion.div variants={itemVariants} className="bg-[#e8e8e8] rounded-3xl p-6 flex items-center justify-center min-h-[200px]">
+          <Image src="/images/3d-cylinder.jpg" alt="3D illustration" width={200} height={200} className="object-contain max-h-[180px]" />
         </motion.div>
 
         {/* Motivational text card */}
@@ -107,10 +80,10 @@ export function StatsSection() {
             <br />
             <strong>Bizdan sharoit - sizdan harakat.</strong>
             <br />
-            {'Harakatni "01Maktab"da davom eting!'}
+            {'Harakatni "01AI"da davom eting!'}
           </p>
         </motion.div>
       </motion.div>
     </section>
-  )
+  );
 }

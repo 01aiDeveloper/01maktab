@@ -2,11 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
 import { MainButton } from "@/components/ui/main-button";
 
 const SLIDES = [
@@ -43,130 +39,134 @@ const SLIDES = [
 ];
 
 export function Hero() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
-    Autoplay({ delay: 8000, stopOnInteraction: false }),
-  ]);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [isAnimating, setIsAnimating] = React.useState(false);
+  const intervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const onSelect = React.useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
+  const goToSlide = React.useCallback(
+    (idx: number) => {
+      if (isAnimating || idx === selectedIndex) return;
+      setIsAnimating(true);
+      setSelectedIndex(idx);
+      setTimeout(() => setIsAnimating(false), 700);
+    },
+    [isAnimating, selectedIndex]
+  );
+
+  const startAutoplay = React.useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setSelectedIndex((prev) => {
+        const next = (prev + 1) % SLIDES.length;
+        return next;
+      });
+    }, 8000);
+  }, []);
 
   React.useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on("select", onSelect);
-  }, [emblaApi, onSelect]);
+    startAutoplay();
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [startAutoplay]);
 
   return (
-    <section className="relative">
-      <div className="relative h-screen min-h-[600px] md:min-h-[800px] w-full bg-base-dark pb-4!">
-        <div
-          className="relative h-full w-full overflow-hidden  sm:rounded-b-[55px] rounded-b-[48px] rounded-t-none"
-          ref={emblaRef}
-        >
-          <div className="flex h-full">
-            {SLIDES.map((slide, index) => (
-              <div
-                key={slide.id}
-                className="relative flex-[0_0_100%] min-w-0 h-full"
-              >
-                <div className={`absolute inset-0 z-0 ${slide.bgColor}`}>
-                  <Image
-                    src={slide.image || "/placeholder.svg"}
-                    alt={slide.title}
-                    fill
-                    className="object-cover object-center md:object-right"
-                    priority={index === 0}
-                  />
-                  <div className="absolute inset-0 bg-black/40" />
-                </div>
+    <section className="relative h-screen min-h-116 sm:min-h-150 w-full">
+      <div className="relative h-full w-full bg-base-dark">
+        <div className="relative h-full w-full overflow-hidden rounded-b-[48px] md:rounded-b-[55px] rounded-t-none">
+          {/* Fade Slides */}
+          {SLIDES.map((slide, index) => (
+            <div
+              key={slide.id}
+              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                selectedIndex === index ? "opacity-100 z-10" : "opacity-0 z-0"
+              }`}
+            >
+              <div className={`absolute inset-0 ${slide.bgColor}`}>
+                <Image
+                  src={slide.image || "/placeholder.svg"}
+                  alt={slide.title}
+                  fill
+                  className="object-cover object-[85%] md:object-right"
+                  priority={index === 0}
+                />
+                <div className="absolute inset-0 bg-black/40" />
+              </div>
 
-                <div className="container relative z-10 h-full flex items-center px-4 md:px-6">
-                  <div className="max-w-4xl w-full">
-                    <AnimatePresence mode="wait">
-                      {selectedIndex === index && (
-                        <motion.div
-                          key={`slide-content-${index}`}
-                          initial={{ x: -60, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          exit={{ x: 60, opacity: 0 }}
-                          transition={{
-                            duration: 0.7,
-                            ease: [0.16, 1, 0.3, 1],
-                          }}
-                        >
-                          <h2
-                            className={`text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-semibold lg:leading-17.5 tracking-[-0.05em] text-balance ${
-                              slide.isDark ? "text-white" : "text-foreground"
-                            }`}
-                          >
-                            {slide.title}
-                          </h2>
+              <div className="container relative z-10 h-full flex items-center px-4 md:px-6">
+                <div className="max-w-4xl w-full">
+                  <h2
+                    className={`text-[36px] leading-[39px] tracking-[-0.05em] font-semibold md:text-6xl md:leading-[1.1] lg:text-[64px] lg:leading-[70px] text-balance ${
+                      slide.isDark ? "text-white" : "text-foreground"
+                    }`}
+                  >
+                    {slide.title}
+                  </h2>
 
-                          <p
-                            className={`mt-4 md:mt-10 text-base sm:text-lg md:text-xl lg:text-2xl font-medium max-w-lg leading-relaxed ${
-                              slide.isDark
-                                ? "text-white/80"
-                                : "text-foreground/80"
-                            }`}
-                          >
-                            {slide.description}
-                          </p>
+                  <p
+                    className={`mt-4 md:mt-10 text-[16px] leading-[18px] tracking-[-0.05em] font-[450] md:text-xl md:leading-relaxed lg:text-2xl max-w-lg ${
+                      slide.isDark ? "text-white/80" : "text-foreground/80"
+                    }`}
+                  >
+                    {slide.description}
+                  </p>
 
-                          <div className="mt-6 md:mt-14 flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 md:gap-6">
-                            <div
-                              className={`backdrop-blur-2xl rounded-[10px] px-4 md:px-6 py-3 md:py-4 border flex items-center gap-3 md:gap-4 ${
-                                slide.isDark
-                                  ? "bg-white/10 border-white/20"
-                                  : "bg-black/5 border-black/10"
-                              }`}
-                            >
-                              <span
-                                className={`text-[10px] md:text-[11px] font-bold uppercase tracking-wider leading-tight text-white`}
-                              >
-                                Hamkorlikda
-                                <br />
-                                yaratilgan:
-                              </span>
-                              <div className="flex items-center">
-                                <Image src="/icons/tbc_bank_logo.svg" alt="TBC Bank" width={120} height={40} className="object-contain" />
-                              </div>
-                            </div>
+                  <div className="mt-6 md:mt-14 flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 md:gap-6">
+                    <div
+                      className={`backdrop-blur-2xl rounded-xl px-4 md:px-6 h-13 md:h-15 w-48.25 border flex items-center gap-3 md:gap-4 ${
+                        slide.isDark
+                          ? "bg-white/10 border-white/20"
+                          : "bg-black/5 border-black/10"
+                      }`}
+                    >
+                      <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider leading-tight text-white">
+                        Hamkorlikda
+                        <br />
+                        yaratilgan:
+                      </span>
+                      <div className="flex items-center">
+                        <Image
+                          src="/icons/tbc_bank_logo.svg"
+                          alt="TBC Bank"
+                          width={120}
+                          height={40}
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
 
-                            <MainButton
-                              variant="gradient"
-                              size="lg"
-                              icon={<ArrowRight className="h-5 w-5 md:h-6 md:w-6" />}
-                              iconPosition="right"
-                              className="group w-full sm:w-auto"
-                            >
-                              Batafsil
-                            </MainButton>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    <MainButton
+                      variant="gradient"
+                      size="lg"
+                      icon={<ArrowRight className="h-5 w-5 md:h-6 md:w-6" />}
+                      iconPosition="right"
+                      className="group h-13 md:h-15 lg:h-15 w-48.25 rounded-xl"
+                    >
+                      Batafsil
+                    </MainButton>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
+        </div>
 
-          <div className="absolute bottom-6 md:bottom-12 left-4 md:left-12 lg:left-24 z-20 flex items-center gap-2 md:gap-4">
-            {SLIDES.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => emblaApi?.scrollTo(idx)}
-                className={`h-1.5 md:h-2 rounded-full transition-all duration-500 ${
-                  selectedIndex === idx
-                    ? "w-12 md:w-20 bg-white"
-                    : "w-6 md:w-8 bg-white/30 hover:bg-white/50"
-                }`}
-              />
-            ))}
-          </div>
+        {/* Dots — overflow-hidden tashqarisida */}
+        <div className="absolute bottom-6 md:bottom-12 left-4 md:left-12 lg:left-24 z-20 flex items-center gap-1 md:gap-2">
+          {SLIDES.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                goToSlide(idx);
+                startAutoplay();
+              }}
+              className={`h-1.5 md:h-2 rounded-full transition-all duration-500 ${
+                selectedIndex === idx
+                  ? "w-12 md:w-20 bg-white"
+                  : "w-6 md:w-8 bg-white/30 hover:bg-white/50"
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>

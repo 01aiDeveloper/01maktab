@@ -1,109 +1,90 @@
-"use client"
-import { useState } from "react"
-import { ArrowLeft, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
-import { useUpdateProfile } from "@/hooks/use-update-profile"
+'use client';
+import { useState } from 'react';
+import { ArrowLeft, ChevronDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { useUpdateProfile } from '@/hooks/use-update-profile';
 
 interface ProfileSetupProps {
-  onBack: () => void
-  onComplete: () => void
-  isModal?: boolean
+  onBack: () => void;
+  onComplete: () => void;
+  isModal?: boolean;
 }
 
 export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps) {
-  const { updateProfile, isLoading: isSubmitting, error, setError } = useUpdateProfile()
+  const { updateProfile, isLoading: isSubmitting, error, setError } = useUpdateProfile();
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    firstName: '',
+    lastName: '',
     // phone: "",
-    birthDay: "",
-    birthMonth: "",
-    birthYear: "",
-    gender: "",
+    birthDay: '',
+    birthMonth: '',
+    birthYear: '',
+    gender: '',
     // region: "",
-  })
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
+    e.preventDefault();
+    setError(null);
 
-    let birthday: string | undefined
+    let birthday: string | undefined;
     if (formData.birthYear && formData.birthMonth && formData.birthDay) {
-      birthday = new Date(
-        parseInt(formData.birthYear),
-        parseInt(formData.birthMonth) - 1,
-        parseInt(formData.birthDay),
-      ).toISOString()
+      birthday = new Date(parseInt(formData.birthYear), parseInt(formData.birthMonth) - 1, parseInt(formData.birthDay)).toISOString();
     }
 
     const payload: Record<string, string> = {
       firstname: formData.firstName,
       lastname: formData.lastName,
-    }
-    if (formData.gender) payload.gender = formData.gender.toUpperCase()
-    if (birthday) payload.birthday = birthday
+    };
+    if (formData.gender) payload.gender = formData.gender.toUpperCase();
+    if (birthday) payload.birthday = birthday;
 
     try {
-      await updateProfile(payload)
-      onComplete()
-      if (typeof window !== "undefined") {
-        window.location.href = "/"
+      await updateProfile(payload);
+      onComplete();
+      if (typeof window !== 'undefined') {
+        window.location.href = '/';
       }
     } catch {
       // error is handled inside hook
     }
-  }
+  };
 
   const regions = [
-    "Toshkent shahri",
-    "Toshkent viloyati",
-    "Andijon",
-    "Buxoro",
+    'Toshkent shahri',
+    'Toshkent viloyati',
+    'Andijon',
+    'Buxoro',
     "Farg'ona",
-    "Jizzax",
-    "Xorazm",
-    "Namangan",
-    "Navoiy",
-    "Qashqadaryo",
-    "Samarqand",
-    "Sirdaryo",
-    "Surxondaryo",
+    'Jizzax',
+    'Xorazm',
+    'Namangan',
+    'Navoiy',
+    'Qashqadaryo',
+    'Samarqand',
+    'Sirdaryo',
+    'Surxondaryo',
     "Qoraqalpog'iston Respublikasi",
-  ]
+  ];
 
-  const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString())
-  const months = [
-    "Yanvar",
-    "Fevral",
-    "Mart",
-    "Aprel",
-    "May",
-    "Iyun",
-    "Iyul",
-    "Avgust",
-    "Sentabr",
-    "Oktabr",
-    "Noyabr",
-    "Dekabr",
-  ]
-  const years = Array.from({ length: 100 }, (_, i) => (2024 - i).toString())
+  const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
+  const months = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'];
+  const years = Array.from({ length: 100 }, (_, i) => (2024 - i).toString());
 
   return (
-    <div className={cn("w-full flex flex-col items-center", isModal ? "p-0" : "p-0")}>
+    <div className={cn('w-full flex flex-col items-center', isModal ? 'p-0' : 'p-0')}>
       <div className="w-full flex items-center justify-between mb-8">
         <button onClick={onBack} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
           <ArrowLeft className="w-6 h-6 text-gray-900" />
         </button>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">01MAKTAB</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">01AI</h1>
         <div className="w-10" /> {/* Spacer */}
       </div>
 
       <div className="text-center mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-1 flex items-center justify-center gap-2">
-          Keling tanishamiz 👋
-        </h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-1 flex items-center justify-center gap-2">Keling tanishamiz 👋</h2>
         <p className="text-sm text-gray-400">Pastdagi ma'lumotlarni to'ldiring</p>
       </div>
 
@@ -240,9 +221,9 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
           disabled={isSubmitting}
           className="w-full bg-[#E5E7EB] hover:bg-gray-300 text-gray-600 font-semibold py-7 rounded-2xl shadow-none mt-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? "Saqlanmoqda..." : "Boshlash"}
+          {isSubmitting ? 'Saqlanmoqda...' : 'Boshlash'}
         </Button>
       </form>
     </div>
-  )
+  );
 }

@@ -123,8 +123,8 @@ const staticFaqs = [
   },
   {
     id: '2',
-    question: 'Почему мне стоит выбрать именно 01Maktab?',
-    answer: '01Maktab предлагает уникальную методологию обучения с реальными проектами и поддержкой менторов.',
+    question: 'Почему мне стоит выбрать именно 01AI?',
+    answer: '01AI предлагает уникальную методологию обучения с реальными проектами и поддержкой менторов.',
   },
   {
     id: '3',
@@ -246,11 +246,7 @@ export default function CoursePage() {
       />
 
       {/* Course Description Section */}
-      <CourseDescriptionSection
-        title={course.title}
-        description={course.description.replace(/<[^>]*>/g, '')}
-      />
-
+      <CourseDescriptionSection title={course.title} description={course.description.replace(/<[^>]*>/g, '')} />
 
       {/* Learning Outcomes Section */}
       <LearningOutcomesSection outcomes={staticLearningOutcomes} />
@@ -271,7 +267,11 @@ export default function CoursePage() {
       {projects.length > 0 && <ProjectsCarouselSection projects={projects} title={`${projects.length} ta real loyiha`} />}
 
       {/* Trial Video Section */}
-      <TrialVideoSection title="Kursni sinab ko'ring" subtitle="Dastlabki darslar bepul. Sizga yoqsa, davom eting" videoImage="/images/courses/bg.webp" />
+      <TrialVideoSection
+        title="Kursni sinab ko'ring"
+        subtitle="Dastlabki darslar bepul. Sizga yoqsa, davom eting"
+        videoImage="/images/courses/bg.webp"
+      />
 
       {/* Full Curriculum Section */}
       <section className="w-full py-8">
