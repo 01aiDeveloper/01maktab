@@ -9,27 +9,7 @@ import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
 import { courseService } from "@/services/course.service"
 import { useApi } from "@/hooks/use-api"
 import { getMediaUrl } from "@/lib/utils"
-
-// Fallback data if API fails
-const FALLBACK_COURSES = [
-  {
-    title: "Data Analyst Kursi",
-    description:
-      "Python boasts a vast standard library and a rich ecosystem of third-party libraries and frameworks, which significantly accelerate development.",
-    imageUrl: "/images/courses/1.webp",
-  },
-  {
-    title: "ML Engineer Kursi",
-    description:
-      "Python boasts a vast standard library and a rich ecosystem of third-party libraries and frameworks, which significantly accelerate development.",
-    imageUrl: "/images/courses/2.gif",
-  },
-  {
-    title: "Python Dasturlash Tili",
-    description: "Python boasts a vast standard library and a rich ecosystem of third-party libraries and frameworks.",
-    imageUrl: "/images/courses/1.webp",
-  },
-]
+import { NoData } from "@/components/shared/no-data"
 
 export function CoursesSection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -47,8 +27,7 @@ export function CoursesSection() {
     { autoFetch: true }
   )
 
-  // Use API data or fallback
-  const courses = coursesData?.data?.data || FALLBACK_COURSES
+  const courses = coursesData?.data?.data || []
 
   // Transform API data to component format
   const displayCourses = courses.map((course: any) => ({
@@ -63,11 +42,11 @@ export function CoursesSection() {
   }))
 
   return (
-    <section className=" py-24 md:py-32 overflow-hidden">
+    <section className="min-h-screen flex flex-col justify-center py-8 md:py-10 overflow-hidden">
       <div className="mx-auto w-full max-w-7xl px-4 md:px-8 lg:px-12">
         <div className="text-center">
-          <MainTitle 
-            align="center" 
+          <MainTitle
+            align="center"
             color="text-dark"
             animated
           >
@@ -76,7 +55,7 @@ export function CoursesSection() {
           <Subtitle
             align="center"
             color="muted"
-            className="mx-auto mt-4 md:mt-6 lg:mt-8 max-w-2xl text-gray-500"
+            className="mx-auto mt-4 md:mt-6 max-w-2xl text-gray-500"
             animated
             animationDelay={0.1}
           >
@@ -86,7 +65,7 @@ export function CoursesSection() {
         </div>
       </div>
 
-      <div className="mt-20 w-full max-w-[1440px] mx-auto px-4 md:px-8">
+      <div className="mt-6 md:mt-10 w-full max-w-360 mx-auto px-4 md:px-8">
         {loading ? (
           <div className="flex justify-center items-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
@@ -95,6 +74,8 @@ export function CoursesSection() {
           <div className="text-center py-20">
             <p className="text-red-500">{error}</p>
           </div>
+        ) : courses.length === 0 ? (
+          <NoData message="Kurslar topilmadi" description="Hozircha hech qanday kurs mavjud emas" />
         ) : (
           <>
             <div className="overflow-hidden" ref={emblaRef}>
@@ -102,7 +83,7 @@ export function CoursesSection() {
                 {displayCourses.map((course: any, index: number) => (
                   <div
                     key={course.id || index}
-                    className="flex-[0_0_62.5%] min-w-0 sm:flex-[0_0_62.5%] md:flex-[0_0_50%] lg:flex-[0_0_60%]"
+                    className="flex-[0_0_90%] min-w-0 sm:flex-[0_0_75%] md:flex-[0_0_55%] lg:flex-[0_0_45%]"
                   >
                     <CourseCard {...course} />
                   </div>
@@ -113,7 +94,7 @@ export function CoursesSection() {
         )}
 
         {!loading && !error && (
-          <div className="mt-16 flex justify-center">
+          <div className="mt-8 md:mt-10 flex justify-center">
             <CarouselNavigation
               onPrevClick={scrollPrev}
               onNextClick={scrollNext}
