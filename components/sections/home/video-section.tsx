@@ -45,7 +45,7 @@ export function VideoSection() {
       >
         <video
           ref={videoRef}
-          src="/videos/01.mp4"
+          src="/videos/banner1.webm"
           className="absolute inset-0 w-full h-full object-cover object-center"
           loop
           muted

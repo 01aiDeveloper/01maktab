@@ -27,11 +27,11 @@ const EVENTS = [
 
 export function EventsSection() {
   return (
-    <section className=" py-24">
+    <section className="min-h-screen flex flex-col justify-center py-8 md:py-10">
       <div className="container">
         <div className="text-center">
-          <MainTitle 
-            align="center" 
+          <MainTitle
+            align="center"
             color="text-dark"
             className="text-[#121212]"
             animated
@@ -41,7 +41,7 @@ export function EventsSection() {
           <Subtitle
             align="center"
             color="muted"
-            className="mx-auto mt-4 md:mt-6 max-w-2xl text-gray-500"
+            className="mx-auto mt-2 md:mt-3 max-w-2xl text-gray-500"
             animated
             animationDelay={0.1}
           >
@@ -50,7 +50,7 @@ export function EventsSection() {
           </Subtitle>
         </div>
 
-        <div className="mt-16 grid gap-6 grid-cols-1 md:grid-cols-3">
+        <div className="mt-6 md:mt-10 grid gap-6 grid-cols-1 md:grid-cols-3">
           {EVENTS.map((event, index) => (
             <EventCard key={index} {...event} />
           ))}
