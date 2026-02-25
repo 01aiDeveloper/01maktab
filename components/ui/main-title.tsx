@@ -110,10 +110,8 @@ export function MainTitle({
     : colorClasses[color as keyof typeof colorClasses] || colorClasses.foreground;
 
   const baseClassName = cn(
-    // Responsive font sizes: mobile 36px, desktop 64px
-    "text-[36px] md:text-[64px]",
-    // Responsive line heights: mobile 81px, desktop 81px
-    "leading-[81px]",
+    // Responsive font sizes: mobile 36px, tablet 48px, desktop 64px
+    "text-[36px] sm:text-[48px] md:text-[56px] lg:text-[64px]",
     // Font family: Suisse Intl
     "font-['Suisse_Intl',sans-serif]",
     // Font weight: 600 (Semibold)

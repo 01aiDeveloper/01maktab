@@ -7,7 +7,7 @@ import { CoursesSection } from '@/components/sections/home/courses';
 import { EventsSection } from '@/components/sections/home/events';
 import { PartnersSection } from '@/components/sections/home/partners';
 import { ChatWidget } from '@/components/shared/chat-widget';
-import { MySkillsSection } from '@/components/sections/home/my-skills-section';
+import { SkillsSection } from '@/components/sections/home/skills-section';
 import { HomeGraduatesSection } from '@/components/sections/home/home-graduates-section';
 import { StatsSection } from '@/components/sections/home/stats-section';
 import { ContactSection } from '@/components/sections/home/contact-section';
@@ -55,12 +55,13 @@ export default async function GuestHomePage() {
   } catch (error) {
     console.error('Failed to parse skills:', error);
   }
+
   return (
     <main className="min-h-screen">
       <Header />
       <Hero />
       <MentorsSection />
-      <MySkillsSection skills={skills} />
+      <SkillsSection skills={skills} />
       <CareersSection careers={careers} />
       <CoursesSection />
       <VideoSection />

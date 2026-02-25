@@ -109,7 +109,7 @@ const colorClasses = {
   primary: "text-primary",
   white: "text-white",
   black: "text-black",
-  secondary: "text-secondary",
+  secondary: "text-[#9F9F9F]",
   "text-dark": "text-text-dark",
   "text-gray": "text-text-gray",
   "primary-blue": "text-primary-blue",

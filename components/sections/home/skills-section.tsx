@@ -12,11 +12,11 @@ import { NoData } from "@/components/shared/no-data"
 import { getMediaUrl } from "@/lib/utils"
 import type { Skill } from "@/types/api.types"
 
-interface MySkillsSectionProps {
+interface SkillsSectionProps {
   skills: Skill[]
 }
 
-export function MySkillsSection({ skills }: MySkillsSectionProps) {
+export function SkillsSection({ skills }: SkillsSectionProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
@@ -30,7 +30,7 @@ export function MySkillsSection({ skills }: MySkillsSectionProps) {
     return (
       <section className="py-8 container">
         <MainTitle align="center" className="mt-4 md:mt-6 lg:mt-8" animated>
-          Skillarim
+          Skillar
         </MainTitle>
         <NoData
           message="Skilllar topilmadi"
@@ -49,11 +49,12 @@ export function MySkillsSection({ skills }: MySkillsSectionProps) {
       className="py-8! container"
     >
       <MainTitle align="center" className="mt-4 md:mt-6 lg:mt-8" animated>
-        Skillarim
+        Skillar
       </MainTitle>
       <Subtitle
         align="center"
-        className="mb-8 md:mb-10 lg:mb-12 mt-4 md:mt-6 lg:mt-8 max-w-2xl mx-auto"
+        color="secondary"
+        className="mb-8 md:mb-10 lg:mb-12 mt-4 md:mt-6 lg:mt-8 max-w-xl mx-auto"
         animated
         animationDelay={0.1}
       >

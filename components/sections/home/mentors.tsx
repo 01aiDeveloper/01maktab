@@ -38,7 +38,7 @@ export function MentorsSection() {
   const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } = useCarouselNavigation(emblaApi as any);
 
   return (
-    <section className="relative w-full bg-base-dark overflow-hidden rounded-b-[70px] md:rounded-b-[328px] min-h-screen flex flex-col justify-center py-10 sm:py-18">
+    <section className="relative w-full bg-base-dark overflow-hidden rounded-b-[70px] sm:rounded-b-[160px] md:rounded-b-[328px] min-h-screen flex flex-col justify-center py-10 sm:py-18">
       <div className="container">
         <div className="mx-auto max-w-4xl text-center">
           <motion.h2
@@ -95,7 +95,7 @@ export function MentorsSection() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="mt-10 flex justify-center"
         >
-          <MainButton variant="gradient" size="lg" icon={<ArrowRight className="h-6 w-6" />} iconPosition="right" className="group w-60 h-13.5 rounded-[10px] px-4 py-3.75">
+          <MainButton variant="gradient" size="default" icon={<ArrowRight className="h-6 w-6" />} iconPosition="right" className="group w-60 h-13.5 rounded-[10px] px-4 py-3.75">
             Bepul Boshlash
           </MainButton>
         </motion.div>

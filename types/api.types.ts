@@ -79,6 +79,7 @@ export interface Career {
   description: string
   photo: string
   icon: string | null
+  decorImage: string
 }
 
 // Skill Types

@@ -19,7 +19,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="fixed top-0 md:top-[35px] left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:w-[578px] pointer-events-none">
+    <header className={`fixed left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:w-144.5 pointer-events-none transition-all duration-300 ${scrolled ? "top-0 md:top-1.5" : "top-0 md:top-8.75"}`}>
       <motion.div
         layout
         initial={false}
