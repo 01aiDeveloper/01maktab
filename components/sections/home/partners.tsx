@@ -61,7 +61,7 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true, va
 
   return (
     <section
-      className={`${sectionBg} px-4 pb-20 mx-auto w-full overflow-hidden rounded-[80px] py-24 text-center border ${borderColor} ${isDark ? '' : 'shadow-sm'}`}
+      className={`${sectionBg} px-4 pb-20 mx-auto w-full overflow-hidden rounded-[28px] md:rounded-[40px] py-24 text-center border ${borderColor} ${isDark ? '' : 'shadow-sm'}`}
     >
       <div className="container">
         <div className="px-4">
