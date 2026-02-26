@@ -12,7 +12,7 @@ import { Subtitle } from '@/components/ui/subtitle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { FAQAccordion } from '@/components/shared/faq-accordion';
-import { SiteHeader } from '@/components/site-header';
+import { CourseHeader } from '@/components/course-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MentorCard } from '@/components/cards/mentor-card';
 import { ProgramBenefits } from '@/components/sections/program-benefits';
@@ -203,10 +203,17 @@ export default function ProfessionPage() {
     setOpenModule(String(profession.modules[0].id));
   }
 
+  const professionGuestNav = [
+    { label: "Nima o'rganasiz", href: '#nima-organasiz' },
+    { label: 'Kurs dasturi', href: '#kurs-dasturi' },
+    { label: 'Mentor', href: '#mentor' },
+    { label: 'Hamkor', href: '#hamkor' },
+  ]
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#101010]">
-        <SiteHeader variant="dark" />
+        <CourseHeader variant="dark" guestNavLinks={professionGuestNav} />
         <PageLoader />
       </div>
     );
@@ -215,7 +222,7 @@ export default function ProfessionPage() {
   if (isError || !profession) {
     return (
       <div className="min-h-screen bg-[#101010]">
-        <SiteHeader variant="dark" />
+        <CourseHeader variant="dark" guestNavLinks={professionGuestNav} />
         <PageError />
         <SiteFooter variant="dark" />
       </div>
@@ -236,10 +243,10 @@ export default function ProfessionPage() {
 
   return (
     <div className="min-h-screen bg-[#101010]">
-      <SiteHeader variant="dark" />
+      <CourseHeader variant="dark" guestNavLinks={professionGuestNav} />
       <main>
         {/* Hero Section */}
-        <section className="w-full py-6">
+        <section id="nima-organasiz" className="w-full py-6">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -276,24 +283,52 @@ export default function ProfessionPage() {
                 )}
 
                 {/* CTA Button */}
-                <Button
-                  size="lg"
-                  className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit mb-8 flex items-center gap-2"
-                  onClick={handleStart}
-                  disabled={startLoading}
-                >
-                  {startLoading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Yuklanmoqda...
-                    </>
-                  ) : (
-                    <>
-                      Boshlash
-                      <ArrowLeft className="w-5 h-5 rotate-180" />
-                    </>
-                  )}
-                </Button>
+                {professionModules?.progress && professionModules.progress.totalLessonsCount > 0 ? (
+                  <div className="space-y-3 mb-8">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs bg-white/20 backdrop-blur-sm text-white px-3 py-1.5 rounded-full">
+                        Modul: {professionModules.progress.moduleTitile ?? '—'}
+                      </span>
+                      <span className="text-xs bg-white/20 backdrop-blur-sm text-white px-3 py-1.5 rounded-full">
+                        Dars: {professionModules.progress.completedLessonsCount}/{professionModules.progress.totalLessonsCount}
+                      </span>
+                    </div>
+                    <div className="w-full max-w-sm bg-white/30 rounded-full h-2">
+                      <div
+                        className="bg-white h-2 rounded-full transition-all duration-500"
+                        style={{ width: `${Math.round((professionModules.progress.completedLessonsCount / professionModules.progress.totalLessonsCount) * 100)}%` }}
+                      />
+                    </div>
+                    <Button
+                      size="lg"
+                      className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit flex items-center gap-2"
+                      onClick={handleStart}
+                      disabled={startLoading}
+                    >
+                      {startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowLeft className="w-5 h-5 rotate-180" />}
+                      {startLoading ? 'Yuklanmoqda...' : 'Продолжить обучение'}
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    size="lg"
+                    className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit mb-8 flex items-center gap-2"
+                    onClick={handleStart}
+                    disabled={startLoading}
+                  >
+                    {startLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Yuklanmoqda...
+                      </>
+                    ) : (
+                      <>
+                        Boshlash
+                        <ArrowLeft className="w-5 h-5 rotate-180" />
+                      </>
+                    )}
+                  </Button>
+                )}
 
                 {/* Meta Info Pills */}
                 <div className="flex flex-wrap gap-3">
@@ -365,7 +400,7 @@ export default function ProfessionPage() {
 
         {/* Mentor Section */}
         {mentor && (
-          <section className="w-full py-8">
+          <section id="mentor" className="w-full py-8">
             <div className="container mx-auto px-4">
               <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-6">Ментор курса</h2>
               <MentorCard
@@ -398,7 +433,9 @@ export default function ProfessionPage() {
         <CertificatesSection certificates={staticCertificates} footnote={staticCertificatesFootnote} />
 
         {/* Partners Section */}
-        <PartnersSection variant="dark" showSubtitle={false} />
+        <div id="hamkor">
+          <PartnersSection variant="dark" showSubtitle={false} />
+        </div>
 
         {/* Internship Statistics Section */}
         <InternshipStatsSection />
@@ -413,7 +450,7 @@ export default function ProfessionPage() {
         <GraduatesSection />
 
         {/* Course Program Section */}
-        <section className="w-full bg-[#101010] py-16 lg:py-24">
+        <section id="kurs-dasturi" className="w-full bg-[#101010] py-16 lg:py-24">
           <div className="container mx-auto px-4">
             <h2 className="text-white font-bold text-3xl lg:text-4xl mb-8 lg:mb-12">Kurs dasturi</h2>
             <ModuleAccordion

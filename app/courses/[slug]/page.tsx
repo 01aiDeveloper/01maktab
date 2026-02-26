@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useCallback } from 'react';
 import api from '@/lib/api';
-import { SiteHeader } from '@/components/site-header';
+import { CourseHeader } from '@/components/course-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MentorCard } from '@/components/cards/mentor-card';
 import { ModuleAccordion } from '@/components/shared/module-accordion';
@@ -186,10 +186,17 @@ export default function CoursePage() {
     setOpenModule(String(course.modules[0].id));
   }
 
+  const courseGuestNav = [
+    { label: "Nima o'rganasiz", href: '#nima-organasiz' },
+    { label: 'Kurs dasturi', href: '#kurs-dasturi' },
+    { label: 'Mentor', href: '#mentor' },
+    { label: 'Hamkor', href: '#hamkor' },
+  ]
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f5f5f7]">
-        <SiteHeader variant="light" />
+        <CourseHeader variant="light" guestNavLinks={courseGuestNav} />
         <PageLoader />
       </div>
     );
@@ -198,7 +205,7 @@ export default function CoursePage() {
   if (isError || !course) {
     return (
       <div className="min-h-screen bg-[#f5f5f7]">
-        <SiteHeader variant="light" />
+        <CourseHeader variant="light" guestNavLinks={courseGuestNav} />
         <PageError />
         <SiteFooter />
       </div>
@@ -227,7 +234,7 @@ export default function CoursePage() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
-      <SiteHeader variant="light" />
+      <CourseHeader variant="light" guestNavLinks={courseGuestNav} />
 
       {/* Hero Section */}
       <CourseHeroSection
@@ -241,6 +248,7 @@ export default function CoursePage() {
         level="Boshlang'ich"
         price={priceLabel}
         stats={{ graduates: course.enrollmentCount }}
+        progress={courseModules?.progress ?? null}
         onStart={handleStart}
         startLoading={startLoading}
       />
@@ -249,7 +257,9 @@ export default function CoursePage() {
       <CourseDescriptionSection title={course.title} description={course.description.replace(/<[^>]*>/g, '')} />
 
       {/* Learning Outcomes Section */}
-      <LearningOutcomesSection outcomes={staticLearningOutcomes} />
+      <div id="nima-organasiz">
+        <LearningOutcomesSection outcomes={staticLearningOutcomes} />
+      </div>
 
       {/* Skills and Instruments Section */}
       {(skillNames.length > 0 || instruments.length > 0) && (
@@ -274,7 +284,7 @@ export default function CoursePage() {
       />
 
       {/* Full Curriculum Section */}
-      <section className="w-full py-8">
+      <section id="kurs-dasturi" className="w-full py-8">
         <div className="container mx-auto px-4">
           <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-2">To'liq kurs dasturi</h2>
           <p className="text-gray-500 mb-6">
@@ -300,7 +310,7 @@ export default function CoursePage() {
 
       {/* Mentor Section */}
       {mentor && (
-        <section className="w-full py-8">
+        <section id="mentor" className="w-full py-8">
           <div className="container mx-auto px-4">
             <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">Ментор курса</h2>
             <MentorCard
@@ -321,7 +331,9 @@ export default function CoursePage() {
       <CertificateSection certificate={staticCertificate} />
 
       {/* Partners Section */}
-      <PartnersSection />
+      <div id="hamkor">
+        <PartnersSection />
+      </div>
 
       {/* FAQ Section */}
       <FAQAccordion variant="light" faqs={staticFaqs} />

@@ -61,7 +61,7 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true, va
 
   return (
     <section
-      className={`${sectionBg} px-4 pb-20 mx-auto w-full overflow-hidden rounded-[28px] md:rounded-[40px] py-24 text-center border ${borderColor} ${isDark ? '' : 'shadow-sm'}`}
+      className={`${sectionBg} pb-20 mx-auto w-full rounded-[28px] md:rounded-[40px] py-24 text-center border ${borderColor} ${isDark ? '' : 'shadow-sm'} overflow-hidden`}
     >
       <div className="container">
         <div className="px-4">
@@ -81,9 +81,10 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true, va
             </Subtitle>
           )}
         </div>
+      </div>
 
-        <div className="mt-20 overflow-hidden">
-          <div className="flex gap-6  py-6 whitespace-nowrap">
+      <div className="mt-20 w-full">
+          <div className="flex gap-6 py-6 whitespace-nowrap">
             <motion.div
               animate={{ x: ['0%', '-50%'] }}
               transition={{
@@ -111,19 +112,6 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true, va
           </div>
         </div>
 
-        {/* Navigation Buttons */}
-        {/* <div className="mt-12 flex justify-center">
-          <CarouselNavigation
-            onPrevClick={() => {}}
-            onNextClick={() => {}}
-            canScrollPrev={false}
-            canScrollNext={false}
-            variant="gray"
-            iconType="arrow"
-            size="md"
-          />
-        </div> */}
-      </div>
     </section>
   );
 }

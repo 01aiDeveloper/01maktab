@@ -127,19 +127,21 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
           </motion.div>
         </motion.div>
 
-        {/* Large logo text with multiple variants */}
-        <motion.div
+      </div>
+
+      {/* Large logo text with multiple variants */}
+      <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="pt-8 md:pt-12 overflow-hidden"
+          className="pt-8 md:pt-12 overflow-hidden w-full "
         >
           <div className="flex flex-col gap-4 md:gap-6">
             {/* First Row */}
 
             {/* Second Row */}
-            <div className="flex items-center gap-4 md:gap-8 flex-wrap">
+            <div className="flex items-center justify-center  ">
               <motion.h2
                 initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -147,7 +149,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 onHoverStart={() => setHoveredLogoIndex(3)}
                 onHoverEnd={() => setHoveredLogoIndex(null)}
-                className={`text-[clamp(3rem,15vw,12rem)] md:text-[clamp(5rem,20vw,18rem)] font-bold leading-[0.85] tracking-tighter ${logoTextColor} cursor-pointer relative`}
+                className={`text-[clamp(3rem,15vw,12rem)] md:text-[clamp(8rem,20vw,28rem)] font-bold leading-[0.85] tracking-tighter ${logoTextColor} cursor-pointer relative`}
               >
                 <motion.span
                   animate={
@@ -185,113 +187,51 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
                   1
                 </motion.span>
                 <motion.span
-                  animate={
-                    hoveredLogoIndex === 3
-                      ? {
-                          y: [0, -6, 3, -3, 1, 0],
-                          rotate: [0, 3, -3, 2, -2, 0],
-                        }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.6,
-                    ease: 'easeInOut',
-                    delay: 0.1,
-                  }}
+                  animate={hoveredLogoIndex === 3 ? { y: [0, -6, 3, -3, 1, 0], rotate: [0, 3, -3, 2, -2, 0] } : {}}
+                  transition={{ duration: 0.6, ease: 'easeInOut', delay: 0.1 }}
                   className="inline-block"
                 >
-                  M
+                  A
                 </motion.span>
                 <motion.span
-                  animate={
-                    hoveredLogoIndex === 3
-                      ? {
-                          y: [0, -7, 4, -4, 2, 0],
-                        }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.6,
-                    ease: 'easeInOut',
-                    delay: 0.15,
-                  }}
+                  animate={hoveredLogoIndex === 3 ? { y: [0, -7, 4, -4, 2, 0] } : {}}
+                  transition={{ duration: 0.6, ease: 'easeInOut', delay: 0.15 }}
                   className="inline-block"
                 >
-                  a
+                  I
                 </motion.span>
                 <motion.span
-                  animate={
-                    hoveredLogoIndex === 3
-                      ? {
-                          y: [0, -9, 5, -5, 3, 0],
-                        }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.6,
-                    ease: 'easeInOut',
-                    delay: 0.2,
-                  }}
+                  animate={hoveredLogoIndex === 3 ? { y: [0, -8, 4, -4, 2, 0], rotate: [0, -5, 5, -3, 3, 0] } : {}}
+                  transition={{ duration: 0.6, ease: 'easeInOut', delay: 0.2 }}
                   className="inline-block"
                 >
-                  k
+                  0
                 </motion.span>
                 <motion.span
-                  animate={
-                    hoveredLogoIndex === 3
-                      ? {
-                          y: [0, -8, 4, -4, 2, 0],
-                        }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.6,
-                    ease: 'easeInOut',
-                    delay: 0.25,
-                  }}
+                  animate={hoveredLogoIndex === 3 ? { y: [0, -10, 5, -5, 3, 0], scale: [1, 1.1, 1, 1.05, 1, 1] } : {}}
+                  transition={{ duration: 0.6, ease: 'easeInOut', delay: 0.25 }}
                   className="inline-block"
                 >
-                  t
+                  1
                 </motion.span>
                 <motion.span
-                  animate={
-                    hoveredLogoIndex === 3
-                      ? {
-                          y: [0, -6, 3, -3, 1, 0],
-                        }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.6,
-                    ease: 'easeInOut',
-                    delay: 0.3,
-                  }}
+                  animate={hoveredLogoIndex === 3 ? { y: [0, -6, 3, -3, 1, 0], rotate: [0, 3, -3, 2, -2, 0] } : {}}
+                  transition={{ duration: 0.6, ease: 'easeInOut', delay: 0.3 }}
                   className="inline-block"
                 >
-                  a
+                  A
                 </motion.span>
                 <motion.span
-                  animate={
-                    hoveredLogoIndex === 3
-                      ? {
-                          y: [0, -7, 4, -4, 2, 0],
-                        }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.6,
-                    ease: 'easeInOut',
-                    delay: 0.35,
-                  }}
+                  animate={hoveredLogoIndex === 3 ? { y: [0, -7, 4, -4, 2, 0] } : {}}
+                  transition={{ duration: 0.6, ease: 'easeInOut', delay: 0.35 }}
                   className="inline-block"
                 >
-                  b
+                  I
                 </motion.span>
               </motion.h2>
             </div>
           </div>
         </motion.div>
-      </div>
     </footer>
   );
 }

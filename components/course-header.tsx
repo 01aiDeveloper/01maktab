@@ -10,23 +10,30 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useAuthStore } from "@/store/auth-store"
 import { useMe } from "@/hooks/use-me"
 
-const navLinks = [
+const defaultNavLinks = [
   { label: "Darsxona", href: "/" },
   { label: "Barcha Kurslar", href: "/catalog" },
   { label: "Hamjamiyat", href: "/community" },
   { label: "Market", href: "#" },
 ]
 
-interface SiteHeaderProps {
-  variant?: 'light' | 'dark'
+interface NavLink {
+  label: string
+  href: string
 }
 
-export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
+interface CourseHeaderProps {
+  variant?: 'light' | 'dark'
+  guestNavLinks?: NavLink[]
+}
+
+export function CourseHeader({ variant = 'dark', guestNavLinks }: CourseHeaderProps) {
   const [isOpen, setIsOpen] = useState(false)
   const { user, logout } = useAuthStore()
   useMe()
 
   const isDark = variant === 'dark'
+  const activeNavLinks = !user && guestNavLinks ? guestNavLinks : defaultNavLinks
 
   return (
     <motion.header
@@ -46,8 +53,8 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
           </Link>
 
           {/* Navigation */}
-          <nav className="hidden lg:flex items-center gap-10">
-            {navLinks.map((link) => (
+          <nav className="hidden lg:flex items-center gap-14">
+            {activeNavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

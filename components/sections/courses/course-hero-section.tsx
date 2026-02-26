@@ -7,6 +7,12 @@ import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { MainButton } from '@/components/ui/main-button';
 
+interface CourseProgress {
+  moduleTitile: string | null;
+  completedLessonsCount: number;
+  totalLessonsCount: number;
+}
+
 interface CourseHeroSectionProps {
   title: string;
   description: string;
@@ -20,6 +26,7 @@ interface CourseHeroSectionProps {
   stats: {
     graduates: number;
   };
+  progress?: CourseProgress | null;
   onStart?: () => void;
   startLoading?: boolean;
 }
@@ -35,9 +42,14 @@ export function CourseHeroSection({
   level,
   price,
   stats,
+  progress,
   onStart,
   startLoading = false,
 }: CourseHeroSectionProps) {
+  const hasProgress = progress && progress.totalLessonsCount > 0;
+  const progressPercent = hasProgress
+    ? Math.round((progress.completedLessonsCount / progress.totalLessonsCount) * 100)
+    : 0;
   return (
     <section className="w-full py-6">
       <div className="container mx-auto px-4">
@@ -86,17 +98,47 @@ export function CourseHeroSection({
                 {title}
               </h1>
               <p className="text-gray-600 text-lg lg:text-xl leading-relaxed">{description}</p>
-              <MainButton
-                variant="gradient"
-                size="lg"
-                icon={startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
-                iconPosition="right"
-                className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5]"
-                onClick={onStart}
-                disabled={startLoading}
-              >
-                {startLoading ? 'Yuklanmoqda...' : 'Boshlash'}
-              </MainButton>
+              {hasProgress ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="text-xs bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full">
+                      Модуль: {progress.moduleTitile ?? '—'}
+                    </span>
+                    <span className="text-xs bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full">
+                      Dars: {progress.completedLessonsCount}/{progress.totalLessonsCount}
+                    </span>
+                  </div>
+                  <div className="w-full max-w-sm bg-white/30 rounded-full h-2">
+                    <div
+                      className="bg-[#5d7bf5] h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+                  <MainButton
+                    variant="gradient"
+                    size="lg"
+                    icon={startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
+                    iconPosition="right"
+                    className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5]"
+                    onClick={onStart}
+                    disabled={startLoading}
+                  >
+                    {startLoading ? 'Yuklanmoqda...' : 'Продолжить обучение'}
+                  </MainButton>
+                </div>
+              ) : (
+                <MainButton
+                  variant="gradient"
+                  size="lg"
+                  icon={startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
+                  iconPosition="right"
+                  className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5]"
+                  onClick={onStart}
+                  disabled={startLoading}
+                >
+                  {startLoading ? 'Yuklanmoqda...' : 'Boshlash'}
+                </MainButton>
+              )}
             </div>
 
             {/* Bottom stats badges */}

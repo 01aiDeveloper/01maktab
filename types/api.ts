@@ -73,6 +73,7 @@ export interface ApiSkill {
   name: string;
   title: string;
   description: string;
+  courseOutcomes: string | null;
   photo: string | null;
   icon: string | null;
   decorImage: string | null;
