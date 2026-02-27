@@ -18,7 +18,7 @@ export function EnrollmentCTASection({
   return (
     <section className="w-full py-12 lg:py-16">
       <div className="container mx-auto px-4">
-        <div className="relative bg-[#2A51E6] rounded-[40px] py-20 px-8 lg:px-16 overflow-hidden min-h-[950px]">
+        <div className="relative bg-[#2A51E6] rounded-[40px] py-20 px-8 lg:px-16 overflow-hidden lg:min-h-[950px]">
           {/* Header texts */}
           <div className="flex flex-col items-center gap-6 mb-12">
             <h2 className="font-suisse font-semibold text-4xl lg:text-[64px] lg:leading-[81px] tracking-[-0.05em] text-white text-center max-w-5xl">

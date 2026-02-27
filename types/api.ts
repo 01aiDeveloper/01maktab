@@ -101,6 +101,11 @@ export interface ApiCourseModule {
   lessons: ApiCourseLesson[];
 }
 
+export interface ApiLearningOutcome {
+  title: string;
+  description: string;
+}
+
 export interface ApiCourse {
   id: number;
   name: string;
@@ -109,6 +114,7 @@ export interface ApiCourse {
   photo: string | null;
   icon: string | null;
   decorImage: string | null;
+  courseOutcomes: ApiLearningOutcome[] | string | null;
   price: number;
   pricingType: 'FREE' | 'PAID';
   publishDate: string | null;

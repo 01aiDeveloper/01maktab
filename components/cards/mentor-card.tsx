@@ -46,13 +46,13 @@ export function MentorCard({
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
       className={cn(
-        "flex flex-col lg:flex-row gap-4 items-center lg:items-stretch",
+        "flex flex-col sm:flex-row gap-4 items-center sm:items-stretch",
         className
       )}
     >
       {/* Left Block - Avatar Container */}
       <div className={cn(
-        "w-full lg:w-56 aspect-square rounded-3xl overflow-hidden shrink-0 flex items-center justify-center",
+        "w-full h-68 sm:w-56 sm:h-56 rounded-3xl overflow-hidden shrink-0 flex items-center justify-center",
         isDark ? "bg-[#2a2a2d]" : "bg-[#f5f5f5]"
       )}>
         <div className="relative w-full h-full">
@@ -79,25 +79,25 @@ export function MentorCard({
 
       {/* Right Block - Info Card */}
       <div className={cn(
-        "flex-1 rounded-3xl p-8 lg:p-10 flex flex-col lg:flex-row gap-6 items-start justify-between",
+        "flex-1 rounded-3xl w-full p-6 sm:p-10 flex flex-col sm:flex-row gap-6 items-start justify-between relative overflow-hidden",
         isDark ? "bg-[#18181a]" : "bg-white"
       )}>
         {/* Text Content */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 pr-16 sm:pr-0">
           <h3 className={cn(
-            "font-suisse text-2xl lg:text-3xl font-bold leading-tight",
+            "font-suisse text-2xl sm:text-3xl font-bold leading-tight",
             isDark ? "text-white" : "text-gray-900"
           )}>
             {name}
           </h3>
           <p className={cn(
-            "mt-2 text-sm lg:text-base",
+            "mt-2 text-sm sm:text-base",
             isDark ? "text-gray-400" : "text-gray-500"
           )}>
             {role} s {company}
           </p>
           <div className={cn(
-            "mt-4 space-y-1 text-sm lg:text-base leading-relaxed",
+            "mt-4 space-y-1 text-sm sm:text-base leading-relaxed",
             isDark ? "text-gray-300" : "text-gray-600"
           )}>
             <p>{experience}</p>
@@ -105,8 +105,8 @@ export function MentorCard({
           </div>
         </div>
 
-        {/* Decorative Illustration - Inside the card on the far right */}
-        <div className="hidden lg:block w-32 h-32 relative shrink-0">
+        {/* Decorative Illustration - Bottom right corner */}
+        <div className="absolute -bottom-4 sm:-bottom-6 right-0 w-24 h-24 sm:w-40 sm:h-40 opacity-90 pointer-events-none">
           <Image
             src={decorationUrl}
             alt="Decoration"

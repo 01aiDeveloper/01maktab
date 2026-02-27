@@ -16,7 +16,7 @@ export function TrialVideoSection({
   videoImage = '/images/courses/bg.webp',
 }: TrialVideoSectionProps) {
   return (
-    <section className="container mx-auto px-4 py-12 lg:py-16">
+    <section className="container mx-auto px-4 py-6 lg:py-10">
       <div className="bg-[#18181A] rounded-[40px] p-8 lg:p-16 text-center">
         <h2 className="font-suisse text-3xl lg:text-5xl font-semibold text-white mb-3">{title}</h2>
         <p className="text-white/80 text-base lg:text-lg mb-12">{subtitle}</p>

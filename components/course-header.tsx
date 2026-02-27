@@ -44,7 +44,7 @@ export function CourseHeader({ variant = 'dark', guestNavLinks }: CourseHeaderPr
       // className={`sticky top-0 z-50 w-full ${isDark ? 'bg-[#101010]' : 'bg-transparent'}`}
     >
       <div className="container mx-auto px-4 py-3">
-        <div className={`flex h-14 items-center justify-between px-6 rounded-full border ${isDark ? ' bg-[#F4F4F6] border-gray-200' : 'bg-[#1a1a1a] border-white/10'}`}>
+        <div className={`flex h-14 items-center justify-between px-6 rounded-[40px] border ${isDark ? ' bg-[#F4F4F6] border-gray-200' : 'bg-[#1a1a1a] border-white/10'}`}>
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1">
             <span className={`font-bold text-xl tracking-tight ${!isDark ? 'text-white' : 'text-[#18181A]'}`}>
@@ -146,11 +146,14 @@ export function CourseHeader({ variant = 'dark', guestNavLinks }: CourseHeaderPr
           ) : (
             <Link href="/login" className="hidden lg:block">
               <Button
-                className={`rounded-full px-6 font-medium ${
-                  isDark
+                className={`rounded-xl px-6 font-medium text-white border-0 ${
+                  !isDark
                     ? 'bg-white text-black hover:bg-gray-100'
-                    : 'bg-[#5d7bf5] text-white hover:bg-[#4c6ae4]'
+                    : 'hover:opacity-90 transition-opacity'
                 }`}
+                style={isDark ? {
+                  background: 'linear-gradient(135deg, #2A51E6 0%, #4469F6 100%)'
+                } : undefined}
               >
                 Kirish
               </Button>

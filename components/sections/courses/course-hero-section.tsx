@@ -6,6 +6,8 @@ import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, Clock, Users, FileText, 
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { MainButton } from '@/components/ui/main-button';
+import { MainTitle } from '@/components/ui/main-title';
+import { Subtitle } from '@/components/ui/subtitle';
 
 interface CourseProgress {
   moduleTitile: string | null;
@@ -51,13 +53,13 @@ export function CourseHeroSection({
     ? Math.round((progress.completedLessonsCount / progress.totalLessonsCount) * 100)
     : 0;
   return (
-    <section className="w-full py-6">
-      <div className="container mx-auto px-4">
+    <section className="w-full">
+      <div className="container mx-auto px-4 h-[511px] lg:h-[calc(100vh-90px)]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="rounded-[40px] overflow-hidden relative min-h-[500px] lg:min-h-[600px]"
+          className="rounded-[29px] lg:rounded-[40px] overflow-hidden relative h-full"
         >
           {/* Background Image */}
           <Image
@@ -66,10 +68,11 @@ export function CourseHeroSection({
             fill
             className="object-cover"
             priority
+            quality={100}
           />
 
           {/* Content Overlay */}
-          <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center min-h-[500px] lg:min-h-[600px]">
+          <div className="relative z-10 p-6 lg:p-12 flex flex-col justify-center h-full">
             {/* Back button */}
             <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit">
               <ArrowLeft className="w-4 h-4" />
@@ -94,10 +97,8 @@ export function CourseHeroSection({
 
             {/* Content */}
             <div className="space-y-6 max-w-2xl">
-              <h1 className="font-suisse text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight text-balance text-gray-900">
-                {title}
-              </h1>
-              <p className="text-gray-600 text-lg lg:text-xl leading-relaxed">{description}</p>
+              <MainTitle className="mb-4 leading-tight!">{title}</MainTitle>
+              <div className="prose prose-sm lg:prose-base max-w-none text-gray-600 line-clamp-6" dangerouslySetInnerHTML={{ __html: description }} />
               {hasProgress ? (
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 flex-wrap">
@@ -116,7 +117,7 @@ export function CourseHeroSection({
                   </div>
                   <MainButton
                     variant="gradient"
-                    size="lg"
+                    size="md"
                     icon={startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
                     iconPosition="right"
                     className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5]"
@@ -129,7 +130,7 @@ export function CourseHeroSection({
               ) : (
                 <MainButton
                   variant="gradient"
-                  size="lg"
+                  size="md"
                   icon={startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
                   iconPosition="right"
                   className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5]"

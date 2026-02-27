@@ -137,15 +137,15 @@ export default function SkillDetailPage() {
       {/* Hero Section */}
       <section id="nima-organasiz" className="w-full py-6">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Left Column */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 lg:col-span-2">
               {/* Top Card */}
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, ease: 'easeOut' }}
-                className="bg-white rounded-3xl p-6 lg:p-8 flex flex-col relative overflow-hidden"
+                className="bg-white rounded-[40px] p-6 lg:p-8 flex flex-col relative overflow-hidden"
               >
                 <Link
                   href="/"
@@ -182,7 +182,7 @@ export default function SkillDetailPage() {
                     </div>
                     <MainButton
                       variant="gradient"
-                      size="lg"
+                      size="md"
                       icon={startLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                       iconPosition="right"
                       className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-xl w-fit"
@@ -195,7 +195,7 @@ export default function SkillDetailPage() {
                 ) : (
                   <MainButton
                     variant="gradient"
-                    size="lg"
+                    size="md"
                     icon={startLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                     iconPosition="right"
                     className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-xl w-fit"
@@ -206,6 +206,7 @@ export default function SkillDetailPage() {
                   </MainButton>
                 )}
               </motion.div>
+              
 
               {/* Bottom Card - Partner */}
               {partner && (
@@ -213,7 +214,7 @@ export default function SkillDetailPage() {
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
-                  className="bg-[#e8e8e8] rounded-3xl p-6 flex items-center gap-4"
+                  className="bg-[#e8e8e8] rounded-[40px] p-6 flex items-center gap-4"
                 >
                   <div className="w-20 h-20 lg:w-36 lg:h-36 bg-white rounded-2xl flex items-center justify-center shrink-0">
                     {partner.logo ? (
@@ -244,7 +245,7 @@ export default function SkillDetailPage() {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
-              className="bg-linear-to-br from-[#5d7bf5] via-[#5b6ef5] to-[#7c71f4] rounded-3xl overflow-hidden relative h-100 lg:h-full"
+              className="bg-linear-to-br from-[#5d7bf5] via-[#5b6ef5] to-[#7c71f4] rounded-[40px] overflow-hidden relative h-100 lg:h-full"
             >
               {courseImage && <Image src={courseImage} alt={skill.title} fill className="object-cover" priority />}
               <div className="absolute top-6 left-6 flex flex-col gap-2">

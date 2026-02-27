@@ -24,6 +24,7 @@ const mainButtonVariants = cva(
       size: {
         default: "h-[44px] px-4 py-[10px] text-base", // height: 44px, padding: 10px top/bottom, 16px left/right
         sm: "h-10 px-3 py-2 text-sm",
+        md: "h-[48px] px-6 py-3 text-base",
         lg: "h-[44px] md:h-[54px] lg:h-[76px] px-4 md:px-8 lg:px-16 py-[10px] md:py-[15px] text-base md:text-lg lg:text-xl", // Responsive height va padding
         icon: "h-[44px] w-[44px] md:h-[54px] md:w-[54px] p-0",
       },

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, Users, BookCheck, Award, Briefcase, Loader2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Users, BookCheck, Award, Briefcase, Loader2, Flame } from 'lucide-react';
 import api from '@/lib/api';
 import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
@@ -207,7 +207,9 @@ export default function ProfessionPage() {
     { label: "Nima o'rganasiz", href: '#nima-organasiz' },
     { label: 'Kurs dasturi', href: '#kurs-dasturi' },
     { label: 'Mentor', href: '#mentor' },
-    { label: 'Hamkor', href: '#hamkor' },
+    { label: 'Bitiruv chillari', href: '#bitiruv-chillari' },
+    { label: 'Sertifikat', href: '#sertifikat' },
+    { label: 'Hamkorlar', href: '#hamkor' },
   ]
 
   if (isLoading) {
@@ -246,19 +248,19 @@ export default function ProfessionPage() {
       <CourseHeader variant="dark" guestNavLinks={professionGuestNav} />
       <main>
         {/* Hero Section */}
-        <section id="nima-organasiz" className="w-full py-6">
-          <div className="container mx-auto px-4">
+        <section id="nima-organasiz" className="w-full">
+          <div className="container mx-auto px-4 h-[511px] sm:h-[calc(100vh-90px)]">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="rounded-[40px] overflow-hidden relative min-h-[500px] lg:min-h-[600px]"
+              className="rounded-[29px] lg:rounded-[40px] overflow-hidden relative h-full"
             >
               {/* Background Image */}
               {courseImage && <Image src={courseImage} alt={profession.title} fill className="object-cover" priority />}
 
               {/* Content Overlay */}
-              <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center min-h-[500px] lg:min-h-[600px]">
+              <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center h-full">
                 {/* Back Button */}
                 <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit">
                   <ArrowLeft className="w-4 h-4" />
@@ -267,19 +269,18 @@ export default function ProfessionPage() {
 
                 {/* Enrollment Badge */}
                 <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-xs w-fit mb-6">
-                  <span className="w-2 h-2 bg-white rounded-full mr-2 inline-block" />
+                  <Flame className="w-3.5 h-3.5 mr-2" />
                   Набор открыт
                 </Badge>
 
                 {/* Title */}
-                <MainTitle className="mb-4 !leading-tight max-w-2xl">{profession.title}</MainTitle>
+                <MainTitle className="mb-4 !leading-tight max-w-2xl">{profession.name}</MainTitle>
 
                 {/* Description */}
                 {profession.description && (
-                  <div
-                    className="text-gray-200 text-sm lg:text-base leading-relaxed mb-8 max-w-xl prose prose-sm prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: profession.description }}
-                  />
+                  <Subtitle  size="base" className="mb-8 max-w-xl line-clamp-8">
+                    {profession.description.replace(/<[^>]*>/g, '')}
+                  </Subtitle>
                 )}
 
                 {/* CTA Button */}
@@ -311,7 +312,7 @@ export default function ProfessionPage() {
                   </div>
                 ) : (
                   <Button
-                    size="lg"
+                    size="md"
                     className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit mb-8 flex items-center gap-2"
                     onClick={handleStart}
                     disabled={startLoading}
@@ -332,13 +333,13 @@ export default function ProfessionPage() {
 
                 {/* Meta Info Pills */}
                 <div className="flex flex-wrap gap-3">
-                  <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-xs">
-                    <Users className="w-4 h-4 mr-2" />
+                  <Badge className="text-black border-0 rounded-full px-4 py-2 text-xs flex items-center gap-2" style={{ background: '#A9A9A933', backdropFilter: 'blur(118.8px)' }}>
+                    <Users className="w-4 h-4" />
                     {profession.enrollmentCount} ta o'quvchi
                   </Badge>
                   {startDateLabel && (
-                    <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-xs">
-                      <Calendar className="w-4 h-4 mr-2" />
+                    <Badge className="text-black border-0 rounded-full px-4 py-2 text-xs flex items-center gap-2" style={{ background: '#A9A9A933', backdropFilter: 'blur(118.8px)' }}>
+                      <Calendar className="w-4 h-4" />
                       {startDateLabel}
                     </Badge>
                   )}
@@ -430,7 +431,9 @@ export default function ProfessionPage() {
         <SupportCardsSection />
 
         {/* Certificates Section */}
-        <CertificatesSection certificates={staticCertificates} footnote={staticCertificatesFootnote} />
+        <div id="sertifikat">
+          <CertificatesSection certificates={staticCertificates} footnote={staticCertificatesFootnote} />
+        </div>
 
         {/* Partners Section */}
         <div id="hamkor">
@@ -447,7 +450,9 @@ export default function ProfessionPage() {
         <RefundSection />
 
         {/* Graduates Section */}
-        <GraduatesSection />
+        <div id="bitiruv-chillari">
+          <GraduatesSection />
+        </div>
 
         {/* Course Program Section */}
         <section id="kurs-dasturi" className="w-full bg-[#101010] py-16 lg:py-24">

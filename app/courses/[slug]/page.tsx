@@ -59,45 +59,12 @@ function toProject(p: ApiProject, index: number, total: number): Project {
     id: String(p.id),
     number: `${index + 1}/${total}`,
     title: p.title,
-    description: p.description.replace(/<[^>]*>/g, ''),
+    description: p.description,
     image: '/images/3d-cylinder.jpg',
   };
 }
 
-// ─── Static data (o'zgarmaydigan sectionlar uchun) ────────────────────────────
 
-const staticLearningOutcomes = [
-  {
-    title: 'Общаться с заказчиком',
-    description:
-      'Узнаете, как правильно провести интервью, собрать и задокументировать требования. Научитесь трансформировать бизнес-задачи в исследовательские вопросы.',
-  },
-  {
-    title: 'Понимать проблемы бизнеса',
-    description:
-      'Разберётесь, как устроены типичные процессы в компаниях: разработка, поддержка и сопровождение IT-продукта, маркетинг, продажи. Узнаете, какие проблемы возникают на каждом из этапов, и научитесь их решать с помощью аналитики.',
-  },
-  {
-    title: 'Готовить данные для анализа',
-    description:
-      'Будете извлекать данные из различных источников: читать из файлов, баз данных. Научитесь очищать и трансформировать данные, находить аномалии и выбросы.',
-  },
-  {
-    title: 'Проводить исследование',
-    description:
-      'Научитесь проводить когортный анализ, рассчитывать коэффициенты корреляции и строить прогнозы. Будете формулировать гипотезы и подбирать методы для их проверки.',
-  },
-  {
-    title: 'Визуализировать результаты работы',
-    description:
-      'Узнаете о правилах композиции дэшбордов, научитесь правильно выбирать тип диаграммы, чтобы понятно доносить выводы до аудитории. Будете создавать дэшборды в Power BI, рисовать графики и визуализировать с помощью Python-библиотек plotly и matplotlib.',
-  },
-  {
-    title: 'Презентовать результаты заказчику',
-    description:
-      'Узнаете, как сформулировать понятный вывод и составить развёрнутый аналитический отчёт. Познакомитесь с типовой структурой презентации. Поймёте, как удержать внимание аудитории. Научитесь конструктивно критиковать и адекватно реагировать на обратную связь.',
-  },
-];
 
 const staticStats = {
   graduates: 1247,
@@ -190,7 +157,9 @@ export default function CoursePage() {
     { label: "Nima o'rganasiz", href: '#nima-organasiz' },
     { label: 'Kurs dasturi', href: '#kurs-dasturi' },
     { label: 'Mentor', href: '#mentor' },
-    { label: 'Hamkor', href: '#hamkor' },
+    { label: 'Loyihalar', href: '#loyihalar' },
+    { label: 'Sertifikat', href: '#sertifikat' },
+    { label: 'Hamkorlar', href: '#hamkor' },
   ]
 
   if (isLoading) {
@@ -239,7 +208,7 @@ export default function CoursePage() {
       {/* Hero Section */}
       <CourseHeroSection
         title={course.title}
-        description={course.description.replace(/<[^>]*>/g, '')}
+        description={course.description}
         image={courseImage || '/images/hero1.webp'}
         videosCount={totalLessons}
         tasksCount={course.modules.length}
@@ -254,11 +223,11 @@ export default function CoursePage() {
       />
 
       {/* Course Description Section */}
-      <CourseDescriptionSection title={course.title} description={course.description.replace(/<[^>]*>/g, '')} />
+      <CourseDescriptionSection title={course.title} description={course.description} />
 
       {/* Learning Outcomes Section */}
       <div id="nima-organasiz">
-        <LearningOutcomesSection outcomes={staticLearningOutcomes} />
+        <LearningOutcomesSection courseOutcomes={course?.courseOutcomes || ""} />
       </div>
 
       {/* Skills and Instruments Section */}
@@ -274,7 +243,9 @@ export default function CoursePage() {
       )}
 
       {/* Real Projects Section */}
-      {projects.length > 0 && <ProjectsCarouselSection projects={projects} title={`${projects.length} ta real loyiha`} />}
+      <div id="loyihalar">
+        {projects.length > 0 && <ProjectsCarouselSection projects={projects} title={`${projects.length} ta real loyiha`} />}
+      </div>
 
       {/* Trial Video Section */}
       <TrialVideoSection
@@ -328,7 +299,9 @@ export default function CoursePage() {
       )}
 
       {/* Certificate Section */}
-      <CertificateSection certificate={staticCertificate} />
+      <div id="sertifikat">
+        <CertificateSection certificate={staticCertificate} />
+      </div>
 
       {/* Partners Section */}
       <div id="hamkor">

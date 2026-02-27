@@ -1,5 +1,6 @@
 'use client';
 
+import { NoData } from '@/components/ui/no-data';
 import { motion } from 'framer-motion';
 
 interface CourseDescriptionSectionProps {
@@ -19,7 +20,12 @@ export function CourseDescriptionSection({ title, description }: CourseDescripti
           className="bg-white rounded-3xl p-8 lg:p-12"
         >
           <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-4">{title}</h2>
-          <p className="text-gray-600 text-sm lg:text-base leading-relaxed">{description}</p>
+
+          {description ? (
+            <div className="prose prose-sm lg:prose-base max-w-none text-gray-600" dangerouslySetInnerHTML={{ __html: description }} />
+          ) : (
+            <NoData title="Ma'lumot hali qo'shilmagan" />
+          )}
         </motion.div>
       </div>
     </section>

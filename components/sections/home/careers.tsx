@@ -92,7 +92,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                     icon={<ArrowRight className="h-4 w-4 md:h-6 md:w-6" />}
                     iconPosition="right"
                     className="group mt-6 md:mt-12"
-                    href={`/professions/${activeData.slug}`}
+                    href={`/professions/${activeData.id}`}
                   >
                     Batafsil
                   </MainButton>
