@@ -9,7 +9,8 @@ import { MyProfessionsSection } from '@/components/sections/my-professions-secti
 import { MySkillsSection } from '@/components/sections/my-skills-section';
 import { HomeGraduatesSection } from '@/components/sections/home/home-graduates-section';
 
-import { StatsSection } from '@/components/sections/stats-section';
+import { StatsSection } from '@/components/sections/home/stats-section';
+
 import { ProfileSetupModal } from '@/components/auth/profile-setup-modal';
 import { useAuthStore } from '@/store/auth-store';
 import { SiteFooter } from '@/components/layout/site-footer';

@@ -14,6 +14,7 @@ interface MyCourseCardProps {
 
 export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
   const photoUrl = getMediaUrl(item.photo);
+  const iconUrl = item.icon ? getMediaUrl(item.icon) : null;
 
   return (
     <Link href={href} className="block group">
@@ -44,12 +45,29 @@ export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
           </span>
         </div>
 
-        {/* Play/Pause — top right */}
-        {/* <div className="absolute top-3 right-3 z-10">
-          <div className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-            {item.isOpen ? <Pause className="w-3.5 h-3.5 text-white fill-white" /> : <Play className="w-3.5 h-3.5 text-white fill-white" />}
+        {/* Icon — top right */}
+        {iconUrl && (
+          <div
+            className="absolute top-3 right-3 z-10 flex items-center justify-center"
+            style={{
+              width: '57px',
+              height: '57px',
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: '0.581633px solid rgba(255, 255, 255, 0.17)',
+              backdropFilter: 'blur(9.68418px)',
+              borderRadius: '18px',
+              padding: '8px',
+            }}
+          >
+            <Image
+              src={iconUrl}
+              alt="course icon"
+              width={40}
+              height={40}
+              className="w-full h-full object-contain"
+            />
           </div>
-        </div> */}
+        )}
 
         {/* Bottom info box — catalog-card bilan bir xil */}
         <div

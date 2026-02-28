@@ -50,23 +50,23 @@ export function MyProfessionsSection() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="py-8 px-6 bg-[#1a1a1a] rounded-3xl"
+      className="py-8 "
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">Kasblarim</h2>
+        <h2 className="text-2xl font-bold text-foreground">Kasblarim</h2>
       </div>
 
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-4">
           {professions.map((profession) => (
-            <div key={profession.id} className="flex-[0_0_calc(25%-12px)] min-w-0">
+            <div key={profession.id} className="flex-[0_0_calc(33.333%-12px)] min-w-0">
               <MyCourseCard item={profession} href={`/professions/${profession.id}`} dark />
             </div>
           ))}
         </div>
       </div>
 
-      <div className="flex justify-center mt-6">
+      {/* <div className="flex justify-center mt-6"> 
         <CarouselNavigation
           onPrevClick={scrollPrev}
           onNextClick={scrollNext}
@@ -74,7 +74,7 @@ export function MyProfessionsSection() {
           canScrollNext={canScrollNext}
           variant="dark"
         />
-      </div>
+      </div> */}
     </motion.section>
   )
 }

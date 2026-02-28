@@ -7,10 +7,29 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 
+interface MenuItem {
+  label: string;
+  sectionId: string;
+}
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const menuItems = ['Bosh Sahifa', 'Skillar', 'Kurslar', 'Kasblar'];
+
+  const menuItems: MenuItem[] = [
+    { label: 'Bosh Sahifa', sectionId: 'nima-organasiz' },
+    { label: 'Skillar', sectionId: 'skillar' },
+    { label: 'Kurslar', sectionId: 'kurslar' },
+    { label: 'Kasblar', sectionId: 'kasblar' }
+  ];
+
+  const handleNavClick = (sectionId: string) => {
+    setIsMenuOpen(false);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -36,7 +55,7 @@ export function Header() {
             <Button
               variant="ghost"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:bg-white/10 md:hover:bg-white rounded-xl px-2 md:px-3 h-10 flex items-center gap-1 md:gap-2"
+              className="text-white hover:bg-white/10 cursor-pointer md:hover:bg-white rounded-xl px-2 md:px-3 h-10 flex items-center gap-1 md:gap-2"
             >
               {isMenuOpen ? <X className="w-5 h-5 md:w-4 md:h-4" /> : <Menu className="w-5 h-5 md:w-4 md:h-4" />}
               <span className="text-xs md:text-sm font-medium hidden sm:inline">Menu</span>
@@ -48,7 +67,7 @@ export function Header() {
           </div>
 
           <Link href="/login">
-            <Button className="bg-[#3b66f5] hover:bg-[#2d52d1] text-white rounded-xl px-4 md:px-6 h-9 md:h-10 text-xs md:text-sm font-semibold shadow-lg">
+            <Button className="bg-[#3b66f5] hover:bg-[#2d52d1] cursor-pointer text-white rounded-xl px-4 md:px-6 h-9 md:h-10 text-xs md:text-sm font-semibold shadow-lg">
               Kirish
             </Button>
           </Link>
@@ -65,14 +84,14 @@ export function Header() {
             >
               {/* Links */}
               <div className="flex flex-col gap-4 md:gap-6">
-                {menuItems.map((item, idx) => (
-                  <motion.a
-                    key={item}
-                    href="#"
-                    className="text-white hover:text-[#3b66f5] text-lg md:text-xl lg:text-2xl font-bold transition-colors"
+                {menuItems.map((item) => (
+                  <motion.button
+                    key={item.label}
+                    onClick={() => handleNavClick(item.sectionId)}
+                    className="text-white hover:text-[#3b66f5] text-lg md:text-xl lg:text-2xl font-bold transition-colors text-left"
                   >
-                    {item}
-                  </motion.a>
+                    {item.label}
+                  </motion.button>
                 ))}
               </div>
 
@@ -97,9 +116,12 @@ export function Header() {
 
       {/* Tagline */}
       {!isMenuOpen && !scrolled && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-2 md:mt-4 text-center hidden md:block">
-          <p
-            className="flex items-center justify-center gap-1 text-white/40 underline"
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-2 md:mt-4 text-center hidden md:block pointer-events-auto">
+          <a
+            href="https://t.me/mlc_uz"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1 text-white/40 underline hover:text-white/60 transition-colors cursor-pointer"
             style={{
               fontFamily: "'Suisse Intl', sans-serif",
               fontWeight: 450,
@@ -110,7 +132,7 @@ export function Header() {
           >
             ML COMMUNITY Uzbekistan ekspertlari tomonidan yartilgan
             <ArrowUpRight className="w-3.5 h-3.5" />
-          </p>
+          </a>
         </motion.div>
       )}
     </header>

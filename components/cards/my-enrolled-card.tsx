@@ -12,6 +12,7 @@ interface MyEnrolledCardProps {
   lessonLabel?: string;
   href: string;
   variant?: 'light' | 'dark';
+  icon?: string;
 }
 
 export function MyEnrolledCard({
@@ -22,8 +23,10 @@ export function MyEnrolledCard({
   lessonLabel,
   href,
   variant = 'light',
+  icon,
 }: MyEnrolledCardProps) {
   const imgSrc = getMediaUrl(image) || '/placeholder.svg';
+  const iconSrc = icon ? getMediaUrl(icon) : null;
   const isDark = variant === 'dark';
 
   return (
@@ -50,6 +53,30 @@ export function MyEnrolledCard({
                 {lessonLabel}
               </span>
             )}
+          </div>
+        )}
+
+        {/* Top right icon */}
+        {iconSrc && (
+          <div
+            className="absolute top-3 right-3 z-10 flex items-center justify-center"
+            style={{
+              width: '57px',
+              height: '57px',
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: '0.581633px solid rgba(255, 255, 255, 0.17)',
+              backdropFilter: 'blur(9.68418px)',
+              borderRadius: '18px',
+              padding: '8px',
+            }}
+          >
+            <Image
+              src={iconSrc}
+              alt="course icon"
+              width={40}
+              height={40}
+              className="w-full h-full object-contain"
+            />
           </div>
         )}
 

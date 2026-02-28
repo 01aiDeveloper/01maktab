@@ -42,7 +42,7 @@ export function CoursesSection() {
   }))
 
   return (
-    <section className="min-h-screen flex flex-col justify-center py-8 md:py-10 overflow-hidden">
+    <section id="kurslar" className="min-h-screen flex flex-col justify-center py-8 md:py-10 overflow-hidden">
       <div className="mx-auto w-full max-w-7xl px-4 md:px-8 lg:px-12">
         <div className="text-center">
           <MainTitle

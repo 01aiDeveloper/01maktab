@@ -22,7 +22,7 @@ export function TabCertificates() {
 
   if (loading) {
     return (
-      <div className="max-w-300 mx-auto px-4 pb-8">
+      <div className=" pb-8">
         <div className="flex justify-center py-16">
           <div className="w-10 h-10 border-4 border-gray-200 border-t-[#3B5BFF] rounded-full animate-spin" />
         </div>
@@ -32,7 +32,7 @@ export function TabCertificates() {
 
   if (items.length === 0) {
     return (
-      <div className="max-w-300 mx-auto px-4 pb-8">
+      <div className=" pb-8">
         <div className="bg-white rounded-[22px] shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
           <NoData
             title="Здесь пока ничего нет"

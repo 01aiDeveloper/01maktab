@@ -59,14 +59,14 @@ export function MySkillsSection() {
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-3">
           {skills.map((skill) => (
-            <div key={skill.id} className="flex-[0_0_calc(25%-12px)] min-w-0">
+            <div key={skill.id} className="flex-[0_0_calc(33.333%-12px)] min-w-0">
               <MyCourseCard item={skill} href={`/skills/${skill.id}`} />
             </div>
           ))}
         </div>
       </div>
 
-      <div className="flex justify-center mt-6">
+      {/* <div className="flex justify-center mt-6">
         <CarouselNavigation
           onPrevClick={scrollPrev}
           onNextClick={scrollNext}
@@ -74,7 +74,7 @@ export function MySkillsSection() {
           canScrollNext={canScrollNext}
           variant="light"
         />
-      </div>
+      </div> */}
     </motion.section>
   )
 }

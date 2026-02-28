@@ -71,7 +71,7 @@ export function Hero() {
   }, [startAutoplay]);
 
   return (
-    <section className="relative h-screen min-h-116 sm:min-h-150 w-full">
+    <section id="nima-organasiz" className="relative h-screen min-h-116 sm:min-h-150 w-full">
       <div className="relative h-full w-full bg-base-dark">
         <div className="relative h-full w-full overflow-hidden rounded-b-[48px] md:rounded-b-[55px] rounded-t-none">
           {/* Fade Slides */}

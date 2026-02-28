@@ -41,7 +41,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
   const activeData = careers.find((c) => c.id === activeTab)!;
 
   return (
-    <section className="bg-base-dark min-h-screen flex flex-col justify-center py-8 md:py-10 rounded-xl sm:rounded-3xl  md:rounded-[40px]">
+    <section id="kasblar" className="bg-base-dark min-h-screen flex flex-col justify-center py-8 md:py-10 rounded-xl sm:rounded-3xl  md:rounded-[40px]">
       <div className="container">
         <div className="overflow-hidden rounded-[30px] md:rounded-[60px] py-4 md:py-6 text-center">
           <MainTitle align="center" color="white" className="text-white" animated>

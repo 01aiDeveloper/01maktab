@@ -28,7 +28,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
 
   if (skills.length === 0) {
     return (
-      <section className="py-8 container">
+      <section id="skillar" className="py-8 container">
         <MainTitle align="center" className="mt-4 md:mt-6 lg:mt-8" animated>
           Skillar
         </MainTitle>
@@ -42,6 +42,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
 
   return (
     <motion.section
+      id="skillar"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}

@@ -2,6 +2,13 @@
 @import "tw-animate-css";
 @import "plyr/dist/plyr.css";
 
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

@@ -4,47 +4,13 @@ import { motion } from "framer-motion"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
 import { MyEnrolledCard } from "@/components/cards/my-enrolled-card"
-
-const courses = [
-  {
-    id: 1,
-    image: "/images/course1.png",
-    title: "Data Science",
-    instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-1",
-    lessonLabel: "Дарс: 3/10",
-    href: "/courses/data-science",
-  },
-  {
-    id: 2,
-    image: "/python-programming-dark-blue-laptop-keyboard-3d.jpg",
-    title: "Python Dasturlash Tili",
-    instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-1",
-    lessonLabel: "Дарс: 3/10",
-    href: "/courses/python",
-  },
-  {
-    id: 3,
-    image: "/web-development-blue-gradient-code-3d.jpg",
-    title: "Web Development",
-    instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-2",
-    lessonLabel: "Дарс: 5/12",
-    href: "/courses/web-development",
-  },
-  {
-    id: 4,
-    image: "/machine-learning-neural-network-blue-3d.jpg",
-    title: "Machine Learning",
-    instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-1",
-    lessonLabel: "Дарс: 2/8",
-    href: "/courses/machine-learning",
-  },
-]
+import { useMyCourses } from "@/hooks/use-my-courses"
+import { PageLoader } from "@/components/ui/page-loader"
+import { NoData } from "@/components/shared/no-data"
 
 export function MyCoursesSection() {
+  const { data: courses, isLoading } = useMyCourses()
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
@@ -52,6 +18,30 @@ export function MyCoursesSection() {
   })
 
   const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } = useCarouselNavigation(emblaApi)
+
+  if (isLoading) {
+    return (
+      <section className="py-8">
+        <PageLoader />
+      </section>
+    )
+  }
+
+  if (!courses || courses.length === 0) {
+    return (
+      <section className="py-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-foreground">Kurslarim</h2>
+        </div>
+        <NoData
+          message="Bu yer hozircha bo'sh, kurslar qo'shishni boshlang"
+          description="Pastdagi ma'lumotlarni to'ldiring"
+          buttonText="Kurslarni ko'rish"
+          buttonLink="/catalog?tab=courses"
+        />
+      </section>
+    )
+  }
 
   return (
     <motion.section
@@ -68,15 +58,16 @@ export function MyCoursesSection() {
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-4">
           {courses.map((course) => (
-            <div key={course.id} className="flex-[0_0_calc(25%-12px)] min-w-0">
+            <div key={course.id} className="flex-[0_0_calc(33.333%-12px)] min-w-0">
               <MyEnrolledCard
-                image={course.image}
-                title={course.title}
-                mentorName={course.instructor}
-                moduleLabel={course.moduleLabel}
-                lessonLabel={course.lessonLabel}
-                href={course.href}
+                image={course.photo}
+                title={course.title || course.name}
+                mentorName={course.mentor?.fullname || ''}
+                moduleLabel={course.moduleTitle}
+                lessonLabel={`Dars: ${course.completedLessons}/${course.totalLessons}`}
+                href={`/courses/${course.id}`}
                 variant="light"
+                icon={course.icon}
               />
             </div>
           ))}

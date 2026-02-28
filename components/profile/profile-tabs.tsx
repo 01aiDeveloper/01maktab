@@ -21,11 +21,19 @@ export function ProfileTabs({ activeTab }: ProfileTabsProps) {
 
   const setTab = (tab: TabKey) => {
     router.push(`/profile?tab=${tab}`, { scroll: false });
+
+    // Scroll animatsiya bilan #profile-content ga o'tish
+    setTimeout(() => {
+      const element = document.getElementById('profile-content');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 0);
   };
 
   return (
-    <div className="max-w-300 mx-auto px-4 py-4">
-      <div className="flex items-center w-full">
+    <div className="pb-3">
+      <div className="flex items-center w-full overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {TABS.map((tab) => {
           const isActive = activeTab === tab.key;
 
@@ -33,15 +41,19 @@ export function ProfileTabs({ activeTab }: ProfileTabsProps) {
             <button
               key={tab.key}
               onClick={() => setTab(tab.key)}
-              className={`relative flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
+              className={`relative flex-1 lg:flex-1 shrink-0 lg:shrink flex items-center justify-center gap-2 py-3 px-4 text-sm font-medium whitespace-nowrap transition-colors ${
                 isActive ? 'text-[#1A1A1A]' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
-              <Image src={tab.icon} alt={tab.label} width={32} height={32} className={`w-8 h-8 object-contain ${!isActive ? 'grayscale opacity-50' : ''}`} />
+              <Image
+                src={tab.icon}
+                alt={tab.label}
+                width={32}
+                height={32}
+                className={`w-8 h-8 object-contain ${!isActive ? 'grayscale opacity-50' : ''}`}
+              />
               {tab.label}
-              {isActive && (
-                <span className="absolute bottom-0 left-4 right-4 h-[2.5px] bg-[#3B5BFF] rounded-full" />
-              )}
+              {isActive && <span className="absolute bottom-0 left-4 right-4 h-[2.5px] bg-[#3B5BFF] rounded-full" />}
             </button>
           );
         })}

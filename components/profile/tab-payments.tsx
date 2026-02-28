@@ -24,7 +24,7 @@ export function TabPayments() {
 
   if (loading) {
     return (
-      <div className="max-w-300 mx-auto px-4 pb-8">
+      <div className="pb-8">
         <div className="flex justify-center py-16">
           <div className="w-10 h-10 border-4 border-gray-200 border-t-[#3B5BFF] rounded-full animate-spin" />
         </div>
@@ -34,19 +34,16 @@ export function TabPayments() {
 
   if (items.length === 0) {
     return (
-      <div className="max-w-300 mx-auto px-4 pb-8">
+      <div className="pb-8">
         <div className="bg-white rounded-[22px] shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
-          <NoData
-            title="Здесь пока ничего нет"
-            description="У вас пока нет оплаченных курсов"
-          />
+          <NoData title="Здесь пока ничего нет" description="У вас пока нет оплаченных курсов" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-300 mx-auto px-4 pb-8">
+    <div className="pb-8">
       <div className="bg-white rounded-[22px] p-6 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
         <div className="space-y-3">
           {items.map((item, index) => (
@@ -54,9 +51,7 @@ export function TabPayments() {
               <span className="text-sm font-semibold text-gray-400 w-6">{index + 1}</span>
               <span className="flex-1 text-sm font-medium text-gray-900">{item.courseName}</span>
               <span className="text-xs text-gray-400 hidden sm:block">{item.date}</span>
-              <span className="inline-flex items-center px-3 py-1 rounded-lg bg-emerald-500 text-white text-xs font-semibold">
-                Оплачено
-              </span>
+              <span className="inline-flex items-center px-3 py-1 rounded-lg bg-emerald-500 text-white text-xs font-semibold">Оплачено</span>
             </div>
           ))}
         </div>

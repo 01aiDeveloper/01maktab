@@ -17,14 +17,14 @@ function ProfileContent() {
   const activeTab: TabKey = tabParam && ['info', 'achievements', 'certificates', 'payments'].includes(tabParam) ? tabParam : 'info';
 
   return (
-    <>
+    <div id='profile-content' >
       <ProfileTabs activeTab={activeTab} />
 
       {activeTab === 'info' && <TabPersonalInfo />}
       {activeTab === 'achievements' && <TabAchievements />}
       {activeTab === 'certificates' && <TabCertificates />}
       {activeTab === 'payments' && <TabPayments />}
-    </>
+    </div>
   );
 }
 
@@ -33,11 +33,11 @@ export default function ProfilePage() {
     <>
       <SiteHeader variant="light" />
 
-      <main className="min-h-screen bg-[#f5f5f5]">
+      <main className="min-h-screen container bg-[#f5f5f5]">
         <ProfileHero />
 
         <Suspense fallback={
-          <div className="max-w-300 mx-auto px-4 py-12">
+          <div className="py-12">
             <div className="flex justify-center">
               <div className="w-10 h-10 border-4 border-gray-200 border-t-[#3B5BFF] rounded-full animate-spin" />
             </div>
