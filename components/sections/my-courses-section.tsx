@@ -18,7 +18,7 @@ export function MyCoursesSection() {
     slidesToScroll: 1,
   })
 
-  const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } = useCarouselNavigation(emblaApi)
+  // const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } = useCarouselNavigation(emblaApi)
 
   if (isLoading) {
     return (

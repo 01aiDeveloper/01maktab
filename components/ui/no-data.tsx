@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface NoDataProps {
   title?: string;
@@ -7,26 +8,14 @@ interface NoDataProps {
   className?: string;
 }
 
-export function NoData({
-  title = "Ma'lumot topilmadi",
-  description,
-  icon,
-  className,
-}: NoDataProps) {
+export function NoData({ title = "Ma'lumot topilmadi", description, icon, className }: NoDataProps) {
   return (
-    <div
-      className={cn(
-        'flex flex-col items-center justify-center gap-3 py-16 text-center',
-        className,
-      )}
-    >
-      <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center text-2xl mb-1">
-        {icon ?? '📭'}
+    <div className={cn('flex flex-col items-center justify-center gap-3 py-16 text-center', className)}>
+      <div className="w-16 h-16 rounded-2xl  flex items-center justify-center text-2xl mb-1">
+        {icon ? icon : <Image src="/images/common/nodata.png" alt="No data" width={200} height={200} className={`object-contain  `} />}
       </div>
       <p className="text-sm font-medium text-gray-500">{title}</p>
-      {description && (
-        <p className="text-xs text-gray-400 max-w-xs leading-relaxed">{description}</p>
-      )}
+      {description && <p className="text-xs text-gray-400 max-w-xs leading-relaxed">{description}</p>}
     </div>
   );
 }

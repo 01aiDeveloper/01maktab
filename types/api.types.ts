@@ -82,6 +82,23 @@ export interface Career {
   decorImage: string
 }
 
+// Course Certificate Types
+export interface CourseCertificate {
+  id: number
+  file: string
+  title: string
+  createdAt: string
+}
+
+// Course Badge Types
+export interface CourseBadge {
+  id: number
+  title: string
+  icon: string
+  description: string
+  isClaimed: boolean
+}
+
 // Skill Types
 export interface Skill {
   id: number
