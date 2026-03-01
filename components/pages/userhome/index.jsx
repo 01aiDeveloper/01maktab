@@ -14,6 +14,7 @@ import { StatsSection } from '@/components/sections/home/stats-section';
 import { ProfileSetupModal } from '@/components/auth/profile-setup-modal';
 import { useAuthStore } from '@/store/auth-store';
 import { SiteFooter } from '@/components/layout/site-footer';
+import { MainButton } from '@/components/ui/main-button';
 import api from '@/lib/api';
 
 export default function PrivateHomePage() {
@@ -65,14 +66,40 @@ export default function PrivateHomePage() {
           <MySkillsSection />
         </div>
 
-        <HomeGraduatesSection />
+        <HomeGraduatesSection rows={1} />
 
         <StatsSection />
+
+        {/* CTA Section */}
+        <section className="w-full py-6">
+          <div className="container">
+            <div
+              className="flex flex-col items-center justify-center gap-8 px-6 py-14"
+              style={{ background: '#E6E6E7', borderRadius: '25px', minHeight: '311px' }}
+            >
+              <p
+                className="text-center text-[#18181A] max-w-3xl"
+                style={{ fontWeight: 600, fontSize: '36px', lineHeight: '41px', letterSpacing: '-0.05em' }}
+              >
+                Siz ham ularning orasida bo&apos;lishingiz mumkin. Bizdan sharoit - sizdan harakat. Harakatni &quot;01Maktab&quot;da davom eting!
+              </p>
+              <MainButton
+                size="md"
+                href="/catalog"
+                className="!h-[54px] !text-[20px] !gap-[39px] !px-4"
+              >
+                Hoziroq boshlash →
+              </MainButton>
+            </div>
+          </div>
+        </section>
+
       </main>
+
 
       <SiteFooter />
       {/* Profile Setup Modal */}
-      <ProfileSetupModal isOpen={isProfileModalOpen} onClose={handleProfileComplete} />
+      <ProfileSetupModal isOpen={true} onClose={handleProfileComplete} />
     </div>
   );
 }

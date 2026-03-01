@@ -8,7 +8,7 @@ interface ProfileData {
   lastname?: string;
   email?: string;
   phone?: string | number;
-  avatar?: string;
+  photo?: string;
   coins?: number;
   birthday?: string;
   gender?: string;

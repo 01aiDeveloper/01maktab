@@ -93,7 +93,7 @@ export function CourseHeader({ variant = 'dark', guestNavLinks }: CourseHeaderPr
                   }`}
                 >
                   <Avatar className="h-7 w-7">
-                    <AvatarImage src={user?.avatar || "/diverse-user-avatars.png"} />
+                    <AvatarImage src={user?.photo || "/diverse-user-avatars.png"} />
                     <AvatarFallback className="bg-gray-200 text-xs">
                       {user?.firstname?.[0]?.toUpperCase() || "U"}
                       {user?.lastname?.[0]?.toUpperCase() || ""}

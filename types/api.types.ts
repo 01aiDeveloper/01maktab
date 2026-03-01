@@ -47,7 +47,7 @@ export interface User {
   lastname?: string
   email?: string
   phone?: string
-  avatar?: string
+  photo?: string
   gender?: "MALE" | "FEMALE"
   birthday?: string
 }
@@ -80,6 +80,15 @@ export interface Career {
   photo: string
   icon: string | null
   decorImage: string
+}
+
+// Payment Types
+export interface Payment {
+  id: number
+  amount: number
+  status: 'PAID' | 'PENDING' | 'FAILED'
+  provider: string
+  createdAt: string
 }
 
 // Course Certificate Types

@@ -1,40 +1,42 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import useEmblaCarousel from 'embla-carousel-react';
 import { StoryModal, STORIES } from './feature-cards-modal';
+import { CarouselNavigation } from './ui/carousel-navigation';
 
 const featureCards = [
   {
     id: 1,
     title: "No'l bir maktab bu nima?",
-    bgColor: 'bg-[#ff6b35]',
-    borderColor: 'border-[#ff8c5a]',
+    borderColor: '#ff8c5a',
+    gradient: 'linear-gradient(104.46deg, #F96415 -0.24%, #FFA469 101.27%)',
     image: '/images/hero-info-image1.png',
     imagePosition: 'object-right-bottom',
   },
   {
     id: 2,
     title: "Hamjimiyatga qanday a'zo bo'laman",
-    bgColor: 'bg-[#3b82f6]',
-    borderColor: 'border-[#60a5fa]',
+    borderColor: '#60a5fa',
+    gradient: 'linear-gradient(104.46deg, #2563eb -0.24%, #60a5fa 101.27%)',
     image: '/images/hero-info-image2.png',
     imagePosition: 'object-right-top',
   },
   {
     id: 3,
     title: 'Kasb bu nima?',
-    bgColor: 'bg-[#84cc16]',
-    borderColor: 'border-[#a3e635]',
+    borderColor: '#a3e635',
+    gradient: 'linear-gradient(104.46deg, #65a30d -0.24%, #a3e635 101.27%)',
     image: '/images/hero-info-image3.png',
     imagePosition: 'object-right-bottom',
   },
   {
     id: 4,
     title: 'Skillar nima uchun kerak?',
-    bgColor: 'bg-[#a855f7]',
-    borderColor: 'border-[#c084fc]',
+    borderColor: '#c084fc',
+    gradient: 'linear-gradient(104.46deg, #9333ea -0.24%, #c084fc 101.27%)',
     image: '/images/hero-info-image4.png',
     imagePosition: 'object-right-bottom',
   },
@@ -59,6 +61,28 @@ const cardVariants = {
 
 export function FeatureCards() {
   const [activeStoryId, setActiveStoryId] = useState<number | null>(null);
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: false,
+    align: 'start',
+    breakpoints: {
+      '(min-width: 1024px)': { active: false },
+    },
+  });
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(true);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+  }, [emblaApi, onSelect]);
 
   const activeStory = activeStoryId !== null
     ? STORIES.find((s) => s.id === activeStoryId) ?? null
@@ -71,31 +95,89 @@ export function FeatureCards() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          className="container"
         >
-          {featureCards.map((card) => (
-            <motion.div key={card.id} variants={cardVariants}>
-              <motion.button
-                onClick={() => setActiveStoryId(card.id)}
-                whileHover={{ scale: 1.02, y: -4 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.2 }}
-                className={`w-full text-left ${card.bgColor} ${card.borderColor} border-4 rounded-3xl p-5 h-[180px] relative overflow-hidden cursor-pointer`}
-              >
-                <h3 className="text-white font-bold text-lg md:text-xl leading-tight max-w-[60%] relative z-10">
-                  {card.title}
-                </h3>
-                <div className="absolute right-0 bottom-0 w-[45%] h-full">
-                  <Image
-                    src={card.image}
-                    alt={card.title}
-                    fill
-                    className={`object-contain ${card.imagePosition}`}
-                  />
-                </div>
-              </motion.button>
-            </motion.div>
-          ))}
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex gap-4 lg:grid lg:grid-cols-4">
+              {featureCards.map((card) => (
+                <motion.div
+                  key={card.id}
+                  variants={cardVariants}
+                  className="flex-[0_0_80%] min-w-0 sm:flex-[0_0_calc(50%-8px)] lg:flex-none"
+                >
+                  <motion.button
+                    onClick={() => setActiveStoryId(card.id)}
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    whileTap={{ scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-full text-left cursor-pointer"
+                    style={{
+                      borderRadius: '29px',
+                      border: `4px solid ${card.borderColor}`,
+                      padding: '4px',
+                      height: '178px',
+                    }}
+                  >
+                    {/* Inner gradient container */}
+                    <div
+                      className="relative w-full h-full overflow-hidden"
+                      style={{
+                        borderRadius: '24px',
+                        background: card.gradient,
+                      }}
+                    >
+                      {/* Title */}
+                      <h3
+                        className="absolute text-white z-10"
+                        style={{
+                          left: '24px',
+                          top: '41px',
+                          width: '160px',
+                          fontWeight: 600,
+                          fontSize: '30px',
+                          lineHeight: '29px',
+                          letterSpacing: '-0.05em',
+                        }}
+                      >
+                        {card.title}
+                      </h3>
+                      {/* Image */}
+                      <div
+                        className="absolute"
+                        style={{
+                          width: '164px',
+                          height: '204px',
+                          right: '-6px',
+                          top: '-20px',
+                          transform: 'rotate(3.09deg)',
+                        }}
+                      >
+                        <Image
+                          src={card.image}
+                          alt={card.title}
+                          fill
+                          className={`object-contain ${card.imagePosition}`}
+                        />
+                      </div>
+                    </div>
+                  </motion.button>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation - only on mobile/tablet */}
+          <div className="flex items-center justify-center mt-4 ">
+            <CarouselNavigation
+              onPrevClick={() => emblaApi?.scrollPrev()}
+              onNextClick={() => emblaApi?.scrollNext()}
+              canScrollPrev={canScrollPrev}
+              canScrollNext={canScrollNext}
+              variant="gray"
+              iconType="chevron"
+              size="md"
+            />
+          </div>
         </motion.div>
       </section>
 

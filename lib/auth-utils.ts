@@ -6,10 +6,11 @@ interface User {
   lastname?: string
   email?: string
   phone?: string
-  avatar?: string
+  photo?: string
   coins?: number
   birthday?: string
   gender?: "MALE" | "FEMALE"
+  region?: string
   createdAt?: string
 }
 

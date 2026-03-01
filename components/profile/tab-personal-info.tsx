@@ -6,16 +6,29 @@ import { Pencil } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/auth-store';
 import { useUpdateProfile } from '@/hooks/use-update-profile';
+import { useUploadFile } from '@/hooks/use-upload-file';
 import { getMediaUrl } from '@/lib/utils';
 import api from '@/lib/api';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { Search, CalendarIcon } from 'lucide-react';
+import { REGIONS } from '@/constants/regions';
+import { format } from 'date-fns';
+import { SuccessModal } from '@/components/ui/success-modal';
 
 export function TabPersonalInfo() {
   const user = useAuthStore((state) => state.user);
   const { updateProfile, isLoading: saving } = useUpdateProfile();
+  const { uploadFile, isUploading } = useUploadFile();
   const router = useRouter();
   const searchParams = useSearchParams();
   const editing = searchParams.get('edit') === 'true';
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [successOpen, setSuccessOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const setEditing = (value: boolean) => {
@@ -35,6 +48,7 @@ export function TabPersonalInfo() {
     phone: user?.phone || '',
     birthday: user?.birthday || '',
     gender: user?.gender || '',
+    region: user?.region || '',
   });
 
   useEffect(() => {
@@ -46,6 +60,7 @@ export function TabPersonalInfo() {
         phone: user.phone || '',
         birthday: user.birthday || '',
         gender: user.gender || '',
+        region: user.region || '',
       });
     }
   }, [user]);
@@ -57,8 +72,8 @@ export function TabPersonalInfo() {
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file);
-      setAvatarPreview(url);
+      setAvatarFile(file);
+      setAvatarPreview(URL.createObjectURL(file));
     }
   };
 
@@ -73,6 +88,10 @@ export function TabPersonalInfo() {
 
   const handleSave = async () => {
     try {
+      let avatarUrl: string | undefined;
+      if (avatarFile) {
+        avatarUrl = await uploadFile(avatarFile);
+      }
       await updateProfile({
         firstname: form.firstname,
         lastname: form.lastname,
@@ -80,18 +99,21 @@ export function TabPersonalInfo() {
         phone: form.phone || undefined,
         birthday: form.birthday || undefined,
         gender: form.gender || undefined,
+        region: form.region || undefined,
+        ...(avatarUrl ? { photo: avatarUrl } : {}),
       });
-      // Qayta user ma'lumotlarini olish
       const res = await api.get('/user/me');
       if (res.data?.data) setUser(res.data.data);
+      setAvatarFile(null);
       setEditing(false);
+      setSuccessOpen(true);
+      setTimeout(() => setSuccessOpen(false), 2000);
     } catch {
       // error is handled inside hook
     }
   };
 
-  const inputCls =
-    'w-full h-11 px-4 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#3B5BFF]/20 focus:border-[#3B5BFF]';
+  const inputCls = '!h-11 rounded-[10px] border-gray-200 text-sm text-gray-900';
 
   if (editing) {
     return (
@@ -99,12 +121,12 @@ export function TabPersonalInfo() {
         <div className="bg-white rounded-[22px] p-6 lg:p-10 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
           {/* Avatar - left aligned */}
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
-          <div className="flex justify-start mb-8">
+          <div className="flex justify-start mb-8 ">
             <button className="relative" onClick={handleAvatarClick}>
-              <div className="w-20 h-20 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
-                {avatarPreview || user?.avatar ? (
+              <div className="w-20 h-20 cursor-pointer rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
+                {avatarPreview || user?.photo ? (
                   <Image
-                    src={avatarPreview || getMediaUrl(user!.avatar) || ''}
+                    src={avatarPreview || getMediaUrl(user!.photo) || ''}
                     alt="avatar"
                     width={80}
                     height={80}
@@ -116,7 +138,7 @@ export function TabPersonalInfo() {
                   </svg>
                 )}
               </div>
-              <span className="absolute -bottom-1 -right-1 w-7 h-7 bg-[#1a1a1a] rounded-full flex items-center justify-center">
+              <span className="absolute cursor-pointer -bottom-1 -right-1 w-7 h-7 bg-[#1a1a1a] rounded-full flex items-center justify-center">
                 <Pencil className="w-3.5 h-3.5 text-white" />
               </span>
             </button>
@@ -125,8 +147,8 @@ export function TabPersonalInfo() {
           {/* Form Grid - row 1: Ism, Email, Viloyat */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-5">
             <div>
-              <label className="block text-xs text-gray-400 mb-1.5">Ism</label>
-              <input
+              <label className="block text-xs text-gray-600 mb-1.5">Ism</label>
+              <Input
                 type="text"
                 value={form.firstname}
                 onChange={(e) => setForm({ ...form, firstname: e.target.value })}
@@ -134,74 +156,69 @@ export function TabPersonalInfo() {
               />
             </div>
             <div>
-              <label className="block text-xs text-gray-400 mb-1.5">E-mail</label>
-              <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={inputCls} />
+              <label className="block text-xs text-gray-600 mb-1.5">E-mail</label>
+              <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <label className="block text-xs text-gray-400 mb-1.5">Viloyat</label>
-              <div className="relative">
-                <select className={`${inputCls} appearance-none pr-10`}>
-                  <option>Toshkent viloyati</option>
-                  <option>Toshkent shahri</option>
-                  <option>Andijon</option>
-                  <option>Buxoro</option>
-                  <option>Farg&apos;ona</option>
-                  <option>Jizzax</option>
-                  <option>Xorazm</option>
-                  <option>Namangan</option>
-                  <option>Navoiy</option>
-                  <option>Qashqadaryo</option>
-                  <option>Qoraqalpog&apos;iston</option>
-                  <option>Samarqand</option>
-                  <option>Sirdaryo</option>
-                  <option>Surxondaryo</option>
-                </select>
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              </div>
+              <label className="block text-xs text-gray-600 mb-1.5">Viloyat</label>
+              <Select value={form.region || 'toshkent-viloyati'} onValueChange={(v) => setForm({ ...form, region: v })}>
+                <SelectTrigger className="w-full !h-11 rounded-[10px] border-gray-200 bg-white text-sm text-gray-900 [&>svg:last-child]:ml-auto">
+                  <Search className="w-4 h-4 text-gray-600 shrink-0" />
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {REGIONS.map((region) => (
+                    <SelectItem key={region.value} value={region.value}>
+                      {region.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* row 2: Familiya, Telefon, Pol */}
             <div>
-              <label className="block text-xs text-gray-400 mb-1.5">Familiya</label>
-              <input type="text" value={form.lastname} onChange={(e) => setForm({ ...form, lastname: e.target.value })} className={inputCls} />
+              <label className="block text-xs text-gray-600 mb-1.5">Familiya</label>
+              <Input type="text" value={form.lastname} onChange={(e) => setForm({ ...form, lastname: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <label className="block text-xs text-gray-400 mb-1.5">Telefon raqami</label>
-              <input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={inputCls} />
+              <label className="block text-xs text-gray-600 mb-1.5">Telefon raqami</label>
+              <Input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <label className="block text-xs text-gray-400 mb-1.5">Pol</label>
-              <div className="flex rounded-xl border border-gray-200 overflow-hidden h-11">
-                <button
-                  type="button"
-                  onClick={() => setForm({ ...form, gender: 'MALE' })}
-                  className={`flex-1 text-sm font-medium transition-colors ${form.gender === 'MALE' ? 'bg-gray-900 text-white' : 'bg-white text-gray-600'}`}
-                >
-                  Erkak
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setForm({ ...form, gender: 'FEMALE' })}
-                  className={`flex-1 text-sm font-medium transition-colors ${form.gender === 'FEMALE' ? 'bg-gray-900 text-white' : 'bg-white text-gray-600'}`}
-                >
-                  Ayol
-                </button>
-              </div>
+              <label className="block text-xs text-gray-600 mb-1.5">Pol</label>
+              <Tabs value={form.gender || 'MALE'} onValueChange={(v) => setForm({ ...form, gender: v })}>
+                <TabsList className="w-full h-11 rounded-[10px] bg-[#F4F4F4] p-1">
+                  <TabsTrigger value="MALE" className="flex-1 rounded-[8px] text-sm font-medium">Erkak</TabsTrigger>
+                  <TabsTrigger value="FEMALE" className="flex-1 rounded-[8px] text-sm font-medium">Ayol</TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
 
             {/* row 3: Tug'ilgan sana */}
             <div>
-              <label className="block text-xs text-gray-400 mb-1.5">Tug&apos;ilgan sana</label>
-              <input
-                type="date"
-                value={form.birthday ? form.birthday.split('T')[0] : ''}
-                onChange={(e) => setForm({ ...form, birthday: e.target.value })}
-                className={inputCls}
-              />
+              <label className="block text-xs text-gray-600 mb-1.5">Tug&apos;ilgan sana</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button className="w-full !h-11 rounded-[10px] border border-gray-200 bg-white px-4 text-sm text-gray-900 flex items-center justify-between">
+                    <span className={form.birthday ? 'text-gray-900' : 'text-gray-600'}>
+                      {form.birthday ? format(new Date(form.birthday), 'dd.MM.yyyy') : 'Sanani tanlang'}
+                    </span>
+                    <CalendarIcon className="w-4 h-4 text-gray-600" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={form.birthday ? new Date(form.birthday) : undefined}
+                    onSelect={(date) => setForm({ ...form, birthday: date ? new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString() : '' })}
+                    captionLayout="dropdown"
+                    startMonth={new Date(1950, 0)}
+                    endMonth={new Date(new Date().getFullYear(), 11)}
+                    autoFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </div>
@@ -210,14 +227,14 @@ export function TabPersonalInfo() {
         <div className="flex gap-3 justify-center  flex-col sm:flex-row mt-4">
           <button
             onClick={handleSave}
-            disabled={saving}
+            disabled={saving || isUploading}
             className=" w-full sm:w-fit px-8  sm:px-18 cursor-pointer   h-12 rounded-xl bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium transition-colors disabled:bg-[#D2D2D2] disabled:opacity-100"
           >
-            {saving ? 'Saqlanmoqda...' : 'Saqlash'}
+            {isUploading ? 'Yuklanmoqda...' : saving ? 'Saqlanmoqda...' : 'Saqlash'}
           </button>
           <button
             onClick={() => setEditing(false)}
-            className=" w-full sm:w-fit px-8  sm:px-18 cursor-pointer  h-12 disabled:bg-[#D2D2D2] bg-[#D2D2D2] rounded-xl text-gray-400 text-sm font-medium"
+            className=" w-full sm:w-fit px-8  sm:px-18 cursor-pointer  h-12 disabled:bg-[#D2D2D2] bg-[#D2D2D2] rounded-xl text-gray-600 text-sm font-medium"
           >
             Bekor qilish
           </button>
@@ -226,20 +243,14 @@ export function TabPersonalInfo() {
     );
   }
 
-  const avatarSrc = avatarPreview || (user?.avatar ? getMediaUrl(user.avatar) : null);
+  const avatarSrc = avatarPreview || (user?.photo ? getMediaUrl(user.photo) : null);
 
   // View Mode
   return (
     <div className="pb-8">
       <div className="bg-white rounded-[22px] p-6 lg:p-10 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
         {/* Avatar */}
-        {/* <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={handleAvatarChange}
-        /> */}
+      
         <div className="flex justify-center lg:justify-start mb-8">
           <button className="relative" onClick={handleAvatarClick}>
             <div className="w-20 h-20 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
@@ -257,31 +268,31 @@ export function TabPersonalInfo() {
         {/* Info Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5 mb-8">
           <div>
-            <p className="text-xs text-gray-400 mb-1">Ism</p>
+            <p className="text-xs text-gray-600 mb-1">Ism</p>
             <p className="text-sm font-medium text-gray-900">{user?.firstname || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 mb-1">E-mail</p>
+            <p className="text-xs text-gray-600 mb-1">E-mail</p>
             <p className="text-sm font-medium text-gray-900">{user?.email || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 mb-1">Viloyat</p>
-            <p className="text-sm font-medium text-gray-900">Toshkent viloyati</p>
+            <p className="text-xs text-gray-600 mb-1">Viloyat</p>
+            <p className="text-sm font-medium text-gray-900">{REGIONS.find((r) => r.value === user?.region)?.label || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 mb-1">Familiya</p>
+            <p className="text-xs text-gray-600 mb-1">Familiya</p>
             <p className="text-sm font-medium text-gray-900">{user?.lastname || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 mb-1">Telefon raqami</p>
+            <p className="text-xs text-gray-600 mb-1">Telefon raqami</p>
             <p className="text-sm font-medium text-gray-900">{user?.phone || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 mb-1">Jins</p>
+            <p className="text-xs text-gray-600 mb-1">Jins</p>
             <p className="text-sm font-medium text-gray-900">{user?.gender === 'FEMALE' ? 'Ayol' : 'Erkak'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 mb-1">Tug&apos;ilgan kungi</p>
+            <p className="text-xs text-gray-600 mb-1">Tug&apos;ilgan kungi</p>
             <p className="text-sm font-medium text-gray-900">{formatBirthday(user?.birthday || '')}</p>
           </div>
         </div>
@@ -298,6 +309,7 @@ export function TabPersonalInfo() {
               phone: user?.phone || '',
               birthday: user?.birthday || '',
               gender: user?.gender || 'MALE',
+              region: user?.region || '',
             });
             setEditing(true); // URL: ?tab=info&edit=true
           }}
@@ -307,6 +319,12 @@ export function TabPersonalInfo() {
           O&apos;zgartirish
         </button>
       </div>
+
+      <SuccessModal
+        open={successOpen}
+        onClose={() => setSuccessOpen(false)}
+        title="O'zgarishlar saqlandi"
+      />
     </div>
   );
 }

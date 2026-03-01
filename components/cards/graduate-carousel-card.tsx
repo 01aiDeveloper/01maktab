@@ -15,7 +15,7 @@ export function GraduateCarouselCard({
   image,
 }: GraduateCarouselCardProps) {
   return (
-    <div className="relative group cursor-pointer rounded-3xl overflow-hidden min-h-100 h-full">
+    <div className="relative group cursor-pointer rounded-[25px] overflow-hidden min-h-100 h-full">
       {/* Background Image */}
       <Image
         src={image}
@@ -24,17 +24,24 @@ export function GraduateCarouselCard({
         className="object-cover transition-transform duration-300 group-hover:scale-105"
       />
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/70" />
+      {/* Info Container */}
+      <div className="absolute left-0 right-0 bottom-0 h-[110px] bg-white/20 backdrop-blur-[51px] rounded-[25px]">
+        {/* Arrow icon */}
+        <div className="absolute w-10 h-10 right-[10px] top-[7px] flex items-center justify-center">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M4 16L16 4M16 4H6M16 4V14" stroke="white" strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
 
-      {/* Content at Bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-6">
-        <h3 className="font-semibold text-lg text-white mb-1 line-clamp-1">
-          {name}
-        </h3>
-        <p className="text-sm text-white/80 line-clamp-1">
-          {company}
-        </p>
+        {/* Text */}
+        <div className="absolute left-6 top-8 flex flex-col gap-[10px]">
+          <h3 className="text-white text-2xl font-semibold leading-[25px] tracking-[-0.05em] line-clamp-1">
+            {name}
+          </h3>
+          <p className="text-white text-base leading-[25px] tracking-[-0.05em] line-clamp-1" style={{ fontWeight: 450 }}>
+            {company}
+          </p>
+        </div>
       </div>
     </div>
   );

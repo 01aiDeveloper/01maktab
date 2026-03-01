@@ -9,6 +9,8 @@ export interface UpdateProfilePayload {
   email?: string;
   birthday?: string;
   gender?: string;
+  region?: string;
+  photo?: string;
 }
 
 export function useUpdateProfile() {

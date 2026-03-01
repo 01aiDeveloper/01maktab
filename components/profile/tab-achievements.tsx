@@ -8,6 +8,7 @@ import api from '@/lib/api';
 import { NoData } from '@/components/ui/no-data';
 import type { ApiResponse, PaginatedResponse, CourseBadge } from '@/types/api.types';
 import { MainTitle } from '../ui/main-title';
+import { CustomPagination } from '@/components/ui/custom-pagination';
 
 const PAGE_SIZE = 8;
 
@@ -95,38 +96,7 @@ export function TabAchievements() {
         ))}
       </div>
 
-      {/* Pagination */}
-      {pageCount > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-6">
-          <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
-            className="px-4 h-9 rounded-xl text-sm font-medium bg-white border border-gray-200 text-gray-600 disabled:opacity-40 hover:bg-gray-50 transition-colors"
-          >
-            ←
-          </button>
-          {Array.from({ length: pageCount }, (_, i) => i + 1).map((p) => (
-            <button
-              key={p}
-              onClick={() => setPage(p)}
-              className={`w-9 h-9 rounded-xl text-sm font-medium transition-colors ${
-                p === page
-                  ? 'bg-gray-900 text-white'
-                  : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              {p}
-            </button>
-          ))}
-          <button
-            onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
-            disabled={page === pageCount}
-            className="px-4 h-9 rounded-xl text-sm font-medium bg-white border border-gray-200 text-gray-600 disabled:opacity-40 hover:bg-gray-50 transition-colors"
-          >
-            →
-          </button>
-        </div>
-      )}
+      <CustomPagination page={page} pageCount={pageCount} onPageChange={setPage} />
     </div>
   );
 }

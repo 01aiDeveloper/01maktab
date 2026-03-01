@@ -211,7 +211,7 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
             canScrollPrev={canScrollPrev}
             canScrollNext={canScrollNext}
             variant="gray"
-            iconType="arrow"
+            iconType="chevron"
             size="md"
           />
         </div>
