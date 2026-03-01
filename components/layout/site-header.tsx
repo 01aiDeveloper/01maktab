@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 const navLinks = [
-  { label: "Darsxona", href: "/darsxona" },
+  { label: "Darsxona", href: "/classroom" },
   { label: "Barcha Kurslar", href: "/kurslar" },
   { label: "Hamjamiyat", href: "/hamjamiyat" },
   { label: "Market", href: "/market" },

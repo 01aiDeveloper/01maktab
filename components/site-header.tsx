@@ -10,7 +10,7 @@ import { useAuthStore } from "@/store/auth-store"
 import { useMe } from "@/hooks/use-me"
 
 const navLinks = [
-  { label: "Darsxona", href: "/" },
+  { label: "Darsxona", href: "/classroom" },
   { label: "Barcha Kurslar", href: "/catalog" },
   { label: "Hamjamiyat", href: "/community" },
   { label: "Market", href: "#" },
@@ -116,7 +116,7 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
                     {user?.lastname?.[0]?.toUpperCase() || ""}
                   </AvatarFallback>
                 </Avatar>
-                <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <span className={`hidden lg:block text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {user?.firstname} {user?.lastname}
                 </span>
                 <motion.div animate={{ rotate: isUserDropdownOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>

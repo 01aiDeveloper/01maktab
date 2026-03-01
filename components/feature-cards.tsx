@@ -84,30 +84,19 @@ export function FeatureCards() {
     emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
 
-  const activeStory = activeStoryId !== null
-    ? STORIES.find((s) => s.id === activeStoryId) ?? null
-    : null;
+  const activeStory = activeStoryId !== null ? (STORIES.find((s) => s.id === activeStoryId) ?? null) : null;
 
   return (
     <>
       <section className="w-full py-4">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="container"
-        >
+        <motion.div variants={containerVariants} initial="hidden" animate="visible" className="container">
           <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-4 lg:grid lg:grid-cols-4">
+            <div className="flex gap-4 lg:grid lg:grid-cols-4 py-4">
               {featureCards.map((card) => (
-                <motion.div
-                  key={card.id}
-                  variants={cardVariants}
-                  className="flex-[0_0_80%] min-w-0 sm:flex-[0_0_calc(50%-8px)] lg:flex-none"
-                >
+                <motion.div key={card.id} variants={cardVariants} className="flex-[0_0_80%] min-w-0 sm:flex-[0_0_calc(50%-8px)] lg:flex-none">
                   <motion.button
                     onClick={() => setActiveStoryId(card.id)}
-                    whileHover={{ scale: 1.02, y: -4 }}
+                    whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                     transition={{ duration: 0.2 }}
                     className="w-full text-left cursor-pointer"
@@ -152,12 +141,7 @@ export function FeatureCards() {
                           transform: 'rotate(3.09deg)',
                         }}
                       >
-                        <Image
-                          src={card.image}
-                          alt={card.title}
-                          fill
-                          className={`object-contain ${card.imagePosition}`}
-                        />
+                        <Image src={card.image} alt={card.title} fill className={`object-contain ${card.imagePosition}`} />
                       </div>
                     </div>
                   </motion.button>

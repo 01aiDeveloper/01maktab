@@ -55,7 +55,7 @@ export default function PrivateHomePage() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
-      <SiteHeader variant='light' />
+      <SiteHeader variant="light" />
       <main>
         <HeroSection userName={user?.firstname || 'Foydalanuvchi'} />
         <FeatureCards />
@@ -81,25 +81,20 @@ export default function PrivateHomePage() {
                 className="text-center text-[#18181A] max-w-3xl"
                 style={{ fontWeight: 600, fontSize: '36px', lineHeight: '41px', letterSpacing: '-0.05em' }}
               >
-                Siz ham ularning orasida bo&apos;lishingiz mumkin. Bizdan sharoit - sizdan harakat. Harakatni &quot;01Maktab&quot;da davom eting!
+                Siz ham ularning orasida bo&apos;lishingiz mumkin. Bizdan sharoit - sizdan harakat. Harakatni &quot;01Maktab&quot;da davom
+                eting!
               </p>
-              <MainButton
-                size="md"
-                href="/catalog"
-                className="!h-[54px] !text-[20px] !gap-[39px] !px-4"
-              >
+              <MainButton size="md" href="/catalog" className="!h-[54px] !text-[20px] !gap-[39px] !px-4">
                 Hoziroq boshlash →
               </MainButton>
             </div>
           </div>
         </section>
-
       </main>
-
 
       <SiteFooter />
       {/* Profile Setup Modal */}
-      <ProfileSetupModal isOpen={true} onClose={handleProfileComplete} />
+      <ProfileSetupModal isOpen={isProfileModalOpen} onClose={handleProfileComplete} />
     </div>
   );
 }

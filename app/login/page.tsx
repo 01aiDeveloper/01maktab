@@ -83,7 +83,7 @@ function LoginContent() {
         }
       }
 
-      window.location.href = "/"
+      window.location.href = "/classroom"
     } catch (err: any) {
       setError(err.response?.data?.message || "Noto'g'ri kod yoki kod muddati tugagan")
       setIsVerifying(false)

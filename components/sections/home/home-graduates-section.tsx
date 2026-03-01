@@ -95,10 +95,10 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
     emblaApi1.on('reInit', onSelect);
   }, [emblaApi1, onSelect]);
 
-  // Split graduates into two rows
+  // Split graduates into two rows (row1 gets all if rows=1)
   const midpoint = Math.ceil(graduates.length / 2);
-  const graduatesRow1 = graduates.slice(0, midpoint);
-  const graduatesRow2 = graduates.slice(midpoint);
+  const graduatesRow1 = rows === 1 ? graduates : graduates.slice(0, midpoint);
+  const graduatesRow2 = rows === 1 ? [] : graduates.slice(midpoint);
 
   if (loading) {
     return (
