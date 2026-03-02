@@ -33,7 +33,6 @@ export function EventsSection() {
           <MainTitle
             align="center"
             color="text-dark"
-            className="text-[#121212]"
             animated
           >
             Tadbirlarmiz Kalendari
@@ -41,7 +40,7 @@ export function EventsSection() {
           <Subtitle
             align="center"
             color="muted"
-            className="mx-auto mt-2 md:mt-3 max-w-2xl text-gray-500"
+            className="mx-auto mt-2 md:mt-3 max-w-2xl "
             animated
             animationDelay={0.1}
           >

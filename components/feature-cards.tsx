@@ -158,7 +158,6 @@ export function FeatureCards() {
               canScrollPrev={canScrollPrev}
               canScrollNext={canScrollNext}
               variant="gray"
-              iconType="chevron"
               size="md"
             />
           </div>

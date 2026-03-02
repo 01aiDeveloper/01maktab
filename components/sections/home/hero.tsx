@@ -1,4 +1,4 @@
-"use client";
+  "use client";
 
 import * as React from "react";
 import Image from "next/image";
@@ -113,7 +113,7 @@ export function Hero() {
 
                   <div className="mt-6 md:mt-14 flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 md:gap-6">
                     <div
-                      className={`backdrop-blur-2xl rounded-xl px-4 md:px-6 h-13 md:h-15 w-48.25 border flex items-center gap-3 md:gap-4 ${
+                      className={`backdrop-blur-2xl rounded-xl px-4 md:px-6 h-13 md:h-15 w-48.25 md:w-auto border flex items-center gap-3 md:gap-4 ${
                         slide.isDark
                           ? "bg-white/10 border-white/20"
                           : "bg-black/5 border-black/10"

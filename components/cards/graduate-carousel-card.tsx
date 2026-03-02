@@ -28,9 +28,7 @@ export function GraduateCarouselCard({
       <div className="absolute left-0 right-0 bottom-0 h-[110px] bg-white/20 backdrop-blur-[51px] rounded-[25px]">
         {/* Arrow icon */}
         <div className="absolute w-10 h-10 right-[10px] top-[7px] flex items-center justify-center">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M4 16L16 4M16 4H6M16 4V14" stroke="white" strokeWidth="1.667" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <Image src="/icons/main-arrow.svg" alt="arrow" width={20} height={20} unoptimized />
         </div>
 
         {/* Text */}

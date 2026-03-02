@@ -42,7 +42,7 @@ export function ContactSection() {
         className="bg-[#E6E6E7] rounded-3xl p-6 md:p-8 lg:p-10"
       >
           <MainTitle
-            className="mb-6 md:mb-8 text-black"
+            className="mb-6 md:mb-8 text-black text-left sm:text-center"
             align="left"
             animated
             animationDelay={0.2}
@@ -72,7 +72,7 @@ export function ContactSection() {
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+998 XX XXX XX XX"
+                  placeholder="998 XX XXX XX XX"
                   className="w-full h-12 border border-gray-200 rounded-xl px-4 focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue outline-none transition-all bg-white"
                   required
                 />

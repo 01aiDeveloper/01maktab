@@ -123,7 +123,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-base-dark: #18181a;
-  --color-text-dark: #121212;
+  --color-text-dark: #18181a;
   --color-text-gray: #878787;
   --color-primary-blue: #3361FF;
   --color-bg-dark: #0A0A0A;
@@ -132,6 +132,9 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  body, h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label {
+    font-family: "Suisse Intl", "Inter", -apple-system, "system-ui", sans-serif;
   }
   body {
     @apply bg-background text-foreground;

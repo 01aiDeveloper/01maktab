@@ -47,7 +47,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
           <MainTitle align="center" color="white" className="text-white" animated>
             Kasblar
           </MainTitle>
-          <Subtitle align="center" textColor="rgba(255, 255, 255, 0.5)" className="mx-auto mt-2 md:mt-3 max-w-xl" animated animationDelay={0.1}>
+          <Subtitle align="center" textColor="rgba(255, 255, 255)" className="mx-auto mt-2 md:mt-3 max-w-xl" animated animationDelay={0.1}>
             Stajerovka, live darslar, mentorlar, student support, kompaniyalardagi real loyihalar va xalqaro sertifikat o’z ichiga oladigan
             to’liq ta’lim dasturi.
           </Subtitle>

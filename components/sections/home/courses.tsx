@@ -55,7 +55,7 @@ export function CoursesSection() {
           <Subtitle
             align="center"
             color="muted"
-            className="mx-auto mt-4 md:mt-6 max-w-2xl text-gray-500"
+            className="mx-auto mt-4 md:mt-6 max-w-2xl "
             animated
             animationDelay={0.1}
           >
@@ -101,7 +101,6 @@ export function CoursesSection() {
               canScrollPrev={canScrollPrev}
               canScrollNext={canScrollNext}
               variant="gray"
-              iconType="arrow"
               size="lg"
             />
           </div>

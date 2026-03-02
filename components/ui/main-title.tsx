@@ -95,7 +95,7 @@ const colorClasses = {
 export function MainTitle({
   children,
   className,
-  color = "foreground",
+  color = "text-dark",
   size = "2xl",
   weight = "bold",
   align = "left",
@@ -113,7 +113,6 @@ export function MainTitle({
     // Responsive font sizes: mobile 36px, tablet 48px, desktop 64px
     "text-[36px] sm:text-[48px] md:text-[56px] lg:text-[64px]",
     // Font family: Suisse Intl
-    "font-['Suisse_Intl',sans-serif]",
     // Font weight: 600 (Semibold)
     "font-semibold",
     // Letter spacing: -5%

@@ -77,8 +77,8 @@ export function VideoSection() {
 
         {/* Branding - Bottom Left */}
         <div className="absolute bottom-6 md:bottom-8 left-6 md:left-8 z-10">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white">
-            01<span className="font-normal">Maktab</span>
+          <h2 className="text-3xl md:text-[56px] lg:text-[64px]  font-semibold text-white leading-[120px] tracking-[-0.05em] capitalize">
+            01Maktab
           </h2>
         </div>
 
@@ -91,9 +91,9 @@ export function VideoSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="px-4 py-2 bg-black/60 backdrop-blur-sm rounded-full border border-white/20"
+              className="px-6 py-2.5 rounded-full border border-white/30 flex items-center justify-center h-11"
             >
-              <span className="text-white text-sm md:text-base font-medium">{tag}</span>
+              <span className="text-white text-base font-[450] leading-6 tracking-[-0.01em]">{tag}</span>
             </motion.div>
           ))}
         </div>

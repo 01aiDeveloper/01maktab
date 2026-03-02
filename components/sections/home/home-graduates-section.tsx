@@ -112,7 +112,6 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
         <div className="container">
           <MainTitle
             align="center"
-            color="foreground"
             className="mb-4 md:mb-6 lg:mb-8"
             animated
           >
@@ -141,16 +140,14 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
       <div className="container">
         <MainTitle
           align="center"
-          color="foreground"
-          className="mb-4 md:mb-6 lg:mb-8"
+          className="mb-4 md:mb-6 "
           animated
         >
           Bizning Bitiruvchilarimiz
         </MainTitle>
         <Subtitle
           align="center"
-          color="muted"
-          className="mb-8 md:mb-10 lg:mb-12 max-w-72  mx-auto"
+          className="mb-6 md:mb-8 lg:mb-10 max-w-72  mx-auto"
           animated
           animationDelay={0.1}
         >
@@ -211,7 +208,6 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
             canScrollPrev={canScrollPrev}
             canScrollNext={canScrollNext}
             variant="gray"
-            iconType="chevron"
             size="md"
           />
         </div>

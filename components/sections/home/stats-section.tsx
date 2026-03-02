@@ -36,14 +36,14 @@ export function StatsSection() {
       >
         {/* Row 1 */}
         {/* Black card - Graduates count */}
-        <motion.div variants={itemVariants} className="bg-black rounded-[14px] p-6 text-white flex flex-col justify-between h-52.5 md:h-80">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-              <Users className="w-4 h-4" />
+        <motion.div variants={itemVariants} className="bg-[#18181A] rounded-[25px] text-white flex flex-col items-center justify-center h-52.5 md:h-80 gap-4 md:gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3.75">
+            <div className="w-[46.47px] h-[46.47px] bg-white/20 border border-white/17 backdrop-blur-[7.89px] rounded-[14.67px] flex items-center justify-center">
+              <Users className="w-[26.66px] h-[26.66px]" />
             </div>
-            <span className="text-sm text-white/80">Hozirda Bitiruvchilarimiz</span>
+            <span className="text-sm md:text-[32px] font-[450] text-white text-center tracking-[-0.05em]">Hozirda Bitiruvchilarimiz</span>
           </div>
-          <span className="text-5xl md:text-6xl font-bold">+400</span>
+          <span className="text-4xl md:text-[121.2px] font-[450] text-white text-center tracking-[-0.05em] leading-none">+400</span>
         </motion.div>
 
         {/* Team photo 1 - right side of row 1 */}
@@ -58,14 +58,14 @@ export function StatsSection() {
         </motion.div>
 
         {/* Blue card - Employment rate - right side of row 2 */}
-        <motion.div variants={itemVariants} className="bg-[#4361ee] rounded-[14px] p-6 text-white flex flex-col justify-between h-52.5 md:h-80">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-              <Briefcase className="w-4 h-4" />
+        <motion.div variants={itemVariants} className="bg-[#4361ee] rounded-[25px] text-white flex flex-col items-center justify-center h-52.5 md:h-80 gap-4 md:gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-3.75">
+            <div className="w-[46.47px] h-[46.47px] bg-white/20 border border-white/17 backdrop-blur-[7.89px] rounded-[14.67px] flex items-center justify-center">
+              <Briefcase className="w-[26.66px] h-[26.66px]" />
             </div>
-            <span className="text-sm text-white/80">{"Ishga Kirish Ko'rsatgichi"}</span>
+            <span className="text-sm md:text-[32px] font-[450] text-white text-center tracking-[-0.05em]">{"Ishga Kirish Ko'rsatgichi"}</span>
           </div>
-          <span className="text-5xl md:text-6xl font-bold">83%</span>
+          <span className="text-4xl md:text-[121.2px] font-[450] text-white text-center tracking-[-0.05em] leading-none">83%</span>
         </motion.div>
       </motion.div>
       </div>

@@ -118,7 +118,7 @@ const colorClasses = {
 export function Subtitle({
   children,
   className,
-  color = "muted",
+  color = "secondary",
   size = "lg",
   weight = "normal",
   align = "left",
@@ -140,8 +140,6 @@ export function Subtitle({
     "text-[16px] md:text-[20px]",
     // Responsive line heights: mobile 21px, desktop 25px
     "leading-[21px] md:leading-[25px]",
-    // Font family: Suisse Intl
-    "font-['Suisse_Intl',sans-serif]",
     // Font weight: 450 (Book)
     "font-[450]",
     // Letter spacing: -5%

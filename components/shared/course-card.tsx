@@ -3,7 +3,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ArrowUpRight } from "lucide-react"
 
 interface CourseCardProps {
   id?: number | string
@@ -29,10 +28,10 @@ export function CourseCard({ id, slug, title, description, imageUrl }: CourseCar
       />
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
 
-      <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 md:p-8 lg:p-10 flex flex-col justify-center min-h-32 bg-linear-to-t from-white/50 via-white/30 to-transparent backdrop-blur-sm max-h-[160px]  rounded-t-xl sm:rounded-t-3xl  ">
+      <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 md:p-8 lg:p-10 flex flex-col justify-center min-h-32 bg-white/20 backdrop-blur-[53.25px] max-h-[160px] rounded-t-xl sm:rounded-t-3xl">
         <div className="relative">
-          <div className="absolute -top-2 right-0 text-white opacity-80 group-hover:opacity-100 transition-opacity z-10">
-            <ArrowUpRight size={40} strokeWidth={1.5} />
+          <div className="absolute -top-2 right-0 opacity-80 group-hover:opacity-100 transition-opacity z-10">
+            <Image src="/icons/main-arrow.svg" alt="arrow" width={25} height={25} unoptimized />
           </div>
           <div className="pr-12">
             <h3 className="text-base sm:text-base md:text-lg lg:text-3xl font-bold text-white tracking-tight">{title}</h3>

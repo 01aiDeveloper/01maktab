@@ -87,7 +87,6 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
           canScrollPrev={canScrollPrev}
           canScrollNext={canScrollNext}
           variant="gray"
-          iconType="arrow"
           size="md"
         />
       </div>

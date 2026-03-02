@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const mainButtonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-[10px] font-black transition-all duration-300 cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-[10px] font-[450] transition-all duration-300 cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50",
   {
     variants: {
       variant: {
@@ -25,7 +25,7 @@ const mainButtonVariants = cva(
         default: "h-[44px] px-4 py-[10px] text-base", // height: 44px, padding: 10px top/bottom, 16px left/right
         sm: "h-10 px-3 py-2 text-sm",
         md: "h-[48px] px-6 py-3 text-base",
-        lg: "h-[44px] md:h-[54px] lg:h-[76px] px-4 md:px-8 lg:px-16 py-[10px] md:py-[15px] text-base md:text-lg lg:text-xl", // Responsive height va padding
+        lg: "h-[44px] md:h-[54px] lg:h-[76px] px-4 md:px-8 lg:px-16 py-[10px] md:py-[15px] text-base md:text-[20px]", // Responsive height va padding
         icon: "h-[44px] w-[44px] md:h-[54px] md:w-[54px] p-0",
       },
       hasIcon: {

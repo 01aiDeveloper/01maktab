@@ -71,8 +71,8 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true, va
           {showSubtitle && (
             <Subtitle
               align="center"
-              textColor={isDark ? 'rgb(156, 163, 175)' : 'rgb(156, 163, 175)'}
-              className="mx-auto mt-4 md:mt-6 max-w-2xl text-gray-400"
+              textColor={isDark ? 'rgb(156, 163, 175)' : ''}
+              className="mx-auto mt-4 md:mt-6 max-w-2xl "
               animated
               animationDelay={0.1}
             >
@@ -84,34 +84,33 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true, va
       </div>
 
       <div className="mt-20 w-full">
-          <div className="flex gap-6 py-6 whitespace-nowrap">
-            <motion.div
-              animate={{ x: ['0%', '-50%'] }}
-              transition={{
-                repeat: Number.POSITIVE_INFINITY,
-                duration: 30,
-                ease: 'linear',
-              }}
-              className="flex gap-6 pr-6"
-            >
-              {[...partners, ...partners].map((partner, index) => (
-                <div
-                  key={`${partner.id}-${index}`}
-                  className={`group relative flex h-[160px] w-[280px] shrink-0 items-center justify-center rounded-[32px] ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? '' : 'hover:shadow-xl hover:shadow-gray-200/50'}`}
-                >
-                  <Image
-                    src={useMediaUrl ? getMediaUrl(partner.logo) : partner.logo}
-                    alt={partner.name}
-                    width={180}
-                    height={80}
-                    className={`object-contain transition-all duration-300 brightness-50 group-hover:brightness-100`}
-                  />
-                </div>
-              ))}
-            </motion.div>
-          </div>
+        <div className="flex gap-6 py-6 whitespace-nowrap">
+          <motion.div
+            animate={{ x: ['0%', '-50%'] }}
+            transition={{
+              repeat: Number.POSITIVE_INFINITY,
+              duration: 30,
+              ease: 'linear',
+            }}
+            className="flex gap-6 pr-6"
+          >
+            {[...partners, ...partners].map((partner, index) => (
+              <div
+                key={`${partner.id}-${index}`}
+                className={`group relative flex h-[160px] w-[280px] shrink-0 items-center justify-center rounded-[32px] ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? '' : 'hover:shadow-xl hover:shadow-gray-200/50'}`}
+              >
+                <Image
+                  src={useMediaUrl ? getMediaUrl(partner.logo) : partner.logo}
+                  alt={partner.name}
+                  width={180}
+                  height={80}
+                  className={`object-contain transition-all duration-300 brightness-50 group-hover:brightness-100`}
+                />
+              </div>
+            ))}
+          </motion.div>
         </div>
-
+      </div>
     </section>
   );
 }
