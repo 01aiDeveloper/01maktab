@@ -221,7 +221,7 @@ export default function SkillDetailPage() {
                       <Image src={mediaUrl(partner.logo)} alt={partner.name} width={80} height={80} className="object-contain p-4" />
                     ) : (
                       <span className="text-gray-400 text-xs">{partner.name}</span>
-                    )}
+                    )} 
                   </div>
                   <div className="flex-1">
                     <h3 className="font-suisse font-bold text-gray-900 text-lg lg:text-xl mb-2">Hamkorlik - {partner.name}</h3>
@@ -248,16 +248,16 @@ export default function SkillDetailPage() {
               className="bg-linear-to-br from-[#5d7bf5] via-[#5b6ef5] to-[#7c71f4] rounded-[40px] overflow-hidden relative h-100 lg:h-full"
             >
               {courseImage && <Image src={courseImage} alt={skill.title} fill className="object-cover" priority />}
-              <div className="absolute top-6 left-6 flex flex-col gap-2">
-                <Badge className="bg-white/95 text-gray-700 border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 shadow-sm w-fit backdrop-blur-sm">
-                  <Clock className="w-3.5 h-3.5" />
+              <div className="absolute top-6 left-6 flex flex-wrap gap-2">
+                <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 shadow-sm backdrop-blur-[119px]">
+                  <Clock className="w-3.5 h-3.5 shrink-0" />
                   Davomiylik: {skill.duration} soat
                 </Badge>
-                <Badge className="bg-white/95 text-gray-700 border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 shadow-sm w-fit backdrop-blur-sm">
-                  <BarChart3 className="w-3.5 h-3.5" />
+                <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 shadow-sm backdrop-blur-[119px]">
+                  <BarChart3 className="w-3.5 h-3.5 shrink-0" />
                   Daraja: {difficultyLabel(skill.difficulty)}
                 </Badge>
-                <Badge className="bg-white/95 text-gray-700 border-0 rounded-full px-3 py-1.5 text-xs font-medium w-fit backdrop-blur-sm">
+                <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium backdrop-blur-[119px]">
                   Narxi: {priceLabel}
                 </Badge>
               </div>

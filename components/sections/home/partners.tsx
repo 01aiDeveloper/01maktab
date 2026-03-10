@@ -1,33 +1,39 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { MainTitle } from '@/components/ui/main-title';
-import { Subtitle } from '@/components/ui/subtitle';
-import { CarouselNavigation } from '@/components/ui/carousel-navigation';
-import { getMediaUrl } from '@/lib/utils';
-import type { Partner } from '@/types/api.types';
-import { useEffect, useState } from 'react';
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { MainTitle } from "@/components/ui/main-title";
+import { Subtitle } from "@/components/ui/subtitle";
+import { CarouselNavigation } from "@/components/ui/carousel-navigation";
+import { getMediaUrl } from "@/lib/utils";
+import type { Partner } from "@/types/api.types";
+import { useEffect, useState } from "react";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://dev-api.01maktab.uz/api/v1';
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://app-dev.01ai.uz/api/v1";
 
 interface PartnersSectionProps {
   partners?: Partner[];
   useMediaUrl?: boolean;
-  variant?: 'light' | 'dark';
+  variant?: "light" | "dark";
   showSubtitle?: boolean;
 }
 
-export function PartnersSection({ partners: partnersProp, useMediaUrl = true, variant = 'light', showSubtitle = true }: PartnersSectionProps) {
+export function PartnersSection({
+  partners: partnersProp,
+  useMediaUrl = true,
+  variant = "light",
+  showSubtitle = true,
+}: PartnersSectionProps) {
   const [partners, setPartners] = useState<Partner[]>(partnersProp || []);
   const [loading, setLoading] = useState(!partnersProp);
 
-  const isDark = variant === 'dark';
-  const sectionBg = isDark ? 'bg-[#101010]' : 'bg-[#FFFFFF]';
-  const cardBg = isDark ? 'bg-[#282828]' : 'bg-[#F4F4F6]';
-  const cardHoverBg = isDark ? 'hover:bg-[#F4F4F6]' : 'hover:bg-white';
-  const titleColor = isDark ? '#FFFFFF' : '#18181A';
-  const borderColor = isDark ? 'border-gray-800' : 'border-gray-100';
+  const isDark = variant === "dark";
+  const sectionBg = isDark ? "bg-[#101010]" : "bg-[#FFFFFF]";
+  const cardBg = isDark ? "bg-[#282828]" : "bg-[#F4F4F6]";
+  const cardHoverBg = isDark ? "hover:bg-[#F4F4F6]" : "hover:bg-white";
+  const titleColor = isDark ? "#FFFFFF" : "#18181A";
+  const borderColor = isDark ? "border-gray-800" : "border-gray-100";
 
   useEffect(() => {
     // Agar props orqali partners berilgan bo'lsa, fetch qilmaymiz
@@ -40,11 +46,13 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true, va
     // Props orqali berilmagan bo'lsa, API dan fetch qilamiz
     async function fetchPartners() {
       try {
-        const response = await fetch(`${API_BASE_URL}/partner/public?pageSize=20`);
+        const response = await fetch(
+          `${API_BASE_URL}/partner/public?pageSize=20`,
+        );
         const data = await response.json();
         setPartners(data?.data?.data || []);
       } catch (error) {
-        console.error('Failed to fetch partners:', error);
+        console.error("Failed to fetch partners:", error);
         setPartners([]);
       } finally {
         setLoading(false);
@@ -61,7 +69,7 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true, va
 
   return (
     <section
-      className={`${sectionBg} pb-20 mx-auto w-full rounded-[28px] md:rounded-[40px] py-24 text-center border ${borderColor} ${isDark ? '' : 'shadow-sm'} overflow-hidden`}
+      className={`${sectionBg} pb-20 mx-auto w-full rounded-[28px] md:rounded-[40px] py-24 text-center border ${borderColor} ${isDark ? "" : "shadow-sm"} overflow-hidden`}
     >
       <div className="container">
         <div className="px-4">
@@ -71,12 +79,13 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true, va
           {showSubtitle && (
             <Subtitle
               align="center"
-              textColor={isDark ? 'rgb(156, 163, 175)' : ''}
+              textColor={isDark ? "rgb(156, 163, 175)" : ""}
               className="mx-auto mt-4 md:mt-6 max-w-2xl "
               animated
               animationDelay={0.1}
             >
-              Hamkorlarimiz sizga stajerovka, o'qish jarayonida ularning ofisida ekspertlar bilan master-klasslar, birga yaratilgan o'qish
+              Hamkorlarimiz sizga stajerovka, o'qish jarayonida ularning ofisida
+              ekspertlar bilan master-klasslar, birga yaratilgan o'qish
               dasturlari va boshqa imkoniyatni beradilar.
             </Subtitle>
           )}
@@ -86,18 +95,18 @@ export function PartnersSection({ partners: partnersProp, useMediaUrl = true, va
       <div className="mt-20 w-full">
         <div className="flex gap-6 py-6 whitespace-nowrap">
           <motion.div
-            animate={{ x: ['0%', '-50%'] }}
+            animate={{ x: ["0%", "-50%"] }}
             transition={{
               repeat: Number.POSITIVE_INFINITY,
               duration: 30,
-              ease: 'linear',
+              ease: "linear",
             }}
             className="flex gap-6 pr-6"
           >
             {[...partners, ...partners].map((partner, index) => (
               <div
                 key={`${partner.id}-${index}`}
-                className={`group relative flex h-[160px] w-[280px] shrink-0 items-center justify-center rounded-[32px] ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? '' : 'hover:shadow-xl hover:shadow-gray-200/50'}`}
+                className={`group relative flex h-[203px] w-[412px] shrink-0 items-center justify-center rounded-[16px] border-[3px] ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"}`}
               >
                 <Image
                   src={useMediaUrl ? getMediaUrl(partner.logo) : partner.logo}
