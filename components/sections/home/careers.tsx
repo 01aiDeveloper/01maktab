@@ -16,6 +16,9 @@ interface CareersSectionProps {
 }
 
 export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
+  console.table(apiCareers.map((c) => ({ id: c.id, name: c.name, description: c.description?.slice(0, 50) })));
+  console.log('[CareersSection] apiCareers count:', apiCareers.length);
+
   // Transform API careers to display format
   const careers = useMemo(() => {
     return apiCareers.map((career: Career, index: number) => ({
@@ -30,6 +33,9 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
       slug: career.slug || career.name.toLowerCase().replace(/\s+/g, '-'),
     }));
   }, [apiCareers]);
+
+  console.table(careers.map((c) => ({ id: c.id, label: c.label, cardColor: c.cardColor })));
+  console.log('[CareersSection] careers (transformed) count:', careers.length);
 
   const [activeTab, setActiveTab] = useState<string>(careers[0]?.id || '');
 

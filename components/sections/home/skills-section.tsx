@@ -74,6 +74,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
                 id={skill.id}
                 image={getMediaUrl(skill.photo)}
                 title={skill.title}
+                iconUrl={skill.icon}
               />
             </div>
           ))}

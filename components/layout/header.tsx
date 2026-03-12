@@ -38,7 +38,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className={`fixed left-0 md:left-1/2 md:-translate-x-1/2 z-50 w-full md:w-144.5 pointer-events-none transition-all duration-300 ${scrolled ? "top-0 md:top-1.5" : "top-0 md:top-8.75"}`}>
+    <header className={`fixed left-[13px] right-[13px] md:left-1/2 md:right-auto md:-translate-x-1/2 z-50 w-auto md:w-144.5 pointer-events-none transition-all duration-300 ${scrolled ? "top-[10px] md:top-1.5" : "top-[10px] md:top-8.75"}`}>
       <motion.div
         layout
         initial={false}
@@ -47,7 +47,7 @@ export function Header() {
           width: '100%',
         }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="bg-[#1a1a1a]/95 backdrop-blur-2xl rounded-none md:rounded-[23px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border-0 md:border border-white/10 overflow-hidden pointer-events-auto mx-auto"
+        className="bg-[#1a1a1a]/95 backdrop-blur-2xl rounded-[23px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden pointer-events-auto mx-auto"
       >
         {/* Header Top Bar */}
         <div className="flex items-center justify-between px-4 md:px-3 py-2 h-16">
@@ -121,7 +121,7 @@ export function Header() {
             href="https://t.me/mlc_uz"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1 text-white/40 underline hover:text-white/60 transition-colors cursor-pointer"
+            className="flex items-center justify-center gap-1 text-white/100 underline hover:text-white/60 transition-colors cursor-pointer"
             style={{
               fontFamily: "'Suisse Intl', sans-serif",
               fontWeight: 450,

@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Code2, Grid2X2, Database } from 'lucide-react';
 import { getMediaUrl } from '@/lib/utils';
 
 interface SkillCardProps {
@@ -11,14 +10,12 @@ interface SkillCardProps {
   slug?: string;
   image: string;
   title: string;
-  icon?: 'code' | 'grid' | 'database';
+  iconUrl?: string | null;
   badge?: string;
   href?: string;
 }
 
-export function SkillCard({ id, slug, image, title, icon = 'code', badge, href }: SkillCardProps) {
-  const IconComponent = icon === 'code' ? Code2 : icon === 'grid' ? Grid2X2 : Database;
-
+export function SkillCard({ id, slug, image, title, iconUrl, badge, href }: SkillCardProps) {
   const cardSlug = slug || id?.toString() || 'skill';
   const linkHref = href || `/skills/${cardSlug}`;
 
@@ -44,7 +41,7 @@ export function SkillCard({ id, slug, image, title, icon = 'code', badge, href }
         )}
 
         <div className="absolute top-[13px] left-3 w-[57px] h-[57px] bg-white/20 border border-white/[0.17] backdrop-blur-[9.68px] rounded-[18px] flex items-center justify-center">
-          <Image src={'/images/skills/icon.png'} alt={title} width={39} height={39} />
+          <Image src={iconUrl ? getMediaUrl(iconUrl) : '/images/skills/icon.png'} alt={title} width={39} height={39} />
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 flex items-center px-4.5 h-[104px] bg-white/20 backdrop-blur-[53.25px] rounded-[25px]">
