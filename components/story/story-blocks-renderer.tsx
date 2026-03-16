@@ -19,21 +19,18 @@ export function StoryBlocksRenderer({ blocks }: StoryBlocksRendererProps) {
     );
   }
 
-  // Sort blocks by order
   const sortedBlocks = [...blocks].sort((a, b) => a.order - b.order);
 
   return (
-    <div className="space-y-6 lg:space-y-8">
+    <div className="space-y-8 lg:space-y-10">
       {sortedBlocks.map((block, index) => (
         <div key={index}>
           {block.type === "text" && "value" in block && (
-            <div className="bg-white rounded-3xl p-6 lg:p-8">
-              <HtmlBlock html={block.value} />
-            </div>
+            <HtmlBlock html={block.value} />
           )}
 
           {block.type === "image" && "url" in block && (
-            <div className="relative w-full aspect-video rounded-3xl overflow-hidden">
+            <div className="relative w-full aspect-[4/3] rounded-[24px] overflow-hidden">
               <Image
                 src={getMediaUrl(block.url)}
                 alt="Story image"
@@ -47,7 +44,6 @@ export function StoryBlocksRenderer({ blocks }: StoryBlocksRendererProps) {
             <ImageGroupGallery images={block.images} />
           )}
 
-          {/* Fallback for unknown types - render nothing */}
           {!["text", "image", "image_group"].includes(block.type) && null}
         </div>
       ))}

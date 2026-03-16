@@ -40,7 +40,6 @@ export default function GraduateStoryPage() {
         setLoading(true);
         setError(false);
 
-        // Fetch current story
         const response = await api.get(`/graduate/public/${params.id}`);
         if (response.data?.data) {
           setStory(response.data.data);
@@ -48,14 +47,12 @@ export default function GraduateStoryPage() {
           setError(true);
         }
 
-        // Fetch other stories
         const othersResponse = await api.get('/graduate/public', {
           params: { pageSize: 8 },
         });
 
         if (othersResponse.data?.data) {
           const allStories = othersResponse.data?.data?.data || othersResponse.data?.data || [];
-          // Filter out current story
           const filteredStories = allStories.filter((s: GraduateStoryCard) => s.id !== Number(params.id));
           setOtherStories(filteredStories);
         }
@@ -121,63 +118,71 @@ export default function GraduateStoryPage() {
     <>
       <SiteHeader variant="light" />
 
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-[#F4F4F6]">
         {/* Hero Section */}
-        <section className="w-full py-8 lg:py-12 bg-[#F4F4F6]">
+        <section className="w-full pt-8 lg:pt-12">
           <div className="container mx-auto px-4">
-            <div className="grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-8">
-              {/* Left: Content Card */}
+            {/* Back Link */}
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-8 transition-colors w-fit"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm font-medium">Orqaga</span>
+            </Link>
+
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-10">
+              {/* Left: Content */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="bg-white rounded-3xl p-6 lg:p-8 flex flex-col justify-start"
+                className="flex flex-col justify-center"
               >
-                {/* Back Link */}
-                <Link
-                  href="/graduates"
-                  className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-8 transition-colors w-fit"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  <span className="text-sm font-medium">Orqaga</span>
-                </Link>
-
                 {/* Title */}
-                <h1 className="font-bold text-2xl lg:text-3xl xl:text-4xl text-gray-900 mb-4 leading-tight">{story.title}</h1>
+                <h1 className="font-suisse font-bold text-3xl md:text-4xl lg:text-[48px] lg:leading-[1.1] text-[#18181A] mb-6 tracking-[-0.02em]">
+                  {story.title}
+                </h1>
 
-                {/* Subtitle */}
-                {story.subtitle && <p className="text-gray-600 text-base lg:text-lg mb-6 leading-relaxed">{story.subtitle}</p>}
-
-                {/* Graduate Info */}
-                <div className="mb-6">
-                  <p className="text-gray-900 font-semibold text-lg">{story.fullname}</p>
-                  <p className="text-gray-600">
-                    {story.position} • {story.company}
+                {/* Subtitle / Student Info */}
+                {story.subtitle && (
+                  <p className="text-gray-500 text-base lg:text-lg mb-2 leading-relaxed">
+                    {story.subtitle}
                   </p>
-                </div>
+                )}
+
+                <p className="text-gray-500 text-base mb-8">
+                  {story.fullname} — {story.position}, {story.company}
+                </p>
 
                 {/* CTA Button */}
-                <Button className="bg-[#5d7bf5] hover:bg-[#4c6ae4] text-white rounded-xl px-8 py-3 h-auto w-fit">
-                  Hozir boshlash
+                <Button className="bg-black hover:bg-gray-800 text-white rounded-full px-8 py-3 h-12 w-fit text-base font-medium">
+                  Xoziroq boshlash
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </motion.div>
 
-              {/* Right: Graduate Photo */}
+              {/* Right on desktop, Top on mobile: Graduate Photo */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
-                className="relative aspect-3/4 rounded-3xl overflow-hidden lg:order-last"
+                className="relative w-[349px] h-[420px] lg:w-[464px] lg:h-[453px] rounded-[29px] lg:rounded-[40px] overflow-hidden mx-auto lg:mx-0 order-first lg:order-last"
               >
-                <Image src={getMediaUrl(story.photo)} alt={story.fullname} fill className="object-cover" priority />
+                <Image
+                  src={getMediaUrl(story.photo)}
+                  alt={story.fullname}
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </motion.div>
             </div>
           </div>
         </section>
 
         {/* Story Content Blocks */}
-        <section className="w-full py-8 lg:py-16 bg-[#F4F4F6]">
+        <section className="w-full py-12 lg:py-20">
           <div className="container mx-auto px-4 max-w-4xl">
             <StoryBlocksRenderer blocks={story.blocks} />
           </div>
@@ -185,9 +190,11 @@ export default function GraduateStoryPage() {
 
         {/* Other Stories Section */}
         {otherStories.length > 0 && (
-          <section className="w-full py-16 lg:py-24 bg-gray-50">
+          <section className="w-full py-16 lg:py-24 bg-white">
             <div className="container mx-auto px-4">
-              <h2 className="font-bold text-3xl lg:text-4xl text-gray-900 mb-8 lg:mb-12">Boshqa hikoyalar</h2>
+              <h2 className="font-suisse font-bold text-3xl lg:text-[48px] lg:leading-[1.1] text-[#18181A] tracking-[-0.02em] mb-8 lg:mb-12">
+                Смотреть другие истории
+              </h2>
 
               <div className="overflow-hidden" ref={emblaRef}>
                 <div className="flex gap-4">

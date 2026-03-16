@@ -49,24 +49,48 @@ export function ImageGroupGallery({ images }: ImageGroupGalleryProps) {
 
   return (
     <>
-      {/* Gallery Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-        {images.map((img, index) => (
-          <motion.div
-            key={index}
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
-            className="relative aspect-[4/3] rounded-3xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl"
-            onClick={() => openLightbox(index)}
-          >
-            <Image
-              src={getMediaUrl(img)}
-              alt={`Gallery image ${index + 1}`}
-              fill
-              className="object-cover"
-            />
-          </motion.div>
-        ))}
+      {/* Gallery Grid — alternating rows: odd [60/40], even [40/60] */}
+      <div className="flex flex-col gap-3 lg:gap-4">
+        {Array.from({ length: Math.ceil(images.length / 2) }).map((_, rowIndex) => {
+          const i = rowIndex * 2;
+          const isEvenRow = rowIndex % 2 === 0;
+          const cols = isEvenRow ? "md:grid-cols-[1.5fr_1fr]" : "md:grid-cols-[1fr_1.5fr]";
+
+          return (
+            <div key={rowIndex} className={`grid grid-cols-1 ${cols} gap-3 lg:gap-4`}>
+              {images[i] && (
+                <motion.div
+                  whileHover={{ scale: 1.01 }}
+                  transition={{ duration: 0.2 }}
+                  className="relative h-[200px] lg:h-[300px] rounded-[20px] lg:rounded-[24px] overflow-hidden cursor-pointer hover:shadow-xl transition-shadow"
+                  onClick={() => openLightbox(i)}
+                >
+                  <Image
+                    src={getMediaUrl(images[i])}
+                    alt={`Gallery image ${i + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </motion.div>
+              )}
+              {images[i + 1] && (
+                <motion.div
+                  whileHover={{ scale: 1.01 }}
+                  transition={{ duration: 0.2 }}
+                  className="relative h-[200px] lg:h-[300px] rounded-[20px] lg:rounded-[24px] overflow-hidden cursor-pointer hover:shadow-xl transition-shadow"
+                  onClick={() => openLightbox(i + 1)}
+                >
+                  <Image
+                    src={getMediaUrl(images[i + 1])}
+                    alt={`Gallery image ${i + 2}`}
+                    fill
+                    className="object-cover"
+                  />
+                </motion.div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Lightbox Modal */}
