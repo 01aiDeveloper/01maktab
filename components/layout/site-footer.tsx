@@ -135,7 +135,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="pt-8 md:pt-12 overflow-hidden w-full"
+          className="pt-8 pb-6 md:pt-12 overflow-hidden w-full"
         >
           <div className="flex items-end justify-center w-full px-0">
               <motion.h2

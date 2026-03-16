@@ -59,11 +59,20 @@ type Props = {
   renderModuleMiddle?: (module: ModuleItem) => React.ReactNode;
 
   // lesson right side slot (custom actions)
-  renderLessonRight?: (lesson: LessonItem, ctx: { module: ModuleItem; lessonIndex: number }) => React.ReactNode;
+  renderLessonRight?: (
+    lesson: LessonItem,
+    ctx: { module: ModuleItem; lessonIndex: number },
+  ) => React.ReactNode;
 
   // click handlers (optional)
-  onLessonClick?: (lesson: LessonItem, ctx: { module: ModuleItem; lessonIndex: number }) => void;
-  onTestClick?: (test: { id?: string; title: string } | { title: string }, ctx: { module: ModuleItem }) => void;
+  onLessonClick?: (
+    lesson: LessonItem,
+    ctx: { module: ModuleItem; lessonIndex: number },
+  ) => void;
+  onTestClick?: (
+    test: { id?: string; title: string } | { title: string },
+    ctx: { module: ModuleItem },
+  ) => void;
 
   // wrapper classes
   className?: string;
@@ -75,7 +84,8 @@ type Props = {
 const styles: Record<Variant, any> = {
   dark: {
     moduleItem: "bg-[#282828] border-0 rounded-3xl overflow-hidden",
-    trigger: "px-5 lg:px-6 py-5 hover:no-underline hover:bg-[#333]/50 data-[state=open]:bg-[#282828] transition-colors",
+    trigger:
+      "px-5 lg:px-6 py-5 hover:no-underline hover:bg-[#333]/50 data-[state=open]:bg-[#282828] transition-colors",
     headerTitle: "font-semibold text-white text-base lg:text-lg",
     headerMeta: "text-xs text-gray-400",
     contentWrap: "border-t border-gray-700",
@@ -87,7 +97,8 @@ const styles: Record<Variant, any> = {
   },
   light: {
     moduleItem: "bg-white border-0 rounded-3xl overflow-hidden",
-    trigger: "px-5 lg:px-6 py-5 hover:no-underline hover:bg-gray-50/50 data-[state=open]:bg-white transition-colors",
+    trigger:
+      "px-5 lg:px-6 py-5 hover:no-underline hover:bg-gray-50/50 data-[state=open]:bg-white transition-colors",
     headerTitle: "font-semibold text-gray-900 text-base lg:text-lg",
     headerMeta: "text-xs text-gray-500",
     contentWrap: "border-t border-gray-100",
@@ -100,10 +111,20 @@ const styles: Record<Variant, any> = {
 };
 
 function getDarsCount(m: ModuleItem) {
-  return m.lessonsCount ?? m.darsCount ?? m.lessons?.filter((x) => x.type !== "test").length ?? 0;
+  return (
+    m.lessonsCount ??
+    m.darsCount ??
+    m.lessons?.filter((x) => x.type !== "test").length ??
+    0
+  );
 }
 function getTestCount(m: ModuleItem) {
-  return m.testsCount ?? m.testCount ?? (m.test ? 1 : m.lessons?.filter((x) => x.type === "test").length) ?? 0;
+  return (
+    m.testsCount ??
+    m.testCount ??
+    (m.test ? 1 : m.lessons?.filter((x) => x.type === "test").length) ??
+    0
+  );
 }
 
 export function ModuleAccordion({
@@ -131,7 +152,13 @@ export function ModuleAccordion({
         {emptyState ?? (
           <div className="flex items-start gap-4">
             <div className="shrink-0">
-              <Image src={moduleIconSrc} alt={moduleIconAlt} width={44} height={44} className="w-11 h-11" />
+              <Image
+                src={moduleIconSrc}
+                alt={moduleIconAlt}
+                width={44}
+                height={44}
+                className="w-11 h-11"
+              />
             </div>
             <div>
               <div className="font-semibold">Hozircha ma’lumot yo‘q</div>
@@ -146,12 +173,15 @@ export function ModuleAccordion({
   }
 
   const accordionProps =
-    value !== undefined && onValueChange
-      ? { value, onValueChange }
-      : {};
+    value !== undefined && onValueChange ? { value, onValueChange } : {};
 
   return (
-    <Accordion type="single" collapsible className={cn("space-y-3", className)} {...accordionProps}>
+    <Accordion
+      type="single"
+      collapsible
+      className={cn("space-y-3", className)}
+      {...accordionProps}
+    >
       {list.map((module, moduleIndex) => (
         <motion.div
           key={module.id}
@@ -175,8 +205,12 @@ export function ModuleAccordion({
                 <div className="min-w-0 text-left">
                   <h3 className={s.headerTitle}>{module.title}</h3>
                   <div className="flex items-center gap-3 mt-2">
-                    <span className={s.headerMeta}>Dars: {getDarsCount(module)}</span>
-                    <span className={s.headerMeta}>Test: {getTestCount(module)}</span>
+                    <span className="bg-[#E6E6E7] text-black text-xs font-medium rounded-[5.27px] px-[6.59px] py-[3.29px]">
+                      Dars: {getDarsCount(module)}
+                    </span>
+                    <span className="bg-[#E6E6E7] text-black text-xs font-medium rounded-[5.27px] px-[6.59px] py-[3.29px]">
+                      Test: {getTestCount(module)}
+                    </span>
                   </div>
                 </div>
 
@@ -198,8 +232,10 @@ export function ModuleAccordion({
                   {(module.lessons ?? []).map((lesson, lessonIndex) => {
                     let leftLabel = `Dars ${lessonIndex + 1}`;
                     if (lesson.type === "test") leftLabel = "Test";
-                    else if (lesson.type === "video") leftLabel = `Dars ${lessonIndex + 1}`;
-                    else if (lesson.type === "practice") leftLabel = `Dars ${lessonIndex + 1}`;
+                    else if (lesson.type === "video")
+                      leftLabel = `Dars ${lessonIndex + 1}`;
+                    else if (lesson.type === "practice")
+                      leftLabel = `Dars ${lessonIndex + 1}`;
 
                     return (
                       <div
@@ -207,10 +243,13 @@ export function ModuleAccordion({
                         className={s.row}
                         role={onLessonClick ? "button" : undefined}
                         tabIndex={onLessonClick ? 0 : undefined}
-                        onClick={() => onLessonClick?.(lesson, { module, lessonIndex })}
+                        onClick={() =>
+                          onLessonClick?.(lesson, { module, lessonIndex })
+                        }
                         onKeyDown={(e) => {
                           if (!onLessonClick) return;
-                          if (e.key === "Enter" || e.key === " ") onLessonClick(lesson, { module, lessonIndex });
+                          if (e.key === "Enter" || e.key === " ")
+                            onLessonClick(lesson, { module, lessonIndex });
                         }}
                       >
                         <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -244,7 +283,8 @@ export function ModuleAccordion({
                       onClick={() => onTestClick?.(module.test!, { module })}
                       onKeyDown={(e) => {
                         if (!onTestClick) return;
-                        if (e.key === "Enter" || e.key === " ") onTestClick(module.test!, { module });
+                        if (e.key === "Enter" || e.key === " ")
+                          onTestClick(module.test!, { module });
                       }}
                     >
                       <div className="flex items-center gap-4 flex-1 min-w-0">
@@ -256,7 +296,12 @@ export function ModuleAccordion({
                 </div>
               ) : (
                 // ✅ module ichida no-data
-                <div className={cn("px-5 lg:px-6 py-5", variant === "dark" ? "text-gray-400" : "text-gray-500")}>
+                <div
+                  className={cn(
+                    "px-5 lg:px-6 py-5",
+                    variant === "dark" ? "text-gray-400" : "text-gray-500",
+                  )}
+                >
                   Bu modulda hozircha darslar yo‘q.
                 </div>
               )}
@@ -284,7 +329,9 @@ function DefaultLessonRight({
   if (lesson.isFree) {
     return (
       <>
-        <Badge className={cn("text-xs rounded-full px-3 py-1.5", freeBadgeClassName)}>
+        <Badge
+          className={cn("text-xs rounded-full px-3 py-1.5", freeBadgeClassName)}
+        >
           Bepul sinov darsi
         </Badge>
         <Button
@@ -299,10 +346,22 @@ function DefaultLessonRight({
 
   return (
     <>
-      <Badge className={cn("text-xs rounded-full px-3 py-1.5", variant === "dark" ? "bg-black hover:bg-black text-white" : "bg-black hover:bg-black text-white")}>
+      <Badge
+        className={cn(
+          "text-xs rounded-full px-3 py-1.5",
+          variant === "dark"
+            ? "bg-black hover:bg-black text-white"
+            : "bg-black hover:bg-black text-white",
+        )}
+      >
         To&apos;liq kursda
       </Badge>
-      <Lock className={cn("w-5 h-5", variant === "dark" ? "text-gray-400" : "text-gray-400")} />
+      <Lock
+        className={cn(
+          "w-5 h-5",
+          variant === "dark" ? "text-gray-400" : "text-gray-400",
+        )}
+      />
     </>
   );
 }

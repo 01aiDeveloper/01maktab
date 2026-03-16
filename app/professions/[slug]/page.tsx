@@ -399,6 +399,12 @@ export default function ProfessionPage() {
           </div>
         </section>
 
+        {/* Program Benefits Section */}
+        <ProgramBenefits benefits={staticBenefits} />
+
+        {/* Journey Section */}
+        <JourneySection />
+
         {/* Mentor Section */}
         {mentor && (
           <section id="mentor" className="w-full py-8">
@@ -417,12 +423,6 @@ export default function ProfessionPage() {
             </div>
           </section>
         )}
-
-        {/* Program Benefits Section */}
-        <ProgramBenefits benefits={staticBenefits} />
-
-        {/* Journey Section */}
-        <JourneySection />
 
         {/* Mentor Communication Section */}
         <MentorCommunicationSection />
@@ -468,14 +468,15 @@ export default function ProfessionPage() {
           </div>
         </section>
 
+
+        {/* FAQ Section */}
+        <FAQAccordion variant="dark" faqs={staticFaqs} />
+
         {/* Payment Options Section */}
         <PaymentOptionsSection />
 
         {/* Enrollment CTA with Countdown */}
         <EnrollmentCtaCountdown />
-
-        {/* FAQ Section */}
-        <FAQAccordion variant="dark" faqs={staticFaqs} />
       </main>
       <SiteFooter variant="dark" />
     </div>

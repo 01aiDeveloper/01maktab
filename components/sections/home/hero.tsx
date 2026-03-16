@@ -12,7 +12,7 @@ const SLIDES = [
     description:
       "С нуля до аналитика в топ-компании: твоя карьера начинается здесь",
     bgColor: "bg-[#e5e7eb]",
-    image: "/images/hero1.webp",
+    image: "/images/hero11.webp",
     textColor: "text-white",
     isDark: true,
   },

@@ -1,47 +1,57 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Image from "next/image"
-import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { CountdownTile } from "@/components/ui/countdown-tile"
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CountdownTile } from "@/components/ui/countdown-tile";
 
 interface EnrollmentCtaCountdownProps {
-  deadline?: Date
+  deadline?: Date;
 }
 
-export function EnrollmentCtaCountdown({ deadline }: EnrollmentCtaCountdownProps) {
-  const [timeLeft, setTimeLeft] = useState({ days: 20, hours: 20, minutes: 0 })
-  const [prevTimeLeft, setPrevTimeLeft] = useState({ days: 20, hours: 20, minutes: 0 })
+export function EnrollmentCtaCountdown({
+  deadline,
+}: EnrollmentCtaCountdownProps) {
+  const [timeLeft, setTimeLeft] = useState({ days: 20, hours: 20, minutes: 0 });
+  const [prevTimeLeft, setPrevTimeLeft] = useState({
+    days: 20,
+    hours: 20,
+    minutes: 0,
+  });
 
   useEffect(() => {
-    const targetDeadline = deadline || new Date(Date.now() + 20 * 24 * 60 * 60 * 1000 + 20 * 60 * 60 * 1000)
+    const targetDeadline =
+      deadline ||
+      new Date(Date.now() + 20 * 24 * 60 * 60 * 1000 + 20 * 60 * 60 * 1000);
 
     const calculateTimeLeft = () => {
-      const now = new Date().getTime()
-      const distance = targetDeadline.getTime() - now
+      const now = new Date().getTime();
+      const distance = targetDeadline.getTime() - now;
 
       if (distance < 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0 })
-        return
+        setTimeLeft({ days: 0, hours: 0, minutes: 0 });
+        return;
       }
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24))
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+      );
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
       setTimeLeft((prev) => {
-        setPrevTimeLeft(prev)
-        return { days, hours, minutes }
-      })
-    }
+        setPrevTimeLeft(prev);
+        return { days, hours, minutes };
+      });
+    };
 
-    calculateTimeLeft()
-    const interval = setInterval(calculateTimeLeft, 1000) // Update every second
+    calculateTimeLeft();
+    const interval = setInterval(calculateTimeLeft, 1000); // Update every second
 
-    return () => clearInterval(interval)
-  }, [deadline])
+    return () => clearInterval(interval);
+  }, [deadline]);
 
   return (
     <section className="w-full bg-black py-16 lg:py-24">
@@ -55,10 +65,10 @@ export function EnrollmentCtaCountdown({ deadline }: EnrollmentCtaCountdownProps
         >
           {/* Top Content - Centered */}
           <div className="text-center mb-8">
-            <h2 className="text-white font-bold text-2xl lg:text-4xl mb-3">
+            <h2 className="text-white font-suisse font-semibold text-3xl md:text-[64px] leading-tight md:leading-[81px] tracking-[-0.05em] text-center mb-3">
               Начните карьеру сегодня
             </h2>
-            <p className="text-white/85 text-sm lg:text-base">
+            <p className="text-white/100 font-suisse text-xl md:text-[40px] leading-tight md:leading-[47px] tracking-[-0.05em] text-center">
               Места ограничены.
               <br />
               Следующий поток через 3 месяца.
@@ -87,36 +97,28 @@ export function EnrollmentCtaCountdown({ deadline }: EnrollmentCtaCountdownProps
             </Button>
           </div>
 
-          {/* Countdown Label - Left Aligned */}
-          <div className="mb-6">
-            <h3 className="text-white font-bold text-lg lg:text-xl">
+          {/* Countdown Label - Left aligned */}
+          <div className="mb-6 text-left">
+            <h3 className="text-white font-suisse font-semibold text-[32px] lg:text-[64px] leading-[75px] tracking-[-0.05em]">
               До закрытия набора:
             </h3>
           </div>
 
-          {/* Countdown Tiles - Responsive */}
-          <div className="flex items-center justify-start gap-4 lg:gap-6">
-            <CountdownTile 
-              value={timeLeft.days} 
+          {/* Countdown Tiles - Hours & Minutes */}
+          <div className="flex items-center justify-evenly gap-12 lg:gap-[10px]">
+            <CountdownTile
+              value={timeLeft.days}
               prevValue={prevTimeLeft.days}
-              label="дней" 
+              label="дней"
             />
-            <CountdownTile 
-              value={timeLeft.hours} 
+            <CountdownTile
+              value={timeLeft.hours}
               prevValue={prevTimeLeft.hours}
-              label="часов" 
+              label="часов"
             />
-            {/* Show minutes only on desktop */}
-            <div className="hidden lg:block">
-              <CountdownTile 
-                value={timeLeft.minutes} 
-                prevValue={prevTimeLeft.minutes}
-                label="минут" 
-              />
-            </div>
           </div>
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

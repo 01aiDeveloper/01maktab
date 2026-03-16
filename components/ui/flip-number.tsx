@@ -8,6 +8,15 @@ interface FlipNumberProps {
   prevValue: number
 }
 
+const numberStyle: React.CSSProperties = {
+  fontFamily: "'Suisse Intl', sans-serif",
+  fontWeight: 600,
+  letterSpacing: "0px",
+  lineHeight: "140%",
+  textAlign: "center",
+  verticalAlign: "middle",
+}
+
 export function FlipNumber({ value, prevValue }: FlipNumberProps) {
   const [isFlipping, setIsFlipping] = useState(false)
   const displayValue = value.toString().padStart(2, "0")
@@ -29,7 +38,10 @@ export function FlipNumber({ value, prevValue }: FlipNumberProps) {
           className="absolute inset-0 flex items-center justify-center"
           style={{ clipPath: "inset(0 0 50% 0)" }}
         >
-          <span className="text-5xl lg:text-6xl font-bold text-[#5d7bf5] leading-none">
+          <span
+            className="text-[80px] lg:text-[184px] text-[#4355DB]"
+            style={numberStyle}
+          >
             {displayValue}
           </span>
         </div>
@@ -41,7 +53,10 @@ export function FlipNumber({ value, prevValue }: FlipNumberProps) {
           className="absolute inset-0 flex items-center justify-center"
           style={{ clipPath: "inset(50% 0 0 0)" }}
         >
-          <span className="text-5xl lg:text-6xl font-bold text-[#5d7bf5] leading-none">
+          <span
+            className="text-[80px] lg:text-[184px] text-[#4355DB]"
+            style={numberStyle}
+          >
             {displayValue}
           </span>
         </div>
@@ -57,10 +72,13 @@ export function FlipNumber({ value, prevValue }: FlipNumberProps) {
           }}
         >
           <div
-            className="absolute inset-0 flex items-center justify-center bg-[#1a1a1d]"
+            className="absolute inset-0 flex items-center justify-center bg-[#2e2e33]"
             style={{ clipPath: "inset(0 0 50% 0)" }}
           >
-            <span className="text-5xl lg:text-6xl font-bold text-[#5d7bf5] leading-none">
+            <span
+              className="text-[80px] lg:text-[184px] text-[#4355DB]"
+              style={numberStyle}
+            >
               {prevDisplayValue}
             </span>
           </div>
@@ -77,10 +95,13 @@ export function FlipNumber({ value, prevValue }: FlipNumberProps) {
           }}
         >
           <div
-            className="absolute inset-0 flex items-center justify-center bg-[#1a1a1d]"
+            className="absolute inset-0 flex items-center justify-center bg-[#161618]"
             style={{ clipPath: "inset(50% 0 0 0)" }}
           >
-            <span className="text-5xl lg:text-6xl font-bold text-[#5d7bf5] leading-none">
+            <span
+              className="text-[80px] lg:text-[184px] text-[#4355DB]"
+              style={numberStyle}
+            >
               {displayValue}
             </span>
           </div>
