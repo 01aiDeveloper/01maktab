@@ -44,7 +44,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
   const borderColor = isDark ? 'border-white/20' : 'border-border/50';
 
   return (
-    <footer className={`w-full ${bgColor} pt-8 pb-12`}>
+    <footer className={`w-full ${bgColor} pt-8`}>
       <div className="container mx-auto px-4">
         {/* Top section with links */}
         <motion.div
@@ -129,27 +129,23 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
 
       </div>
 
-      {/* Large logo text with multiple variants */}
+      {/* Large logo text — fills left, bottom, right */}
       <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="pt-8 md:pt-12 overflow-hidden w-full "
+          className="pt-8 md:pt-12 overflow-hidden w-full"
         >
-          <div className="flex flex-col gap-4 md:gap-6">
-            {/* First Row */}
-
-            {/* Second Row */}
-            <div className="flex items-center justify-center  ">
+          <div className="flex items-end justify-center w-full px-0">
               <motion.h2
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.6 }}
                 onHoverStart={() => setHoveredLogoIndex(3)}
                 onHoverEnd={() => setHoveredLogoIndex(null)}
-                className={`text-[clamp(3rem,15vw,12rem)] md:text-[clamp(8rem,20vw,28rem)] font-bold leading-[0.85] tracking-tighter ${logoTextColor} cursor-pointer relative`}
+                className={`text-[clamp(4rem,26vw,40rem)] font-bold leading-[0.85] tracking-tighter ${logoTextColor} cursor-pointer relative whitespace-nowrap translate-y-[0.12em]`}
               >
                 <motion.span
                   animate={
@@ -229,7 +225,6 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
                   I
                 </motion.span>
               </motion.h2>
-            </div>
           </div>
         </motion.div>
     </footer>

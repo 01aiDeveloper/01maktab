@@ -46,8 +46,8 @@ export default async function GuestHomePage() {
   try {
     const careersData = await careersRes.json();
     careers = careersData?.data?.data || [];
-    console.log('[GuestHomePage] Fetched careers raw count:', careers.length);
-    console.table(careers.map((c: any) => ({ id: c.id, name: c.name })));
+    // console.log('[GuestHomePage] Fetched careers raw count:', careers.length);
+    // console.table(careers.map((c: any) => ({ id: c.id, name: c.name })));
   } catch (error) {
     console.error("Failed to parse careers:", error);
   }
