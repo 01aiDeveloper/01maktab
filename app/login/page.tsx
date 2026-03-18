@@ -22,6 +22,8 @@ function LoginContent() {
     setError(null)
     setIsLoading(true)
 
+    console.log("Telegram user data:", JSON.stringify(user, null, 2))
+
     try {
       const response = await api.post("/auth/telegram/login", user)
 
