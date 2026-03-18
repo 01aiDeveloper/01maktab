@@ -9,6 +9,7 @@ function LoginContent() {
   const { setTokens, setUser } = useAuthStore()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [debugData, setDebugData] = useState<string | null>(null)
 
   const handleTelegramAuth = useCallback(async (user: {
     id: number
@@ -21,8 +22,7 @@ function LoginContent() {
   }) => {
     setError(null)
     setIsLoading(true)
-
-    console.log("Telegram user data:", JSON.stringify(user, null, 2))
+    setDebugData(JSON.stringify(user, null, 2))
 
     try {
       const response = await api.post("/auth/telegram/login", user)
@@ -36,7 +36,8 @@ function LoginContent() {
         }
       }
 
-      window.location.href = "/classroom"
+      // TODO: remove debug - temporarily disabled redirect to see Telegram data
+      // window.location.href = "/classroom"
     } catch (err: any) {
       setError(err.response?.data?.message || "Tizimga kirishda xatolik yuz berdi")
       setIsLoading(false)
@@ -75,6 +76,12 @@ function LoginContent() {
 
         {error && (
           <p className="text-sm text-red-500 font-medium mt-4">{error}</p>
+        )}
+
+        {debugData && (
+          <pre className="mt-4 p-4 bg-gray-100 rounded text-left text-xs max-w-full overflow-auto">
+            {debugData}
+          </pre>
         )}
       </div>
     </div>
