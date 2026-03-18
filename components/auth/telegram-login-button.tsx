@@ -23,7 +23,7 @@ declare global {
   }
 }
 
-export default function TelegramLoginButton({ botUsername = "maktab01bot", onAuth }: TelegramLoginButtonProps) {
+export default function TelegramLoginButton({ botUsername = "O1AI_Contact_Bot", onAuth }: TelegramLoginButtonProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
