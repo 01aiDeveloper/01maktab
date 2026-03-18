@@ -103,11 +103,10 @@ export function MentorsSection() {
             <MainButton
               variant="gradient"
               size="default"
-              icon={<ArrowRight className="h-6 w-6" />}
-              iconPosition="right"
-              className="group w-60 h-13.5 rounded-[10px] px-4 py-3.75"
+              className="group w-60 h-13.5 rounded-[10px] px-4 py-3.75 flex flex-row items-center"
             >
               Bepul Boshlash
+              <ArrowRight className="h-6 w-6 inline ml-1" />
             </MainButton>
           </Link>
         </motion.div>

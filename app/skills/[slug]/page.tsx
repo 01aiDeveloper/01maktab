@@ -22,6 +22,7 @@ import type { ApiSkillModule } from "@/types/api";
 import { PageLoader } from "@/components/ui/page-loader";
 import { PageError } from "@/components/ui/page-error";
 import { NoData } from "@/components/ui/no-data";
+import { useAuthStore } from "@/store/auth-store";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -66,12 +67,17 @@ export default function SkillDetailPage() {
   const router = useRouter();
   const slug = params?.slug as string;
 
+  const { user } = useAuthStore();
   const { data: skill, isLoading, isError } = useSkill(slug);
   const { data: skillModules } = useSkillModules(skill?.id);
   const [openModule, setOpenModule] = useState<string>("");
   const [startLoading, setStartLoading] = useState(false);
 
   const handleStart = useCallback(async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
     if (!skill) return;
     setStartLoading(true);
     try {
@@ -94,7 +100,7 @@ export default function SkillDetailPage() {
       return;
     }
     setStartLoading(false);
-  }, [skill, skillModules, router]);
+  }, [user, skill, skillModules, router]);
 
   if (skill && !openModule && skill.modules.length > 0) {
     setOpenModule(String(skill.modules[0].id));
@@ -203,38 +209,32 @@ export default function SkillDetailPage() {
                     <MainButton
                       variant="gradient"
                       size="md"
-                      icon={
-                        startLoading ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <ArrowRight className="w-4 h-4" />
-                        )
-                      }
-                      iconPosition="right"
-                      className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-xl w-fit"
+                      className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-xl w-fit flex flex-row items-center"
                       onClick={handleStart}
                       disabled={startLoading}
                     >
                       {startLoading ? "Yuklanmoqda..." : "O'qishni davom ettirish"}
+                      {startLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
+                      ) : (
+                        <ArrowRight className="w-4 h-4 inline ml-1" />
+                      )}
                     </MainButton>
                   </div>
                 ) : (
                   <MainButton
                     variant="gradient"
                     size="md"
-                    icon={
-                      startLoading ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <ArrowRight className="w-4 h-4" />
-                      )
-                    }
-                    iconPosition="right"
-                    className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-xl w-fit"
+                    className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-xl w-fit flex flex-row items-center"
                     onClick={handleStart}
                     disabled={startLoading}
                   >
                     {startLoading ? "Yuklanmoqda..." : "Xoziroq boshlash"}
+                    {startLoading ? (
+                      <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
+                    ) : (
+                      <ArrowRight className="w-4 h-4 inline ml-1" />
+                    )}
                   </MainButton>
                 )}
               </motion.div>
@@ -273,11 +273,10 @@ export default function SkillDetailPage() {
                       <MainButton
                         variant="black"
                         size="sm"
-                        icon={<ArrowRight className="w-3 h-3" />}
-                        iconPosition="right"
-                        className="rounded-xl border-0 text-xs"
+                        className="rounded-xl border-0 text-xs flex flex-row items-center"
                       >
                         Batafsil
+                        <ArrowRight className="w-3 h-3 inline ml-1" />
                       </MainButton>
                     </Link>
                   </div>
@@ -403,19 +402,16 @@ export default function SkillDetailPage() {
           <MainButton
             variant="gradient"
             size="lg"
-            icon={
-              startLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <ArrowRight className="w-5 h-5" />
-              )
-            }
-            iconPosition="right"
-            className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-2xl w-full max-w-[70%] h-16 text-lg font-semibold"
+            className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-2xl w-full max-w-[70%] h-16 text-lg font-semibold flex flex-row items-center"
             onClick={handleStart}
             disabled={startLoading}
           >
             {startLoading ? "Yuklanmoqda..." : "Xoziroq boshlash"}
+            {startLoading ? (
+              <Loader2 className="w-5 h-5 animate-spin inline ml-1" />
+            ) : (
+              <ArrowRight className="w-5 h-5 inline ml-1" />
+            )}
           </MainButton>
         </div>
       </section>
@@ -443,11 +439,10 @@ export default function SkillDetailPage() {
                     <MainButton
                       variant="white"
                       size="lg"
-                      icon={<ArrowRight className="w-4 h-4" />}
-                      iconPosition="right"
-                      className="rounded-xl h-11 text-sm"
+                      className="rounded-xl h-11 text-sm flex flex-row items-center"
                     >
                       Batafsil
+                      <ArrowRight className="w-4 h-4 inline ml-1" />
                     </MainButton>
                   </Link>
                 </div>
