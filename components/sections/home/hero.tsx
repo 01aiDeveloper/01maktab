@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { MainButton } from "@/components/ui/main-button";
 
@@ -10,7 +11,7 @@ const SLIDES = [
     id: 1,
     title: "Data Analyst Kursi",
     description:
-      "С нуля до аналитика в топ-компании: твоя карьера начинается здесь",
+      "Noldan top-kompaniyada analitikgacha: karyerangiz shu yerdan boshlanadi",
     bgColor: "bg-[#e5e7eb]",
     image: "/images/hero11.webp",
     textColor: "text-white",
@@ -20,7 +21,7 @@ const SLIDES = [
     id: 2,
     title: "ML Engineer Kursi",
     description:
-      "С нуля до аналитика в топ-компании: твоя карьера начинается здесь",
+      "Noldan top-kompaniyada analitikgacha: karyerangiz shu yerdan boshlanadi",
     bgColor: "bg-[#111111]",
     image: "/images/hero2.png",
     textColor: "text-white",
@@ -134,16 +135,16 @@ export function Hero() {
                         />
                       </div>
                     </div>
-
-                    <MainButton
-                      variant="gradient"
-                      size="lg"
-                      icon={<ArrowRight className="h-5 w-5 md:h-6 md:w-6" />}
-                      iconPosition="right"
-                      className="group h-13 md:h-15 lg:h-15 w-48.25 rounded-xl"
-                    >
-                      Batafsil
-                    </MainButton>
+                    <Link href="/login">
+                      <MainButton
+                        variant="gradient"
+                        size="xl"
+                        className="group h-13 md:h-15 lg:h-15 w-50 rounded-xl flex flex-row items-center"
+                      >
+                        Bepul boshlash
+                        <ArrowRight className="h-5 w-5 md:h-6 md:w-6 inline ml-1" />
+                      </MainButton>
+                    </Link>
                   </div>
                 </div>
               </div>

@@ -12,8 +12,8 @@ const skills = [
     image: "/python-programming-robot-3d-metallic-blue.jpg",
     title: "Python Dasturlash Tili",
     instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-1",
-    lessonLabel: "Дарс: 3/10",
+    moduleLabel: "Modul-1",
+    lessonLabel: "Dars: 3/10",
     href: "/skills/python",
   },
   {
@@ -21,8 +21,8 @@ const skills = [
     image: "/data-science-abstract-pink-paper-fold-3d.jpg",
     title: "Data Science",
     instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-1",
-    lessonLabel: "Дарс: 4/8",
+    moduleLabel: "Modul-1",
+    lessonLabel: "Dars: 4/8",
     href: "/skills/data-science",
   },
   {
@@ -30,8 +30,8 @@ const skills = [
     image: "/sql-database-server-gray-minimal-3d.jpg",
     title: "SQL va Ma'lumotlar Bazasi",
     instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-2",
-    lessonLabel: "Дарс: 2/6",
+    moduleLabel: "Modul-2",
+    lessonLabel: "Dars: 2/6",
     href: "/skills/sql",
   },
   {
@@ -39,8 +39,8 @@ const skills = [
     image: "/python-coding-robot-mechanical-blue-3d.jpg",
     title: "Python Dasturlash Tili",
     instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-1",
-    lessonLabel: "Дарс: 1/5",
+    moduleLabel: "Modul-1",
+    lessonLabel: "Dars: 1/5",
     href: "/skills/python-2",
   },
   {
@@ -48,15 +48,15 @@ const skills = [
     image: "/machine-learning-ai-neural-3d.jpg",
     title: "Machine Learning",
     instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-3",
-    lessonLabel: "Дарс: 6/10",
+    moduleLabel: "Modul-3",
+    lessonLabel: "Dars: 6/10",
     href: "/skills/machine-learning",
   },
 ]
 
 export function MySkillsSection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
+    loop: true,
     align: "start",
     slidesToScroll: 2,
   })

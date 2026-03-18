@@ -103,7 +103,7 @@ export function CourseHeroSection({
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 flex-wrap">
                     <span className="text-xs bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full">
-                      Модуль: {progress.moduleTitile ?? '—'}
+                      Modul: {progress.moduleTitile ?? '—'}
                     </span>
                     <span className="text-xs bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full">
                       Dars: {progress.completedLessonsCount}/{progress.totalLessonsCount}
@@ -124,7 +124,7 @@ export function CourseHeroSection({
                     onClick={onStart}
                     disabled={startLoading}
                   >
-                    {startLoading ? 'Yuklanmoqda...' : 'Продолжить обучение'}
+                    {startLoading ? 'Yuklanmoqda...' : "O'qishni davom ettirish"}
                   </MainButton>
                 </div>
               ) : (

@@ -12,8 +12,8 @@ const professions = [
     image: "/data-analytics-dashboard-dark-finance-chart-3d.jpg",
     title: "Data Analitik Kasbi",
     instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-1",
-    lessonLabel: "Дарс: 3/10",
+    moduleLabel: "Modul-1",
+    lessonLabel: "Dars: 3/10",
     href: "/professions/data-analitik-kasbi",
   },
   {
@@ -21,8 +21,8 @@ const professions = [
     image: "/programmer-keyboard-dark-blue-coding-3d.jpg",
     title: "ML Engineer Kasbi",
     instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-1",
-    lessonLabel: "Дарс: 3/10",
+    moduleLabel: "Modul-1",
+    lessonLabel: "Dars: 3/10",
     href: "/professions/ml-engineer-kasbi",
   },
   {
@@ -30,15 +30,15 @@ const professions = [
     image: "/backend-developer-server-dark-3d.jpg",
     title: "Backend Developer",
     instructor: "Khikmatilla Pulatov",
-    moduleLabel: "Модуль-2",
-    lessonLabel: "Дарс: 4/12",
+    moduleLabel: "Modul-2",
+    lessonLabel: "Dars: 4/12",
     href: "/professions/backend-developer",
   },
 ]
 
 export function MyProfessionsSection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
+    loop: true,
     align: "start",
     slidesToScroll: 1,
   })

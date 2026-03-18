@@ -41,18 +41,18 @@ export function TestResultModal({
               </div>
             </div>
             <div className="text-4xl font-bold text-gray-900 mb-2">
-              Ваш балл: {correctAnswers}/{totalQuestions}
+              Balingiz: {correctAnswers}/{totalQuestions}
             </div>
           </>
         )}
 
         <h2 className="text-xl font-bold text-gray-900 mb-2">
-          {isPassed ? 'Поздравляем!' : 'Попробуйте снова'}
+          {isPassed ? 'Tabriklaymiz!' : 'Qayta urinib ko\'ring'}
         </h2>
         <p className="text-sm text-gray-500 mb-8">
           {isPassed
-            ? `Вы набрали ${percentage}% и успешно прошли тест.`
-            : `Вы набрали ${percentage}%. Для прохождения нужно больше.`}
+            ? `Siz ${percentage}% to'pladingiz va testdan muvaffaqiyatli o'tdingiz.`
+            : `Siz ${percentage}% to'pladingiz. O'tish uchun ko'proq kerak.`}
         </p>
 
         {isPassed ? (
@@ -60,14 +60,14 @@ export function TestResultModal({
             onClick={onContinue}
             className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors"
           >
-            Продолжить →
+            Davom etish →
           </button>
         ) : (
           <button
             onClick={onRetry}
             className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors"
           >
-            Начать →
+            Boshlash →
           </button>
         )}
       </div>

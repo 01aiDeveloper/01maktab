@@ -7,20 +7,20 @@ const graduatesData = [
     id: 1,
     name: 'Sarvar Karimov',
     age: 27,
-    previousRole: 'Из sales-менеджера в Data Analyst',
-    currentRole: 'Сейчас: стажер Data Analyst в TBC Bank',
+    previousRole: 'Sales-menejerdan Data Analitikga',
+    currentRole: 'Hozir: TBC Bankda Data Analyst stajyor',
     story:
-      'Сарвар пришёл на курс без коммерческого опыта в аналитике, но с большим интересом к данным. За время обучения он освоил SQL, Python и визуализацию данных, а уже после выпуска получил стажировку в одном из крупнейших банков страны.',
+      'Sarvar kursga analitikada tijorat tajribasiz, lekin ma\'lumotlarga katta qiziqish bilan keldi. O\'qish davomida u SQL, Python va ma\'lumotlarni vizualizatsiya qilishni o\'zlashtirib, bitirganidan so\'ng mamlakatdagi eng yirik banklardan birida stajirovka oldi.',
     image: '/images/graduates/1.png',
   },
   {
     id: 2,
     name: 'Lola Sharipova',
     age: 24,
-    previousRole: 'От студента до Data Analyst',
-    currentRole: 'Сейчас: Junior Data Analyst в IT-компании',
+    previousRole: 'Talabadan Data Analitikga',
+    currentRole: 'Hozir: IT-kompaniyada Junior Data Analyst',
     story:
-      'Лола сменила профессию и начала путь в аналитике с нуля. Практические проекты и поддержка менторов помогли ей собрать сильное портфолио и успешно пройти собеседование на позицию Junior Data Analyst.',
+      'Lola kasbini o\'zgartirib, analitikada noldan yo\'l boshladi. Amaliy loyihalar va mentorlar yordami unga kuchli portfolio to\'plashga va Junior Data Analyst lavozimiga suhbatdan muvaffaqiyatli o\'tishga yordam berdi.',
     image: '/images/graduates/2.png',
   },
 ];
@@ -30,7 +30,7 @@ export function GraduatesSection() {
     <section className="w-full bg-black py-16 lg:py-24">
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <h2 className="text-white font-bold text-3xl lg:text-4xl mb-12 lg:mb-16">Наши выпускники</h2>
+        <h2 className="text-white font-bold text-3xl lg:text-4xl mb-12 lg:mb-16">Bizning bitiruvchilar</h2>
 
         {/* Graduates List */}
         <div className="space-y-8 lg:space-y-12">

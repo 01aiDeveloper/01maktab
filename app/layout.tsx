@@ -11,18 +11,18 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "01 Maktab",
-  description: "01 Maktab",
-  generator: "01 Maktab",
-  // icons: {
-  //   icon: [
-  //     {
-  //       url: "/icon.svg",
-  //       type: "image/svg+xml",
-  //     },
-  //   ],
-  //   apple: "/apple-icon.png",
-  // },
+  title: "01AI",
+  description: "01AI",
+  generator: "01AI",
+  icons: {
+    icon: [
+      {
+        url: "/icon.svg",
+        type: "image/svg+xml",
+      },
+    ],
+    apple: "/apple-icon.png",
+  },
 }
 
 export default function RootLayout({

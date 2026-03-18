@@ -53,7 +53,7 @@ const styles: Record<Variant, any> = {
 export function FAQAccordion({
   faqs,
   variant,
-  title = "Часто задаваемые вопросы",
+  title = "Ko'p beriladigan savollar",
   titleClassName,
   className,
   emptyState,

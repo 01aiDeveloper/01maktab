@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { MainButton } from "@/components/ui/main-button";
+import { MainTitle } from "@/components/ui/main-title";
 import { MentorCard } from "@/components/shared/mentor-card";
 import useEmblaCarousel from "embla-carousel-react";
 import { CarouselNavigation } from "@/components/ui/carousel-navigation";
@@ -44,16 +46,10 @@ export function MentorsSection() {
   return (
     <section className="relative w-full bg-base-dark overflow-hidden rounded-b-[70px] sm:rounded-b-[160px] md:rounded-b-[328px] min-h-screen flex flex-col justify-center py-10 sm:py-18">
       <div className="container">
-        <div className="mx-auto max-w-4xl text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="text-2xl font-black leading-[1.1] text-white md:text-4xl lg:text-5xl tracking-tighter lg:mb-8 sm:mb-6 mb-4"
-          >
+        <div className="mx-auto max-w-[1296px] text-center">
+          <MainTitle align="center" color="white" animated>
             Sun'iy Intellekt Yangi Davr Texnologiyasi Birinchilardan Bo'ling!
-          </motion.h2>
+          </MainTitle>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}
@@ -103,15 +99,17 @@ export function MentorsSection() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="mt-10 flex justify-center"
         >
-          <MainButton
-            variant="gradient"
-            size="default"
-            icon={<ArrowRight className="h-6 w-6" />}
-            iconPosition="right"
-            className="group w-60 h-13.5 rounded-[10px] px-4 py-3.75"
-          >
-            Bepul Boshlash
-          </MainButton>
+          <Link href="/login">
+            <MainButton
+              variant="gradient"
+              size="default"
+              icon={<ArrowRight className="h-6 w-6" />}
+              iconPosition="right"
+              className="group w-60 h-13.5 rounded-[10px] px-4 py-3.75"
+            >
+              Bepul Boshlash
+            </MainButton>
+          </Link>
         </motion.div>
       </div>
     </section>

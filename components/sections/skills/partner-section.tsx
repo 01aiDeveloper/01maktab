@@ -1,11 +1,13 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { MainButton } from '@/components/ui/main-button';
 
 export interface Partner {
+  id?: number;
   name: string;
   logo: string;
   title: string;
@@ -36,15 +38,17 @@ export function PartnerSection({ partner, variant = 'default' }: PartnerSectionP
             </div>
             <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-4">{partner.title}</h2>
             <p className="text-gray-600 text-sm lg:text-base leading-relaxed mb-8">{partner.description}</p>
-            <MainButton
-              variant="white"
-              size="lg"
-              icon={<ArrowRight className="w-4 h-4" />}
-              iconPosition="right"
-              className="rounded-xl h-11 text-sm"
-            >
-              Batafsil
-            </MainButton>
+            <Link href={partner.id ? `/partners/${partner.id}` : '#'}>
+              <MainButton
+                variant="white"
+                size="lg"
+                icon={<ArrowRight className="w-4 h-4" />}
+                iconPosition="right"
+                className="rounded-xl h-11 text-sm"
+              >
+                Batafsil
+              </MainButton>
+            </Link>
           </div>
         </motion.div>
       </section>
@@ -67,15 +71,17 @@ export function PartnerSection({ partner, variant = 'default' }: PartnerSectionP
           <div>
             <h3 className="font-suisse font-bold text-gray-900 text-lg lg:text-xl mb-2">{partner.title}</h3>
             <p className="text-gray-600 text-xs lg:text-sm leading-relaxed mb-3">{partner.description}</p>
-            <MainButton
-              variant="black"
-              size="sm"
-              icon={<ArrowRight className="w-3 h-3" />}
-              iconPosition="right"
-              className="rounded-xl border-0 text-xs"
-            >
-              Batafsil
-            </MainButton>
+            <Link href={partner.id ? `/partners/${partner.id}` : '#'}>
+              <MainButton
+                variant="black"
+                size="sm"
+                icon={<ArrowRight className="w-3 h-3" />}
+                iconPosition="right"
+                className="rounded-xl border-0 text-xs"
+              >
+                Batafsil
+              </MainButton>
+            </Link>
           </div>
         </div>
       </motion.div>

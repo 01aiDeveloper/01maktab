@@ -10,49 +10,49 @@ import { EventBenefits } from '@/components/events/event-benefits';
 
 const EVENT_DATA = {
   title: 'ML Contest',
-  description: 'Соревнуйся с сильнейшими, решай реальные задачи и получи шанс на стажировку, призы и признание индустрии.',
+  description: 'Eng kuchlilar bilan bellashing, real masalalarni yeching va stajirovka, sovrinlar va industriya e\'tirofiga imkoniyat qo\'lga kiriting.',
   date: '02.12.2025',
   location: 'IT Park, Muminov Street 4',
   about: {
-    title: 'О мероприятии',
-    content: 'ML Contest — это практический конкурс для начинающих и junior-специалистов в IT. Участники решают реальные кейсы, работают в командах и получают опыт, который ценится работодателями.',
+    title: 'Tadbir haqida',
+    content: 'ML Contest — bu IT sohasidagi yangi boshlovchi va junior-mutaxassislar uchun amaliy tanlov. Ishtirokchilar real keyslarni hal qiladi, jamoalarda ishlaydi va ish beruvchilar tomonidan qadrlanadigan tajriba oladi.',
   },
   program: [
     {
       id: 1,
-      title: 'Этап 1. Регистрация и отбор',
+      title: '1-bosqich. Ro\'yxatdan o\'tish va tanlov',
       items: [
-        { order: 1, text: 'Онлайн-регистрация участников' },
-        { order: 2, text: 'Выбор направления (Data, Frontend, Backend, UI/UX, QA и др.)' },
-        { order: 3, text: 'Входное задание для оценки уровня' },
+        { order: 1, text: 'Ishtirokchilarni onlayn ro\'yxatdan o\'tkazish' },
+        { order: 2, text: 'Yo\'nalish tanlash (Data, Frontend, Backend, UI/UX, QA va boshqalar)' },
+        { order: 3, text: 'Darajani baholash uchun kirish topshirig\'i' },
       ],
     },
     {
       id: 2,
-      title: 'Этап 2. Открытие ML Contest',
+      title: '2-bosqich. ML Contest ochilishi',
       items: [],
     },
     {
       id: 3,
-      title: 'Этап 3. Работа над кейсами',
+      title: '3-bosqich. Keyslar ustida ishlash',
       items: [],
     },
     {
       id: 4,
-      title: 'Этап 4. Презентация решений',
+      title: '4-bosqich. Yechimlarni taqdim etish',
       items: [],
     },
     {
       id: 5,
-      title: 'Этап 5. Награждение и нетворкинг',
+      title: '5-bosqich. Mukofotlash va networking',
       items: [],
     },
   ],
   benefits: [
-    'Практический опыт и готовый кейс в портфолио',
-    'Обратную связь от IT-экспертов',
-    'Сертификат участника',
-    'Шанс попасть на стажировку или в команду компании-партнёра',
+    'Amaliy tajriba va portfolioda tayyor keys',
+    'IT-ekspertlardan qayta aloqa',
+    'Ishtirokchi sertifikati',
+    'Stajirovkaga yoki hamkor kompaniya jamoasiga kirish imkoniyati',
   ],
 };
 

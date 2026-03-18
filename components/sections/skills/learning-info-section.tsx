@@ -52,7 +52,7 @@ export function LearningInfoSection({ learningTopics, learningFormat, learningRe
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-4 text-sm lg:text-base">Результат курса:</h3>
+                <h3 className="font-semibold text-gray-900 mb-4 text-sm lg:text-base">Kurs natijasi:</h3>
                 <p className="text-gray-600 text-sm leading-relaxed">{learningResult}</p>
               </div>
             </div>

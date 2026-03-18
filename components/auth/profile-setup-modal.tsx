@@ -160,7 +160,7 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
               <label className="block text-xs text-gray-600 mb-1">E-mail</label>
               <Input
                 type="email"
-                placeholder="Введите почту"
+                placeholder="Emailni kiriting"
                 {...register('email')}
                 className={`${inputCls} ${errors.email ? 'border-red-400' : ''}`}
               />

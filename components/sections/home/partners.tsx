@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { MainTitle } from "@/components/ui/main-title";
 import { Subtitle } from "@/components/ui/subtitle";
 import { getMediaUrl } from "@/lib/utils";
@@ -31,6 +32,7 @@ export function PartnersSection({
   const sectionBg = isDark ? "bg-[#101010]" : "bg-[#FFFFFF]";
   const cardBg = isDark ? "bg-[#282828]" : "bg-[#F4F4F6]";
   const cardHoverBg = isDark ? "hover:bg-[#F4F4F6]" : "hover:bg-white";
+  const cardBorderColor = isDark ? "border-[#282828]" : "border-[#F4F4F6]";
   const titleColor = isDark ? "#FFFFFF" : "#18181A";
   const borderColor = isDark ? "border-gray-800" : "border-gray-100";
 
@@ -119,18 +121,19 @@ export function PartnersSection({
             style={{ width: "max-content" }}
           >
             {[...partners, ...partners].map((partner, index) => (
-              <div
+              <Link
                 key={`${partner.id}-${index}`}
-                className={`group relative flex h-[203px] w-[412px] shrink-0 items-center justify-center rounded-[16px] border-[3px] ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"}`}
+                href={`/partners/${partner.id}`}
+                className={`group relative flex h-[203px] w-[412px] shrink-0 items-center justify-center rounded-[16px] border-[3px] ${cardBorderColor} ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"}`}
               >
                 <Image
                   src={useMediaUrl ? getMediaUrl(partner.logo) : partner.logo}
                   alt={partner.name}
                   width={180}
                   height={80}
-                  className={`object-contain transition-all duration-300 brightness-50 group-hover:brightness-100`}
+                  className={`object-contain transition-all duration-300 ${isDark ? "brightness-0 invert group-hover:brightness-100 group-hover:invert-0" : "brightness-50 group-hover:brightness-100"}`}
                 />
-              </div>
+              </Link>
             ))}
           </motion.div>
         </motion.div>

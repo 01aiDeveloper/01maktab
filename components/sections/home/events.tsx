@@ -8,20 +8,22 @@ const EVENTS = [
   {
     title: "ML Contest",
     category: "ML Contest",
-    date: "02.12.2025",
+    // date: "02.12.2025",
+    locked: true,
     imageUrl: "/images/event.webp",
+    subtitle: "Ro'yxatdan o'tish tez orada ochiladi"
   },
   {
     title: "ML Party",
     imageUrl: "/images/event.webp",
     locked: true,
-    subtitle: "Регистрация скоро откроется",
+    subtitle: "Ro'yxatdan o'tish tez orada ochiladi",
   },
   {
     title: "ML Gap",
     imageUrl: "/images/event.webp",
     locked: true,
-    subtitle: "Регистрация скоро откроется",
+    subtitle: "Ro'yxatdan o'tish tez orada ochiladi",
   },
 ]
 

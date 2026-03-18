@@ -39,11 +39,11 @@ export function WelcomeModal() {
           </div>
 
           <h2 className="text-3xl font-bold text-foreground mb-4">
-            Поздравляем!
+            Tabriklaymiz!
           </h2>
 
           <p className="text-muted-foreground text-base mb-8 leading-relaxed">
-            Для вас открыта возможность просмотра бесплатных пробных уроков
+            Siz uchun bepul sinov darslarini ko'rish imkoniyati ochildi
           </p>
 
           <Button
@@ -51,7 +51,7 @@ export function WelcomeModal() {
             onClick={handleClose}
             className="w-full rounded-xl bg-blue-600 hover:bg-blue-700"
           >
-            Начать
+            Boshlash
           </Button>
         </div>
       </div>

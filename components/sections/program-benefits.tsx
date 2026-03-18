@@ -32,7 +32,7 @@ export function ProgramBenefits({ benefits }: ProgramBenefitsProps) {
           transition={{ duration: 0.5 }}
         >
           <h2 className="font-suisse text-3xl lg:text-4xl font-bold text-white mb-12 text-center">
-            После программы у вас будет:
+            Dasturdan keyin sizda bo'ladi:
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

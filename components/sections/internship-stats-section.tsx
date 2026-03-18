@@ -27,10 +27,10 @@ export function InternshipStatsSection() {
 
               {/* Right Text Block */}
               <div className="flex-1">
-                <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-3">Возможность стажировки:</h2>
+                <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-3">Stajirovka imkoniyati:</h2>
                 <p className="text-white/70 text-sm lg:text-base leading-relaxed max-w-2xl">
-                  После успешного завершения программы вы получите возможность пройти стажировку в одной из компаний-партнеров. Вы будете
-                  работать над реальными проектами и набираться профессионального опыта.
+                  Dasturni muvaffaqiyatli tugatganingizdan so'ng, hamkor kompaniyalardan birida stajirovka o'tash imkoniyatiga ega bo'lasiz.
+                  Siz real loyihalar ustida ishlaysiz va professional tajriba orttrasiz.
                 </p>
               </div>
             </div>
@@ -39,10 +39,10 @@ export function InternshipStatsSection() {
           {/* Bottom Statistics Cards Grid */}
           <div className="grid lg:grid-cols-2 gap-4">
             {/* Card 1 - Blue 85% */}
-            <ProgressRingCard variant="blue" percent={85} label="Выпускников направлены на стажировку" icon="graduation" />
+            <ProgressRingCard variant="blue" percent={85} label="Bitiruvchilar stajirovkaga yo'naltirilgan" icon="graduation" />
 
             {/* Card 2 - Dark 60% */}
-            <ProgressRingCard variant="dark" percent={60} label="Трудоустроены после стажировки" icon="briefcase" />
+            <ProgressRingCard variant="dark" percent={60} label="Stajirovkadan keyin ishga joylashgan" icon="briefcase" />
           </div>
         </div>
       </div>

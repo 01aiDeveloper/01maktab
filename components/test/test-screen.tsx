@@ -108,7 +108,7 @@ export function TestScreen({ test, moduleId, onBack, onContinue }: TestScreenPro
 
           <h1 className="text-xl font-bold text-gray-900 mb-2">{test.name}</h1>
           <p className="text-sm text-gray-500 mb-8">
-            Tестирование для закрепления материала<br />и завершения модуля.
+            Materialni mustahkamlash<br />va modulni yakunlash uchun test.
           </p>
 
           <button
@@ -120,7 +120,7 @@ export function TestScreen({ test, moduleId, onBack, onContinue }: TestScreenPro
             }}
             className="w-64 h-12 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-medium text-sm transition-colors"
           >
-            Начать
+            Boshlash
           </button>
       </div>
     );
@@ -161,7 +161,7 @@ export function TestScreen({ test, moduleId, onBack, onContinue }: TestScreenPro
         {/* Question badge + timer */}
         <div className="flex items-center justify-between mb-6">
           <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-semibold">
-            Вопросы {currentIndex + 1}/{questions.length}
+            Savollar {currentIndex + 1}/{questions.length}
           </span>
           {test.timeLimit > 0 && (
             <span className={cn(
@@ -269,7 +269,7 @@ export function TestScreen({ test, moduleId, onBack, onContinue }: TestScreenPro
                 : 'border-gray-100 text-gray-300 cursor-not-allowed',
             )}
           >
-            Назад
+            Orqaga
           </button>
 
           {isLast ? (
@@ -278,7 +278,7 @@ export function TestScreen({ test, moduleId, onBack, onContinue }: TestScreenPro
               disabled={submitting}
               className="flex-1 h-11 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-medium text-sm transition-colors disabled:opacity-60"
             >
-              {submitting ? 'Yuborilmoqda...' : 'Завершить'}
+              {submitting ? 'Yuborilmoqda...' : 'Yakunlash'}
             </button>
           ) : (
             <button
@@ -291,7 +291,7 @@ export function TestScreen({ test, moduleId, onBack, onContinue }: TestScreenPro
                   : 'bg-gray-100 text-gray-400 cursor-not-allowed',
               )}
             >
-              Продолжить
+              Davom etish
             </button>
           )}
         </div>

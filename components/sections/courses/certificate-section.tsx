@@ -31,8 +31,8 @@ export function CertificateSection({ certificate, title = 'Professional sertifik
 
             {/* Right - Dark Text Card */}
             <div className="bg-[#18181a] text-white rounded-3xl p-8 lg:p-10 flex flex-col justify-center">
-              <h3 className="text-lg lg:text-xl font-semibold mb-2">По окончанию курса</h3>
-              <h4 className="text-xl lg:text-2xl font-bold mb-6">вы получаете профессиональный сертификат, который:</h4>
+              <h3 className="text-lg lg:text-xl font-semibold mb-2">Kursni tugatganingizda</h3>
+              <h4 className="text-xl lg:text-2xl font-bold mb-6">siz professional sertifikat olasiz, u:</h4>
               <ul className="space-y-3 text-sm lg:text-base text-gray-300 leading-relaxed">
                 {certificate.benefits.map((benefit, index) => (
                   <li key={index}>{benefit}</li>

@@ -193,7 +193,7 @@ export default function GraduateStoryPage() {
           <section className="w-full py-16 lg:py-24 bg-white">
             <div className="container mx-auto px-4">
               <h2 className="font-suisse font-bold text-3xl lg:text-[48px] lg:leading-[1.1] text-[#18181A] tracking-[-0.02em] mb-8 lg:mb-12">
-                Смотреть другие истории
+                Boshqa hikoyalarni ko'rish
               </h2>
 
               <div className="overflow-hidden" ref={emblaRef}>

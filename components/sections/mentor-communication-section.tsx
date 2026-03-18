@@ -35,15 +35,15 @@ export function MentorCommunicationSection() {
 
           {/* Right Content Card */}
           <div className="bg-[#2a2a2d] rounded-3xl p-8 lg:p-10 flex flex-col justify-center">
-            <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-6">Живое общение с менторами</h2>
+            <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-6">Mentorlar bilan jonli muloqot</h2>
 
             <ul className="space-y-3 text-white/85">
               {[
-                'Живые видео-занятия через Telegram',
-                'Мгновенные ответы на ваши вопросы',
-                'Обучение в группе',
-                'Еженедельные support hours',
-                'Мастер-классы в офисах партнеров',
+                'Telegram orqali jonli video-darslar',
+                'Savollaringizga tezkor javoblar',
+                'Guruhda o\'qish',
+                'Har haftalik support hours',
+                'Hamkorlar ofislarida master-klasslar',
               ].map((item, index) => (
                 <li key={index} className="flex items-start gap-3 text-sm lg:text-base">
                   <span className="w-1.5 h-1.5 rounded-full bg-white/60 flex-shrink-0 mt-2" />

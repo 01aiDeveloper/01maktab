@@ -63,48 +63,48 @@ function toModuleItem(m: ApiCourseModule): ModuleItem {
 // ─── Static data (o'zgarmaydigan sectionlar uchun) ────────────────────────────
 
 const staticFeatures = [
-  { id: 1, icon: Calendar, label: '5 Месяцев' },
-  { id: 2, icon: Award, label: '100% возврат средств' },
-  { id: 3, icon: BookCheck, label: '2 Сертификата' },
-  { id: 4, icon: Briefcase, label: 'Стажировка' },
+  { id: 1, icon: Calendar, label: '5 Oy' },
+  { id: 2, icon: Award, label: '100% pulni qaytarish' },
+  { id: 3, icon: BookCheck, label: '2 Sertifikat' },
+  { id: 4, icon: Briefcase, label: 'Stajirovka' },
 ];
 
 const staticBenefits = [
   {
     id: 1,
-    title: 'Профессиональные навыки',
-    bullets: ['Python, SQL, ML, Визуализация', '8+ проектов в портфолио'],
+    title: 'Professional ko\'nikmalar',
+    bullets: ['Python, SQL, ML, Vizualizatsiya', '8+ loyiha portfolioda'],
     icon: <Image src="/icons/professions/1.webp" alt="Certificate" width={80} height={80} className="opacity-40 grayscale" />,
     isDefaultActive: true,
   },
   {
     id: 2,
-    title: 'Международные сертификаты',
-    bullets: ['Сертификат IBM (международный)', 'Сертификат AICA (аккредитованный)'],
+    title: 'Xalqaro sertifikatlar',
+    bullets: ['IBM sertifikati (xalqaro)', 'AICA sertifikati (akkreditatsiya qilingan)'],
     icon: <Image src="/icons/professions/2.webp" alt="Certificate" width={80} height={80} className="opacity-40 grayscale" />,
   },
   {
     id: 3,
-    title: 'Практический опыт',
-    bullets: ['Стажировка в компаниях-партнерах', 'Работа над реальными проектами'],
+    title: 'Amaliy tajriba',
+    bullets: ['Hamkor kompaniyalarda stajirovka', 'Real loyihalar ustida ishlash'],
     icon: <Image src="/icons/professions/3.webp" alt="Briefcase" width={80} height={80} className="opacity-40 grayscale" />,
   },
   {
     id: 4,
-    title: 'Карьерная подготовка',
-    bullets: ['Профессиональное резюме', 'Mock interview и подготовка'],
+    title: 'Karyera tayyorgarligi',
+    bullets: ['Professional rezyume', 'Mock interview va tayyorgarlik'],
     icon: <Image src="/icons/professions/4.png" alt="Career" width={80} height={80} className="opacity-40 grayscale" />,
   },
   {
     id: 5,
-    title: 'Сообщество',
-    bullets: ['Вступление в MLC сообщество', 'Регулярные мероприятия и нетворкинг'],
+    title: 'Hamjamiyat',
+    bullets: ['MLC hamjamiyatiga kirish', 'Muntazam tadbirlar va networking'],
     icon: <Image src="/icons/professions/5.png" alt="Community" width={80} height={80} className="opacity-40 grayscale" />,
   },
   {
     id: 6,
-    title: '100% возврат денег',
-    bullets: ['После завершения программы', 'Полный возврат инвестиций'],
+    title: '100% pulni qaytarish',
+    bullets: ['Dasturni tugatgandan keyin', 'Investitsiyalarni to\'liq qaytarish'],
     icon: <Image src="/icons/professions/6.png" alt="Money back" width={80} height={80} className="opacity-40 grayscale" />,
   },
 ];
@@ -113,55 +113,55 @@ const staticCertificates = [
   {
     id: 1,
     title: 'Google Professional Certificate',
-    badgeText: 'Международный сертификат',
+    badgeText: 'Xalqaro sertifikat',
     badgeColor: 'bg-[#5d7bf5] text-white',
-    bullets: ['Признается по всему миру', 'Добавьте в LinkedIn', 'Для международных компаний'],
+    bullets: ['Butun dunyoda tan olinadi', 'LinkedIn ga qo\'shing', 'Xalqaro kompaniyalar uchun'],
     image: '/images/professions/certificate.png',
   },
   {
     id: 2,
-    title: 'Сертификат MLC',
-    badgeText: 'Аккредитованный AICA',
+    title: 'MLC Sertifikati',
+    badgeText: 'AICA akkreditatsiyasi',
     badgeColor: 'bg-[#5d7bf5] text-white',
-    bullets: ['Центрально-Азиатская Ассоциация ИИ', 'Признается государственными и частными организациями', 'Официальный документ'],
+    bullets: ['Markaziy Osiyo Sun\'iy Intellekt Assotsiatsiyasi', 'Davlat va xususiy tashkilotlar tomonidan tan olinadi', 'Rasmiy hujjat'],
     image: '/images/professions/certificate.png',
   },
 ];
 
 const staticCertificatesFootnote =
-  'Для группы профессий международный сертификат может быть от Google, Microsoft или других ведущих компаний в зависимости от направления';
+  'Kasblar guruhi uchun xalqaro sertifikat yo\'nalishga qarab Google, Microsoft yoki boshqa yetakchi kompaniyalardan bo\'lishi mumkin';
 
 const staticFaqs = [
   {
     id: '1',
-    question: 'Подойдёт ли курс новичкам?',
+    question: 'Kurs yangi boshlovchilar uchun mosmi?',
     answer:
-      'Программа рассчитана на новичков: вы сначала изучите основы и постепенно будете переходить к сложным темам. Каждый из них заканчивается практикой, чтобы вы не просто понимали материал, но и могли применять его на деле. Для старта достаточно базовых навыков работы с компьютером (набор текста, ориентирование в системе). Если у вас нет опыта — мы бесплатно обучим вас компьютерной грамотности перед началом курса.',
+      'Dastur yangi boshlovchilar uchun mo\'ljallangan: avval asoslarni o\'rganasiz va bosqichma-bosqich murakkab mavzularga o\'tasiz. Har bir modul amaliyot bilan tugaydi, siz materialni nafaqat tushunasiz, balki amalda qo\'llay olasiz. Boshlash uchun kompyuter bilan ishlashning asosiy ko\'nikmalari yetarli. Agar tajribangiz bo\'lmasa — kurs boshlanishidan oldin kompyuter savodxonligini bepul o\'rgatamiz.',
   },
   {
     id: '2',
-    question: 'Почему мне стоит выбрать именно 01AI?',
-    answer: '01AI предлагает уникальную методологию обучения с реальными проектами и поддержкой менторов.',
+    question: 'Nega aynan 01AI ni tanlashim kerak?',
+    answer: '01AI real loyihalar va mentorlar yordami bilan noyob o\'qitish metodologiyasini taklif etadi.',
   },
   {
     id: '3',
-    question: 'Кто ваши наставники?',
-    answer: 'Наши наставники — практикующие специалисты из топовых IT-компаний с многолетним опытом.',
+    question: 'Mentorlaringiz kimlar?',
+    answer: 'Bizning mentorlar — ko\'p yillik tajribaga ega top IT-kompaniyalardan amaliyotchi mutaxassislar.',
   },
   {
     id: '4',
-    question: 'Почему обучение длится так долго?',
-    answer: 'Качественное обучение требует времени для усвоения материала и практики на реальных проектах.',
+    question: 'Nega o\'qish shuncha uzoq davom etadi?',
+    answer: 'Sifatli ta\'lim materialni o\'zlashtirish va real loyihalarda amaliyot uchun vaqt talab qiladi.',
   },
   {
     id: '5',
-    question: 'Можно ли начать зарабатывать во время обучения?',
-    answer: 'Да, многие наши студенты начинают работать на фрилансе уже после первых модулей.',
+    question: 'O\'qish davomida pul ishlashni boshlash mumkinmi?',
+    answer: 'Ha, ko\'plab talabalarimiz birinchi modullardan keyin freelance ishlay boshlaydilar.',
   },
   {
     id: '6',
-    question: 'Я смогу устроиться на работу во время курса?',
-    answer: 'Мы помогаем с трудоустройством и многие студенты находят работу ещё до окончания курса.',
+    question: 'Kurs davomida ishga joylasha olamanmi?',
+    answer: 'Biz ishga joylashishda yordam beramiz va ko\'plab talabalar kursni tugatmasdan ish topadilar.',
   },
 ];
 
@@ -270,7 +270,7 @@ export default function ProfessionPage() {
                 {/* Enrollment Badge */}
                 <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-xs w-fit mb-6">
                   <Flame className="w-3.5 h-3.5 mr-2" />
-                  Набор открыт
+                  Qabul ochiq
                 </Badge>
 
                 {/* Title */}
@@ -307,7 +307,7 @@ export default function ProfessionPage() {
                       disabled={startLoading}
                     >
                       {startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowLeft className="w-5 h-5 rotate-180" />}
-                      {startLoading ? 'Yuklanmoqda...' : 'Продолжить обучение'}
+                      {startLoading ? 'Yuklanmoqda...' : "O'qishni davom ettirish"}
                     </Button>
                   </div>
                 ) : (
@@ -409,7 +409,7 @@ export default function ProfessionPage() {
         {mentor && (
           <section id="mentor" className="w-full py-8">
             <div className="container mx-auto px-4">
-              <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-6">Ментор курса</h2>
+              <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-6">Kurs mentori</h2>
               <MentorCard
                 name={mentor.fullname}
                 role={mentor.position}

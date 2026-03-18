@@ -13,7 +13,7 @@ const navLinks = [
   { label: "Darsxona", href: "/classroom" },
   { label: "Barcha Kurslar", href: "/catalog" },
   { label: "Hamjamiyat", href: "/community" },
-  { label: "Market", href: "#" },
+  { label: "Market", href: "/market" },
 ]
 
 interface SiteHeaderProps {
@@ -33,7 +33,7 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className={` top-0 z-50 w-full py-4 bg-transparent`}
+      className={`relative z-50 w-full py-4 bg-transparent`}
       // className={`sticky top-0 z-50 w-full ${isDark ? 'bg-[#101010]' : 'bg-transparent'}`}
     >
       <div className="container mx-auto px-4 py-3">

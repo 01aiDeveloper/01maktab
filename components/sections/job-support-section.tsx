@@ -5,26 +5,26 @@ import { JobSupportItem } from "@/components/cards/job-support-item"
 const jobSupportData = [
   {
     id: 1,
-    title: "Резюме",
-    tagText: "Создание профессионального CV",
+    title: "Rezyume",
+    tagText: "Professional CV yaratish",
     illustration: "/icons/professions/support1.webp",
   },
   {
     id: 2,
-    title: "Портфолио",
-    tagText: "GitHub и проекты",
+    title: "Portfolio",
+    tagText: "GitHub va loyihalar",
     illustration: "/icons/professions/support2.webp",
   },
   {
     id: 3,
     title: "Interview",
-    tagText: "Подготовка и тренировка",
+    tagText: "Tayyorgarlik va mashq",
     illustration: "/icons/professions/support3.webp",
   },
   {
     id: 4,
     title: "Mock Interview",
-    tagText: "Реальная симуляция собеседования",
+    tagText: "Haqiqiy suhbat simulyatsiyasi",
     illustration: "/icons/professions/support4.webp",
   },
 ]
@@ -36,7 +36,7 @@ export function JobSupportSection() {
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <h2 className="text-white text-2xl lg:text-4xl font-bold text-center mb-8 lg:mb-12">
-          Полная помощь в трудоустройстве
+          Ishga joylashishda to'liq yordam
         </h2>
 
         {/* Cards List */}

@@ -78,12 +78,12 @@ export function VideoSection() {
         {/* Branding - Bottom Left */}
         <div className="absolute bottom-6 md:bottom-8 left-6 md:left-8 z-10">
           <h2 className="text-3xl md:text-[56px] lg:text-[64px]  font-semibold text-white leading-[120px] tracking-[-0.05em] capitalize">
-            01Maktab
+            01AI
           </h2>
         </div>
 
         {/* Tags - Bottom Right */}
-        <div className="absolute bottom-6 md:bottom-8 right-6 md:right-8 z-10 flex flex-wrap gap-2 md:gap-3 justify-end">
+        {/* <div className="absolute bottom-6 md:bottom-8 right-6 md:right-8 z-10 flex flex-wrap gap-2 md:gap-3 justify-end">
           {TAGS.map((tag, index) => (
             <motion.div
               key={tag}
@@ -96,7 +96,7 @@ export function VideoSection() {
               <span className="text-white text-base font-[450] leading-6 tracking-[-0.01em]">{tag}</span>
             </motion.div>
           ))}
-        </div>
+        </div> */}
       </motion.div>
     </section>
   )

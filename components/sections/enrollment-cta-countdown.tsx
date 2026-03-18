@@ -66,12 +66,12 @@ export function EnrollmentCtaCountdown({
           {/* Top Content - Centered */}
           <div className="text-center mb-8">
             <h2 className="text-white font-suisse font-semibold text-3xl md:text-[64px] leading-tight md:leading-[81px] tracking-[-0.05em] text-center mb-3">
-              Начните карьеру сегодня
+              Karyerangizni bugun boshlang
             </h2>
             <p className="text-white/100 font-suisse text-xl md:text-[40px] leading-tight md:leading-[47px] tracking-[-0.05em] text-center">
-              Места ограничены.
+              Joylar cheklangan.
               <br />
-              Следующий поток через 3 месяца.
+              Keyingi oqim 3 oydan keyin.
             </p>
           </div>
 
@@ -92,7 +92,7 @@ export function EnrollmentCtaCountdown({
               size="lg"
               className="bg-white hover:bg-gray-100 text-black font-semibold rounded-full flex items-center gap-2 h-12 px-6 lg:px-8 text-base"
             >
-              Оставить заявку сейчас
+              Hoziroq ariza qoldiring
               <ArrowRight className="w-5 h-5" />
             </Button>
           </div>
@@ -100,7 +100,7 @@ export function EnrollmentCtaCountdown({
           {/* Countdown Label - Left aligned */}
           <div className="mb-6 text-left">
             <h3 className="text-white font-suisse font-semibold text-[32px] lg:text-[64px] leading-[75px] tracking-[-0.05em]">
-              До закрытия набора:
+              Qabul yopilishiga:
             </h3>
           </div>
 
@@ -109,12 +109,12 @@ export function EnrollmentCtaCountdown({
             <CountdownTile
               value={timeLeft.days}
               prevValue={prevTimeLeft.days}
-              label="дней"
+              label="kun"
             />
             <CountdownTile
               value={timeLeft.hours}
               prevValue={prevTimeLeft.hours}
-              label="часов"
+              label="soat"
             />
           </div>
         </motion.div>

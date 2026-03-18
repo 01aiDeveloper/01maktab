@@ -62,7 +62,7 @@ const cardVariants = {
 export function FeatureCards() {
   const [activeStoryId, setActiveStoryId] = useState<number | null>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
+    loop: true,
     align: 'start',
     breakpoints: {
       '(min-width: 1024px)': { active: false },

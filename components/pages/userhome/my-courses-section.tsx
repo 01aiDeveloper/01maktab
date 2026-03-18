@@ -12,7 +12,7 @@ export function MyCoursesSection() {
   const { data: courses, isLoading } = useMyCourses()
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
+    loop: true,
     align: "start",
     slidesToScroll: 1,
   })

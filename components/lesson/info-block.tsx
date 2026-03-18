@@ -10,7 +10,7 @@ interface InfoBlockProps {
 const STATUS_CONFIG: Record<string, { icon: React.ElementType; title: string; bgColor: string; borderColor: string; iconColor: string; textColor: string }> = {
   Important: {
     icon: AlertCircle,
-    title: 'Важно',
+    title: 'Muhim',
     bgColor: 'bg-yellow-50',
     borderColor: 'border-yellow-200',
     iconColor: 'text-yellow-600',
@@ -18,7 +18,7 @@ const STATUS_CONFIG: Record<string, { icon: React.ElementType; title: string; bg
   },
   Tip: {
     icon: Lightbulb,
-    title: 'Совет',
+    title: 'Maslahat',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
     iconColor: 'text-green-600',
@@ -34,7 +34,7 @@ const STATUS_CONFIG: Record<string, { icon: React.ElementType; title: string; bg
   },
   Attention: {
     icon: Info,
-    title: 'Внимание',
+    title: 'Diqqat',
     bgColor: 'bg-red-50',
     borderColor: 'border-red-200',
     iconColor: 'text-red-600',

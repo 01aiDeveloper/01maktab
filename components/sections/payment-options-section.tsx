@@ -8,45 +8,45 @@ const paymentOptions = [
   {
     id: 1,
     icon: <Calendar className="w-6 h-6 text-white" />,
-    title: "Помесячная оплата",
-    tag: "В течение 5 месяцев",
+    title: "Oylik to'lov",
+    tag: "5 oy davomida",
     bullets: [
-      "Платите каждый месяц",
-      "Гибкий вариант",
-      "Начните с минимальной суммы",
+      "Har oy to'lang",
+      "Moslashuvchan variant",
+      "Minimal summadan boshlang",
     ],
   },
   {
     id: 2,
     icon: <Lock className="w-6 h-6 text-white" />,
-    title: "Полная оплата",
-    tag: "Единоразово",
+    title: "To'liq to'lov",
+    tag: "Bir martalik",
     bullets: [
-      "5-й месяц в подарок!",
-      "Максимальная экономия",
-      "Цена за 4 месяца",
+      "5-oy sovg'a sifatida!",
+      "Maksimal tejash",
+      "4 oylik narx",
     ],
   },
   {
     id: 3,
     icon: <CreditCard className="w-6 h-6 text-white" />,
-    title: "В течение года",
-    tag: "Рассрочка на 12 месяцев",
+    title: "Yil davomida",
+    tag: "12 oylik bo'lib to'lash",
     bullets: [
-      "Та же цена",
-      "Продление бесплатно",
-      "Комфортные платежи",
+      "Xuddi shu narx",
+      "Uzaytirish bepul",
+      "Qulay to'lovlar",
     ],
   },
   {
     id: 4,
     icon: <GraduationCap className="w-6 h-6 text-white" />,
-    title: "Оплата после обучения",
-    tag: "Начиная с 8 месяца после начала обучения",
+    title: "O'qishdan keyin to'lov",
+    tag: "O'qish boshlanganidan 8 oydan keyin",
     bullets: [
-      "Сначала учитесь",
-      "Потом платите",
-      "После трудоустройства",
+      "Avval o'qing",
+      "Keyin to'lang",
+      "Ishga joylashganingizdan keyin",
     ],
   },
 ]
@@ -63,7 +63,7 @@ export function PaymentOptionsSection() {
           transition={{ duration: 0.5 }}
           className="text-white font-bold text-3xl lg:text-4xl text-center mb-12 lg:mb-16"
         >
-          Удобные варианты оплаты
+          Qulay to'lov variantlari
         </motion.h2>
 
         {/* Payment Cards Grid - 2x2 on desktop, 1 column on mobile */}
@@ -89,7 +89,7 @@ export function PaymentOptionsSection() {
           className="bg-[#1a1a1d] rounded-3xl p-6 lg:p-8"
         >
           <p className="text-white/70 text-center text-base lg:text-lg">
-            Точные цены узнаете после подачи заявки
+            Aniq narxlarni ariza topshirganingizdan keyin bilasiz
           </p>
         </motion.div>
       </div>

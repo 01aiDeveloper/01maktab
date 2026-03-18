@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 interface MenuItem {
   label: string;
-  sectionId: string;
+  href: string;
 }
 
 export function Header() {
@@ -17,19 +17,11 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
 
   const menuItems: MenuItem[] = [
-    { label: 'Bosh Sahifa', sectionId: 'nima-organasiz' },
-    { label: 'Skillar', sectionId: 'skillar' },
-    { label: 'Kurslar', sectionId: 'kurslar' },
-    { label: 'Kasblar', sectionId: 'kasblar' }
+    { label: 'Bosh Sahifa', href: '/' },
+    { label: 'Skillar', href: '/catalog?tab=skills' },
+    { label: 'Kurslar', href: '/catalog?tab=courses' },
+    { label: 'Kasblar', href: '/catalog?tab=professions' }
   ];
-
-  const handleNavClick = (sectionId: string) => {
-    setIsMenuOpen(false);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -85,13 +77,14 @@ export function Header() {
               {/* Links */}
               <div className="flex flex-col gap-4 md:gap-6">
                 {menuItems.map((item) => (
-                  <motion.button
+                  <Link
                     key={item.label}
-                    onClick={() => handleNavClick(item.sectionId)}
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
                     className="text-white hover:text-[#3b66f5] text-lg md:text-xl lg:text-2xl font-bold transition-colors text-left"
                   >
                     {item.label}
-                  </motion.button>
+                  </Link>
                 ))}
               </div>
 
@@ -121,13 +114,14 @@ export function Header() {
             href="https://t.me/mlc_uz"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1 text-white/100 underline hover:text-white/60 transition-colors cursor-pointer"
+            className="flex items-center justify-center gap-1 underline hover:text-white/60 transition-colors cursor-pointer"
             style={{
               fontFamily: "'Suisse Intl', sans-serif",
               fontWeight: 450,
               fontSize: '16px',
               lineHeight: '16px',
               letterSpacing: '0%',
+              color: "#FFFFFF"
             }}
           >
             ML COMMUNITY Uzbekistan ekspertlari tomonidan yartilgan

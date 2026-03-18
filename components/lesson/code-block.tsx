@@ -28,12 +28,12 @@ export function CodeBlock({ code, language = 'Code' }: CodeBlockProps) {
           {copied ? (
             <>
               <Check className="w-4 h-4" />
-              Скопировано
+              Nusxalandi
             </>
           ) : (
             <>
               <Copy className="w-4 h-4" />
-              Копировать код
+              Kodni nusxalash
             </>
           )}
         </button>

@@ -16,7 +16,7 @@ export function RefundSection() {
           transition={{ duration: 0.5 }}
           className="font-suisse text-3xl lg:text-4xl font-bold text-white text-center mb-8 lg:mb-10"
         >
-          Ваши инвестиции вернутся на 100%
+          Investitsiyangiz 100% qaytariladi
         </motion.h2>
 
         {/* Mobile Layout */}
@@ -50,20 +50,20 @@ export function RefundSection() {
             className="bg-[#1a1a1d] rounded-3xl p-6"
           >
             <h3 className="text-white font-semibold text-lg mb-4">
-              Как это работает:
+              Qanday ishlaydi:
             </h3>
             
             {/* Centered Flow */}
             <div className="flex flex-col items-center text-center gap-3">
               <p className="text-white text-sm">
-                Завершите программу
+                Dasturni yakunlang
               </p>
               
               <ArrowDown className="w-5 h-5 text-white/60" />
               
               <div className="inline-flex items-center bg-white rounded-full px-4 py-2">
                 <span className="text-black text-sm font-medium whitespace-nowrap">
-                  Получите до 100% возврат
+                  100% gacha qaytarish oling
                 </span>
               </div>
             </div>
@@ -78,7 +78,7 @@ export function RefundSection() {
             className="bg-[#1a1a1d] rounded-3xl p-6"
           >
             <p className="text-white/80 text-sm leading-relaxed">
-              После успешного завершения программы вы получите возможность пройти стажировку в одной из компаний-партнеров. Вы будете работать над реальными проектами и набираться профессионального опыта.
+              Dasturni muvaffaqiyatli tugatganingizdan so'ng, hamkor kompaniyalardan birida stajirovka o'tash imkoniyatiga ega bo'lasiz. Siz real loyihalar ustida ishlaysiz va professional tajriba orttrasiz.
             </p>
           </motion.div>
 
@@ -92,19 +92,19 @@ export function RefundSection() {
           >
             <div className="flex flex-col gap-3">
               <h4 className="text-black font-semibold text-base">
-                Условия:
+                Shartlar:
               </h4>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-green-600 shrink-0" />
                   <span className="text-gray-900 text-sm">
-                    Завершить все занятия
+                    Barcha darslarni tugatish
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-green-600 shrink-0" />
                   <span className="text-gray-900 text-sm">
-                    Сдать все проекты
+                    Barcha loyihalarni topshirish
                   </span>
                 </div>
               </div>
@@ -147,19 +147,19 @@ export function RefundSection() {
                 className="bg-[#1a1a1d] rounded-3xl p-8"
               >
                 <h3 className="text-white font-semibold text-xl mb-6">
-                  Как это работает:
+                  Qanday ishlaydi:
                 </h3>
                 
                 <div className="flex items-center gap-4">
                   <span className="text-white text-base">
-                    Завершите программу
+                    Dasturni yakunlang
                   </span>
                   
                   <ArrowDown className="w-5 h-5 text-white/60 rotate-[-90deg]" />
                   
                   <div className="inline-flex items-center bg-white rounded-full px-5 py-2.5">
                     <span className="text-black text-base font-medium whitespace-nowrap">
-                      Получите до 100% возврат
+                      100% gacha qaytarish oling
                     </span>
                   </div>
                 </div>
@@ -174,7 +174,7 @@ export function RefundSection() {
                 className="bg-[#1a1a1d] rounded-3xl p-8"
               >
                 <p className="text-white/80 text-base leading-relaxed">
-                  После успешного завершения программы вы получите возможность пройти стажировку в одной из компаний-партнеров. Вы будете работать над реальными проектами и набираться профессионального опыта.
+                  Dasturni muvaffaqiyatli tugatganingizdan so'ng, hamkor kompaniyalardan birida stajirovka o'tash imkoniyatiga ega bo'lasiz. Siz real loyihalar ustida ishlaysiz va professional tajriba orttrasiz.
                 </p>
               </motion.div>
             </div>
@@ -190,19 +190,19 @@ export function RefundSection() {
           >
             <div className="flex items-center gap-8">
               <h4 className="text-black font-semibold text-lg">
-                Условия:
+                Shartlar:
               </h4>
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-green-600" />
                   <span className="text-gray-900 text-base">
-                    Завершить все занятия
+                    Barcha darslarni tugatish
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-green-600" />
                   <span className="text-gray-900 text-base">
-                    Сдать все проекты
+                    Barcha loyihalarni topshirish
                   </span>
                 </div>
               </div>

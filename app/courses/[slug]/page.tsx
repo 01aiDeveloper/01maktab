@@ -75,43 +75,43 @@ const staticStats = {
 const staticCertificate = {
   image: '/images/certificate.webp',
   benefits: [
-    'Помогает в составлении резюме и упаковке портфолио,',
-    'рекомендациях вашей кандидатуры работодателям, а также',
-    'полным сопровождением до трудоустройства.',
+    'Rezyume tuzish va portfolio tayyorlashda yordam beradi,',
+    'nomzodingizni ish beruvchilarga tavsiya qiladi, shuningdek',
+    'ishga joylashguncha to\'liq hamrohlik qiladi.',
   ],
 };
 
 const staticFaqs = [
   {
     id: '1',
-    question: 'Подойдёт ли курс новичкам?',
+    question: 'Kurs yangi boshlovchilar uchun mosmi?',
     answer:
-      'Программа рассчитана на новичков: вы сначала изучите основы и постепенно будете переходить к сложным темам. Каждый из них заканчивается практикой, чтобы вы не просто понимали материал, но и могли применять его на деле. Для старта достаточно базовых навыков работы с компьютером (набор текста, ориентирование в системе). Если у вас нет опыта — мы бесплатно обучим вас компьютерной грамотности перед началом курса.',
+      'Dastur yangi boshlovchilar uchun mo\'ljallangan: avval asoslarni o\'rganasiz va bosqichma-bosqich murakkab mavzularga o\'tasiz. Har bir modul amaliyot bilan tugaydi, siz materialni nafaqat tushunasiz, balki amalda qo\'llay olasiz. Boshlash uchun kompyuter bilan ishlashning asosiy ko\'nikmalari yetarli. Agar tajribangiz bo\'lmasa — kurs boshlanishidan oldin kompyuter savodxonligini bepul o\'rgatamiz.',
   },
   {
     id: '2',
-    question: 'Почему мне стоит выбрать именно 01AI?',
-    answer: '01AI предлагает уникальную методологию обучения с реальными проектами и поддержкой менторов.',
+    question: 'Nega aynan 01AI ni tanlashim kerak?',
+    answer: '01AI real loyihalar va mentorlar yordami bilan noyob o\'qitish metodologiyasini taklif etadi.',
   },
   {
     id: '3',
-    question: 'Кто ваши наставники?',
-    answer: 'Наши наставники — практикующие специалисты из топовых IT-компаний с многолетним опытом.',
+    question: 'Mentorlaringiz kimlar?',
+    answer: 'Bizning mentorlar — ko\'p yillik tajribaga ega top IT-kompaniyalardan amaliyotchi mutaxassislar.',
   },
   {
     id: '4',
-    question: 'Почему обучение длится так долго?',
-    answer: 'Качественное обучение требует времени для усвоения материала и практики на реальных проектах.',
+    question: 'Nega o\'qish shuncha uzoq davom etadi?',
+    answer: 'Sifatli ta\'lim materialni o\'zlashtirish va real loyihalarda amaliyot uchun vaqt talab qiladi.',
   },
   {
     id: '5',
-    question: 'Можно ли начать зарабатывать во время обучения?',
-    answer: 'Да, многие наши студенты начинают работать на фрилансе уже после первых модулей.',
+    question: 'O\'qish davomida pul ishlashni boshlash mumkinmi?',
+    answer: 'Ha, ko\'plab talabalarimiz birinchi modullardan keyin freelance ishlay boshlaydilar.',
   },
   {
     id: '6',
-    question: 'Я смогу устроиться на работу во время курса?',
-    answer: 'Мы помогаем с трудоустройством и многие студенты находят работу ещё до окончания курса.',
+    question: 'Kurs davomida ishga joylasha olamanmi?',
+    answer: 'Biz ishga joylashishda yordam beramiz va ko\'plab talabalar kursni tugatmasdan ish topadilar.',
   },
 ];
 
@@ -283,7 +283,7 @@ export default function CoursePage() {
       {mentor && (
         <section id="mentor" className="w-full py-8">
           <div className="container mx-auto px-4">
-            <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">Ментор курса</h2>
+            <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">Kurs mentori</h2>
             <MentorCard
               name={mentor.fullname}
               role={mentor.position}

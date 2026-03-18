@@ -4,9 +4,17 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Send, Instagram, Linkedin, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
+import { useAuthStore } from '@/store/auth-store';
 
-const footerLinks = [
-  { label: 'Darsxona', href: '/' },
+const guestLinks = [
+  { label: 'Bosh Sahifa', href: '/' },
+  { label: 'Skillar', href: '/catalog?tab=skills' },
+  { label: 'Kurslar', href: '/catalog?tab=courses' },
+  { label: 'Kasblar', href: '/catalog?tab=professions' },
+];
+
+const authLinks = [
+  { label: 'Darsxona', href: '/classroom' },
   { label: 'Barcha Kurslar', href: '/catalog' },
   { label: 'Hamjamiyat', href: '/community' },
   { label: 'Market', href: '#' },
@@ -36,6 +44,8 @@ interface SiteFooterProps {
 
 export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
   const [hoveredLogoIndex, setHoveredLogoIndex] = useState<number | null>(null);
+  const { user } = useAuthStore();
+  const footerLinks = user ? authLinks : guestLinks;
 
   const isDark = variant === 'dark';
   const bgColor = isDark ? 'bg-[#101010]' : 'bg-[#F4F4F6]';

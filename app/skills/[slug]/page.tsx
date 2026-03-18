@@ -215,7 +215,7 @@ export default function SkillDetailPage() {
                       onClick={handleStart}
                       disabled={startLoading}
                     >
-                      {startLoading ? "Yuklanmoqda..." : "Продолжить обучение"}
+                      {startLoading ? "Yuklanmoqda..." : "O'qishni davom ettirish"}
                     </MainButton>
                   </div>
                 ) : (
@@ -269,15 +269,17 @@ export default function SkillDetailPage() {
                     <p className="text-gray-600 text-xs lg:text-sm leading-relaxed mb-3">
                       {partner.description}
                     </p>
-                    <MainButton
-                      variant="black"
-                      size="sm"
-                      icon={<ArrowRight className="w-3 h-3" />}
-                      iconPosition="right"
-                      className="rounded-xl border-0 text-xs"
-                    >
-                      Batafsil
-                    </MainButton>
+                    <Link href={`/partners/${partner.id}`}>
+                      <MainButton
+                        variant="black"
+                        size="sm"
+                        icon={<ArrowRight className="w-3 h-3" />}
+                        iconPosition="right"
+                        className="rounded-xl border-0 text-xs"
+                      >
+                        Batafsil
+                      </MainButton>
+                    </Link>
                   </div>
                 </motion.div>
               )}
@@ -313,13 +315,15 @@ export default function SkillDetailPage() {
                 </Badge>
               </div>
               {skill.icon && (
-                <div className="absolute bottom-6 right-6 w-12 h-12 lg:w-14 lg:h-14 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg">
+                <div className="absolute bottom-6 right-6 w-12 h-12 lg:w-14 lg:h-14 bg-white/25 rounded-full flex items-center justify-center shadow-lg">
                   <Image
                     src={mediaUrl(skill.icon)}
                     alt="icon"
                     width={28}
                     height={28}
                     className="object-contain"
+                    style={{backdropFilter: "blur(19.368366241455078px)"
+}}
                   />
                 </div>
               )}
@@ -435,7 +439,7 @@ export default function SkillDetailPage() {
                   <p className="text-gray-300 text-sm lg:text-base leading-relaxed mb-6">
                     {partner.description}
                   </p>
-                  {partner.website && (
+                  <Link href={`/partners/${partner.id}`}>
                     <MainButton
                       variant="white"
                       size="lg"
@@ -445,7 +449,7 @@ export default function SkillDetailPage() {
                     >
                       Batafsil
                     </MainButton>
-                  )}
+                  </Link>
                 </div>
                 <div className="w-full lg:w-80 shrink-0">
                   <div className="bg-white rounded-2xl flex items-center justify-center aspect-square lg:aspect-auto lg:h-64 relative overflow-hidden">

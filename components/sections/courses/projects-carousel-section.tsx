@@ -22,7 +22,7 @@ interface ProjectsCarouselSectionProps {
 
 export function ProjectsCarouselSection({ projects, title = '5 ta real loyiha' }: ProjectsCarouselSectionProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
+    loop: true,
     align: 'start',
     slidesToScroll: 1,
   });

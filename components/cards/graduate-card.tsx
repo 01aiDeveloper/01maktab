@@ -46,7 +46,7 @@ export function GraduateCard({
         <div className="bg-[#1a1a1d] rounded-3xl p-8 flex flex-col">
           <div className="flex-1">
             <h3 className="text-white font-bold text-2xl mb-2">
-              {name}, {age} лет
+              {name}, {age} yosh
             </h3>
             <p className="text-white/60 text-sm mb-4">
               {previousRole}
@@ -54,10 +54,10 @@ export function GraduateCard({
             <p className="text-white text-base mb-6">
               {currentRole}
             </p>
-            
+
             <div className="mb-4">
               <h4 className="text-white font-semibold text-base mb-3">
-                История:
+                Hikoya:
               </h4>
               <p className="text-white/70 text-sm leading-relaxed">
                 {story}
@@ -99,7 +99,7 @@ export function GraduateCard({
         {/* Content Below */}
         <div className="p-6">
           <h3 className="text-white font-bold text-xl mb-2">
-            {name}, {age} лет
+            {name}, {age} yosh
           </h3>
           <p className="text-white/60 text-sm mb-3">
             {previousRole}
@@ -107,10 +107,10 @@ export function GraduateCard({
           <p className="text-white text-sm mb-5">
             {currentRole}
           </p>
-          
+
           <div className="mb-5">
             <h4 className="text-white font-semibold text-sm mb-2">
-              История:
+              Hikoya:
             </h4>
             <p className="text-white/70 text-sm leading-relaxed">
               {story}

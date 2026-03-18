@@ -67,7 +67,7 @@ export function EventHero({ event, onBack }: EventHeroProps) {
 
             {/* CTA Button */}
             <Button className="bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-xl px-8 py-6 h-auto text-base font-medium">
-              Участвовать
+              Ishtirok etish
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>

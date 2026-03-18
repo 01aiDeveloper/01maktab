@@ -23,7 +23,7 @@ export function CertificatesSection({ certificates, footnote }: CertificatesSect
       <div className="container mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
           {/* Section Title */}
-          <h2 className="font-suisse text-3xl lg:text-4xl font-bold text-white text-center mb-8 lg:mb-12">2 ценных сертификата</h2>
+          <h2 className="font-suisse text-3xl lg:text-4xl font-bold text-white text-center mb-8 lg:mb-12">2 ta qimmatli sertifikat</h2>
 
           {/* Certificates Grid */}
           <div className="grid lg:grid-cols-2 gap-6 mb-6">

@@ -8,36 +8,36 @@ const journeyData = [
   {
     id: 1,
     icon: <BookOpen className="w-full h-full" />,
-    title: "1-2 месяц: Интенсивная фаза",
-    subtitle: "Основы и практические навыки",
+    title: "1-2 oy: Intensiv bosqich",
+    subtitle: "Asoslar va amaliy ko'nikmalar",
     bullets: [
-      "3 раза в неделю живые занятия",
-      "Python, SQL, основы Data Analysis",
-      "Первые проекты",
+      "Haftada 3 marta jonli darslar",
+      "Python, SQL, Data Analysis asoslari",
+      "Birinchi loyihalar",
     ],
   },
   {
     id: 2,
     icon: <Briefcase className="w-full h-full" />,
-    title: "3-5 месяц: Глубокое погружение",
-    subtitle: "Профессиональный уровень",
+    title: "3-5 oy: Chuqur o'rganish",
+    subtitle: "Professional daraja",
     bullets: [
-      "2 раза в неделю живые занятия",
-      "Support hours каждую неделю",
-      "Мастер-классы в офисах партнеров",
-      "Работа над реальными проектами",
-      "Создание портфолио",
+      "Haftada 2 marta jonli darslar",
+      "Har hafta Support hours",
+      "Hamkorlar ofislarida master-klasslar",
+      "Real loyihalar ustida ishlash",
+      "Portfolio yaratish",
     ],
   },
   {
     id: 3,
     icon: <Sparkles className="w-full h-full" />,
-    title: "Дополнительные возможности",
+    title: "Qo'shimcha imkoniyatlar",
     subtitle: "",
     bullets: [
-      "Помощь Support teacher",
-      "Записи всех занятий",
-      "Мероприятия MLC",
+      "Support teacher yordami",
+      "Barcha darslar yozuvlari",
+      "MLC tadbirlari",
     ],
   },
 ]
@@ -56,11 +56,11 @@ export function JourneySection() {
           {/* Header */}
           <div className="text-center mb-12 lg:mb-16">
             <h2 className="font-suisse text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4">
-              5-месячное путешествие
+              5 oylik sayohat
             </h2>
             <p className="text-gray-400 text-sm lg:text-base max-w-2xl mx-auto leading-relaxed">
-              5-месячная интенсивная программа: живые занятия, стажировка, международные 
-              сертификаты и гарантированный результат. Начните профессиональную карьеру сегодня.
+              5 oylik intensiv dastur: jonli darslar, stajirovka, xalqaro
+              sertifikatlar va kafolatlangan natija. Professional karyerangizni bugun boshlang.
             </p>
           </div>
 

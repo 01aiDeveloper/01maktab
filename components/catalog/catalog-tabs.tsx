@@ -95,7 +95,7 @@ export function CatalogTabs() {
           <div className="w-10 h-10 border-4 border-gray-200 border-t-[#3B5BFF] rounded-full animate-spin" />
         </div>
       ) : items.length === 0 ? (
-        <NoData title="Здесь пока ничего нет" description="Hozircha ma'lumot yo'q" />
+        <NoData title="Bu yerda hozircha hech narsa yo'q" description="Hozircha ma'lumot yo'q" />
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {items.map((item: CatalogItem) => (

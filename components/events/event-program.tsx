@@ -28,7 +28,7 @@ export function EventProgram({ program }: EventProgramProps) {
   return (
     <section>
       <h2 className="text-3xl lg:text-4xl font-bold text-white mb-8 lg:mb-12">
-        Программа мероприятия
+        Tadbir dasturi
       </h2>
 
       <div className="space-y-4">

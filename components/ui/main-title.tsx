@@ -111,8 +111,7 @@ export function MainTitle({
 
   const baseClassName = cn(
     // Responsive font sizes: mobile 36px, tablet 48px, desktop 64px
-    "text-[36px] sm:text-[48px] md:text-[56px] lg:text-[64px]",
-    // Font family: Suisse Intl
+    "text-[36px] leading-[1.2] sm:text-[48px] md:text-[56px] lg:text-[64px] lg:leading-[81px]",
     // Font weight: 600 (Semibold)
     "font-semibold",
     // Letter spacing: -5%
