@@ -36,8 +36,7 @@ function LoginContent() {
         }
       }
 
-      // TODO: remove debug - temporarily disabled redirect to see Telegram data
-      // window.location.href = "/classroom"
+      window.location.href = "/classroom"
     } catch (err: any) {
       setError(err.response?.data?.message || "Tizimga kirishda xatolik yuz berdi")
       setIsLoading(false)
