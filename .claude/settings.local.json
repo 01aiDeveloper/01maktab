@@ -8,7 +8,8 @@
       "Bash(find:*)",
       "Bash(head:*)",
       "Bash(grep:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(cd D:\\\\Projects\\\\Clients\\\\01maktab\\\\01maktab:*)"
     ]
   }
 }
