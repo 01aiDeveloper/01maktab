@@ -39,12 +39,13 @@ function mediaUrl(path: string | null | undefined): string {
 }
 
 function toModuleItem(m: ApiCourseModule): ModuleItem {
+  const lessons = m.lessons ?? [];
   return {
     id: String(m.id),
     title: m.title,
-    darsCount: m.lessons.length,
+    darsCount: lessons.length,
     testCount: 0,
-    lessons: m.lessons.map((l, i) => ({
+    lessons: lessons.map((l, i) => ({
       id: l.id,
       title: l.title,
       isFree: i === 0,
@@ -181,7 +182,29 @@ export default function CoursePage() {
     );
   }
 
-  const modules: ModuleItem[] = course.modules.map(toModuleItem);
+  const modules: ModuleItem[] = (courseModules?.modules ?? course.modules).map((m) => {
+    if ('order' in m) {
+      const authMod = m as import('@/types/api').ApiModule;
+      const lessons = authMod.lessons ?? [];
+      return {
+        id: String(authMod.id),
+        title: authMod.title,
+        lessonsCount: lessons.length,
+        testsCount: authMod.test ? 1 : 0,
+        lessons: lessons.map((l) => ({
+          id: l.id,
+          title: l.title,
+          isFree: l.isPublic,
+          isCompleted: l.isCompleted,
+          type: "video" as const,
+        })),
+        test: authMod.test
+          ? { id: String(authMod.test.id), title: authMod.test.name }
+          : undefined,
+      } as ModuleItem;
+    }
+    return toModuleItem(m as import('@/types/api').ApiCourseModule);
+  });
   const projects: Project[] = course.projects.map((p, i) => toProject(p, i, course.projects.length));
   const mentor = course.mentor;
 
@@ -195,7 +218,7 @@ export default function CoursePage() {
   const courseImage = mediaUrl(course.photo);
   const priceLabel = course.pricingType === 'FREE' ? 'Bepul' : `${course.price.toLocaleString()} so'm`;
 
-  const totalLessons = course.modules.reduce((acc, m) => acc + m.lessons.length, 0);
+  const totalLessons = course.modules.reduce((acc, m) => acc + (m.lessons?.length ?? 0), 0);
 
   const handleLessonClick = (lesson: { id: string | number }, ctx: { module: ModuleItem }) => {
     router.push(`/module/${ctx.module.id}?lessonId=${lesson.id}&courseType=course&courseId=${course.id}`);

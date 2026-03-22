@@ -97,26 +97,6 @@ export function EnrollmentCtaCountdown({
             </Button>
           </div>
 
-          {/* Countdown Label - Left aligned */}
-          <div className="mb-6 text-left">
-            <h3 className="text-white font-suisse font-semibold text-[32px] lg:text-[64px] leading-[75px] tracking-[-0.05em]">
-              Qabul yopilishiga:
-            </h3>
-          </div>
-
-          {/* Countdown Tiles - Hours & Minutes */}
-          <div className="flex items-center justify-evenly gap-12 lg:gap-[10px]">
-            <CountdownTile
-              value={timeLeft.days}
-              prevValue={prevTimeLeft.days}
-              label="kun"
-            />
-            <CountdownTile
-              value={timeLeft.hours}
-              prevValue={prevTimeLeft.hours}
-              label="soat"
-            />
-          </div>
         </motion.div>
       </div>
     </section>

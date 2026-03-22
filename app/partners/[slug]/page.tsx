@@ -102,7 +102,7 @@ export default function PartnerPage() {
             )}
             {partner.website && (
               <a href={partner.website} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="w-fit rounded-xl">
+                <Button size="lg" className="w-fit rounded-xl bg-[#3b66f5] hover:bg-[#2d52d1] text-white">
                   Hamkor haqida batafsil
                   <ArrowRight className="w-4 h-4" />
                 </Button>
@@ -110,17 +110,29 @@ export default function PartnerPage() {
             )}
           </div>
 
-          {/* Right: Logo Card */}
+          {/* Right: Image or Logo Card */}
           <div className="bg-white rounded-3xl p-8 md:p-12 flex items-center justify-center">
-            <div className="relative w-full max-w-sm aspect-square">
-              <Image
-                src={getMediaUrl(partner.logo)}
-                alt={partner.name}
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
+            {partner.image ? (
+              <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
+                <Image
+                  src={getMediaUrl(partner.image)}
+                  alt={partner.name}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="relative w-full max-w-sm aspect-square">
+                <Image
+                  src={getMediaUrl(partner.logo)}
+                  alt={partner.name}
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+            )}
           </div>
         </section>
 
@@ -142,7 +154,7 @@ Biz ${partner.name} kabi kompaniyalar bilan hamkorlik IT-industriyaning kelajagi
           {partner.website && (
             <div className="flex justify-center">
               <a href={partner.website} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="rounded-xl">
+                <Button size="lg" className="rounded-xl bg-[#3b66f5] hover:bg-[#2d52d1] text-white">
                   Hamkor haqida batafsil
                   <ArrowRight className="w-4 h-4" />
                 </Button>

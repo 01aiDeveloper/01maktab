@@ -50,20 +50,6 @@ export function MentorsSection() {
           <MainTitle align="center" color="white" animated>
             Sun'iy Intellekt Yangi Davr Texnologiyasi Birinchilardan Bo'ling!
           </MainTitle>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="mx-auto max-w-3xl text-sm leading-snug font-medium text-white/50 md:text-xl md:leading-relaxed"
-          >
-            Blogerlar Texnoplov va Teacher Azam hamda HR sohasining yirik
-            mutaxassisi Temirxon Xolmirzayev karyera yo'lingizni qanday boshlash
-            haqida so'zlab berishadi: ish izlashdan tortib, karyerada tez
-            ko'tarilishga yordam beradigan moslashuvchan ko'nikmalarni
-            rivojlantirishgacha
-          </motion.p>
         </div>
 
         <div className="mt-10">
@@ -114,3 +100,5 @@ export function MentorsSection() {
     </section>
   );
 }
+
+

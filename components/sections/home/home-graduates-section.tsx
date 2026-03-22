@@ -157,11 +157,11 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
         <div className="space-y-4">
         {/* Row 1 */}
         <div className="overflow-hidden" ref={emblaRef1}>
-          <div className="flex gap-3 md:gap-4">
+          <div className="flex">
             {graduatesRow1.map((graduate) => (
               <div
                 key={graduate.id}
-                className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_calc(50%-6px)] md:flex-[0_0_calc(33.333%-8px)] lg:flex-[0_0_calc(25%-9px)]"
+                className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_50%] md:flex-[0_0_33.333%] lg:flex-[0_0_25%] px-1.5 md:px-2"
               >
                 <Link href={`/graduates/${graduate.id}`}>
                   <GraduateCarouselCard
@@ -179,11 +179,11 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
         {/* Row 2 */}
         {rows === 2 && graduatesRow2.length > 0 ? (
           <div className="overflow-hidden" ref={emblaRef2}>
-            <div className="flex gap-3 md:gap-4">
+            <div className="flex">
               {graduatesRow2.map((graduate) => (
                 <div
                   key={graduate.id}
-                  className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_calc(50%-6px)] md:flex-[0_0_calc(33.333%-8px)] lg:flex-[0_0_calc(25%-9px)]"
+                  className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_50%] md:flex-[0_0_33.333%] lg:flex-[0_0_25%] px-1.5 md:px-2"
                 >
                   <Link href={`/graduates/${graduate.id}`}>
                     <GraduateCarouselCard

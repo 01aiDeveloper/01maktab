@@ -45,12 +45,13 @@ function mediaUrl(path: string | null | undefined): string {
 }
 
 function toModuleItem(m: ApiCourseModule): ModuleItem {
+  const lessons = m.lessons ?? [];
   return {
     id: String(m.id),
     title: m.title,
-    darsCount: m.lessons.length,
+    darsCount: lessons.length,
     testCount: 0,
-    lessons: m.lessons.map((l, i) => ({
+    lessons: lessons.map((l, i) => ({
       id: l.id,
       title: l.title,
       isFree: i === 0,
@@ -231,7 +232,29 @@ export default function ProfessionPage() {
     );
   }
 
-  const modules: ModuleItem[] = profession.modules.map(toModuleItem);
+  const modules: ModuleItem[] = (professionModules?.modules ?? profession.modules).map((m) => {
+    if ('order' in m) {
+      const authMod = m as import('@/types/api').ApiModule;
+      const lessons = authMod.lessons ?? [];
+      return {
+        id: String(authMod.id),
+        title: authMod.title,
+        lessonsCount: lessons.length,
+        testsCount: authMod.test ? 1 : 0,
+        lessons: lessons.map((l) => ({
+          id: l.id,
+          title: l.title,
+          isFree: l.isPublic,
+          isCompleted: l.isCompleted,
+          type: "video" as const,
+        })),
+        test: authMod.test
+          ? { id: String(authMod.test.id), title: authMod.test.name }
+          : undefined,
+      } as ModuleItem;
+    }
+    return toModuleItem(m as import('@/types/api').ApiCourseModule);
+  });
   const mentor = profession.mentor;
 
   const handleLessonClick = (lesson: { id: string | number }, ctx: { module: ModuleItem }) => {
@@ -445,6 +468,7 @@ export default function ProfessionPage() {
 
         {/* Job Support Section */}
         <JobSupportSection />
+
 
         {/* Refund Section */}
         <RefundSection />

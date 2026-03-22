@@ -64,70 +64,104 @@ export function JourneySection() {
             </p>
           </div>
 
-          {/* Desktop Venn Diagram Layout */}
-          <div className="hidden lg:block relative mx-auto" style={{ width: '800px', height: '650px' }}>
-            {/* Top Left Circle */}
-            <div className="absolute" style={{ left: '60px', top: '0' }}>
-              <JourneyCircle
-                icon={journeyData[0].icon}
-                title={journeyData[0].title}
-                subtitle={journeyData[0].subtitle}
-                bullets={journeyData[0].bullets}
-              />
+          {/* Tablet & Desktop: Venn Diagram — 2 top circles + 1 bottom center */}
+          <div className="hidden md:flex flex-col items-center">
+            {/* Top row: two circles overlapping horizontally */}
+            <div className="flex justify-center">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="relative z-10 -mr-10 lg:-mr-16 xl:-mr-20"
+              >
+                <JourneyCircle
+                  icon={journeyData[0].icon}
+                  title={journeyData[0].title}
+                  subtitle={journeyData[0].subtitle}
+                  bullets={journeyData[0].bullets}
+                />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="relative z-10 -ml-10 lg:-ml-16 xl:-ml-20"
+              >
+                <JourneyCircle
+                  icon={journeyData[1].icon}
+                  title={journeyData[1].title}
+                  subtitle={journeyData[1].subtitle}
+                  bullets={journeyData[1].bullets}
+                />
+              </motion.div>
             </div>
-            
-            {/* Top Right Circle */}
-            <div className="absolute" style={{ right: '60px', top: '0' }}>
-              <JourneyCircle
-                icon={journeyData[1].icon}
-                title={journeyData[1].title}
-                subtitle={journeyData[1].subtitle}
-                bullets={journeyData[1].bullets}
-              />
-            </div>
-            
-            {/* Bottom Center Circle */}
-            <div className="absolute left-1/2 -translate-x-1/2" style={{ top: '270px' }}>
+
+            {/* Bottom center circle overlapping both top circles */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="relative z-20 -mt-16 lg:-mt-28 xl:-mt-32"
+            >
               <JourneyCircle
                 icon={journeyData[2].icon}
                 title={journeyData[2].title}
                 subtitle={journeyData[2].subtitle}
                 bullets={journeyData[2].bullets}
               />
-            </div>
+            </motion.div>
           </div>
 
-          {/* Mobile Stacked Layout with Vertical Overlap */}
-          <div className="lg:hidden flex flex-col items-center pb-8">
-            {/* Circle 1 */}
-            <div className="relative z-30">
+          {/* Mobile: Stacked with vertical overlap */}
+          <div className="md:hidden flex flex-col items-center pb-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="relative z-30"
+            >
               <JourneyCircle
                 icon={journeyData[0].icon}
                 title={journeyData[0].title}
                 subtitle={journeyData[0].subtitle}
                 bullets={journeyData[0].bullets}
               />
-            </div>
-            
-            {/* Circle 2 - overlaps circle 1 */}
-            <div className="relative z-20 -mt-14">
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="relative z-20 -mt-5"
+            >
               <JourneyCircle
                 icon={journeyData[1].icon}
                 title={journeyData[1].title}
                 subtitle={journeyData[1].subtitle}
                 bullets={journeyData[1].bullets}
               />
-            </div>
-            
-            {/* Circle 3 - overlaps circle 2 */}
-            <div className="relative z-10 -mt-14">
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="relative z-10 -mt-5"
+            >
               <JourneyCircle
                 icon={journeyData[2].icon}
                 title={journeyData[2].title}
                 subtitle={journeyData[2].subtitle}
                 bullets={journeyData[2].bullets}
               />
-            </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>

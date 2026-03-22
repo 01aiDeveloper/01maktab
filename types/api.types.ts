@@ -65,6 +65,7 @@ export interface Partner {
   id: number
   name: string
   logo: string
+  image?: string
   description: string
   website: string
 }

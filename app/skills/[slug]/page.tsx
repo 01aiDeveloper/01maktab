@@ -42,20 +42,22 @@ function difficultyLabel(difficulty: string): string {
 }
 
 function toModuleItem(m: ApiSkillModule): ModuleItem {
+  const lessons = m.lessons ?? [];
+  const tests = m.tests ?? [];
   return {
     id: String(m.id),
     title: m.title,
-    darsCount: m.lessons.length,
-    testCount: m.tests.length,
-    lessons: m.lessons.map((l) => ({
+    darsCount: lessons.length,
+    testCount: tests.length,
+    lessons: lessons.map((l) => ({
       id: l.id,
       title: l.title,
       isFree: l.isPublic,
       type: "video" as const,
     })),
     test:
-      m.tests.length > 0
-        ? { id: String(m.tests[0].id), title: m.tests[0].name }
+      tests.length > 0
+        ? { id: String(tests[0].id), title: tests[0].name }
         : undefined,
   };
 }
@@ -133,7 +135,31 @@ export default function SkillDetailPage() {
   }
 
   const partner = skill.partners[0] ?? null;
-  const modules: ModuleItem[] = skill.modules.map(toModuleItem);
+  const modules: ModuleItem[] = (skillModules?.modules ?? skill.modules).map((m) => {
+    // Authenticated module data (from skillModules) has richer info
+    if ('lessons' in m && 'order' in m) {
+      const authMod = m as import('@/types/api').ApiModule;
+      const lessons = authMod.lessons ?? [];
+      return {
+        id: String(authMod.id),
+        title: authMod.title,
+        lessonsCount: lessons.length,
+        testsCount: authMod.test ? 1 : 0,
+        lessons: lessons.map((l) => ({
+          id: l.id,
+          title: l.title,
+          isFree: l.isPublic,
+          isCompleted: l.isCompleted,
+          type: "video" as const,
+        })),
+        test: authMod.test
+          ? { id: String(authMod.test.id), title: authMod.test.name }
+          : undefined,
+      } as ModuleItem;
+    }
+    // Fallback to public module data
+    return toModuleItem(m as ApiSkillModule);
+  });
   const mentor = skill.mentor;
   const priceLabel =
     skill.pricingType === "FREE"
