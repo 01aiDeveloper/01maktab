@@ -204,7 +204,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
                   transition={{ duration: 0.6, ease: 'easeInOut', delay: 0.15 }}
                   className="inline-block"
                 >
-                  I
+                  I 
                 </motion.span>
                 <motion.span
                   animate={hoveredLogoIndex === 3 ? { y: [0, -8, 4, -4, 2, 0], rotate: [0, -5, 5, -3, 3, 0] } : {}}
