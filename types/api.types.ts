@@ -70,6 +70,7 @@ export interface Partner {
   image?: string
   description: string
   website: string
+  blocks?: string[]
 }
 
 // Career/Profession Types

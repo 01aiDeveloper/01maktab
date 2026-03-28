@@ -157,6 +157,22 @@ Biz ${partner.name} kabi kompaniyalar bilan hamkorlik IT-industriyaning kelajagi
             </p>
           </div>
 
+          {/* Block Images */}
+          {partner.blocks && partner.blocks.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              {partner.blocks.map((block, index) => (
+                <div key={index} className="relative w-full aspect-video overflow-hidden rounded-2xl bg-white">
+                  <Image
+                    src={getMediaUrl(block)}
+                    alt={`${partner.name} - ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
           {partner.website && (
             <div className="flex justify-center">
               <a href={partner.website} target="_blank" rel="noopener noreferrer">

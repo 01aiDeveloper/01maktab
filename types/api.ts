@@ -6,6 +6,7 @@ export interface ApiPartner {
   logo: string;
   description: string;
   website: string;
+  blocks?: string[];
 }
 
 export interface ApiMentor {
