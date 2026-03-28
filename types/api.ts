@@ -6,7 +6,7 @@ export interface ApiPartner {
   logo: string;
   description: string;
   website: string;
-  blocks?: string[];
+  blocks?: import('@/types/api.types').ContentBlock[];
 }
 
 export interface ApiMentor {

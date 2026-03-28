@@ -63,6 +63,11 @@ export interface AuthResponse {
 }
 
 // Partner Types
+export type ContentBlock =
+  | { type: 'text'; value: string; order: number }
+  | { type: 'image'; url: string; order: number }
+  | { type: 'image_group'; images: string[]; order: number }
+
 export interface Partner {
   id: number
   name: string
@@ -70,7 +75,7 @@ export interface Partner {
   image?: string
   description: string
   website: string
-  blocks?: string[]
+  blocks?: ContentBlock[]
 }
 
 // Career/Profession Types

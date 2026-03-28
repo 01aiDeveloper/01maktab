@@ -9,9 +9,24 @@ import { getMediaUrl } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import type { Partner } from '@/types/api.types';
+import { ImageGroupGallery } from '@/components/story/image-group-gallery';
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'https://app-dev.01ai.uz/api/v1';
+
+/** Extract all image URLs from ContentBlock[] */
+function extractBlockImages(blocks: unknown): string[] {
+  if (!blocks || !Array.isArray(blocks)) return [];
+  const images: string[] = [];
+  for (const b of blocks) {
+    if (!b || typeof b !== 'object') continue;
+    if (b.type === 'image' && b.url) images.push(b.url);
+    if (b.type === 'image_group' && Array.isArray(b.images)) {
+      images.push(...b.images.filter(Boolean));
+    }
+  }
+  return images;
+}
 
 export default function PartnerPage() {
   const params = useParams();
@@ -24,12 +39,15 @@ export default function PartnerPage() {
   useEffect(() => {
     async function fetchPartner() {
       try {
-        const response = await fetch(`${API_BASE_URL}/partner/public?pageSize=100`);
+        const response = await fetch(`${API_BASE_URL}/partner/${partnerId}`);
+        if (!response.ok) {
+          setError(true);
+          return;
+        }
         const result = await response.json();
-        const partners: Partner[] = result?.data?.data || [];
-        const found = partners.find((p) => String(p.id) === String(partnerId));
-        if (found) {
-          setPartner(found);
+        const data = result?.data;
+        if (data) {
+          setPartner(data);
         } else {
           setError(true);
         }
@@ -157,21 +175,28 @@ Biz ${partner.name} kabi kompaniyalar bilan hamkorlik IT-industriyaning kelajagi
             </p>
           </div>
 
-          {/* Block Images */}
-          {partner.blocks && partner.blocks.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-              {partner.blocks.map((block, index) => (
-                <div key={index} className="relative w-full aspect-video overflow-hidden rounded-2xl bg-white">
+          {/* Block Images — same layout as student stories */}
+          {(() => {
+            const blockImages = extractBlockImages(partner.blocks);
+            if (blockImages.length === 0) return null;
+            if (blockImages.length === 1) {
+              return (
+                <div className="relative w-full aspect-[4/3] rounded-[24px] overflow-hidden mb-6">
                   <Image
-                    src={getMediaUrl(block)}
-                    alt={`${partner.name} - ${index + 1}`}
+                    src={getMediaUrl(blockImages[0])}
+                    alt={`${partner.name}`}
                     fill
                     className="object-cover"
                   />
                 </div>
-              ))}
-            </div>
-          )}
+              );
+            }
+            return (
+              <div className="mb-6">
+                <ImageGroupGallery images={blockImages} />
+              </div>
+            );
+          })()}
 
           {partner.website && (
             <div className="flex justify-center">
