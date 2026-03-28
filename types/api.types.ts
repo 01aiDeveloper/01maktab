@@ -29,6 +29,7 @@ export interface Course {
   format: CourseFormat
   name: string
   title: string
+  subtitle?: string
   description: string
   photo: string
   icon: string
@@ -78,6 +79,7 @@ export interface Career {
   name: string
   slug?: string
   title: string
+  subtitle?: string
   description: string
   photo: string
   icon: string | null
@@ -117,6 +119,7 @@ export interface Skill {
   format: string
   name: string
   title: string
+  subtitle?: string
   description: string
   photo: string
   icon: string | null

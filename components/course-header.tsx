@@ -17,23 +17,24 @@ const defaultNavLinks = [
   { label: "Market", href: "#" },
 ]
 
-interface NavLink {
-  label: string
-  href: string
-}
+const guestMainNavLinks = [
+  { label: "Bosh Sahifa", href: "/" },
+  { label: "Skillar", href: "/catalog?tab=skills" },
+  { label: "Kurslar", href: "/catalog?tab=courses" },
+  { label: "Kasblar", href: "/catalog?tab=professions" },
+]
 
 interface CourseHeaderProps {
   variant?: 'light' | 'dark'
-  guestNavLinks?: NavLink[]
 }
 
-export function CourseHeader({ variant = 'dark', guestNavLinks }: CourseHeaderProps) {
+export function CourseHeader({ variant = 'dark' }: CourseHeaderProps) {
   const [isOpen, setIsOpen] = useState(false)
   const { user, logout } = useAuthStore()
   useMe()
 
   const isDark = variant === 'dark'
-  const activeNavLinks = !user && guestNavLinks ? guestNavLinks : defaultNavLinks
+  const activeNavLinks = user ? defaultNavLinks : guestMainNavLinks
 
   return (
     <motion.header

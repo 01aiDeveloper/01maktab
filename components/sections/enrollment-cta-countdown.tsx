@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CountdownTile } from "@/components/ui/countdown-tile";
 
@@ -91,9 +92,12 @@ export function EnrollmentCtaCountdown({
             <Button
               size="lg"
               className="bg-white hover:bg-gray-100 text-black font-semibold rounded-full flex items-center gap-2 h-12 px-6 lg:px-8 text-base"
+              asChild
             >
-              Hoziroq ariza qoldiring
-              <ArrowRight className="w-5 h-5" />
+              <Link href="/login">
+                Hoziroq ariza qoldiring
+                <ArrowRight className="w-5 h-5" />
+              </Link>
             </Button>
           </div>
 

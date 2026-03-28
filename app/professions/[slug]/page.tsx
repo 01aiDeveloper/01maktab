@@ -36,7 +36,7 @@ import type { ApiCourseModule } from '@/types/api';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
-import { useModuleTestCounts } from '@/hooks/use-module-test';
+
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -46,13 +46,13 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`;
 }
 
-function toModuleItem(m: ApiCourseModule, questionsCount?: number): ModuleItem {
+function toModuleItem(m: ApiCourseModule): ModuleItem {
   const lessons = m.lessons ?? [];
   return {
     id: String(m.id),
     title: m.title,
-    darsCount: lessons.length,
-    testCount: questionsCount ?? 0,
+    darsCount: m.lessonCount,
+    testCount: m.testCount,
     lessons: lessons.map((l, i) => ({
       id: l.id,
       title: l.title,
@@ -178,8 +178,6 @@ export default function ProfessionPage() {
   const { user } = useAuthStore();
   const { data: profession, isLoading, isError } = useProfession(slug);
   const { data: professionModules } = useProfessionModules(profession?.id);
-  const moduleIds = (profession?.modules ?? []).map((m) => m.id);
-  const testCounts = useModuleTestCounts(moduleIds);
   const [openModule, setOpenModule] = useState<string>('');
   const [startLoading, setStartLoading] = useState(false);
 
@@ -209,19 +207,11 @@ export default function ProfessionPage() {
     setOpenModule(String(profession.modules[0].id));
   }
 
-  const professionGuestNav = [
-    { label: "Nima o'rganasiz", href: '#nima-organasiz' },
-    { label: 'Bepul sinov darslari', href: '#bepul-sinov' },
-    { label: 'Kurs dasturi', href: '#kurs-dasturi' },
-    { label: 'Bitiruvchilar', href: '#bitiruvchilar' },
-    { label: 'Sertifikat', href: '#sertifikat' },
-    { label: 'Hamkorlar', href: '#hamkor' },
-  ]
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#101010]">
-        <CourseHeader variant="dark" guestNavLinks={professionGuestNav} />
+        <CourseHeader variant="dark" />
         <PageLoader />
       </div>
     );
@@ -230,37 +220,14 @@ export default function ProfessionPage() {
   if (isError || !profession) {
     return (
       <div className="min-h-screen bg-[#101010]">
-        <CourseHeader variant="dark" guestNavLinks={professionGuestNav} />
+        <CourseHeader variant="dark" />
         <PageError />
         <SiteFooter variant="dark" />
       </div>
     );
   }
 
-  const modules: ModuleItem[] = (professionModules?.modules ?? profession.modules).map((m) => {
-    if ('order' in m) {
-      const authMod = m as import('@/types/api').ApiModule;
-      const lessons = authMod.lessons ?? [];
-      return {
-        id: String(authMod.id),
-        title: authMod.title,
-        lessonsCount: lessons.length,
-        testsCount: testCounts.get(authMod.id) ?? authMod.test?.totalQuestions ?? 0,
-        lessons: lessons.map((l) => ({
-          id: l.id,
-          title: l.title,
-          isFree: l.isPublic,
-          isCompleted: l.isCompleted,
-          type: "video" as const,
-        })),
-        test: authMod.test
-          ? { id: String(authMod.test.id), title: authMod.test.name }
-          : undefined,
-      } as ModuleItem;
-    }
-    const pub = m as import('@/types/api').ApiCourseModule;
-    return toModuleItem(pub, testCounts.get(pub.id));
-  });
+  const modules: ModuleItem[] = profession.modules.map((m) => toModuleItem(m));
   const mentor = profession.mentor;
 
   const handleLessonClick = (lesson: { id: string | number }, ctx: { module: ModuleItem }) => {
@@ -274,7 +241,7 @@ export default function ProfessionPage() {
 
   return (
     <div className="min-h-screen bg-[#101010]">
-      <CourseHeader variant="dark" guestNavLinks={professionGuestNav} />
+      <CourseHeader variant="dark" />
       <main>
         {/* Hero Section */}
         <section id="nima-organasiz" className="w-full">
@@ -305,10 +272,10 @@ export default function ProfessionPage() {
                 {/* Title */}
                 <MainTitle className="mb-4 !leading-tight max-w-2xl">{profession.name}</MainTitle>
 
-                {/* Description */}
-                {profession.description && (
+                {/* Subtitle */}
+                {profession.subtitle && (
                   <Subtitle  size="base" className="mb-8 max-w-xl line-clamp-8">
-                    {profession.description.replace(/<[^>]*>/g, '')}
+                    {profession.subtitle}
                   </Subtitle>
                 )}
 
@@ -424,23 +391,6 @@ export default function ProfessionPage() {
                   dangerouslySetInnerHTML={{ __html: profession.description }}
                 />
               )}
-              <Button
-                className="bg-[#5d7bf5] hover:bg-[#4a6ae4] text-white rounded-full px-8 py-3 h-auto text-base font-medium mt-6 flex items-center gap-2"
-                onClick={handleStart}
-                disabled={startLoading}
-              >
-                {startLoading ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Yuklanmoqda...
-                  </>
-                ) : (
-                  <>
-                    Оставить заявку
-                    <ArrowLeft className="w-5 h-5 rotate-180" />
-                  </>
-                )}
-              </Button>
             </motion.div>
           </div>
         </section>

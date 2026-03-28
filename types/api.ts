@@ -64,6 +64,8 @@ export interface ApiSkillModule {
   id: number;
   title: string;
   description: string;
+  lessonCount: number;
+  testCount: number;
   lessons: ApiSkillLesson[];
   tests: ApiSkillTest[];
 }
@@ -72,6 +74,7 @@ export interface ApiSkill {
   id: number;
   name: string;
   title: string;
+  subtitle?: string;
   description: string;
   courseOutcomes: string | null;
   photo: string | null;
@@ -98,6 +101,8 @@ export interface ApiCourseModule {
   id: number;
   title: string;
   description: string;
+  lessonCount: number;
+  testCount: number;
   lessons: ApiCourseLesson[];
 }
 
@@ -110,6 +115,7 @@ export interface ApiCourse {
   id: number;
   name: string;
   title: string;
+  subtitle?: string;
   description: string;
   photo: string | null;
   icon: string | null;
@@ -134,6 +140,7 @@ export interface ApiProfession {
   id: number;
   name: string;
   title: string;
+  subtitle?: string;
   description: string;
   photo: string | null;
   icon: string | null;

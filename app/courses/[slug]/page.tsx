@@ -30,7 +30,7 @@ import type { ApiCourseModule, ApiProject } from '@/types/api';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
-import { useModuleTestCounts } from '@/hooks/use-module-test';
+
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -40,13 +40,13 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`;
 }
 
-function toModuleItem(m: ApiCourseModule, questionsCount?: number): ModuleItem {
+function toModuleItem(m: ApiCourseModule): ModuleItem {
   const lessons = m.lessons ?? [];
   return {
     id: String(m.id),
     title: m.title,
-    darsCount: lessons.length,
-    testCount: questionsCount ?? 0,
+    darsCount: m.lessonCount,
+    testCount: m.testCount,
     lessons: lessons.map((l, i) => ({
       id: l.id,
       title: l.title,
@@ -128,8 +128,6 @@ export default function CoursePage() {
   const { user } = useAuthStore();
   const { data: course, isLoading, isError } = useCourse(slug);
   const { data: courseModules } = useCourseModules(course?.id);
-  const moduleIds = (course?.modules ?? []).map((m) => m.id);
-  const testCounts = useModuleTestCounts(moduleIds);
   const [openModule, setOpenModule] = useState<string>('');
   const [startLoading, setStartLoading] = useState(false);
 
@@ -159,19 +157,11 @@ export default function CoursePage() {
     setOpenModule(String(course.modules[0].id));
   }
 
-  const courseGuestNav = [
-    { label: "Nima o'rganasiz", href: '#nima-organasiz' },
-    { label: 'Kurs dasturi', href: '#kurs-dasturi' },
-    { label: 'Mentor', href: '#mentor' },
-    { label: 'Loyihalar', href: '#loyihalar' },
-    { label: 'Sertifikat', href: '#sertifikat' },
-    { label: 'Hamkorlar', href: '#hamkor' },
-  ]
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f5f5f7]">
-        <CourseHeader variant="light" guestNavLinks={courseGuestNav} />
+        <CourseHeader variant="light" />
         <PageLoader />
       </div>
     );
@@ -180,37 +170,14 @@ export default function CoursePage() {
   if (isError || !course) {
     return (
       <div className="min-h-screen bg-[#f5f5f7]">
-        <CourseHeader variant="light" guestNavLinks={courseGuestNav} />
+        <CourseHeader variant="light" />
         <PageError />
         <SiteFooter />
       </div>
     );
   }
 
-  const modules: ModuleItem[] = (courseModules?.modules ?? course.modules).map((m) => {
-    if ('order' in m) {
-      const authMod = m as import('@/types/api').ApiModule;
-      const lessons = authMod.lessons ?? [];
-      return {
-        id: String(authMod.id),
-        title: authMod.title,
-        lessonsCount: lessons.length,
-        testsCount: testCounts.get(authMod.id) ?? authMod.test?.totalQuestions ?? 0,
-        lessons: lessons.map((l) => ({
-          id: l.id,
-          title: l.title,
-          isFree: l.isPublic,
-          isCompleted: l.isCompleted,
-          type: "video" as const,
-        })),
-        test: authMod.test
-          ? { id: String(authMod.test.id), title: authMod.test.name }
-          : undefined,
-      } as ModuleItem;
-    }
-    const pub = m as import('@/types/api').ApiCourseModule;
-    return toModuleItem(pub, testCounts.get(pub.id));
-  });
+  const modules: ModuleItem[] = course.modules.map((m) => toModuleItem(m));
   const projects: Project[] = course.projects.map((p, i) => toProject(p, i, course.projects.length));
   const mentor = course.mentor;
 
@@ -232,11 +199,12 @@ export default function CoursePage() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
-      <CourseHeader variant="light" guestNavLinks={courseGuestNav} />
+      <CourseHeader variant="light" />
 
       {/* Hero Section */}
       <CourseHeroSection
         title={course.title}
+        subtitle={course.subtitle}
         description={course.description}
         image={courseImage || '/images/hero1.webp'}
         videosCount={totalLessons}

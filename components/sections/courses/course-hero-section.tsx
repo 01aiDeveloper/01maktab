@@ -17,6 +17,7 @@ interface CourseProgress {
 
 interface CourseHeroSectionProps {
   title: string;
+  subtitle?: string;
   description: string;
   image: string;
   videosCount: number;
@@ -35,6 +36,7 @@ interface CourseHeroSectionProps {
 
 export function CourseHeroSection({
   title,
+  subtitle,
   description,
   image,
   videosCount,
@@ -98,7 +100,9 @@ export function CourseHeroSection({
             {/* Content */}
             <div className="space-y-6 max-w-2xl">
               <MainTitle className="mb-4 leading-tight!">{title}</MainTitle>
-              <div className="prose prose-sm lg:prose-base max-w-none text-gray-600 line-clamp-6" dangerouslySetInnerHTML={{ __html: description }} />
+              {subtitle && (
+                <p className="text-gray-600 text-sm lg:text-base leading-relaxed line-clamp-6">{subtitle}</p>
+              )}
               {hasProgress ? (
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 flex-wrap">

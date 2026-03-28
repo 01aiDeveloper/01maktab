@@ -23,7 +23,7 @@ const authLinks = [
 const socialLinks = [
   {
     label: 'Telegram',
-    href: 'https://t.me/01AI',
+    href: 'https://t.me/mlc_uz',
     icon: <Send className="w-5 h-5" />,
   },
   {
@@ -70,60 +70,80 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className={`pt-6 pb-8 border-b ${borderColor}`}
         >
-          {/* Navigation links — top row */}
-          <nav className="flex flex-wrap items-center gap-5 md:gap-8">
-            {footerLinks.map((link, index) => (
-              <motion.div
-                key={link.href}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+          {/* Mobile: only social icons centered */}
+          <div className="flex md:hidden items-center justify-center gap-3">
+            {socialLinks.map((social, index) => (
+              <motion.a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDark ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-black/5 text-foreground hover:bg-black/10'} transition-colors`}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.4, delay: 0.1 + index * 0.1 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                aria-label={social.label}
               >
-                <motion.div whileHover={{ scale: 1.05, x: 2 }} whileTap={{ scale: 0.95 }}>
+                {social.icon}
+              </motion.a>
+            ))}
+          </div>
+
+          {/* Desktop (md+): single row — nav links | Maxfiylik siyosati (centered) | social icons */}
+          <div className="hidden md:grid grid-cols-3 items-center">
+            {/* Left: nav links */}
+            <nav className="flex flex-wrap items-center gap-5 lg:gap-8">
+              {footerLinks.map((link, index) => (
+                <motion.div
+                  key={link.href}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <motion.div whileHover={{ scale: 1.05, x: 2 }} whileTap={{ scale: 0.95 }}>
+                    <Link
+                      href={link.href}
+                      className={`${isDark ? 'text-white/70 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors relative group`}
+                      style={linkStyle}
+                    >
+                      {link.label}
+                      <motion.span
+                        className={`absolute bottom-0 left-0 w-0 h-0.5 ${isDark ? 'bg-white' : 'bg-foreground'} group-hover:w-full transition-all duration-300`}
+                        initial={{ width: 0 }}
+                        whileHover={{ width: '100%' }}
+                      />
+                    </Link>
+                  </motion.div>
+                </motion.div>
+              ))}
+            </nav>
+
+            {/* Center: Maxfiylik siyosati */}
+            <div className="flex justify-center">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Link
-                    href={link.href}
-                    className={`${isDark ? 'text-white/70 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors relative group`}
+                    href="/privacy"
+                    className={`${isDark ? 'text-white/70 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors group`}
                     style={linkStyle}
                   >
-                    {link.label}
-                    <motion.span
-                      className={`absolute bottom-0 left-0 w-0 h-0.5 ${isDark ? 'bg-white' : 'bg-foreground'} group-hover:w-full transition-all duration-300`}
-                      initial={{ width: 0 }}
-                      whileHover={{ width: '100%' }}
-                    />
+                    Maxfiylik siyosati
                   </Link>
                 </motion.div>
               </motion.div>
-            ))}
-          </nav>
+            </div>
 
-          {/* Second row: Maxfiylik siyosati (left) + Social icons (right) */}
-          <div className="flex items-center justify-between mt-8">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <motion.div whileHover={{ scale: 1.05, x: 4 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/privacy"
-                  className={`${isDark ? 'text-white/70 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors flex items-center gap-1 group`}
-                  style={linkStyle}
-                >
-                  Maxfiylik siyosati
-                </Link>
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex items-center gap-3"
-            >
+            {/* Right: social icons */}
+            <div className="flex items-center justify-end gap-3">
               {socialLinks.map((social, index) => (
                 <motion.a
                   key={social.label}
@@ -142,7 +162,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
                   {social.icon}
                 </motion.a>
               ))}
-            </motion.div>
+            </div>
           </div>
         </motion.div>
       </div>
