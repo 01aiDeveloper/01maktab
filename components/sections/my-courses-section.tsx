@@ -59,7 +59,7 @@ export function MyCoursesSection() {
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-4">
           {courses.map((course) => (
-            <div key={course.id} className="flex-[0_0_calc(33.333%-12px)] min-w-0">
+            <div key={course.id} className="flex-[0_0_85%] sm:flex-[0_0_calc(50%-8px)] lg:flex-[0_0_calc(33.333%-12px)] min-w-0">
               <MyCourseCard item={course} href={`/courses/${course.id}`} />
             </div>
           ))}

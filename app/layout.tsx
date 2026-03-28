@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {process.env.NODE_ENV === "production" && (
+        {/* {process.env.NODE_ENV === "production" && (
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -54,7 +54,7 @@ export default function RootLayout({
               `,
             }}
           />
-        )}
+        )} */}
       </head>
       <body className={`${inter.variable} font-sans antialiased overflow-x-hidden`}>
         <Providers>

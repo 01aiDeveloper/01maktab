@@ -211,9 +211,9 @@ export default function ProfessionPage() {
 
   const professionGuestNav = [
     { label: "Nima o'rganasiz", href: '#nima-organasiz' },
+    { label: 'Bepul sinov darslari', href: '#bepul-sinov' },
     { label: 'Kurs dasturi', href: '#kurs-dasturi' },
-    { label: 'Mentor', href: '#mentor' },
-    { label: 'Bitiruv chillari', href: '#bitiruv-chillari' },
+    { label: 'Bitiruvchilar', href: '#bitiruvchilar' },
     { label: 'Sertifikat', href: '#sertifikat' },
     { label: 'Hamkorlar', href: '#hamkor' },
   ]
@@ -386,7 +386,7 @@ export default function ProfessionPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+              className="grid grid-cols-2 lg:grid-cols-4 gap-4"
             >
               {staticFeatures.map((feature, index) => (
                 <motion.div
@@ -415,15 +415,32 @@ export default function ProfessionPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-[#282828] text-white rounded-3xl p-8 lg:p-12"
+              className="bg-white rounded-3xl p-8 lg:p-12"
             >
-              <h2 className="font-suisse text-2xl lg:text-3xl font-bold mb-4">{profession.title}</h2>
+              <h2 className="font-suisse text-2xl lg:text-3xl font-bold mb-4 text-[#18181A]">{profession.title}</h2>
               {profession.description && (
                 <div
-                  className="text-gray-300 text-sm lg:text-base leading-relaxed max-w-4xl prose prose-sm prose-invert max-w-none"
+                  className="text-gray-600 text-sm lg:text-base leading-relaxed prose prose-sm max-w-none"
                   dangerouslySetInnerHTML={{ __html: profession.description }}
                 />
               )}
+              <Button
+                className="bg-[#5d7bf5] hover:bg-[#4a6ae4] text-white rounded-full px-8 py-3 h-auto text-base font-medium mt-6 flex items-center gap-2"
+                onClick={handleStart}
+                disabled={startLoading}
+              >
+                {startLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Yuklanmoqda...
+                  </>
+                ) : (
+                  <>
+                    Оставить заявку
+                    <ArrowLeft className="w-5 h-5 rotate-180" />
+                  </>
+                )}
+              </Button>
             </motion.div>
           </div>
         </section>
@@ -481,14 +498,14 @@ export default function ProfessionPage() {
         <RefundSection />
 
         {/* Graduates Section */}
-        <div id="bitiruv-chillari">
+        <div id="bitiruvchilar">
           <GraduatesSection />
         </div>
 
         {/* Course Program Section */}
         <section id="kurs-dasturi" className="w-full bg-[#101010] py-16 lg:py-24">
           <div className="container mx-auto px-4">
-            <h2 className="text-white font-bold text-3xl lg:text-4xl mb-8 lg:mb-12">Kurs dasturi</h2>
+            <h2 className="text-white font-bold text-3xl lg:text-4xl mb-8 lg:mb-12">Nima o'rganamiz?</h2>
             <ModuleAccordion
               variant="dark"
               modules={modules}

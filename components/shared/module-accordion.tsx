@@ -34,6 +34,7 @@ export type ModuleItem = {
   testsCount?: number;
   lessons: LessonItem[];
   test?: { id?: string; title: string } | { title: string };
+  result?: string;
 };
 
 type Variant = "dark" | "light";
@@ -291,6 +292,13 @@ export function ModuleAccordion({
                         <span className={s.rowLeftLabel}>Test</span>
                         <span className={s.rowTitle}>{module.test.title}</span>
                       </div>
+                    </div>
+                  )}
+
+                  {/* Natija bar */}
+                  {module.result && (
+                    <div className="bg-[#5d7bf5] text-white px-5 lg:px-6 py-3 text-sm font-medium rounded-b-3xl">
+                      Natija: {module.result}
                     </div>
                   )}
                 </div>

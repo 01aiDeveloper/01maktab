@@ -81,7 +81,7 @@ export default function PrivateHomePage() {
                 className="text-center text-[#18181A] max-w-3xl"
                 style={{ fontWeight: 600, fontSize: '36px', lineHeight: '41px', letterSpacing: '-0.05em' }}
               >
-                Siz ham ularning orasida bo&apos;lishingiz mumkin. Bizdan sharoit - sizdan harakat. Harakatni &quot;01AI\&quot;da davom
+                Siz ham ularning orasida bo&apos;lishingiz mumkin. Bizdan sharoit - sizdan harakat. Harakatni &quot;01AI&quot;da davom
                 eting!
               </p>
               <MainButton size="md" href="/catalog" className="!h-[54px] !text-[20px] !gap-[39px] !px-4">
