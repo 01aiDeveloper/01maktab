@@ -35,6 +35,8 @@ import { baseMediaUrl } from '@/lib/utils';
 import type { ApiCourseModule } from '@/types/api';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
+import { useAuthStore } from '@/store/auth-store';
+import { useModuleTestCounts } from '@/hooks/use-module-test';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -44,13 +46,13 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`;
 }
 
-function toModuleItem(m: ApiCourseModule): ModuleItem {
+function toModuleItem(m: ApiCourseModule, questionsCount?: number): ModuleItem {
   const lessons = m.lessons ?? [];
   return {
     id: String(m.id),
     title: m.title,
     darsCount: lessons.length,
-    testCount: 0,
+    testCount: questionsCount ?? 0,
     lessons: lessons.map((l, i) => ({
       id: l.id,
       title: l.title,
@@ -173,8 +175,11 @@ export default function ProfessionPage() {
   const router = useRouter();
   const slug = params?.slug as string;
 
+  const { user } = useAuthStore();
   const { data: profession, isLoading, isError } = useProfession(slug);
   const { data: professionModules } = useProfessionModules(profession?.id);
+  const moduleIds = (profession?.modules ?? []).map((m) => m.id);
+  const testCounts = useModuleTestCounts(moduleIds);
   const [openModule, setOpenModule] = useState<string>('');
   const [startLoading, setStartLoading] = useState(false);
 
@@ -240,7 +245,7 @@ export default function ProfessionPage() {
         id: String(authMod.id),
         title: authMod.title,
         lessonsCount: lessons.length,
-        testsCount: authMod.test ? 1 : 0,
+        testsCount: testCounts.get(authMod.id) ?? authMod.test?.totalQuestions ?? 0,
         lessons: lessons.map((l) => ({
           id: l.id,
           title: l.title,
@@ -253,7 +258,8 @@ export default function ProfessionPage() {
           : undefined,
       } as ModuleItem;
     }
-    return toModuleItem(m as import('@/types/api').ApiCourseModule);
+    const pub = m as import('@/types/api').ApiCourseModule;
+    return toModuleItem(pub, testCounts.get(pub.id));
   });
   const mentor = profession.mentor;
 
@@ -421,6 +427,7 @@ export default function ProfessionPage() {
             </motion.div>
           </div>
         </section>
+
 
         {/* Program Benefits Section */}
         <ProgramBenefits benefits={staticBenefits} />

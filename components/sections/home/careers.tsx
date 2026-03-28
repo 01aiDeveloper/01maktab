@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
 import { MainButton } from '@/components/ui/main-button';
+import { EnrollmentBadge } from '@/components/ui/enrollment-badge';
 import { getMediaUrl } from '@/lib/utils';
 import type { Career } from '@/types/api.types';
 
@@ -31,6 +32,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
       buttonVariant: (index % 2 === 0 ? 'white' : 'black') as const,
       imageUrl: getMediaUrl(career.decorImage),
       slug: career.slug || career.name.toLowerCase().replace(/\s+/g, '-'),
+      enrollmentCount: career.enrollmentCount || 0,
     }));
   }, [apiCareers]);
 
@@ -70,7 +72,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                 {career.label}
               </button>
             ))}
-          </div>` `
+          </div>
 
           <div className="mt-4 md:mt-8 relative">
             <AnimatePresence mode="wait">
@@ -84,6 +86,11 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
               >
                 {/* Content */}
                 <div className="relative z-20 flex-1 p-4 md:p-10 text-left lg:p-16">
+                  {activeData.enrollmentCount > 0 && (
+                    <div className="mb-4">
+                      <EnrollmentBadge count={activeData.enrollmentCount} />
+                    </div>
+                  )}
                   <MainTitle className={activeData.textColor}>
                     {activeData.title}
                   </MainTitle>

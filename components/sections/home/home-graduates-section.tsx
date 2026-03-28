@@ -29,16 +29,13 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
   const [emblaRef1, emblaApi1] = useEmblaCarousel({
     loop: true,
     align: 'start',
-    slidesToScroll: 4,
+    dragFree: true,
   });
   const [emblaRef2, emblaApi2] = useEmblaCarousel({
     loop: true,
     align: 'start',
-    slidesToScroll: 4,
+    dragFree: true,
   });
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(true);
-
   useEffect(() => {
     const fetchGraduates = async () => {
       try {
@@ -81,19 +78,6 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
       emblaApi2?.scrollNext();
     }
   }, [emblaApi1, emblaApi2, rows]);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi1) return;
-    setCanScrollPrev(emblaApi1.canScrollPrev());
-    setCanScrollNext(emblaApi1.canScrollNext());
-  }, [emblaApi1]);
-
-  useEffect(() => {
-    if (!emblaApi1) return;
-    onSelect();
-    emblaApi1.on('select', onSelect);
-    emblaApi1.on('reInit', onSelect);
-  }, [emblaApi1, onSelect]);
 
   // Split graduates into two rows (row1 gets all if rows=1)
   const midpoint = Math.ceil(graduates.length / 2);
@@ -205,8 +189,8 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
           <CarouselNavigation
             onPrevClick={scrollPrev}
             onNextClick={scrollNext}
-            canScrollPrev={canScrollPrev}
-            canScrollNext={canScrollNext}
+            canScrollPrev
+            canScrollNext
             variant="gray"
             size="md"
           />

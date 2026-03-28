@@ -1,8 +1,11 @@
 "use client"
 
+import useEmblaCarousel from "embla-carousel-react"
 import { EventCard } from "@/components/shared/event-card"
 import { MainTitle } from "@/components/ui/main-title"
 import { Subtitle } from "@/components/ui/subtitle"
+import { CarouselNavigation } from "@/components/ui/carousel-navigation"
+import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
 
 const EVENTS = [
   {
@@ -28,8 +31,17 @@ const EVENTS = [
 ]
 
 export function EventsSection() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+    loop: false,
+    skipSnaps: true,
+  })
+
+  const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } =
+    useCarouselNavigation(emblaApi)
+
   return (
-    <section className="min-h-screen flex flex-col justify-center py-8 md:py-10">
+    <section className="flex flex-col justify-center py-8 md:py-10 overflow-hidden">
       <div className="container">
         <div className="text-center">
           <MainTitle
@@ -51,10 +63,30 @@ export function EventsSection() {
           </Subtitle>
         </div>
 
-        <div className="mt-6 md:mt-10 grid gap-6 grid-cols-1 md:grid-cols-3">
-          {EVENTS.map((event, index) => (
-            <EventCard key={index} {...event} />
-          ))}
+        <div className="mt-6 md:mt-10">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">
+              {EVENTS.map((event, index) => (
+                <div
+                  key={index}
+                  className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_50%] md:flex-[0_0_33.333%] px-1.5 md:px-2"
+                >
+                  <EventCard {...event} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <CarouselNavigation
+              onPrevClick={scrollPrev}
+              onNextClick={scrollNext}
+              canScrollPrev={canScrollPrev}
+              canScrollNext={canScrollNext}
+              variant="gray"
+              size="lg"
+            />
+          </div>
         </div>
       </div>
     </section>

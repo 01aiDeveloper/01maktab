@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
-import { Button } from '@/components/ui/button';
 import { getMediaUrl } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
@@ -79,39 +78,18 @@ export default function PartnerPage() {
 
       <main className="min-h-screen ">
         <div className="container mx-auto px-4 py-8 md:py-12 max-w-7xl">
-        {/* Back Navigation */}
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8 text-sm"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Orqaga</span>
-        </Link>
-
         {/* Hero Section */}
         <section className="grid lg:grid-cols-2 gap-6 lg:gap-8 mb-12 md:mb-16">
-          {/* Left: Content Card */}
-          <div className="bg-white rounded-3xl p-6 md:p-8 flex flex-col justify-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              {partner.name}
-            </h1>
-            {partner.description && (
-              <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-6">
-                {partner.description}
-              </p>
-            )}
-            {partner.website && (
-              <a href={partner.website} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="w-fit rounded-xl bg-[#3b66f5] hover:bg-[#2d52d1] text-white">
-                  Hamkor haqida batafsil
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </a>
-            )}
-          </div>
-
-          {/* Right: Image or Logo Card */}
-          <div className="bg-white rounded-3xl p-8 md:p-12 flex items-center justify-center">
+          {/* Image or Logo Card — first on mobile */}
+          <div className="relative bg-white rounded-3xl p-8 md:p-12 flex items-center justify-center order-1 lg:order-2">
+            {/* Orqaga — mobile: overlay on image */}
+            <Link
+              href="/"
+              className="lg:hidden absolute top-4 left-4 z-10 inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Orqaga</span>
+            </Link>
             {partner.image ? (
               <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
                 <Image
@@ -134,6 +112,34 @@ export default function PartnerPage() {
               </div>
             )}
           </div>
+
+          {/* Content Card — second on mobile */}
+          <div className="bg-white rounded-3xl p-6 md:p-8 flex flex-col justify-center order-2 lg:order-1">
+            {/* Orqaga — desktop: inside content card */}
+            <Link
+              href="/"
+              className="hidden lg:inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 text-sm"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Orqaga</span>
+            </Link>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              {partner.name}
+            </h1>
+            {partner.description && (
+              <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-6">
+                {partner.description}
+              </p>
+            )}
+            {partner.website && (
+              <a href={partner.website} target="_blank" rel="noopener noreferrer">
+                <button className="inline-flex items-center justify-between w-[321px] max-w-full h-[54px] rounded-[10px] px-4 py-[15px] bg-[#3b66f5] hover:bg-[#2d52d1] text-white transition-colors" style={{ fontWeight: 450, fontSize: '20px', lineHeight: '16px' }}>
+                  <span>Hamkor haqida batafsil</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </a>
+            )}
+          </div>
         </section>
 
         {/* About Partnership Section */}
@@ -154,10 +160,10 @@ Biz ${partner.name} kabi kompaniyalar bilan hamkorlik IT-industriyaning kelajagi
           {partner.website && (
             <div className="flex justify-center">
               <a href={partner.website} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="rounded-xl bg-[#3b66f5] hover:bg-[#2d52d1] text-white">
-                  Hamkor haqida batafsil
+                <button className="inline-flex items-center justify-between w-[321px] max-w-full h-[54px] rounded-[10px] px-4 py-[15px] bg-[#3b66f5] hover:bg-[#2d52d1] text-white transition-colors" style={{ fontWeight: 450, fontSize: '20px', lineHeight: '16px' }}>
+                  <span>Hamkor haqida batafsil</span>
                   <ArrowRight className="w-4 h-4" />
-                </Button>
+                </button>
               </a>
             </div>
           )}

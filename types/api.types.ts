@@ -37,6 +37,7 @@ export interface Course {
   price: number
   pricingType: CoursePricingType
   direction: string
+  enrollmentCount?: number
   createdAt: string
 }
 
@@ -81,6 +82,7 @@ export interface Career {
   photo: string
   icon: string | null
   decorImage: string
+  enrollmentCount?: number
 }
 
 // Payment Types
@@ -118,4 +120,5 @@ export interface Skill {
   description: string
   photo: string
   icon: string | null
+  enrollmentCount?: number
 }

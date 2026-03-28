@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { EnrollmentBadge } from "@/components/ui/enrollment-badge"
 
 interface CourseCardProps {
   id?: number | string
@@ -10,9 +11,10 @@ interface CourseCardProps {
   title: string
   description: string
   imageUrl: string
+  enrollmentCount?: number
 }
 
-export function CourseCard({ id, slug, title, description, imageUrl }: CourseCardProps) {
+export function CourseCard({ id, slug, title, description, imageUrl, enrollmentCount }: CourseCardProps) {
   const courseSlug = slug || id?.toString() || "course"
   
   return (
@@ -27,6 +29,12 @@ export function CourseCard({ id, slug, title, description, imageUrl }: CourseCar
         className="object-cover transition-transform duration-700 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
+
+      {enrollmentCount ? (
+        <div className="absolute top-4 left-4 z-10">
+          <EnrollmentBadge count={enrollmentCount} />
+        </div>
+      ) : null}
 
       <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 md:p-8 lg:p-10 flex flex-col justify-center min-h-32 bg-white/20 backdrop-blur-[53.25px] max-h-[160px] rounded-t-xl sm:rounded-t-3xl">
         <div className="relative">

@@ -70,7 +70,7 @@ export default async function GuestHomePage() {
       <VideoSection />
       <EventsSection />
       <PartnersSection partners={partners} />
-      <HomeGraduatesSection />
+      <HomeGraduatesSection rows={1} />
       <StatsSection />
       <ContactSection />
 

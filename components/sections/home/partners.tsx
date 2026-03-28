@@ -63,13 +63,8 @@ export function PartnersSection({
     fetchPartners();
   }, [partnersProp]);
 
-  const [offset, setOffset] = useState(0);
   const cardWidth = 412 + 24; // card + gap
   const totalWidth = partners.length * cardWidth;
-
-  const scroll = (direction: "prev" | "next") => {
-    setOffset((prev) => prev + (direction === "next" ? -cardWidth : cardWidth));
-  };
 
   // Agar yuklanayotgan bo'lsa yoki ma'lumot bo'lmasa, hech narsa ko'rsatmaydi
   if (loading || !partners || partners.length === 0) {
@@ -101,15 +96,11 @@ export function PartnersSection({
         </div>
       </div>
 
-      <div className="mt-20 w-full overflow-hidden">
-        {/* Outer: smooth offset from button clicks */}
-        <motion.div
-          animate={{ x: offset }}
-          transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          {/* Inner: continuous slow marquee */}
+      <div className="mt-20 w-full overflow-hidden space-y-6">
+        {/* Row 1: scrolls left */}
+        <div className="overflow-hidden">
           <motion.div
-            className="flex gap-6 py-6 px-6"
+            className="flex gap-6 px-6"
             animate={{ x: ["0px", `${-totalWidth}px`] }}
             transition={{
               x: {
@@ -120,9 +111,9 @@ export function PartnersSection({
             }}
             style={{ width: "max-content" }}
           >
-            {[...partners, ...partners].map((partner, index) => (
+            {[...partners, ...partners, ...partners].map((partner, index) => (
               <Link
-                key={`${partner.id}-${index}`}
+                key={`row1-${partner.id}-${index}`}
                 href={`/partners/${partner.id}`}
                 className={`group relative flex h-[203px] w-[412px] shrink-0 items-center justify-center rounded-[16px] border-[3px] ${cardBorderColor} ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"}`}
               >
@@ -136,51 +127,8 @@ export function PartnersSection({
               </Link>
             ))}
           </motion.div>
-        </motion.div>
-      </div>
-
-      {/* Navigation arrows - centered at bottom */}
-      <div className="flex justify-center mt-8">
-        <div className="flex items-center gap-[18px]">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => scroll("prev")}
-            className={`flex h-14 w-14 items-center justify-center rounded-full transition-colors ${
-              isDark
-                ? "bg-white/10 hover:bg-white/20"
-                : "bg-[#DDDDDD] hover:bg-[#CCCCCC]"
-            }`}
-          >
-            <Image
-              src="/icons/chevron-left.svg"
-              alt="Previous"
-              width={24}
-              height={24}
-              className={isDark ? "invert" : ""}
-              unoptimized
-            />
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => scroll("next")}
-            className={`flex h-14 w-14 items-center justify-center rounded-full transition-colors ${
-              isDark
-                ? "bg-white/10 hover:bg-white/20"
-                : "bg-[#DDDDDD] hover:bg-[#CCCCCC]"
-            }`}
-          >
-            <Image
-              src="/icons/chevron-right.svg"
-              alt="Next"
-              width={24}
-              height={24}
-              className={isDark ? "invert" : ""}
-              unoptimized
-            />
-          </motion.button>
         </div>
+
       </div>
     </section>
   );

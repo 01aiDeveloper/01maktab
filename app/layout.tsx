@@ -12,7 +12,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "01AI",
-  description: "01AI",
+  description: "01AI", 
   generator: "01AI",
   icons: {
     icon: [
@@ -32,7 +32,30 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head></head>
+      <head>
+        {process.env.NODE_ENV === "production" && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                // Disable React DevTools
+                if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined') {
+                  window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function() {};
+                }
+                // Disable right-click context menu
+                document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+                // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+                document.addEventListener('keydown', function(e) {
+                  if (e.key === 'F12' ||
+                      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                      (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                  }
+                });
+              `,
+            }}
+          />
+        )}
+      </head>
       <body className={`${inter.variable} font-sans antialiased overflow-x-hidden`}>
         <Providers>
           {children}

@@ -23,6 +23,7 @@ import { PageLoader } from "@/components/ui/page-loader";
 import { PageError } from "@/components/ui/page-error";
 import { NoData } from "@/components/ui/no-data";
 import { useAuthStore } from "@/store/auth-store";
+import { useModuleTestCounts } from "@/hooks/use-module-test";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -41,14 +42,14 @@ function difficultyLabel(difficulty: string): string {
   return map[difficulty] ?? difficulty;
 }
 
-function toModuleItem(m: ApiSkillModule): ModuleItem {
+function toModuleItem(m: ApiSkillModule, questionsCount?: number): ModuleItem {
   const lessons = m.lessons ?? [];
   const tests = m.tests ?? [];
   return {
     id: String(m.id),
     title: m.title,
     darsCount: lessons.length,
-    testCount: tests.length,
+    testCount: questionsCount ?? tests.length,
     lessons: lessons.map((l) => ({
       id: l.id,
       title: l.title,
@@ -72,6 +73,8 @@ export default function SkillDetailPage() {
   const { user } = useAuthStore();
   const { data: skill, isLoading, isError } = useSkill(slug);
   const { data: skillModules } = useSkillModules(skill?.id);
+  const moduleIds = (skill?.modules ?? []).map((m) => m.id);
+  const testCounts = useModuleTestCounts(moduleIds);
   const [openModule, setOpenModule] = useState<string>("");
   const [startLoading, setStartLoading] = useState(false);
 
@@ -144,7 +147,7 @@ export default function SkillDetailPage() {
         id: String(authMod.id),
         title: authMod.title,
         lessonsCount: lessons.length,
-        testsCount: authMod.test ? 1 : 0,
+        testsCount: testCounts.get(authMod.id) ?? authMod.test?.totalQuestions ?? 0,
         lessons: lessons.map((l) => ({
           id: l.id,
           title: l.title,
@@ -158,7 +161,8 @@ export default function SkillDetailPage() {
       } as ModuleItem;
     }
     // Fallback to public module data
-    return toModuleItem(m as ApiSkillModule);
+    const pub = m as ApiSkillModule;
+    return toModuleItem(pub, testCounts.get(pub.id));
   });
   const mentor = skill.mentor;
   const priceLabel =
@@ -356,6 +360,7 @@ export default function SkillDetailPage() {
           </div>
         </div>
       </section>
+
 
       <section className="w-full py-8">
         <div className="container mx-auto px-4">

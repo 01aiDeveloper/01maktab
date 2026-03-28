@@ -9,7 +9,6 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
-import { Button } from '@/components/ui/button';
 import { StoryBlocksRenderer } from '@/components/story/story-blocks-renderer';
 import { GraduateCarouselCard } from '@/components/cards/graduate-carousel-card';
 import { CarouselNavigation } from '@/components/ui/carousel-navigation';
@@ -119,78 +118,82 @@ export default function GraduateStoryPage() {
       <SiteHeader variant="light" />
 
       <main className="min-h-screen bg-[#F4F4F6]">
-        {/* Hero Section */}
-        <section className="w-full pt-8 lg:pt-12">
-          <div className="container mx-auto px-4">
-            {/* Back Link */}
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-8 transition-colors w-fit"
+        <div className="container mx-auto px-4 pt-8 lg:pt-12 space-y-6">
+          {/* Hero Section */}
+          <section className="flex flex-col lg:flex-row lg:items-stretch gap-6 lg:gap-8">
+            {/* Left: Content Card */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-10 flex flex-col justify-center order-last lg:order-first lg:flex-1"
             >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm font-medium">Orqaga</span>
-            </Link>
-
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-10">
-              {/* Left: Content */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                className="flex flex-col justify-center"
+              {/* Back Link — desktop only */}
+              <Link
+                href="/"
+                className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-8 transition-colors w-fit"
               >
-                {/* Title */}
-                <h1 className="font-suisse font-bold text-3xl md:text-4xl lg:text-[48px] lg:leading-[1.1] text-[#18181A] mb-6 tracking-[-0.02em]">
-                  {story.title}
-                </h1>
+                <ArrowLeft className="w-4 h-4" />
+                <span className="text-sm font-medium">Orqaga</span>
+              </Link>
+              {/* Title */}
+              <h1 className="font-suisse font-bold text-3xl md:text-4xl lg:text-[48px] lg:leading-[1.1] text-[#18181A] mb-6 tracking-[-0.02em]">
+                {story.title}
+              </h1>
 
-                {/* Subtitle / Student Info */}
-                {story.subtitle && (
-                  <p className="text-gray-500 text-base lg:text-lg mb-2 leading-relaxed">
-                    {story.subtitle}
-                  </p>
-                )}
-
-                <p className="text-gray-500 text-base mb-8">
-                  {story.fullname} — {story.position}, {story.company}
+              {/* Subtitle / Student Info */}
+              {story.subtitle && (
+                <p className="text-gray-500 text-base lg:text-lg mb-2 leading-relaxed">
+                  {story.subtitle}
                 </p>
+              )}
 
-                {/* CTA Button */}
-                <Button className="bg-black hover:bg-gray-800 text-white rounded-full px-8 py-3 h-12 w-fit text-base font-medium">
-                  Xoziroq boshlash
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </motion.div>
+              <p className="text-gray-500 text-base mb-8">
+                {story.fullname} — {story.position}, {story.company}
+              </p>
 
-              {/* Right on desktop, Top on mobile: Graduate Photo */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-                className="relative w-[349px] h-[420px] lg:w-[464px] lg:h-[453px] rounded-[29px] lg:rounded-[40px] overflow-hidden mx-auto lg:mx-0 order-first lg:order-last"
+              {/* CTA Button */}
+              <button className="inline-flex items-center gap-2 bg-[#3b66f5] hover:bg-[#2d52d1] text-white rounded-full px-8 py-3 h-12 w-fit text-base font-medium transition-colors">
+                Xoziroq boshlash
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </motion.div>
+
+            {/* Right on desktop, Top on mobile: Graduate Photo */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="relative w-full h-[420px] lg:w-[464px] lg:shrink-0 lg:h-[453px] rounded-[29px] lg:rounded-[40px] overflow-hidden order-first lg:order-last"
+            >
+              <Link
+                href="/"
+                className="lg:hidden absolute top-4 left-4 z-10 inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors w-fit"
               >
-                <Image
-                  src={getMediaUrl(story.photo)}
-                  alt={story.fullname}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </motion.div>
-            </div>
-          </div>
-        </section>
+                <ArrowLeft className="w-4 h-4" />
+                <span className="text-sm font-medium">Orqaga</span>
+              </Link>
+              <Image
+                src={getMediaUrl(story.photo)}
+                alt={story.fullname}
+                fill
+                className="object-cover"
+                priority
+              />
+            </motion.div>
+          </section>
 
-        {/* Story Content Blocks */}
-        <section className="w-full py-12 lg:py-20">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <StoryBlocksRenderer blocks={story.blocks} />
-          </div>
-        </section>
+          {/* Story Content Card */}
+          <section className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-10">
+            <div className="max-w-4xl">
+              <StoryBlocksRenderer blocks={story.blocks} />
+            </div>
+          </section>
+        </div>
 
         {/* Other Stories Section */}
         {otherStories.length > 0 && (
-          <section className="w-full py-16 lg:py-24 bg-white">
+          <section className="w-full py-16 lg:py-24">
             <div className="container mx-auto px-4">
               <h2 className="font-suisse font-bold text-3xl lg:text-[48px] lg:leading-[1.1] text-[#18181A] tracking-[-0.02em] mb-8 lg:mb-12">
                 Boshqa hikoyalarni ko'rish

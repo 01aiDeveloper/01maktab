@@ -39,6 +39,7 @@ export function CoursesSection() {
     duration: course.duration,
     price: course.price,
     pricingType: course.pricingType,
+    enrollmentCount: course.enrollmentCount,
   }))
 
   return (

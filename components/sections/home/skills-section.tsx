@@ -20,7 +20,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
-    slidesToScroll: 2,
+    slidesToScroll: 1,
   })
 
   const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } =
@@ -75,6 +75,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
                 image={getMediaUrl(skill.photo)}
                 title={skill.title}
                 iconUrl={skill.icon}
+                enrollmentCount={skill.enrollmentCount}
               />
             </div>
           ))}

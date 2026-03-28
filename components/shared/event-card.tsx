@@ -24,7 +24,7 @@ export function EventCard({
     return (
       <motion.div
         whileHover={{ y: -10 }}
-        className="group relative aspect-[3/4] w-full overflow-hidden rounded-[31px] bg-gray-100"
+        className="group relative h-[420px] md:h-[460px] w-full overflow-hidden rounded-[40px] bg-gray-100"
       >
         <Image
           src={imageUrl || "/placeholder.svg"}
@@ -64,7 +64,7 @@ export function EventCard({
   return (
     <motion.div
       whileHover={{ y: -10 }}
-      className="group relative aspect-[3/4] w-full overflow-hidden rounded-[31px] bg-gray-100"
+      className="group relative h-[420px] md:h-[460px] w-full overflow-hidden rounded-[40px] bg-gray-100"
     >
       <Image
         src={imageUrl || "/placeholder.svg"}

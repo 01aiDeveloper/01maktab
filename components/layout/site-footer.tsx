@@ -62,7 +62,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className={`flex flex-col md:flex-row items-center justify-between gap-4 py-6 border-b ${borderColor}`}
+          className={`flex flex-wrap items-center justify-between gap-4 py-6 border-b ${borderColor}`}
         >
           {/* Navigation links */}
           <nav className="flex items-center gap-4 md:gap-6">
@@ -155,7 +155,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
                 transition={{ duration: 0.6, delay: 0.6 }}
                 onHoverStart={() => setHoveredLogoIndex(3)}
                 onHoverEnd={() => setHoveredLogoIndex(null)}
-                className={`text-[clamp(4rem,26vw,40rem)] font-bold leading-[0.85] tracking-tighter ${logoTextColor} cursor-pointer relative whitespace-nowrap translate-y-[0.12em]`}
+                className={`text-[clamp(4rem,26vw,40rem)] font-bold leading-[0.85] tracking-tighter ${logoTextColor} cursor-default relative whitespace-nowrap translate-y-[0.12em]`}
               >
                 <motion.span
                   animate={
@@ -204,7 +204,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
                   transition={{ duration: 0.6, ease: 'easeInOut', delay: 0.15 }}
                   className="inline-block"
                 >
-                  I 
+                  I
                 </motion.span>
                 <motion.span
                   animate={hoveredLogoIndex === 3 ? { y: [0, -8, 4, -4, 2, 0], rotate: [0, -5, 5, -3, 3, 0] } : {}}

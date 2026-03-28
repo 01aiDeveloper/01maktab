@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getMediaUrl } from '@/lib/utils';
+import { EnrollmentBadge } from '@/components/ui/enrollment-badge';
 
 interface SkillCardProps {
   id?: number;
@@ -13,9 +14,10 @@ interface SkillCardProps {
   iconUrl?: string | null;
   badge?: string;
   href?: string;
+  enrollmentCount?: number;
 }
 
-export function SkillCard({ id, slug, image, title, iconUrl, badge, href }: SkillCardProps) {
+export function SkillCard({ id, slug, image, title, iconUrl, badge, href, enrollmentCount }: SkillCardProps) {
   const cardSlug = slug || id?.toString() || 'skill';
   const linkHref = href || `/skills/${cardSlug}`;
 
@@ -39,6 +41,12 @@ export function SkillCard({ id, slug, image, title, iconUrl, badge, href }: Skil
             {badge}
           </div>
         )}
+
+        {enrollmentCount ? (
+          <div className="absolute top-3 right-3 z-10">
+            <EnrollmentBadge count={enrollmentCount} />
+          </div>
+        ) : null}
 
         <div className="absolute top-[13px] left-3 w-[57px] h-[57px] bg-white/20 border border-white/[0.17] backdrop-blur-[9.68px] rounded-[18px] flex items-center justify-center">
           <Image src={iconUrl ? getMediaUrl(iconUrl) : '/images/skills/icon.png'} alt={title} width={39} height={39} />

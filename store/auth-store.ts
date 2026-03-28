@@ -105,6 +105,18 @@ export const useAuthStore = create<AuthState>()(
         isAuthenticated: state.isAuthenticated,
         prompt: state.prompt,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (
+          process.env.NODE_ENV === "development" &&
+          state &&
+          !state.accessToken
+        ) {
+          const devToken = process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN
+          if (devToken) {
+            state.setTokens(devToken, "dev-refresh-token")
+          }
+        }
+      },
     },
   ),
 )
