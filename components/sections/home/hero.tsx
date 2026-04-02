@@ -30,6 +30,8 @@ const SLIDES = [
     isDark: true,
     partnerLogo: "/icons/alif_logo.png",
     partnerName: "Alif",
+    partnerLogoWidth: 80,
+    partnerLogoHeight: 28,
   },
   {
     id: 3,
@@ -135,8 +137,8 @@ export function Hero() {
                         <Image
                           src={slide.partnerLogo}
                           alt={slide.partnerName}
-                          width={120}
-                          height={40}
+                          width={slide.partnerLogoWidth ?? 120}
+                          height={slide.partnerLogoHeight ?? 40}
                           className="object-contain"
                         />
                       </div>
