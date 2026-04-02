@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { MainButton } from '@/components/ui/main-button';
 
@@ -38,15 +39,17 @@ export function EnrollmentCTASection({
 
           {/* Button */}
           <div className="flex justify-center">
-            <MainButton
-              variant="white"
-              size="lg"
-              icon={<ArrowRight className="w-6 h-6" />}
-              iconPosition="right"
-              className="text-xl shadow-lg"
-            >
-              Batafsil
-            </MainButton>
+            <Link href="/login">
+              <MainButton
+                variant="white"
+                size="lg"
+                icon={<ArrowRight className="w-6 h-6" />}
+                iconPosition="right"
+                className="text-xl shadow-lg"
+              >
+                Hoziroq boshlash
+              </MainButton>
+            </Link>
           </div>
         </div>
       </div>

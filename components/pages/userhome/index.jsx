@@ -15,6 +15,7 @@ import { ProfileSetupModal } from '@/components/auth/profile-setup-modal';
 import { useAuthStore } from '@/store/auth-store';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MainButton } from '@/components/ui/main-button';
+import { PresaleQueueSection } from '@/components/sections/presale-queue-section';
 import api from '@/lib/api';
 
 export default function PrivateHomePage() {
@@ -59,6 +60,54 @@ export default function PrivateHomePage() {
       <main>
         <HeroSection userName={user?.firstname || 'Foydalanuvchi'} />
         <FeatureCards />
+
+        {/* Presale Queue Mode */}
+        <section className="w-full py-6">
+          <PresaleQueueSection
+            queueNumber={12}
+            title="SQL: Ma'lumotlar bazasi asoslari"
+            duration="8 Soat"
+            price="Bepul"
+            level="Boshlang'ich"
+            partnerName="TBC BANK"
+            modules={[
+              {
+                id: '1',
+                title: 'I modul - Основы SQL',
+                darsCount: 4,
+                testCount: 1,
+                lessons: [
+                  { id: 1, title: 'Введение в базы данных и SQL', type: 'video' },
+                  { id: 2, title: 'Типы данных и создание таблиц (CREATE TABLE)', type: 'video' },
+                  { id: 3, title: 'Вставка данных (INSERT) и простые запросы (SELECT)', type: 'video' },
+                  { id: 4, title: 'Фильтрация данных (WHERE, AND, OR, NOT)', type: 'video' },
+                ],
+                test: { id: '1', title: 'Test 1' },
+              },
+              {
+                id: '2',
+                title: 'II modul - Работа с несколькими таблицами',
+                darsCount: 4,
+                testCount: 1,
+                lessons: [],
+              },
+              {
+                id: '3',
+                title: 'III modul - Группировка и агрегация',
+                darsCount: 4,
+                testCount: 1,
+                lessons: [],
+              },
+              {
+                id: '4',
+                title: 'IV modul - Управление данными и оптимизация',
+                darsCount: 4,
+                testCount: 1,
+                lessons: [],
+              },
+            ]}
+          />
+        </section>
 
         <div className="container space-y-8 pb-16">
           <MyCoursesSection />

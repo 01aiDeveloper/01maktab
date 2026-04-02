@@ -6,6 +6,9 @@ import axios from "axios";
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://app-dev.01ai.uz/api/v1";
 
+const IS_DEV_STAGE = process.env.NEXT_PUBLIC_DEV_STAGE === "true";
+const DEV_ACCESS_TOKEN = process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN || "";
+
 // Global axios instance for API
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -29,6 +32,12 @@ const getAuthStore = async () => {
 // Request interceptor - Add auth token to requests
 api.interceptors.request.use(
   async (config) => {
+    // In dev stage, use the dev access token directly
+    if (IS_DEV_STAGE && DEV_ACCESS_TOKEN) {
+      config.headers.Authorization = `Bearer ${DEV_ACCESS_TOKEN}`;
+      return config;
+    }
+
     if (typeof window !== "undefined") {
       const authModule = await getAuthStore();
       if (authModule) {
@@ -84,8 +93,8 @@ api.interceptors.response.use(
           }
         }
       } catch (refreshError) {
-        // If refresh fails, logout user
-        if (typeof window !== "undefined") {
+        // If refresh fails, logout user (skip redirect in dev stage)
+        if (typeof window !== "undefined" && !IS_DEV_STAGE) {
           const authModule = await getAuthStore();
           if (authModule) {
             authModule.useAuthStore.getState().clearAuth();

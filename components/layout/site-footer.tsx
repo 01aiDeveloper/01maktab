@@ -132,7 +132,9 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
               >
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Link
-                    href="/privacy"
+                    href="/Maxfiylik_Siyosati_01AI_UZ.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={`${isDark ? 'text-white/70 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors group`}
                     style={linkStyle}
                   >

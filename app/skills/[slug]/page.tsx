@@ -23,6 +23,7 @@ import { PageLoader } from "@/components/ui/page-loader";
 import { PageError } from "@/components/ui/page-error";
 import { NoData } from "@/components/ui/no-data";
 import { useAuthStore } from "@/store/auth-store";
+import { PresaleSection } from "@/components/sections/skills/presale-section";
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -252,30 +253,40 @@ export default function SkillDetailPage() {
                         }}
                       />
                     </div>
-                    <MainButton
-                      variant="gradient"
-                      size="md"
-                      className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-xl w-fit flex flex-row items-center"
-                      onClick={handleStart}
-                      disabled={startLoading}
-                    >
-                      {startLoading ? "Yuklanmoqda..." : "O'qishni davom ettirish"}
-                      {startLoading ? (
-                        <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
-                      ) : (
-                        <ArrowRight className="w-4 h-4 inline ml-1" />
-                      )}
-                    </MainButton>
+                    <div className="flex flex-wrap gap-3">
+                      <MainButton
+                        variant="gradient"
+                        size="md"
+                        className="rounded-xl w-fit flex flex-row items-center opacity-50 cursor-not-allowed"
+                        disabled
+                      >
+                        Sotib olingan
+                      </MainButton>
+                      <MainButton
+                        variant="outline"
+                        size="md"
+                        className="rounded-xl w-fit flex flex-row items-center"
+                        onClick={handleStart}
+                        disabled={startLoading}
+                      >
+                        {startLoading ? "Yuklanmoqda..." : "Kabinetga o'tish"}
+                        {startLoading ? (
+                          <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
+                        ) : (
+                          <ArrowRight className="w-4 h-4 inline ml-1" />
+                        )}
+                      </MainButton>
+                    </div>
                   </div>
                 ) : (
                   <MainButton
                     variant="gradient"
                     size="md"
-                    className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-xl w-fit flex flex-row items-center"
+                    className="rounded-xl w-fit flex flex-row items-center"
                     onClick={handleStart}
                     disabled={startLoading}
                   >
-                    {startLoading ? "Yuklanmoqda..." : "Xoziroq boshlash"}
+                    {startLoading ? "Yuklanmoqda..." : "Oldindan yozilish"}
                     {startLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
                     ) : (
@@ -333,6 +344,9 @@ export default function SkillDetailPage() {
         </div>
       </section>
 
+
+      {/* Presale Section */}
+      <PresaleSection courseId={skill?.id} />
 
       <section className="w-full py-8">
         <div className="container mx-auto px-4">
@@ -409,7 +423,7 @@ export default function SkillDetailPage() {
             onClick={handleStart}
             disabled={startLoading}
           >
-            {startLoading ? "Yuklanmoqda..." : "Xoziroq boshlash"}
+            {startLoading ? "Yuklanmoqda..." : "Hoziroq boshlash"}
             {startLoading ? (
               <Loader2 className="w-5 h-5 animate-spin inline ml-1" />
             ) : (

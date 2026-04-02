@@ -36,6 +36,7 @@ import type { ApiCourseModule } from '@/types/api';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
+import { PresaleSection } from '@/components/sections/skills/presale-section';
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -182,6 +183,10 @@ export default function ProfessionPage() {
   const [startLoading, setStartLoading] = useState(false);
 
   const handleStart = useCallback(async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
     if (!profession) return;
     setStartLoading(true);
     try {
@@ -344,6 +349,9 @@ export default function ProfessionPage() {
             </motion.div>
           </div>
         </section>
+
+        {/* Presale Section */}
+        <PresaleSection courseId={profession?.id} />
 
         {/* Feature Pills Row */}
         <section className="w-full py-6">

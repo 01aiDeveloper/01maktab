@@ -153,10 +153,10 @@ export default function GraduateStoryPage() {
               </p>
 
               {/* CTA Button */}
-              <button className="inline-flex items-center gap-2 bg-[#3b66f5] hover:bg-[#2d52d1] text-white rounded-full px-8 py-3 h-12 w-fit text-base font-medium transition-colors">
-                Xoziroq boshlash
+              <Link href="/login" className="inline-flex items-center gap-2 bg-[#3b66f5] hover:bg-[#2d52d1] text-white rounded-full px-8 py-3 h-12 w-fit text-base font-medium transition-colors">
+                Hoziroq boshlash
                 <ArrowRight className="w-5 h-5" />
-              </button>
+              </Link>
             </motion.div>
 
             {/* Right on desktop, Top on mobile: Graduate Photo */}

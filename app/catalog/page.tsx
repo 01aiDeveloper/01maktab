@@ -25,7 +25,9 @@ export default function CatalogPage() {
           <CatalogTabs />
         </Suspense>
 
-        <CatalogCta />
+        <Suspense fallback={null}>
+          <CatalogCta />
+        </Suspense>
       </main>
 
       <SiteFooter />

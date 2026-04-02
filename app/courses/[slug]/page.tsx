@@ -30,6 +30,7 @@ import type { ApiCourseModule, ApiProject } from '@/types/api';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
+import { PresaleSection } from '@/components/sections/skills/presale-section';
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -132,6 +133,10 @@ export default function CoursePage() {
   const [startLoading, setStartLoading] = useState(false);
 
   const handleStart = useCallback(async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
     if (!course) return;
     setStartLoading(true);
     try {
@@ -218,6 +223,9 @@ export default function CoursePage() {
         onStart={handleStart}
         startLoading={startLoading}
       />
+
+      {/* Presale Section */}
+      <PresaleSection courseId={course.id} />
 
       {/* Course Description Section */}
       <CourseDescriptionSection title={course.title} description={course.description} />
