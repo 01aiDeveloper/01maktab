@@ -36,7 +36,7 @@ export function ChatWidget() {
           />
         ))}
         <a
-          href="https://t.me/shakhrior_kh"
+          href="https://t.me/mlc_uz"
           target="_blank"
           rel="noopener noreferrer"
           className="relative cursor-pointer bg-[#3b66f5] text-white w-16 h-16 rounded-[24px] shadow-2xl flex items-center justify-center hover:bg-[#2d52d1] hover:scale-110 active:scale-95 transition-all group"

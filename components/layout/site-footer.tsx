@@ -28,12 +28,12 @@ const socialLinks = [
   },
   {
     label: 'Instagram',
-    href: 'https://instagram.com/01AI',
+    href: 'https://www.instagram.com/mlc_uz/',
     icon: <Instagram className="w-5 h-5" />,
   },
   {
     label: 'LinkedIn',
-    href: 'https://linkedin.com/company/01AI',
+    href: 'https://uz.linkedin.com/company/mlc-uz',
     icon: <Linkedin className="w-5 h-5" />,
   },
 ];
