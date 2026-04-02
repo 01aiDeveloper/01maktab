@@ -16,6 +16,8 @@ const SLIDES = [
     image: "/images/hero11.webp",
     textColor: "text-white",
     isDark: true,
+    partnerLogo: "/icons/tbc_bank_logo.svg",
+    partnerName: "TBC Bank",
   },
   {
     id: 2,
@@ -26,6 +28,8 @@ const SLIDES = [
     image: "/images/hero2.png",
     textColor: "text-white",
     isDark: true,
+    partnerLogo: "/icons/alif_logo.png",
+    partnerName: "Alif",
   },
   {
     id: 3,
@@ -36,6 +40,8 @@ const SLIDES = [
     image: "/images/hero3.webp",
     textColor: "text-white",
     isDark: true,
+    partnerLogo: "/icons/tbc_bank_logo.svg",
+    partnerName: "TBC Bank",
   },
 ];
 
@@ -127,8 +133,8 @@ export function Hero() {
                       </span>
                       <div className="flex items-center">
                         <Image
-                          src="/icons/tbc_bank_logo.svg"
-                          alt="TBC Bank"
+                          src={slide.partnerLogo}
+                          alt={slide.partnerName}
                           width={120}
                           height={40}
                           className="object-contain"
