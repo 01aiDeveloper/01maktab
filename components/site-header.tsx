@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronDown, Settings, User, LogOut, Menu, X } from "lucide-react"
+import { ChevronDown, User, LogOut, Menu, X, Info, Trophy, Award, CreditCard, Monitor } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useAuthStore } from "@/store/auth-store"
@@ -137,17 +137,47 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
                       onClick={() => setIsUserDropdownOpen(false)}
                       className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
                     >
-                      <Settings className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm text-gray-900">Sozlash</span>
-                    </Link>
-                    <Link
-                      href="/profile"
-                      onClick={() => setIsUserDropdownOpen(false)}
-                      className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
-                    >
                       <User className="h-4 w-4 text-gray-500" />
                       <span className="text-sm text-gray-900">Profil</span>
                     </Link>
+                    <Link
+                      href="/profile?tab=info"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                      className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
+                    >
+                      <Info className="h-4 w-4 text-gray-500" />
+                      <span className="text-sm text-gray-900">Ma&apos;lumotlarim</span>
+                    </Link>
+                    <Link
+                      href="/profile?tab=achievements"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                      className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
+                    >
+                      <Trophy className="h-4 w-4 text-gray-500" />
+                      <span className="text-sm text-gray-900">Yutuqlarim</span>
+                    </Link>
+                    <Link
+                      href="/profile?tab=certificates"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                      className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
+                    >
+                      <Award className="h-4 w-4 text-gray-500" />
+                      <span className="text-sm text-gray-900">Sertifikatlarim</span>
+                    </Link>
+                    <Link
+                      href="/profile?tab=payments"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                      className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
+                    >
+                      <CreditCard className="h-4 w-4 text-gray-500" />
+                      <span className="text-sm text-gray-900">To&apos;lovlarim</span>
+                    </Link>
+                    <div
+                      className="flex items-center gap-3 py-2.5 px-3 border-b border-gray-100 cursor-default opacity-50"
+                    >
+                      <Monitor className="h-4 w-4 text-gray-400" />
+                      <span className="text-sm text-gray-400">Qurilmarim –</span>
+                    </div>
                     <button
                       onClick={() => {
                         logout()
