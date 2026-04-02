@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { CatalogCard } from '@/components/cards/catalog-card';
 import { NoData } from '@/components/ui/no-data';
+import { useAuthStore } from '@/store/auth-store';
+import { useMyCourses, useMySkills, useMyProfessions } from '@/hooks/use-my-courses';
 import api from '@/lib/api';
 
 type TabKey = 'skills' | 'courses' | 'professions';
@@ -24,11 +26,24 @@ interface CatalogItem {
   icon?: string;
   mentor?: { fullname?: string } | string;
   mentorName?: string;
+  pricingType?: 'FREE' | 'PAID';
+  enrollmentCount?: number;
 }
 
 export function CatalogTabs() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { user } = useAuthStore();
+
+  const { data: myCourses } = useMyCourses();
+  const { data: mySkills } = useMySkills();
+  const { data: myProfessions } = useMyProfessions();
+
+  const myItemIds: Record<TabKey, Set<number>> = {
+    courses: new Set(myCourses?.map((c) => c.id) || []),
+    skills: new Set(mySkills?.map((s) => s.id) || []),
+    professions: new Set(myProfessions?.map((p) => p.id) || []),
+  };
 
   const tabParam = searchParams.get('tab') as TabKey | null;
   const activeTab: TabKey = tabParam && TABS.some((t) => t.key === tabParam) ? tabParam : 'skills';
@@ -98,23 +113,30 @@ export function CatalogTabs() {
         <NoData title="Bu yerda hozircha hech narsa yo'q" description="Hozircha ma'lumot yo'q" />
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {items.map((item: CatalogItem) => (
-            <CatalogCard
-              key={item.id}
-              id={item.id}
-              slug={item.slug}
-              title={item.title}
-              image={getItemImage(item)}
-              icon={item.icon}
-              badge="Bepul"
-              mentorName={
-                typeof item.mentor === 'object'
-                  ? item.mentor?.fullname
-                  : item.mentorName
-              }
-              href={getItemHref(item)}
-            />
-          ))}
+          {items.map((item: CatalogItem) => {
+            const isBought = user ? myItemIds[activeTab].has(item.id) : false;
+            const isFree = item.pricingType === 'FREE';
+            const status: 'bought' | 'free' | 'waitlist' = isBought ? 'bought' : isFree ? 'free' : 'waitlist';
+
+            return (
+              <CatalogCard
+                key={item.id}
+                id={item.id}
+                slug={item.slug}
+                title={item.title}
+                image={getItemImage(item)}
+                icon={item.icon}
+                status={status}
+                enrollmentCount={item.enrollmentCount}
+                mentorName={
+                  typeof item.mentor === 'object'
+                    ? item.mentor?.fullname
+                    : item.mentorName
+                }
+                href={getItemHref(item)}
+              />
+            );
+          })}
         </div>
       )}
     </section>
