@@ -65,7 +65,7 @@ export function SkillHeroSection({ title, description, duration, level, price, i
             >
               Xoziroq boshlash
             </MainButton>
-          </motion.div>
+          </div>
 
           {/* Right Image */}
           <motion.div

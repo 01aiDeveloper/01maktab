@@ -24,6 +24,7 @@ import { PageError } from "@/components/ui/page-error";
 import { NoData } from "@/components/ui/no-data";
 import { useAuthStore } from "@/store/auth-store";
 import { PresaleSection } from "@/components/sections/skills/presale-section";
+import { CourseStartModal } from "@/components/modals/course-start-modal";
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -76,6 +77,7 @@ export default function SkillDetailPage() {
   const { data: skillModules } = useSkillModules(skill?.id);
   const [openModule, setOpenModule] = useState<string>("");
   const [startLoading, setStartLoading] = useState(false);
+  const [showStartModal, setShowStartModal] = useState(false);
 
   const handleStart = useCallback(async () => {
     if (!user) {
@@ -86,6 +88,8 @@ export default function SkillDetailPage() {
     setStartLoading(true);
     try {
       await api.post(`/course/${skill.id}/enroll`);
+      // Show course start modal on successful enrollment
+      setShowStartModal(true);
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response
         ?.status;
@@ -94,22 +98,24 @@ export default function SkillDetailPage() {
         return;
       }
     }
-    const modules = skillModules?.modules ?? [];
+    setStartLoading(false);
+  }, [user, skill, router]);
+
+  const handleStartCourse = useCallback(() => {
+    if (!skill || !skillModules) return;
+    const modules = skillModules.modules ?? [];
     const firstModule = modules[0];
     const firstLesson = firstModule?.lessons?.[0];
     if (firstModule && firstLesson) {
       router.push(
         `/module/${firstModule.id}?lessonId=${firstLesson.id}&courseType=skill&courseId=${skill.id}`,
       );
-      return;
     }
-    setStartLoading(false);
-  }, [user, skill, skillModules, router]);
+  }, [skill, skillModules, router]);
 
   if (skill && !openModule && skill.modules.length > 0) {
     setOpenModule(String(skill.modules[0].id));
   }
-
 
   if (isLoading) {
     return (
@@ -151,6 +157,13 @@ export default function SkillDetailPage() {
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
       <CourseHeader variant="light" />
+
+      {/* Course Start Modal */}
+      <CourseStartModal
+        open={showStartModal}
+        onClose={() => setShowStartModal(false)}
+        onStartCourse={handleStartCourse}
+      />
 
       {/* Hero Section */}
       <section id="nima-organasiz" className="w-full py-6">
@@ -266,7 +279,7 @@ export default function SkillDetailPage() {
                         variant="outline"
                         size="md"
                         className="rounded-xl w-fit flex flex-row items-center"
-                        onClick={handleStart}
+                        onClick={handleStartCourse}
                         disabled={startLoading}
                       >
                         {startLoading ? "Yuklanmoqda..." : "Kabinetga o'tish"}

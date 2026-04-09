@@ -209,6 +209,30 @@ export interface ApiCourseModules {
   partners: ApiPartner[];
 }
 
+// ─── Presale ─────────────────────────────────────────────────────────────────
+
+export interface ApiPresale {
+  id: number;
+  courseId: number;
+  originalPrice: number;
+  presalePrice: number;
+  discountPercent: number;
+  enrolledCount: number;
+  isActive: boolean;
+  startDate: string | null;
+  endDate: string | null;
+}
+
+// ─── Waitlist ────────────────────────────────────────────────────────────────
+
+export interface ApiWaitlistEntry {
+  id: number;
+  courseId: number;
+  queueNumber: number;
+  courseName?: string;
+  coursePhoto?: string;
+}
+
 // ─── Generic API response wrapper ────────────────────────────────────────────
 
 export interface ApiResponse<T> {

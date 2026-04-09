@@ -1,25 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
-import { ArrowRight, Users } from 'lucide-react';
+import { ArrowRight, Users, Loader2, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { MainButton } from '@/components/ui/main-button';
 import { useAuthStore } from '@/store/auth-store';
+import { usePresale } from '@/hooks/use-presale';
+import { useJoinWaitlist } from '@/hooks/use-waitlist';
 import api from '@/lib/api';
 
 interface PresaleSectionProps {
-  variant?: 'light' | 'dark';
   isPurchased?: boolean;
   courseId?: number;
+  courseType?: 'skill' | 'course' | 'profession';
   promocodeId?: number;
   onCabinetClick?: () => void;
 }
-
-const SPOTS_LEFT = 50;
-const ORIGINAL_PRICE = 5_000_000;
-const PRESALE_PRICE = 2_500_000;
 
 function formatPrice(price: number) {
   return price.toLocaleString('uz-UZ').replace(/,/g, ' ');
@@ -30,10 +27,42 @@ interface ClickResponse {
   data: { link: string };
 }
 
-export function PresaleSection({ variant = 'light', isPurchased = false, courseId, promocodeId, onCabinetClick }: PresaleSectionProps) {
+/** Dynamic discount badge — renders the actual % from API instead of a static PNG */
+function DiscountBadge({ percent }: { percent: number }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-0.5">
+      <div className="flex items-center gap-1 text-white text-xs font-semibold">
+        <Flame className="w-3.5 h-3.5 text-orange-400" />
+        <span>Maxsus taklif</span>
+      </div>
+      <div className="bg-[#FFE500] text-black rounded-lg px-4 py-1 font-suisse font-extrabold text-xl lg:text-2xl leading-none">
+        Chegirma
+      </div>
+      <div className="text-[#0a2fff] font-suisse font-black text-4xl lg:text-5xl leading-none">
+        -{percent}%
+      </div>
+    </div>
+  );
+}
+
+export function PresaleSection({
+  isPurchased = false,
+  courseId,
+  courseType = 'skill',
+  promocodeId,
+  onCabinetClick,
+}: PresaleSectionProps) {
   const router = useRouter();
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
+
+  const { data: presale, isLoading: presaleLoading } = usePresale(courseId);
+  const joinWaitlist = useJoinWaitlist();
+
+  // Don't render if no presale data or presale is not active
+  if (presaleLoading || !presale || !presale.isActive) return null;
+
+  const { originalPrice, presalePrice, discountPercent, enrolledCount } = presale;
 
   const handlePresale = async () => {
     if (!user) {
@@ -51,10 +80,25 @@ export function PresaleSection({ variant = 'light', isPurchased = false, courseI
       const link = res.data.data.link;
       window.open(link, '_blank', 'noopener,noreferrer');
     } catch {
-      // fallback to payment page
-      router.push(`/payment/${courseId}?courseType=course`);
+      router.push(
+        `/payment/${courseId}?courseType=${courseType}&discountedPrice=${presalePrice}`,
+      );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleWaitlist = async () => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    if (!courseId) return;
+    try {
+      await joinWaitlist.mutateAsync(courseId);
+      router.push('/classroom');
+    } catch {
+      // Already in waitlist or error
     }
   };
 
@@ -66,26 +110,31 @@ export function PresaleSection({ variant = 'light', isPurchased = false, courseI
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="relative overflow-hidden rounded-[29px] lg:rounded-[40px] p-6 pb-28 sm:pb-6 lg:p-8 lg:pr-48"
-          style={{ background: 'linear-gradient(93.13deg, #CAE25B -36.46%, #00DB30 102.2%)' }}
+          className="relative overflow-hidden rounded-[29px] lg:rounded-[40px] p-6 pb-36 sm:pb-6 lg:p-8 lg:pr-56"
+          style={{
+            background:
+              'linear-gradient(93.13deg, #CAE25B -36.46%, #00DB30 102.2%)',
+          }}
         >
           {/* Content */}
           <div className="relative z-10 space-y-3 flex flex-col items-center sm:items-start">
             {/* Spots badge */}
-            <div className="inline-flex items-center gap-2 bg-white/100 backdrop-blur-sm rounded-full px-4 py-2 text-black/100 text-sm font-medium">
+            <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 text-black text-sm font-medium">
               <Users className="w-4 h-4" />
-              <span>{SPOTS_LEFT} kishi allaqachon yozilgan</span>
+              <span>{enrolledCount} kishi allaqachon yozilgan</span>
             </div>
 
             {/* Price row */}
             <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-4 flex-wrap">
-              <span className="text-white/100 line-through decoration-red-500 decoration-2 text-lg lg:text-2xl font-bold italic">
-                {formatPrice(ORIGINAL_PRICE)} so&apos;m
+              <span className="text-white line-through decoration-red-500 decoration-2 text-lg lg:text-2xl font-bold italic">
+                {formatPrice(originalPrice)} so&apos;m
               </span>
-              <span className="text-white text-2xl sm:hidden">↓</span>
-              <span className="text-white hidden sm:inline text-4xl">⟶</span>
+              <span className="text-white text-2xl sm:hidden">&darr;</span>
+              <span className="text-white hidden sm:inline text-4xl">
+                &rarr;
+              </span>
               <span className="bg-[#FFE500] text-black font-suisse text-3xl lg:text-5xl font-bold tracking-tight rounded-full px-6 py-1 lg:px-8 lg:py-2">
-                {formatPrice(PRESALE_PRICE)} so&apos;m
+                {formatPrice(presalePrice)} so&apos;m
               </span>
             </div>
 
@@ -120,14 +169,23 @@ export function PresaleSection({ variant = 'light', isPurchased = false, courseI
                     onClick={handlePresale}
                     disabled={loading}
                   >
-                    {loading ? 'Yuklanmoqda...' : `Oldindan yozilish – ${formatPrice(PRESALE_PRICE)} so'm`}
-                    {!loading && <ArrowRight className="w-4 h-4 inline ml-1" />}
+                    {loading
+                      ? 'Yuklanmoqda...'
+                      : `Oldindan yozilish – ${formatPrice(presalePrice)} so'm`}
+                    {!loading && (
+                      <ArrowRight className="w-4 h-4 inline ml-1" />
+                    )}
                   </MainButton>
                   <MainButton
                     variant="outline-white"
                     size="md"
                     className="rounded-xl text-sm border-white hover:bg-white hover:text-green-600"
+                    onClick={handleWaitlist}
+                    disabled={joinWaitlist.isPending}
                   >
+                    {joinWaitlist.isPending && (
+                      <Loader2 className="w-4 h-4 animate-spin inline mr-1" />
+                    )}
                     Kutish ro&apos;yxatiga kirish
                     <ArrowRight className="w-4 h-4 inline ml-1" />
                   </MainButton>
@@ -136,15 +194,9 @@ export function PresaleSection({ variant = 'light', isPurchased = false, courseI
             </div>
           </div>
 
-          {/* Presale badge image — right corner */}
-          <div className="absolute bottom-[-40px] left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:right-0 sm:bottom-[-20px] lg:bottom-[-53px] w-28 h-28 sm:w-28 sm:h-28 lg:w-44 lg:h-44 z-10">
-            <Image
-              src="/images/presale-badge.png"
-              alt="Chegirma -50%"
-              width={176}
-              height={176}
-              className="object-contain"
-            />
+          {/* Dynamic discount badge — bottom-right corner */}
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:right-4 sm:bottom-4 lg:right-6 lg:bottom-6 z-10">
+            <DiscountBadge percent={discountPercent} />
           </div>
         </motion.div>
       </div>

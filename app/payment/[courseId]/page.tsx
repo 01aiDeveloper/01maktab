@@ -7,6 +7,7 @@ import { SiteFooter } from '@/components/layout/site-footer';
 import { StepConfirmInfo } from '@/components/payment/step-confirm-info';
 import { StepPaymentMethod } from '@/components/payment/step-payment-method';
 import { StepSuccess } from '@/components/payment/step-success';
+import { StepPresaleSuccess } from '@/components/payment/step-presale-success';
 import { useAuthStore } from '@/store/auth-store';
 import { useProfile } from '@/hooks/use-profile';
 import { useCourseInfo } from '@/hooks/use-course-info';
@@ -28,7 +29,10 @@ function PaymentContent() {
   const stepParam = searchParams.get('step');
   const currentStep = stepParam ? parseInt(stepParam, 10) : 1;
 
-  // userInfo URL query da saqlanadi — step ozgarganda yoki reload da yoqolmaydi
+  // Presale discounted price from URL
+  const discountedPriceParam = searchParams.get('discountedPrice');
+  const discountedPrice = discountedPriceParam ? parseInt(discountedPriceParam, 10) : undefined;
+
   const userInfo = {
     firstName: searchParams.get('firstName') ?? user?.firstname ?? '',
     lastName:  searchParams.get('lastName')  ?? user?.lastname  ?? '',
@@ -37,6 +41,7 @@ function PaymentContent() {
   };
 
   const coursePrice = courseInfo?.price ?? 0;
+  const courseName = courseInfo?.title ?? courseInfo?.name ?? '';
 
   if (courseLoading) {
     return (
@@ -67,13 +72,18 @@ function PaymentContent() {
         <StepPaymentMethod
           courseId={Number(courseId)}
           coursePrice={coursePrice}
+          discountedPrice={discountedPrice}
           onNext={() => goToStep(3)}
           onBack={() => goToStep(1)}
         />
       )}
 
       {currentStep === 3 && (
-        <StepSuccess courseId={courseId} />
+        discountedPrice ? (
+          <StepPresaleSuccess courseName={courseName} />
+        ) : (
+          <StepSuccess courseId={courseId} />
+        )
       )}
     </div>
   );
