@@ -1,4 +1,4 @@
-  "use client";
+"use client";
 
 import * as React from "react";
 import Image from "next/image";
@@ -45,6 +45,30 @@ const SLIDES = [
     partnerLogo: "/icons/tbc_bank_logo.svg",
     partnerName: "TBC Bank",
   },
+  {
+    id: 4,
+    title: "Data Analyst Kasbi",
+    description:
+      "С нуля до аналитика в топ-компании: твоя карьера начинается здесь",
+    bgColor: "bg-[#111111]",
+    image: "/images/hero4.jpg",
+    textColor: "text-white",
+    isDark: true,
+    partnerLogo: "/icons/tbc_bank_logo.svg",
+    partnerName: "TBC Bank",
+  },
+  {
+    id: 5,
+    title: "AI Specialist Kursi",
+    description:
+      "С нуля до аналитика в топ-компании: твоя карьера начинается здесь",
+    bgColor: "bg-[#2563eb]",
+    image: "/images/hero5.png",
+    textColor: "text-white",
+    isDark: true,
+    partnerLogo: "/icons/tbc_bank_logo.svg",
+    partnerName: "TBC Bank",
+  },
 ];
 
 export function Hero() {
@@ -59,7 +83,7 @@ export function Hero() {
       setSelectedIndex(idx);
       setTimeout(() => setIsAnimating(false), 700);
     },
-    [isAnimating, selectedIndex]
+    [isAnimating, selectedIndex],
   );
 
   const startAutoplay = React.useCallback(() => {
@@ -80,7 +104,10 @@ export function Hero() {
   }, [startAutoplay]);
 
   return (
-    <section id="nima-organasiz" className="relative h-screen min-h-116 sm:min-h-150 w-full">
+    <section
+      id="nima-organasiz"
+      className="relative h-screen min-h-116 sm:min-h-150 w-full"
+    >
       <div className="relative h-full w-full bg-base-dark">
         <div className="relative h-full w-full overflow-hidden rounded-b-[48px] md:rounded-b-[55px] rounded-t-none">
           {/* Fade Slides */}
