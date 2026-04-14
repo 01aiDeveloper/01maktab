@@ -28,6 +28,15 @@ function extractBlockImages(blocks: unknown): string[] {
   return images;
 }
 
+/** Extract all text values from ContentBlock[] sorted by order */
+function extractBlockTexts(blocks: unknown): string[] {
+  if (!blocks || !Array.isArray(blocks)) return [];
+  return blocks
+    .filter((b) => b && typeof b === 'object' && b.type === 'text' && b.value)
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map((b) => b.value as string);
+}
+
 export default function PartnerPage() {
   const params = useParams();
   const partnerId = params.slug as string;
@@ -166,13 +175,21 @@ export default function PartnerPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
               Hamkorlik haqida
             </h2>
-            <p className="text-muted-foreground text-base md:text-lg leading-relaxed whitespace-pre-line">
-              {`Bizning hamkorligimizda Maktab01 ta'lim platformasi talabalariga ${partner.name} — O'zbekiston va Qafqazdagi eng yirik moliyaviy institutlardan birida stajirovka o'tash imkoniyati beriladi.
-
-Stajirovka talabalarga olgan bilimlarini amalda qo'llash, professional dasturlash muhitlarini o'zlashtirish va yuqori darajadagi IT-mutaxassislar jamoasida real biznes masalalarini hal qilishni o'rganish imkonini beradi.
-Maktab01 uchun bu hamkorlik — ta'lim sifatining tasdig'i va bozor talablarining tan olinishi. Stajyorlar uchun — bu o'qishning yangi maqsadini ochish, professional o'sish va karyerani boshlash imkoniyati.
-Biz ${partner.name} kabi kompaniyalar bilan hamkorlik IT-industriyaning kelajagini shakllantirishiga ishonamiz.`}
-            </p>
+            {(() => {
+              const textBlocks = extractBlockTexts(partner.blocks);
+              if (textBlocks.length > 0) {
+                return textBlocks.map((text, idx) => (
+                  <p key={idx} className="text-muted-foreground text-base md:text-lg leading-relaxed whitespace-pre-line mb-4 last:mb-0">
+                    {text}
+                  </p>
+                ));
+              }
+              return (
+                <p className="text-muted-foreground text-base md:text-lg leading-relaxed whitespace-pre-line">
+                  {partner.description}
+                </p>
+              );
+            })()}
           </div>
 
           {/* Block Images — same layout as student stories */}
