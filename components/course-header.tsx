@@ -14,7 +14,7 @@ const defaultNavLinks = [
   { label: "Darsxona", href: "/classroom" },
   { label: "Barcha Kurslar", href: "/catalog" },
   { label: "Hamjamiyat", href: "/community" },
-  { label: "Market", href: "#" },
+  { label: "Market", href: "/market" },
 ]
 
 const guestMainNavLinks = [
