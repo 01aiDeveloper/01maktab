@@ -17,7 +17,7 @@ const authLinks = [
   { label: 'Darsxona', href: '/classroom' },
   { label: 'Barcha Kurslar', href: '/catalog' },
   { label: 'Hamjamiyat', href: '/community' },
-  { label: 'Market', href: '#' },
+  { label: 'Market', href: '/market' },
 ];
 
 const socialLinks = [
@@ -178,7 +178,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
         className="pt-8 pb-6 md:pt-12 overflow-hidden w-full max-w-full"
         
       >
-        <div className="flex items-end justify-center w-full px-0">
+        <div className="flex items-end justify-center w-full px-[15px]">
           <motion.h2
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -186,7 +186,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
             transition={{ duration: 0.6, delay: 0.6 }}
             onHoverStart={() => setHoveredLogoIndex(3)}
             onHoverEnd={() => setHoveredLogoIndex(null)}
-            className={`text-[clamp(4rem,26vw,40rem)] font-bold leading-[0.85] tracking-tighter ${logoTextColor} cursor-default relative whitespace-nowrap translate-y-[0.12em]`}
+            className={`text-[clamp(3.75rem,25.5vw,39rem)] font-bold leading-[0.85] tracking-tighter ${logoTextColor} cursor-default relative whitespace-nowrap translate-y-[0.12em] -translate-x-[0.02em]`}
           >
             <motion.span
               animate={hoveredLogoIndex === 3 ? { y: [0, -8, 4, -4, 2, 0], rotate: [0, -5, 5, -3, 3, 0] } : {}}

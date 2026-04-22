@@ -17,7 +17,7 @@ export function StepIndicator({ currentStep, totalSteps = 3 }: StepIndicatorProp
           <div key={step} className="flex items-center">
             {/* Step Circle */}
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+              className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all ${
                 isActive
                   ? 'bg-[#3B5BFF] text-white shadow-lg shadow-blue-500/30'
                   : isCompleted
