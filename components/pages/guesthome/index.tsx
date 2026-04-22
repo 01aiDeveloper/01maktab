@@ -3,6 +3,7 @@ import { Hero } from "@/components/sections/home/hero";
 import { MentorsSection } from "@/components/sections/home/mentors";
 import { CareersSection } from "@/components/sections/home/careers";
 import { VideoSection } from "@/components/sections/home/video-section";
+import { MockupSection } from "@/components/sections/home/mockup-section";
 import { CoursesSection } from "@/components/sections/home/courses";
 import { EventsSection } from "@/components/sections/home/events";
 import { PartnersSection } from "@/components/sections/home/partners";
@@ -67,6 +68,7 @@ export default async function GuestHomePage() {
       <SkillsSection skills={skills} />
       <CareersSection careers={careers} />
       <CoursesSection />
+      <MockupSection />
       <VideoSection />
       <EventsSection />
       <PartnersSection partners={partners} />

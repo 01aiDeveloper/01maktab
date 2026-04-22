@@ -24,6 +24,8 @@ import { PageError } from "@/components/ui/page-error";
 import { NoData } from "@/components/ui/no-data";
 import { useAuthStore } from "@/store/auth-store";
 import { PresaleSection } from "@/components/sections/skills/presale-section";
+import { PresaleDisabledSection } from "@/components/sections/skills/presale-disabled-section";
+import { useCourseBadges } from "@/hooks/use-course-badges";
 import { CourseStartModal } from "@/components/modals/course-start-modal";
 
 
@@ -75,6 +77,7 @@ export default function SkillDetailPage() {
   const { user } = useAuthStore();
   const { data: skill, isLoading, isError } = useSkill(slug);
   const { data: skillModules } = useSkillModules(skill?.id);
+  const { data: skillBadges } = useCourseBadges(skill?.id);
   const [openModule, setOpenModule] = useState<string>("");
   const [startLoading, setStartLoading] = useState(false);
   const [showStartModal, setShowStartModal] = useState(false);
@@ -154,6 +157,14 @@ export default function SkillDetailPage() {
     );
   };
 
+  const handleTestClick = (
+    _test: { id?: string; title: string },
+    ctx: { module: ModuleItem },
+  ) => {
+    const params = new URLSearchParams({ courseType: 'skill', courseId: String(skill.id) });
+    router.push(`/test/${ctx.module.id}?${params.toString()}`);
+  };
+
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
       <CourseHeader variant="light" />
@@ -204,6 +215,11 @@ export default function SkillDetailPage() {
                   <BarChart3 className="w-3.5 h-3.5 shrink-0" />
                   Daraja: {difficultyLabel(skill.difficulty)}
                 </Badge>
+                {skillBadges?.map((badge) => (
+                  <Badge key={badge.id} className="bg-[#5d7bf5]/80 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium backdrop-blur-[119px]" title={badge.description}>
+                    {badge.title}
+                  </Badge>
+                ))}
               </div>
               {skill.icon && (
                 <div className="absolute top-6 right-6 w-12 h-12 lg:w-14 lg:h-14 bg-white/25 rounded-full flex items-center justify-center shadow-lg">
@@ -359,7 +375,8 @@ export default function SkillDetailPage() {
 
 
       {/* Presale Section */}
-      <PresaleSection courseId={skill?.id} />
+      <PresaleSection courseId={skill?.id} courseType="skill" />
+      <PresaleDisabledSection courseId={skill?.id} />
 
       <section className="w-full py-8">
         <div className="container mx-auto px-4">
@@ -399,6 +416,7 @@ export default function SkillDetailPage() {
             freeBadgeClassName="bg-orange-500 hover:bg-orange-500 text-white"
             actionButtonClassName="bg-[#1ebb4a] hover:bg-[#19a842] text-white"
             onLessonClick={handleLessonClick}
+            onTestClick={handleTestClick}
           />
         </div>
       </section>
