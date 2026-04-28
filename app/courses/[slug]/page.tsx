@@ -225,7 +225,7 @@ export default function CoursePage() {
       />
 
       {/* Presale Section */}
-      <PresaleSection courseId={course.id} />
+      <PresaleSection courseId={course.id} courseType="course" />
 
       {/* Course Description Section */}
       <CourseDescriptionSection title={course.title} description={course.description} />

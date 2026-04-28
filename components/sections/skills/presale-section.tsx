@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight, Users, Loader2, Flame } from 'lucide-react';
+import { ArrowRight, Users, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { MainButton } from '@/components/ui/main-button';
 import { useAuthStore } from '@/store/auth-store';
 import { usePresale } from '@/hooks/use-presale';
@@ -27,21 +28,16 @@ interface ClickResponse {
   data: { link: string };
 }
 
-/** Dynamic discount badge — renders the actual % from API instead of a static PNG */
-function DiscountBadge({ percent }: { percent: number }) {
+/** Static discount badge image */
+function DiscountBadge() {
   return (
-    <div className="flex flex-col items-center justify-center gap-0.5">
-      <div className="flex items-center gap-1 text-white text-xs font-semibold">
-        <Flame className="w-3.5 h-3.5 text-orange-400" />
-        <span>Maxsus taklif</span>
-      </div>
-      <div className="bg-[#FFE500] text-black rounded-lg px-4 py-1 font-suisse font-extrabold text-xl lg:text-2xl leading-none">
-        Chegirma
-      </div>
-      <div className="text-[#0a2fff] font-suisse font-black text-4xl lg:text-5xl leading-none">
-        -{percent}%
-      </div>
-    </div>
+    <Image
+      src="/images/skills/maxsusTaklif.png"
+      alt="Maxsus taklif"
+      width={160}
+      height={160}
+      className="w-28 h-28 sm:w-36 sm:h-36 lg:w-40 lg:h-40 object-contain"
+    />
   );
 }
 
@@ -81,7 +77,7 @@ export function PresaleSection({
       window.open(link, '_blank', 'noopener,noreferrer');
     } catch {
       router.push(
-        `/payment/${courseId}?courseType=${courseType}&discountedPrice=${presalePrice}`,
+        `/payment/${courseId}?courseType=${courseType}&discountedPrice=${presalePrice}&discountPercent=${discountPercent}`,
       );
     } finally {
       setLoading(false);
@@ -196,7 +192,7 @@ export function PresaleSection({
 
           {/* Dynamic discount badge — bottom-right corner */}
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:right-4 sm:bottom-4 lg:right-6 lg:bottom-6 z-10">
-            <DiscountBadge percent={discountPercent} />
+            <DiscountBadge />
           </div>
         </motion.div>
       </div>

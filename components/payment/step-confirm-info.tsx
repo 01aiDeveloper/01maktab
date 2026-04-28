@@ -89,13 +89,13 @@ export function StepConfirmInfo({ userInfo, onNext, onBack }: StepConfirmInfoPro
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col-reverse sm:flex-row gap-3">
           <button
             type="button"
             onClick={onBack}
             className="flex-1 h-12 rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 font-medium text-sm transition-colors"
           >
-            Orqaga
+            Bekor qilish
           </button>
           <button
             type="submit"

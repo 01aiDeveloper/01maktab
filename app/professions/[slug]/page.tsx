@@ -351,7 +351,7 @@ export default function ProfessionPage() {
         </section>
 
         {/* Presale Section */}
-        <PresaleSection courseId={profession?.id} />
+        <PresaleSection courseId={profession?.id} courseType="profession" />
 
         {/* Feature Pills Row */}
         <section className="w-full py-6">
