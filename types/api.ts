@@ -233,6 +233,16 @@ export interface ApiWaitlistEntry {
   coursePhoto?: string;
 }
 
+// ─── Promocode ─────────────────────────────────────────────────────────────
+
+export interface ApiPromocodeValidation {
+  id: number;
+  code: string;
+  discountType: 'PERCENT' | 'FIXED';
+  discountValue: number;
+  isValid: boolean;
+}
+
 // ─── Generic API response wrapper ────────────────────────────────────────────
 
 export interface ApiResponse<T> {

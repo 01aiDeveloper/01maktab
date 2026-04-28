@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight, Users } from 'lucide-react';
+import { ArrowUpRight, Clock, Users } from 'lucide-react';
 import { getMediaUrl } from '@/lib/utils';
 
 type CardStatus = 'bought' | 'free' | 'waitlist';
@@ -10,7 +10,7 @@ type CardStatus = 'bought' | 'free' | 'waitlist';
 const STATUS_CONFIG: Record<CardStatus, { label: string; bg: string; text: string }> = {
   bought: { label: 'Sotib olingan', bg: 'bg-emerald-500', text: 'text-white' },
   free: { label: 'Bepul', bg: 'bg-[#3B5BFF]', text: 'text-white' },
-  waitlist: { label: 'Waitlist', bg: 'bg-white', text: 'text-[#1a1a1a]' },
+  waitlist: { label: 'Waitlist', bg: 'bg-[#3B5BFF]', text: 'text-white' },
 };
 
 function formatCount(count: number): string {
@@ -48,7 +48,11 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, icon
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
           {statusInfo && (
             <div className={`flex items-center gap-1.5 ${statusInfo.bg} ${statusInfo.text} px-3 py-1.5 rounded-lg text-xs font-semibold`}>
-              <Image src="/images/skills/icon.png" alt="" width={14} height={14} className="w-3.5 h-3.5" />
+              {status === 'waitlist' ? (
+                <Clock className="w-3.5 h-3.5" />
+              ) : (
+                <Image src="/images/skills/icon.png" alt="" width={14} height={14} className="w-3.5 h-3.5" />
+              )}
               {statusInfo.label}
             </div>
           )}

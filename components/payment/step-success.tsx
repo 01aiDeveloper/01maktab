@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Check, Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { StepIndicator } from './step-indicator';
 import api from '@/lib/api';
 
 interface StepSuccessProps {
@@ -69,8 +68,6 @@ export function StepSuccess({ courseId }: StepSuccessProps) {
 
   return (
     <>
-      <StepIndicator currentStep={3} />
-
       <div className="flex justify-center mb-6">
         <div className="w-16 h-16 bg-[#3B5BFF] rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30">
           <Check className="w-8 h-8 text-white" strokeWidth={3} />

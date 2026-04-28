@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
@@ -31,7 +31,18 @@ function PaymentContent() {
 
   // Presale discounted price from URL
   const discountedPriceParam = searchParams.get('discountedPrice');
-  const discountedPrice = discountedPriceParam ? parseInt(discountedPriceParam, 10) : undefined;
+  const urlDiscountedPrice = discountedPriceParam ? parseInt(discountedPriceParam, 10) : undefined;
+
+  // Discount percent from URL (presale)
+  const discountPercentParam = searchParams.get('discountPercent');
+  const urlDiscountPercent = discountPercentParam ? parseInt(discountPercentParam, 10) : undefined;
+
+  // Promo kod orqali o'zgargan narx va promocode ID
+  const [promoDiscountedPrice, setPromoDiscountedPrice] = useState<number | undefined>(undefined);
+  const [promocodeId, setPromocodeId] = useState<number | undefined>(undefined);
+
+  const discountedPrice = promoDiscountedPrice ?? urlDiscountedPrice;
+  const discountPercent = urlDiscountPercent;
 
   const userInfo = {
     firstName: searchParams.get('firstName') ?? user?.firstname ?? '',
@@ -73,8 +84,14 @@ function PaymentContent() {
           courseId={Number(courseId)}
           coursePrice={coursePrice}
           discountedPrice={discountedPrice}
+          discountPercent={discountPercent}
+          promocodeId={promocodeId}
           onNext={() => goToStep(3)}
           onBack={() => goToStep(1)}
+          onPromocodeApplied={(data) => {
+            setPromoDiscountedPrice(data.discountedPrice);
+            setPromocodeId(data.promocodeId);
+          }}
         />
       )}
 
