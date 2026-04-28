@@ -7,6 +7,7 @@ import { FeatureCards } from '@/components/feature-cards';
 import { MyCoursesSection } from '@/components/sections/my-courses-section';
 import { MyProfessionsSection } from '@/components/sections/my-professions-section';
 import { MySkillsSection } from '@/components/sections/my-skills-section';
+import { MyWaitlistSection } from '@/components/sections/my-waitlist-section';
 import { HomeGraduatesSection } from '@/components/sections/home/home-graduates-section';
 
 import { StatsSection } from '@/components/sections/home/stats-section';
@@ -64,6 +65,7 @@ export default function PrivateHomePage() {
           <MyCoursesSection />
           <MyProfessionsSection />
           <MySkillsSection />
+          <MyWaitlistSection />
         </div>
 
         <HomeGraduatesSection rows={1} />

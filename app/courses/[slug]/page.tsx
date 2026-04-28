@@ -31,6 +31,8 @@ import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
 import { PresaleSection } from '@/components/sections/skills/presale-section';
+import { PresaleDisabledSection } from '@/components/sections/skills/presale-disabled-section';
+import { useCourseBadges } from '@/hooks/use-course-badges';
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -54,7 +56,7 @@ function toModuleItem(m: ApiCourseModule): ModuleItem {
       isFree: i === 0,
       type: 'video' as const,
     })),
-    test: undefined,
+    test: m.testCount > 0 ? { id: String(m.id), title: 'Modul testi' } : undefined,
   };
 }
 
@@ -129,6 +131,7 @@ export default function CoursePage() {
   const { user } = useAuthStore();
   const { data: course, isLoading, isError } = useCourse(slug);
   const { data: courseModules } = useCourseModules(course?.id);
+  const { data: courseBadges } = useCourseBadges(course?.id);
   const [openModule, setOpenModule] = useState<string>('');
   const [startLoading, setStartLoading] = useState(false);
 
@@ -202,6 +205,11 @@ export default function CoursePage() {
     router.push(`/module/${ctx.module.id}?lessonId=${lesson.id}&courseType=course&courseId=${course.id}`);
   };
 
+  const handleTestClick = (_test: { id?: string; title: string }, ctx: { module: ModuleItem }) => {
+    const params = new URLSearchParams({ courseType: 'course', courseId: String(course.id) });
+    router.push(`/test/${ctx.module.id}?${params.toString()}`);
+  };
+
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
       <CourseHeader variant="light" />
@@ -222,10 +230,12 @@ export default function CoursePage() {
         progress={courseModules?.progress ?? null}
         onStart={handleStart}
         startLoading={startLoading}
+        badges={courseBadges ?? []}
       />
 
       {/* Presale Section */}
       <PresaleSection courseId={course.id} courseType="course" />
+      <PresaleDisabledSection courseId={course.id} />
 
       {/* Course Description Section */}
       <CourseDescriptionSection title={course.title} description={course.description} />
@@ -275,6 +285,7 @@ export default function CoursePage() {
             freeBadgeClassName="bg-green-500 hover:bg-green-500 text-white"
             actionButtonClassName="bg-[#5d7bf5] hover:bg-[#5d7bf5] text-white"
             onLessonClick={handleLessonClick}
+            onTestClick={handleTestClick}
           />
         </div>
       </section>

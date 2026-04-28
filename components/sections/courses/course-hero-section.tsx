@@ -8,11 +8,19 @@ import { Badge } from '@/components/ui/badge';
 import { MainButton } from '@/components/ui/main-button';
 import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
+import { baseMediaUrl } from '@/lib/utils';
 
 interface CourseProgress {
   moduleTitile: string | null;
   completedLessonsCount: number;
   totalLessonsCount: number;
+}
+
+interface CourseBadgeDisplay {
+  id: number;
+  title: string;
+  icon: string;
+  description: string;
 }
 
 interface CourseHeroSectionProps {
@@ -32,6 +40,7 @@ interface CourseHeroSectionProps {
   progress?: CourseProgress | null;
   onStart?: () => void;
   startLoading?: boolean;
+  badges?: CourseBadgeDisplay[];
 }
 
 export function CourseHeroSection({
@@ -49,6 +58,7 @@ export function CourseHeroSection({
   progress,
   onStart,
   startLoading = false,
+  badges = [],
 }: CourseHeroSectionProps) {
   const hasProgress = progress && progress.totalLessonsCount > 0;
   const progressPercent = hasProgress
@@ -145,6 +155,30 @@ export function CourseHeroSection({
                 </MainButton>
               )}
             </div>
+
+            {/* Course badges (plashkalar) */}
+            {badges.length > 0 && (
+              <div className="mt-6 flex flex-wrap gap-2">
+                {badges.map((badge) => (
+                  <Badge
+                    key={badge.id}
+                    className="bg-[#5d7bf5] text-white border-0 rounded-full px-4 py-2 text-sm font-medium flex items-center gap-2 shadow-lg"
+                    title={badge.description}
+                  >
+                    {badge.icon && (
+                      <Image
+                        src={badge.icon.startsWith('http') ? badge.icon : `${baseMediaUrl}/${badge.icon}`}
+                        alt={badge.title}
+                        width={18}
+                        height={18}
+                        className="object-contain"
+                      />
+                    )}
+                    {badge.title}
+                  </Badge>
+                ))}
+              </div>
+            )}
 
             {/* Bottom stats badges */}
             <div className="mt-8 flex flex-wrap gap-3">
