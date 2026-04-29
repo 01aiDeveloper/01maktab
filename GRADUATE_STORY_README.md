@@ -3,7 +3,7 @@
 ## Overview
 This is a complete implementation of the Graduate Story Detail page that displays individual graduate success stories with dynamic content blocks.
 
-## Features
+## Features 
 
 ### ✅ Implemented Components
 1. **GraduateStoryPage** (`/app/graduates/[id]/page.tsx`)
