@@ -13,7 +13,7 @@ const SLIDES = [
     description:
       "Noldan top-kompaniyada analitikgacha: karyerangiz shu yerdan boshlanadi",
     bgColor: "bg-[#e5e7eb]",
-    image: "/images/hero11.webp",
+    image: "/images/hero4.jpg",
     textColor: "text-white",
     isDark: true,
     partnerLogo: "/icons/tbc_bank_logo.svg",
@@ -25,49 +25,13 @@ const SLIDES = [
     description:
       "Noldan top-kompaniyada analitikgacha: karyerangiz shu yerdan boshlanadi",
     bgColor: "bg-[#111111]",
-    image: "/images/hero2.png",
+    image: "/images/hero6.jpg",
     textColor: "text-white",
     isDark: true,
     partnerLogo: "/icons/alif_logo.png",
     partnerName: "Alif",
     partnerLogoWidth: 80,
     partnerLogoHeight: 28,
-  },
-  {
-    id: 3,
-    title: "AI Specialist",
-    description:
-      "Sun'iy intellekt olamiga chuqur sho'ng'ing va kelajak texnologiyalarini yarating",
-    bgColor: "bg-[#2563eb]",
-    image: "/images/hero3.webp",
-    textColor: "text-white",
-    isDark: true,
-    partnerLogo: "/icons/tbc_bank_logo.svg",
-    partnerName: "TBC Bank",
-  },
-  {
-    id: 4,
-    title: "Data Analyst Kasbi",
-    description:
-      "С нуля до аналитика в топ-компании: твоя карьера начинается здесь",
-    bgColor: "bg-[#111111]",
-    image: "/images/hero4.jpg",
-    textColor: "text-white",
-    isDark: true,
-    partnerLogo: "/icons/tbc_bank_logo.svg",
-    partnerName: "TBC Bank",
-  },
-  {
-    id: 5,
-    title: "AI Specialist Kursi",
-    description:
-      "С нуля до аналитика в топ-компании: твоя карьера начинается здесь",
-    bgColor: "bg-[#2563eb]",
-    image: "/images/hero5.png",
-    textColor: "text-white",
-    isDark: true,
-    partnerLogo: "/icons/tbc_bank_logo.svg",
-    partnerName: "TBC Bank",
   },
 ];
 

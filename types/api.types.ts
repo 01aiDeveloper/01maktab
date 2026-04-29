@@ -91,6 +91,7 @@ export interface Career {
   icon: string | null
   decorImage: string
   enrollmentCount?: number
+  waitlistCount?: number
 }
 
 // Payment Types
