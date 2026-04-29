@@ -8,8 +8,13 @@ import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
 import { MainButton } from '@/components/ui/main-button';
 import { EnrollmentBadge } from '@/components/ui/enrollment-badge';
-import { getMediaUrl } from '@/lib/utils';
 import type { Career } from '@/types/api.types';
+
+const STATIC_IMAGES = ['/images/hero4.jpg', '/images/hero6.jpg'];
+const STATIC_TITLES = [
+  'Data Analitik:\n0 dan Ishgacha',
+  "ML Engineer: Suni'y\nIntellekt Yasashni\nO'rganamiz",
+];
 
 
 interface CareersSectionProps {
@@ -25,14 +30,14 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
     return apiCareers.map((career: Career, index: number) => ({
       id: career.id.toString(),
       label: career.name,
-      title: career.name,
-      description: career.description || 'Build advanced machine learning models and deploy them to production.',
-      cardColor: index % 2 === 0 ? 'bg-[#3361FF]' : 'bg-gray-100',
+      title: STATIC_TITLES[index] || career.name,
+      cardColor: index % 2 === 0 ? 'bg-[#111111]' : 'bg-gray-100',
       textColor: index % 2 === 0 ? 'text-white' : 'text-black',
-      buttonVariant: (index % 2 === 0 ? 'white' : 'black') as const,
-      imageUrl: getMediaUrl(career.decorImage),
+      buttonVariant: (index % 2 === 0 ? 'gradient' : 'black') as const,
+      titleClassName: index === 1 ? '!lg:text-[55px]' : '',
+      imageUrl: STATIC_IMAGES[index] || '/placeholder.svg',
       slug: career.slug || career.name.toLowerCase().replace(/\s+/g, '-'),
-      enrollmentCount: career.enrollmentCount || 0,
+      enrollmentCount: career.waitlistCount || career.enrollmentCount || 0,
     }));
   }, [apiCareers]);
 
@@ -56,8 +61,8 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
             Kasblar
           </MainTitle>
           <Subtitle align="center" textColor="rgba(255, 255, 255)" className="mx-auto mt-2 md:mt-3 max-w-xl" animated animationDelay={0.1}>
-            Stajerovka, live darslar, mentorlar, student support, kompaniyalardagi real loyihalar va xalqaro sertifikat o’z ichiga oladigan
-            to’liq ta’lim dasturi.
+            Stajerovka, live darslar, mentorlar, student support, kompaniyalardagi real loyihalar va xalqaro sertifikat o'z ichiga oladigan
+            to'liq ta'lim dasturi.
           </Subtitle>
 
           <div className="mt-4 md:mt-6 flex justify-center gap-2 md:gap-3 flex-wrap">
@@ -82,7 +87,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.4 }}
-                className={`relative flex flex-col md:flex-row md:items-center overflow-hidden rounded-[24px] md:rounded-[48px] ${activeData.cardColor}`}
+                className={`relative flex flex-col md:flex-row md:items-center overflow-hidden rounded-[24px] md:rounded-[48px] md:h-[447px] ${activeData.cardColor}`}
               >
                 {/* Content */}
                 <div className="relative z-20 flex-1 p-4 md:p-10 text-left lg:p-16">
@@ -91,14 +96,9 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                       <EnrollmentBadge count={activeData.enrollmentCount} />
                     </div>
                   )}
-                  <MainTitle className={activeData.textColor}>
+                  <MainTitle className={`${activeData.textColor} whitespace-pre-line ${activeData.titleClassName}`}>
                     {activeData.title}
                   </MainTitle>
-                  <div
-                    className={`mt-4 md:mt-6 max-w-lg ml-0 text-sm md:text-base lg:text-lg leading-relaxed line-clamp-3 md:line-clamp-4 ${activeData.textColor === 'text-white' ? 'text-white/90' : 'text-black/90'}`}
-                    dangerouslySetInnerHTML={{ __html: activeData.description }}
-                  />
-
                   <MainButton
                     variant={activeData.buttonVariant}
                     size="lg"
@@ -111,18 +111,17 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                   </MainButton>
                 </div>
 
-                {/* Image — mobile: pastda, desktop: o'ng tomonda absolute */}
-                <div className="relative w-full h-64 md:absolute md:bottom-0 md:right-0 md:w-1/2 md:h-full z-0">
-                  {activeData.cardColor === 'bg-[#3361FF]' && (
-                    <div className="absolute inset-0 bg-linear-to-l from-blue-600/20 to-transparent pointer-events-none z-10" />
-                  )}
+                {/* Image — full background */}
+                <div className="relative w-full h-64 md:absolute md:inset-0 md:h-full z-0">
                   <Image
-                    src={activeData.imageUrl || '/placeholder.svg'}
+                    src={activeData.imageUrl}
                     alt={activeData.title}
                     fill
-                    className="object-contain object-right-bottom"
+                    className="object-cover object-right"
                     priority
                   />
+                  {/* Gradient overlay — text o'qilishi uchun */}
+                  <div className={`absolute inset-0 ${activeData.textColor === 'text-white' ? 'bg-gradient-to-r from-[#111111] via-[#111111]/80 to-transparent' : 'bg-gradient-to-r from-gray-100 via-gray-100/80 to-transparent'}`} />
                 </div>
               </motion.div>
             </AnimatePresence>
