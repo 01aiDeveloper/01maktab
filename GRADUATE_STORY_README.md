@@ -5,6 +5,7 @@ This is a complete implementation of the Graduate Story Detail page that display
 
 ## Features 
 
+
 ### ✅ Implemented Components
 1. **GraduateStoryPage** (`/app/graduates/[id]/page.tsx`)
    - Dynamic routing with `[id]` parameter
