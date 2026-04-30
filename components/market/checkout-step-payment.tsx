@@ -78,7 +78,7 @@ export function CheckoutStepPayment({
               {formatPrice(price)}
             </span>
             {isCoin ? (
-              <Image src="/images/market/01.png" alt="01" width={24} height={24} className="w-6 h-6" />
+              <Image src="/images/market/VC.png" alt="VC" width={18} height={24} className="w-5 h-6" />
             ) : (
               <span className="text-lg sm:text-xl font-bold text-gray-900">сум</span>
             )}

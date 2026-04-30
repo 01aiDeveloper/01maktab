@@ -25,10 +25,10 @@ function formatSum(value: number) {
 
 const CoinIcon = ({ className }: { className?: string }) => (
   <Image
-    src="/images/market/01.png"
-    alt="01"
-    width={250}
-    height={250}
+    src="/images/market/VC.png"
+    alt="VC"
+    width={30}
+    height={40}
     className={cn('inline-block', className)}
   />
 );
@@ -45,7 +45,7 @@ export function MarketProductCard({ product }: MarketProductCardProps) {
     OUT_OF_STOCK: 'Нет в наличии',
     COIN_ONLY: (
       <span className="inline-flex items-center gap-1">
-        Только за <CoinIcon className="w-4 h-4 sm:w-[30px] sm:h-[30px]" />
+        Только за <CoinIcon className="w-4 h-5 sm:w-5 sm:h-7" />
       </span>
     ),
     SOON: 'Скоро',
@@ -85,7 +85,7 @@ export function MarketProductCard({ product }: MarketProductCardProps) {
         {insufficient && (
           <div className="absolute top-3 right-3 z-10">
             <span className="inline-flex items-center gap-1 rounded-full sm:rounded-[12px] bg-neutral-200/90 backdrop-blur px-2.5 sm:px-4 py-0.5 sm:py-1 text-[11px] sm:text-[20px] font-semibold text-neutral-600">
-              Недостаточно <CoinIcon className="w-4 h-4 sm:w-[30px] sm:h-[30px]" />
+              Недостаточно <CoinIcon className="w-4 h-5 sm:w-5 sm:h-7" />
             </span>
           </div>
         )}
@@ -110,7 +110,7 @@ export function MarketProductCard({ product }: MarketProductCardProps) {
             {product.priceCoin > 0 && (
               <span className="inline-flex items-center gap-1.5 text-lg sm:text-xl text-neutral-400">
                 {formatSum(product.priceCoin)}
-                <CoinIcon className="sm:w-[35px] sm:h-[35px] w-9 h-9" />
+                <CoinIcon className="w-6 h-8 sm:w-7 sm:h-9" />
               </span>
             )}
           </div>
