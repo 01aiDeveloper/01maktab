@@ -11,10 +11,14 @@ interface ProductDetailGalleryProps {
   product: MarketProduct;
 }
 
-const statusLabel: Record<ProductStatus, string> = {
+const statusLabel: Record<ProductStatus, React.ReactNode> = {
   IN_STOCK: 'В наличии',
   OUT_OF_STOCK: 'Нет в наличии',
-  COIN_ONLY: 'Только за 01',
+  COIN_ONLY: (
+    <span className="inline-flex items-center gap-1">
+      Только за <Image src="/images/market/VC.png" alt="VC" width={15} height={20} className="w-4 h-5 align-middle" />
+    </span>
+  ),
   SOON: 'Скоро',
 };
 

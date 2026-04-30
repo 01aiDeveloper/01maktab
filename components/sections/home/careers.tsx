@@ -33,7 +33,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
       title: STATIC_TITLES[index] || career.name,
       cardColor: index % 2 === 0 ? 'bg-[#111111]' : 'bg-gray-100',
       textColor: index % 2 === 0 ? 'text-white' : 'text-black',
-      buttonVariant: (index % 2 === 0 ? 'gradient' : 'black') as const,
+      buttonVariant: (index % 2 === 0 ? 'gradient' : 'black'),
       titleClassName: index === 1 ? '!lg:text-[55px]' : '',
       imageUrl: STATIC_IMAGES[index] || '/placeholder.svg',
       slug: career.slug || career.name.toLowerCase().replace(/\s+/g, '-'),
