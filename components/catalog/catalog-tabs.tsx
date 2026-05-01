@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueries } from '@tanstack/react-query';
 import { CatalogCard } from '@/components/cards/catalog-card';
 import { NoData } from '@/components/ui/no-data';
 import { useAuthStore } from '@/store/auth-store';
@@ -25,11 +25,18 @@ interface CatalogItem {
   photo?: string;
   cardImage?: string;
   icon?: string;
-  mentor?: { fullname?: string } | string;
+  mentorId?: number;
+  mentor?: { id?: number; fullname?: string } | string;
   mentorName?: string;
   pricingType?: 'FREE' | 'PAID';
   enrollmentCount?: number;
 }
+
+const detailPaths: Record<TabKey, (id: number) => string> = {
+  skills: (id) => `/course/skill/${id}/public`,
+  courses: (id) => `/course/${id}/public`,
+  professions: (id) => `/course/profession/${id}/public`,
+};
 
 export function CatalogTabs() {
   const router = useRouter();
@@ -64,6 +71,26 @@ export function CatalogTabs() {
       const data = response.data?.data?.data || response.data?.data || [];
       return Array.isArray(data) ? data : [];
     },
+  });
+
+  // Fetch mentor names from individual detail endpoints
+  const mentorQueries = useQueries({
+    queries: items.map((item) => ({
+      queryKey: ['catalog-mentor', activeTab, item.id],
+      queryFn: async () => {
+        const res = await api.get(detailPaths[activeTab](item.id));
+        const data = res.data?.data;
+        return { id: item.id, mentorName: data?.mentor?.fullname || null };
+      },
+      staleTime: 10 * 60 * 1000,
+    })),
+  });
+
+  const mentorNames: Record<number, string> = {};
+  mentorQueries.forEach((q) => {
+    if (q.data?.mentorName) {
+      mentorNames[q.data.id] = q.data.mentorName;
+    }
   });
 
   const setTab = (tab: TabKey) => {
@@ -113,7 +140,7 @@ export function CatalogTabs() {
       ) : items.length === 0 ? (
         <NoData title="Bu yerda hozircha hech narsa yo'q" description="Hozircha ma'lumot yo'q" />
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 gap-3 sm:gap-4">
           {items.map((item: CatalogItem) => {
             const isBought = user ? myItemIds[activeTab].has(item.id) : false;
             const isFree = item.pricingType === 'FREE';
@@ -129,11 +156,7 @@ export function CatalogTabs() {
                 icon={item.icon}
                 status={status}
                 enrollmentCount={item.enrollmentCount}
-                mentorName={
-                  typeof item.mentor === 'object'
-                    ? item.mentor?.fullname
-                    : item.mentorName
-                }
+                mentorName={mentorNames[item.id]}
                 href={getItemHref(item)}
               />
             );

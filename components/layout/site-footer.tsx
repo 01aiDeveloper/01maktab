@@ -70,26 +70,59 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className={`pt-6 pb-8 border-b ${borderColor}`}
         >
-          {/* Mobile: only social icons centered */}
-          <div className="flex md:hidden items-center justify-center gap-3">
-            {socialLinks.map((social, index) => (
-              <motion.a
-                key={social.label}
-                href={social.href}
+          {/* Mobile: nav links + Maxfiylik + social */}
+          <div className="flex flex-col gap-8 md:hidden">
+            {/* Nav links — full width, evenly spaced */}
+            <nav className="flex items-center justify-between">
+              {footerLinks.map((link, index) => (
+                <motion.div
+                  key={link.href}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.08 }}
+                >
+                  <Link
+                    href={link.href}
+                    className={`${isDark ? 'text-white hover:text-white' : 'text-foreground hover:text-foreground'} transition-colors font-medium text-base tracking-tight`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+
+            {/* Maxfiylik + social row */}
+            <div className="flex items-center justify-between">
+              <Link
+                href="/Maxfiylik_Siyosati_01AI_UZ.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDark ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-black/5 text-foreground hover:bg-black/10'} transition-colors`}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.1 + index * 0.1 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                aria-label={social.label}
+                className={`${isDark ? 'text-white hover:text-white' : 'text-foreground hover:text-foreground'} transition-colors font-medium text-base tracking-tight`}
               >
-                {social.icon}
-              </motion.a>
-            ))}
+                Maxfiylik siyosati
+              </Link>
+              <div className="flex items-center gap-3">
+                {socialLinks.map((social, index) => (
+                  <motion.a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center ${isDark ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-black/5 text-foreground hover:bg-black/10'} transition-colors`}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.1 + index * 0.1 }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    aria-label={social.label}
+                  >
+                    {social.icon}
+                  </motion.a>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Desktop (md+): single row — nav links | Maxfiylik siyosati (centered) | social icons */}

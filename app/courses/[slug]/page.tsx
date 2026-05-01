@@ -32,6 +32,7 @@ import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
 import { PresaleSection } from '@/components/sections/skills/presale-section';
 import { PresaleDisabledSection } from '@/components/sections/skills/presale-disabled-section';
+import { WaitlistSection } from '@/components/sections/skills/waitlist-section';
 import { useCourseBadges } from '@/hooks/use-course-badges';
 
 
@@ -236,6 +237,7 @@ export default function CoursePage() {
       {/* Presale Section */}
       <PresaleSection courseId={course.id} courseType="course" />
       <PresaleDisabledSection courseId={course.id} />
+      <WaitlistSection courseId={course.id} enrollmentCount={course.enrollmentCount} />
 
       {/* Course Description Section */}
       <CourseDescriptionSection title={course.title} description={course.description} />
