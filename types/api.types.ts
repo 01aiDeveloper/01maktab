@@ -32,6 +32,7 @@ export interface Course {
   subtitle?: string
   description: string
   photo: string
+  cardImage?: string
   icon: string
   difficulty: CourseDifficulty
   duration: number
@@ -88,6 +89,7 @@ export interface Career {
   subtitle?: string
   description: string
   photo: string
+  cardImage?: string
   icon: string | null
   decorImage: string
   enrollmentCount?: number
@@ -129,6 +131,7 @@ export interface Skill {
   subtitle?: string
   description: string
   photo: string
+  cardImage?: string
   icon: string | null
   enrollmentCount?: number
 }

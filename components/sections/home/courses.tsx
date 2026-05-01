@@ -34,7 +34,7 @@ export function CoursesSection() {
     id: course.id,
     title: course.name || course.title,
     description: course.description?.replace(/<[^>]*>/g, "") || "", // Strip HTML tags
-    imageUrl: course.photo ? getMediaUrl(course.photo) : "/images/courses/1.webp",
+    imageUrl: getMediaUrl(course.cardImage || course.photo) || "/images/courses/1.webp",
     difficulty: course.difficulty,
     duration: course.duration,
     price: course.price,
