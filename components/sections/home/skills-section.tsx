@@ -72,7 +72,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
             >
               <SkillCard
                 id={skill.id}
-                image={getMediaUrl(skill.photo)}
+                image={getMediaUrl(skill.cardImage || skill.photo)}
                 title={skill.title}
                 iconUrl={skill.icon}
                 enrollmentCount={skill.enrollmentCount}

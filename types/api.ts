@@ -79,6 +79,7 @@ export interface ApiSkill {
   description: string;
   courseOutcomes: string | null;
   photo: string | null;
+  cardImage: string | null;
   icon: string | null;
   decorImage: string | null;
   price: number;
@@ -119,6 +120,7 @@ export interface ApiCourse {
   subtitle?: string;
   description: string;
   photo: string | null;
+  cardImage: string | null;
   icon: string | null;
   decorImage: string | null;
   courseOutcomes: ApiLearningOutcome[] | string | null;
@@ -144,6 +146,7 @@ export interface ApiProfession {
   subtitle?: string;
   description: string;
   photo: string | null;
+  cardImage: string | null;
   icon: string | null;
   decorImage: string | null;
   price: number;

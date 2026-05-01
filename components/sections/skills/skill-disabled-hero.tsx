@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Clock, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
@@ -35,6 +35,7 @@ export function SkillDisabledHero({
   courseImage,
   icon,
 }: SkillDisabledHeroProps) {
+  const router = useRouter();
   const priceLabel = price === 0 ? 'Bepul' : `${price.toLocaleString()} so'm`;
 
   return (
@@ -57,13 +58,13 @@ export function SkillDisabledHero({
                 priority
               />
             )}
-            <Link
-              href="/"
-              className="absolute top-6 left-6 inline-flex lg:hidden items-center gap-2 text-white text-sm transition-colors w-fit z-10"
+            <button
+              onClick={() => router.back()}
+              className="absolute top-6 left-6 inline-flex lg:hidden items-center gap-2 text-white text-sm transition-colors w-fit z-10 cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Orqaga</span>
-            </Link>
+            </button>
 
             {/* Disabled badge */}
             <div className="absolute top-6 left-6 lg:top-auto lg:left-auto lg:bottom-6 lg:right-6 z-10">
@@ -108,13 +109,13 @@ export function SkillDisabledHero({
               transition={{ duration: 0.6, ease: 'easeOut' }}
               className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-8 flex flex-col relative overflow-hidden"
             >
-              <Link
-                href="/"
-                className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6 transition-colors w-fit"
+              <button
+                onClick={() => router.back()}
+                className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6 transition-colors w-fit cursor-pointer"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span>Orqaga</span>
-              </Link>
+              </button>
 
               <h1 className="font-suisse text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
                 {title}

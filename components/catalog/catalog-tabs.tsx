@@ -23,6 +23,7 @@ interface CatalogItem {
   slug?: string;
   image?: string;
   photo?: string;
+  cardImage?: string;
   icon?: string;
   mentor?: { fullname?: string } | string;
   mentorName?: string;
@@ -77,7 +78,7 @@ export function CatalogTabs() {
   };
 
   const getItemImage = (item: CatalogItem) => {
-    return item.image || item.photo || '/placeholder.svg';
+    return item.cardImage || item.image || item.photo || '/placeholder.svg';
   };
 
   return (
