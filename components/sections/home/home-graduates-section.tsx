@@ -36,6 +36,12 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
     align: 'start',
     dragFree: true,
   });
+  // Mobile: single row carousel with all graduates
+  const [emblaRefMobile, emblaApiMobile] = useEmblaCarousel({
+    loop: true,
+    align: 'start',
+    dragFree: true,
+  });
   useEffect(() => {
     const fetchGraduates = async () => {
       try {
@@ -64,7 +70,7 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
     fetchGraduates();
   }, []);
 
-  // Sync both carousels
+  // Desktop: sync both carousels
   const scrollPrev = useCallback(() => {
     emblaApi1?.scrollPrev();
     if (rows === 2) {
@@ -78,6 +84,15 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
       emblaApi2?.scrollNext();
     }
   }, [emblaApi1, emblaApi2, rows]);
+
+  // Mobile: single carousel
+  const scrollPrevMobile = useCallback(() => {
+    emblaApiMobile?.scrollPrev();
+  }, [emblaApiMobile]);
+
+  const scrollNextMobile = useCallback(() => {
+    emblaApiMobile?.scrollNext();
+  }, [emblaApiMobile]);
 
   // Split graduates into two rows (row1 gets all if rows=1)
   const midpoint = Math.ceil(graduates.length / 2);
@@ -138,36 +153,14 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
           Xozirda ish topgan studentlarimiz bir nechasi va ularning hikoyalari.
         </Subtitle>
 
-        <div className="space-y-4">
-        {/* Row 1 */}
-        <div className="overflow-hidden" ref={emblaRef1}>
-          <div className="flex">
-            {graduatesRow1.map((graduate) => (
-              <div
-                key={graduate.id}
-                className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_50%] md:flex-[0_0_33.333%] lg:flex-[0_0_25%] px-1.5 md:px-2"
-              >
-                <Link href={`/graduates/${graduate.id}`}>
-                  <GraduateCarouselCard
-                    name={graduate.fullname}
-                    company={graduate.company}
-                    position={graduate.position}
-                    image={getMediaUrl(graduate.photo)}
-                  />
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Row 2 */}
-        {rows === 2 && graduatesRow2.length > 0 ? (
-          <div className="overflow-hidden" ref={emblaRef2}>
+        {/* Mobile: single row slider */}
+        <div className="md:hidden">
+          <div className="overflow-hidden" ref={emblaRefMobile}>
             <div className="flex">
-              {graduatesRow2.map((graduate) => (
+              {graduates.map((graduate) => (
                 <div
                   key={graduate.id}
-                  className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_50%] md:flex-[0_0_33.333%] lg:flex-[0_0_25%] px-1.5 md:px-2"
+                  className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_50%] px-1.5"
                 >
                   <Link href={`/graduates/${graduate.id}`}>
                     <GraduateCarouselCard
@@ -181,19 +174,72 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
               ))}
             </div>
           </div>
-        ) : null}
+          <div className="flex items-center justify-center mt-8">
+            <CarouselNavigation
+              onPrevClick={scrollPrevMobile}
+              onNextClick={scrollNextMobile}
+              canScrollPrev
+              canScrollNext
+              variant="gray"
+              size="md"
+            />
+          </div>
         </div>
 
-        {/* Navigation */}
-        <div className="flex items-center justify-center mt-8">
-          <CarouselNavigation
-            onPrevClick={scrollPrev}
-            onNextClick={scrollNext}
-            canScrollPrev
-            canScrollNext
-            variant="gray"
-            size="md"
-          />
+        {/* Desktop: two rows */}
+        <div className="hidden md:block space-y-4">
+          <div className="overflow-hidden" ref={emblaRef1}>
+            <div className="flex">
+              {graduatesRow1.map((graduate) => (
+                <div
+                  key={graduate.id}
+                  className="flex-[0_0_33.333%] lg:flex-[0_0_25%] min-w-0 px-2"
+                >
+                  <Link href={`/graduates/${graduate.id}`}>
+                    <GraduateCarouselCard
+                      name={graduate.fullname}
+                      company={graduate.company}
+                      position={graduate.position}
+                      image={getMediaUrl(graduate.photo)}
+                    />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {rows === 2 && graduatesRow2.length > 0 && (
+            <div className="overflow-hidden" ref={emblaRef2}>
+              <div className="flex">
+                {graduatesRow2.map((graduate) => (
+                  <div
+                    key={graduate.id}
+                    className="flex-[0_0_33.333%] lg:flex-[0_0_25%] min-w-0 px-2"
+                  >
+                    <Link href={`/graduates/${graduate.id}`}>
+                      <GraduateCarouselCard
+                        name={graduate.fullname}
+                        company={graduate.company}
+                        position={graduate.position}
+                        image={getMediaUrl(graduate.photo)}
+                      />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center justify-center mt-8">
+            <CarouselNavigation
+              onPrevClick={scrollPrev}
+              onNextClick={scrollNext}
+              canScrollPrev
+              canScrollNext
+              variant="gray"
+              size="md"
+            />
+          </div>
         </div>
       </div>
     </motion.section>

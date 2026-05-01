@@ -25,6 +25,7 @@ import { NoData } from "@/components/ui/no-data";
 import { useAuthStore } from "@/store/auth-store";
 import { PresaleSection } from "@/components/sections/skills/presale-section";
 import { PresaleDisabledSection } from "@/components/sections/skills/presale-disabled-section";
+import { WaitlistSection } from "@/components/sections/skills/waitlist-section";
 import { useCourseBadges } from "@/hooks/use-course-badges";
 import { CourseStartModal } from "@/components/modals/course-start-modal";
 
@@ -377,6 +378,7 @@ export default function SkillDetailPage() {
       {/* Presale Section */}
       <PresaleSection courseId={skill?.id} courseType="skill" />
       <PresaleDisabledSection courseId={skill?.id} />
+      <WaitlistSection courseId={skill?.id} enrollmentCount={skill?.enrollmentCount} />
 
       <section className="w-full py-8">
         <div className="container mx-auto px-4">
