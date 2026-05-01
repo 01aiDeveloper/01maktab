@@ -7,7 +7,7 @@ import { MainTitle } from "@/components/ui/main-title";
 import { Subtitle } from "@/components/ui/subtitle";
 import { getMediaUrl } from "@/lib/utils";
 import type { Partner } from "@/types/api.types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://app-dev.01ai.uz/api/v1";
@@ -65,6 +65,7 @@ export function PartnersSection({
 
   const cardWidth = 412 + 24; // card + gap
   const totalWidth = partners.length * cardWidth;
+  const [isPaused, setIsPaused] = useState(false);
 
   // Agar yuklanayotgan bo'lsa yoki ma'lumot bo'lmasa, hech narsa ko'rsatmaydi
   if (loading || !partners || partners.length === 0) {
@@ -101,7 +102,7 @@ export function PartnersSection({
         <div className="overflow-hidden">
           <motion.div
             className="flex gap-6 px-6"
-            animate={{ x: ["0px", `${-totalWidth}px`] }}
+            animate={isPaused ? undefined : { x: ["0px", `${-totalWidth}px`] }}
             transition={{
               x: {
                 repeat: Infinity,
@@ -110,6 +111,8 @@ export function PartnersSection({
               },
             }}
             style={{ width: "max-content" }}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
           >
             {[...partners, ...partners, ...partners].map((partner, index) => (
               <Link

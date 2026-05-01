@@ -20,7 +20,7 @@ export function CourseCard({ id, slug, title, description, imageUrl, enrollmentC
   return (
     <Link href={`/courses/${courseSlug}`}>
       <motion.div
-        className="group relative min-h-[380px] md:h-[500px] w-full overflow-hidden rounded-xl   sm:rounded-[40px] shadow-sm"
+        className="group relative w-full aspect-[654/430] overflow-hidden rounded-xl sm:rounded-[40px] shadow-sm"
       >
       <Image
         src={imageUrl || "/placeholder.svg"}

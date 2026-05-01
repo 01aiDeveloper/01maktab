@@ -263,10 +263,10 @@ export default function ProfessionPage() {
               {/* Content Overlay */}
               <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center h-full">
                 {/* Back Button */}
-                <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit">
+                <button onClick={() => router.back()} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit cursor-pointer">
                   <ArrowLeft className="w-4 h-4" />
                   <span className="text-sm font-medium">Orqaga</span>
-                </Link>
+                </button>
 
                 {/* Enrollment Badge */}
                 <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-xs w-fit mb-6">

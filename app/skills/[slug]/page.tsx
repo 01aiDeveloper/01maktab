@@ -196,13 +196,13 @@ export default function SkillDetailPage() {
                   priority
                 />
               )}
-              <Link
-                href="/"
-                className="absolute top-6 left-6 inline-flex lg:hidden items-center gap-2 text-white text-sm transition-colors w-fit z-10"
+              <button
+                onClick={() => router.back()}
+                className="absolute top-6 left-6 inline-flex lg:hidden items-center gap-2 text-white text-sm transition-colors w-fit z-10 cursor-pointer"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span>Orqaga</span>
-              </Link>
+              </button>
               <div className="absolute bottom-6 left-6 flex flex-wrap gap-2">
                 <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 shadow-sm backdrop-blur-[119px]">
                   <Clock className="w-3.5 h-3.5 shrink-0" />
@@ -244,13 +244,13 @@ export default function SkillDetailPage() {
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-8 flex flex-col relative overflow-hidden"
               >
-                <Link
-                  href="/"
-                  className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6 transition-colors w-fit"
+                <button
+                  onClick={() => router.back()}
+                  className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6 transition-colors w-fit cursor-pointer"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   <span>Orqaga</span>
-                </Link>
+                </button>
 
                 <h1 className="font-suisse text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
                   {skill.title}
