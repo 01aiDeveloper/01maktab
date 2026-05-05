@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import type { Partner } from '@/types/api.types';
 import { ImageGroupGallery } from '@/components/story/image-group-gallery';
+import { useSmartBack } from '@/hooks/use-smart-back';
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'https://app-dev.01ai.uz/api/v1';
@@ -40,6 +41,7 @@ function extractBlockTexts(blocks: unknown): string[] {
 export default function PartnerPage() {
   const params = useParams();
   const partnerId = params.slug as string;
+  const goBack = useSmartBack('/');
 
   const [partner, setPartner] = useState<Partner | null>(null);
   const [loading, setLoading] = useState(true);
@@ -110,13 +112,14 @@ export default function PartnerPage() {
           {/* Image or Logo Card — first on mobile */}
           <div className="relative bg-white rounded-3xl p-8 md:p-12 flex items-center justify-center order-1 lg:order-2">
             {/* Orqaga — mobile: overlay on image */}
-            <Link
-              href="/"
-              className="lg:hidden absolute top-4 left-4 z-10 inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
+            <button
+              type="button"
+              onClick={goBack}
+              className="lg:hidden absolute top-4 left-4 z-10 inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Orqaga</span>
-            </Link>
+            </button>
             {partner.image ? (
               <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
                 <Image
@@ -143,13 +146,14 @@ export default function PartnerPage() {
           {/* Content Card — second on mobile */}
           <div className="bg-white rounded-3xl p-6 md:p-8 flex flex-col justify-center order-2 lg:order-1">
             {/* Orqaga — desktop: inside content card */}
-            <Link
-              href="/"
-              className="hidden lg:inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 text-sm"
+            <button
+              type="button"
+              onClick={goBack}
+              className="hidden lg:inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 text-sm cursor-pointer w-fit"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Orqaga</span>
-            </Link>
+            </button>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
               {partner.name}
             </h1>

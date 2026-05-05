@@ -12,12 +12,14 @@ import { useAuthStore } from '@/store/auth-store';
 import { useProfile } from '@/hooks/use-profile';
 import { useCourseInfo } from '@/hooks/use-course-info';
 import { PageLoader } from '@/components/ui/page-loader';
+import { useSmartBack } from '@/hooks/use-smart-back';
 
 function PaymentContent() {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseId = params.courseId as string;
+  const goBack = useSmartBack(`/courses/${courseId}`);
 
   const { data: profileData } = useProfile();
   const storeUser = useAuthStore((state) => state.user);
@@ -75,7 +77,7 @@ function PaymentContent() {
         <StepConfirmInfo
           userInfo={userInfo}
           onNext={() => goToStep(2)}
-          onBack={() => router.back()}
+          onBack={goBack}
         />
       )}
 

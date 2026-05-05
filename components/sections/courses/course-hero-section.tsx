@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, Clock, Users, FileText, Heart, Loader2 } from 'lucide-react';
+import { useSmartBack } from '@/hooks/use-smart-back';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { MainButton } from '@/components/ui/main-button';
@@ -60,7 +60,7 @@ export function CourseHeroSection({
   startLoading = false,
   badges = [],
 }: CourseHeroSectionProps) {
-  const router = useRouter();
+  const goBack = useSmartBack('/catalog?tab=courses');
   const hasProgress = progress && progress.totalLessonsCount > 0;
   const progressPercent = hasProgress
     ? Math.round((progress.completedLessonsCount / progress.totalLessonsCount) * 100)
@@ -87,7 +87,7 @@ export function CourseHeroSection({
           {/* Content Overlay */}
           <div className="relative z-10 p-6 lg:p-12 flex flex-col justify-center h-full">
             {/* Back button */}
-            <button onClick={() => router.back()} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit cursor-pointer">
+            <button onClick={goBack} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit cursor-pointer">
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm font-medium">Orqaga</span>
             </button>

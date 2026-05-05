@@ -33,6 +33,7 @@ import { useProfession } from '@/hooks/use-profession';
 import { useProfessionModules } from '@/hooks/use-course-modules';
 import { baseMediaUrl } from '@/lib/utils';
 import type { ApiCourseModule } from '@/types/api';
+import { useSmartBack } from '@/hooks/use-smart-back';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
@@ -175,6 +176,7 @@ export default function ProfessionPage() {
   const params = useParams();
   const router = useRouter();
   const slug = params?.slug as string;
+  const goBack = useSmartBack('/catalog?tab=professions');
 
   const { user } = useAuthStore();
   const { data: profession, isLoading, isError } = useProfession(slug);
@@ -263,7 +265,7 @@ export default function ProfessionPage() {
               {/* Content Overlay */}
               <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center h-full">
                 {/* Back Button */}
-                <button onClick={() => router.back()} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit cursor-pointer">
+                <button onClick={goBack} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit cursor-pointer">
                   <ArrowLeft className="w-4 h-4" />
                   <span className="text-sm font-medium">Orqaga</span>
                 </button>

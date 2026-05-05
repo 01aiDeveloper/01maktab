@@ -6,6 +6,7 @@ import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 interface MenuItem {
   label: string;
@@ -15,19 +16,38 @@ interface MenuItem {
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentTab = searchParams?.get('tab');
 
   const menuItems: MenuItem[] = [
     { label: 'Bosh Sahifa', href: '/' },
-    { label: 'Skillar', href: '/catalog?tab=skills' },
-    { label: 'Kurslar', href: '/catalog?tab=courses' },
-    { label: 'Kasblar', href: '/catalog?tab=professions' }
+    { label: 'Darsxona', href: '/classroom' },
+    { label: 'Barcha kurslar', href: '/catalog' },
+    { label: 'Hamjamiyat', href: '/community' },
   ];
+
+  const isActiveItem = (href: string) => {
+    if (href === '/') return pathname === '/';
+    if (href === '/catalog') return pathname === '/catalog' && !currentTab;
+    return pathname === href || pathname?.startsWith(`${href}/`);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const startY = window.scrollY;
+    const onScroll = () => {
+      if (Math.abs(window.scrollY - startY) > 8) setIsMenuOpen(false);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [isMenuOpen]);
 
   return (
     <header className={`fixed left-[13px] right-[13px] md:left-1/2 md:right-auto md:-translate-x-1/2 z-50 w-auto md:w-144.5 pointer-events-none transition-all duration-300 ${scrolled ? "top-[10px] md:top-1.5" : "top-[10px] md:top-8.75"}`}>
@@ -76,16 +96,23 @@ export function Header() {
             >
               {/* Links */}
               <div className="flex flex-col gap-4 md:gap-6">
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="text-white hover:text-[#3b66f5] text-lg md:text-xl lg:text-2xl font-bold transition-colors text-left"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                {menuItems.map((item) => {
+                  const active = isActiveItem(item.href);
+                  return (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`text-lg md:text-xl lg:text-2xl font-bold transition-colors text-left w-fit ${
+                        active
+                          ? 'text-white/60 underline underline-offset-[6px] decoration-white/60'
+                          : 'text-white hover:text-[#3b66f5]'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
               </div>
 
               {/* Promo Card */}

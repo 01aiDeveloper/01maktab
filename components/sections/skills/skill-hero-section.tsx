@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Clock, BarChart3 } from 'lucide-react';
+import { useSmartBack } from '@/hooks/use-smart-back';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { MainButton } from '@/components/ui/main-button';
@@ -17,7 +17,7 @@ interface SkillHeroSectionProps {
 }
 
 export function SkillHeroSection({ title, description, duration, level, price, image }: SkillHeroSectionProps) {
-  const router = useRouter();
+  const goBack = useSmartBack('/catalog?tab=skills');
   return (
     <section className="w-full py-6">
       <div className="container mx-auto px-4">
@@ -30,7 +30,7 @@ export function SkillHeroSection({ title, description, duration, level, price, i
           {/* Left Content */}
           <div className="space-y-6">
             {/* Back Button */}
-            <button onClick={() => router.back()} className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer">
+            <button onClick={goBack} className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer">
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm">Orqaga</span>
             </button>

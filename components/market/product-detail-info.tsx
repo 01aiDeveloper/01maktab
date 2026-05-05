@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useSmartBack } from '@/hooks/use-smart-back';
 import { ProductColorPicker } from './product-color-picker';
 import { ProductSizePicker } from './product-size-picker';
 import {
@@ -23,6 +24,7 @@ function formatSum(value: number) {
 
 export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
   const router = useRouter();
+  const goBack = useSmartBack('/market');
   const sumAvailable = product.priceSum > 0;
   const coinAvailable = product.priceCoin > 0;
   const [colorId, setColorId] = useState<string | null>(
@@ -42,7 +44,7 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
     <div className="bg-white rounded-3xl p-5 sm:p-8 lg:p-10 flex flex-col gap-4 sm:gap-6 lg:h-full">
       <button
         type="button"
-        onClick={() => router.back()}
+        onClick={goBack}
         className="inline-flex items-center gap-2 text-base text-neutral-700 hover:text-neutral-900 transition-colors w-fit font-medium"
       >
         <ArrowLeft className="w-5 h-5" />
