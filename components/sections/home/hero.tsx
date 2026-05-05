@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { MainButton } from "@/components/ui/main-button";
+import { useAuthStore } from "@/store/auth-store";
 
 const SLIDES = [
   {
@@ -39,6 +40,15 @@ export function Hero() {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [isAnimating, setIsAnimating] = React.useState(false);
   const intervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const accessToken = useAuthStore((s) => s.accessToken);
+  const [hydrated, setHydrated] = React.useState(false);
+  React.useEffect(() => {
+    setHydrated(true);
+  }, []);
+  const isLoggedIn = hydrated && (isAuthenticated || !!accessToken);
+  const ctaHref = isLoggedIn ? '/catalog' : '/login';
+  const ctaLabel = isLoggedIn ? 'Barcha kurslar' : 'Bepul boshlash';
 
   const goToSlide = React.useCallback(
     (idx: number) => {
@@ -134,13 +144,13 @@ export function Hero() {
                         />
                       </div>
                     </div>
-                    <Link href="/login">
+                    <Link href={ctaHref}>
                       <MainButton
                         variant="gradient"
                         size="xl"
-                        className="group h-13 md:h-15 lg:h-15 w-50 rounded-xl flex flex-row items-center"
+                        className="group h-13 md:h-15 lg:h-15 w-auto min-w-50 px-6 rounded-xl flex flex-row items-center"
                       >
-                        Bepul boshlash
+                        {ctaLabel}
                         <ArrowRight className="h-5 w-5 md:h-6 md:w-6 inline ml-1" />
                       </MainButton>
                     </Link>

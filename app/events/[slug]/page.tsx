@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useSmartBack } from '@/hooks/use-smart-back';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { EventHero } from '@/components/events/event-hero';
@@ -57,14 +57,14 @@ const EVENT_DATA = {
 };
 
 export default function EventPage() {
-  const router = useRouter();
+  const goBack = useSmartBack('/');
 
   return (
     <div className="min-h-screen bg-[#0b0b0b]">
       <SiteHeader variant="light" />
 
       <main className="min-h-screen bg-[#0b0b0b]">
-        <EventHero event={EVENT_DATA} onBack={() => router.back()} />
+        <EventHero event={EVENT_DATA} onBack={goBack} />
 
         <div className="container mx-auto my-12 lg:my-16 max-w-[1200px] space-y-8 lg:space-y-12">
           <EventAbout title={EVENT_DATA.about.title} content={EVENT_DATA.about.content} />

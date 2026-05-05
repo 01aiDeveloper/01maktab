@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { ArrowLeft, Clock, BarChart3 } from 'lucide-react';
+import { useSmartBack } from '@/hooks/use-smart-back';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { MainButton } from '@/components/ui/main-button';
@@ -35,7 +35,7 @@ export function SkillDisabledHero({
   courseImage,
   icon,
 }: SkillDisabledHeroProps) {
-  const router = useRouter();
+  const goBack = useSmartBack('/catalog?tab=skills');
   const priceLabel = price === 0 ? 'Bepul' : `${price.toLocaleString()} so'm`;
 
   return (
@@ -59,7 +59,7 @@ export function SkillDisabledHero({
               />
             )}
             <button
-              onClick={() => router.back()}
+              onClick={goBack}
               className="absolute top-6 left-6 inline-flex lg:hidden items-center gap-2 text-white text-sm transition-colors w-fit z-10 cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -110,7 +110,7 @@ export function SkillDisabledHero({
               className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-8 flex flex-col relative overflow-hidden"
             >
               <button
-                onClick={() => router.back()}
+                onClick={goBack}
                 className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6 transition-colors w-fit cursor-pointer"
               >
                 <ArrowLeft className="h-4 w-4" />

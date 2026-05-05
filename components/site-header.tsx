@@ -2,12 +2,35 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, User, LogOut, Menu, X, Info, Trophy, Award, CreditCard, Monitor } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useAuthStore } from "@/store/auth-store"
 import { useMe } from "@/hooks/use-me"
+
+function VibecoinBadge({ amount, isDark }: { amount: number; isDark: boolean }) {
+  const formatted = new Intl.NumberFormat("ru-RU").format(amount)
+  return (
+    <div
+      className={`hidden sm:flex items-center gap-2 rounded-xl px-3 h-9 ${
+        isDark ? "bg-white/5" : "bg-black/5"
+      }`}
+    >
+      <span className={`text-sm font-semibold tabular-nums ${isDark ? "text-white" : "text-[#18181A]"}`}>
+        {formatted}
+      </span>
+      <span
+        className="flex items-center justify-center w-5 h-5 rounded-md text-white text-[10px] font-black"
+        style={{ background: "linear-gradient(135deg, #4469F6 0%, #2A51E6 100%)" }}
+        aria-label="Vibecoin"
+      >
+        V
+      </span>
+    </div>
+  )
+}
 
 const navLinks = [
   { label: "Darsxona", href: "/classroom" },
@@ -25,8 +48,11 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false)
   const { user, logout } = useAuthStore()
   useMe()
+  const pathname = usePathname()
 
   const isDark = variant === 'dark'
+  const showVibecoin = !!user && (pathname?.startsWith('/profile') || pathname === '/catalog')
+  const coins = user?.coins ?? 0
 
   return (
     <motion.header
@@ -100,7 +126,8 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
 
           {/* Auth Section - Right */}
           {user ? (
-            <div className="relative">
+            <div className="flex items-center gap-2 relative">
+              {showVibecoin && <VibecoinBadge amount={coins} isDark={isDark} />}
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}

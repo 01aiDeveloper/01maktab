@@ -1,10 +1,44 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
+import Hls from "hls.js"
+
+const VIDEO_SRC =
+  "https://video.01ai.uz/2c9eb729-1ae9-4434-a5bf-e477bade2f1b/playlist.m3u8"
 
 export function MockupSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    let hls: Hls | null = null
+
+    const tryPlay = () => {
+      const p = video.play()
+      if (p && typeof p.catch === "function") p.catch(() => {})
+    }
+
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = VIDEO_SRC
+      video.addEventListener("loadedmetadata", tryPlay, { once: true })
+    } else if (Hls.isSupported()) {
+      hls = new Hls({ enableWorker: true })
+      hls.loadSource(VIDEO_SRC)
+      hls.attachMedia(video)
+      hls.on(Hls.Events.MANIFEST_PARSED, tryPlay)
+    } else {
+      video.src = VIDEO_SRC
+      video.addEventListener("loadedmetadata", tryPlay, { once: true })
+    }
+
+    return () => {
+      video.removeEventListener("loadedmetadata", tryPlay)
+      hls?.destroy()
+    }
+  }, [])
 
   return (
     <section className="container py-8 md:py-16">
@@ -40,10 +74,9 @@ export function MockupSection() {
                 loop
                 muted
                 playsInline
-                preload="none"
-              >
-                <source src="/videos/banner1.webm" type="video/webm" />
-              </video>
+                preload="metadata"
+              />
+
 
               {/* Shine overlay */}
               <div

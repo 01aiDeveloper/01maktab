@@ -28,6 +28,7 @@ import { PresaleDisabledSection } from "@/components/sections/skills/presale-dis
 import { WaitlistSection } from "@/components/sections/skills/waitlist-section";
 import { useCourseBadges } from "@/hooks/use-course-badges";
 import { CourseStartModal } from "@/components/modals/course-start-modal";
+import { useSmartBack } from "@/hooks/use-smart-back";
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -74,6 +75,7 @@ export default function SkillDetailPage() {
   const params = useParams();
   const router = useRouter();
   const slug = params?.slug as string;
+  const goBack = useSmartBack('/catalog?tab=skills');
 
   const { user } = useAuthStore();
   const { data: skill, isLoading, isError } = useSkill(slug);
@@ -198,7 +200,7 @@ export default function SkillDetailPage() {
                 />
               )}
               <button
-                onClick={() => router.back()}
+                onClick={goBack}
                 className="absolute top-6 left-6 inline-flex lg:hidden items-center gap-2 text-white text-sm transition-colors w-fit z-10 cursor-pointer"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -246,7 +248,7 @@ export default function SkillDetailPage() {
                 className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-8 flex flex-col relative overflow-hidden"
               >
                 <button
-                  onClick={() => router.back()}
+                  onClick={goBack}
                   className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6 transition-colors w-fit cursor-pointer"
                 >
                   <ArrowLeft className="h-4 w-4" />
