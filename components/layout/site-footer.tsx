@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Send, Instagram, Linkedin } from 'lucide-react';
-import { useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth-store';
 
 const guestLinks = [
@@ -53,8 +53,13 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
   const { user } = useAuthStore();
   const footerLinks = user ? authLinks : guestLinks;
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const currentTab = searchParams?.get('tab');
+  const [currentTab, setCurrentTab] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    setCurrentTab(params.get('tab'));
+  }, [pathname]);
 
   const isActiveLink = (href: string) => {
     if (href === '/') return pathname === '/';
