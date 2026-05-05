@@ -17,9 +17,11 @@ import { getMediaUrl } from '@/lib/utils';
 import api from '@/lib/api';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
+import { useSmartBack } from '@/hooks/use-smart-back';
 
 export default function GraduateStoryPage() {
   const params = useParams();
+  const goBack = useSmartBack('/');
   const [story, setStory] = useState<GraduateStory | null>(null);
   const [otherStories, setOtherStories] = useState<GraduateStoryCard[]>([]);
   const [loading, setLoading] = useState(true);
@@ -129,13 +131,14 @@ export default function GraduateStoryPage() {
               className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-10 flex flex-col justify-center order-last lg:order-first lg:flex-1"
             >
               {/* Back Link — desktop only */}
-              <Link
-                href="/"
-                className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-8 transition-colors w-fit"
+              <button
+                type="button"
+                onClick={goBack}
+                className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-8 transition-colors w-fit cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span className="text-sm font-medium">Orqaga</span>
-              </Link>
+              </button>
               {/* Title */}
               <h1 className="font-suisse font-bold text-3xl md:text-4xl lg:text-[48px] lg:leading-[1.1] text-[#18181A] mb-6 tracking-[-0.02em]">
                 {story.title}
@@ -166,13 +169,14 @@ export default function GraduateStoryPage() {
               transition={{ duration: 0.6 }}
               className="relative w-full h-[420px] lg:w-[464px] lg:shrink-0 lg:h-[453px] rounded-[29px] lg:rounded-[40px] overflow-hidden order-first lg:order-last"
             >
-              <Link
-                href="/"
-                className="lg:hidden absolute top-4 left-4 z-10 inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors w-fit"
+              <button
+                type="button"
+                onClick={goBack}
+                className="lg:hidden absolute top-4 left-4 z-10 inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors w-fit cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span className="text-sm font-medium">Orqaga</span>
-              </Link>
+              </button>
               <Image
                 src={getMediaUrl(story.photo)}
                 alt={story.fullname}
