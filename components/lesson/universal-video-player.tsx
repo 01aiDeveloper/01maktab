@@ -15,7 +15,7 @@ interface UniversalVideoPlayerProps {
   preventSkip?: boolean; // block forward seek beyond max watched position
 }
 
-const COMPLETE_THRESHOLD = 0.95;
+const COMPLETE_THRESHOLD = 0.9;
 const SEEK_TOLERANCE = 1; // seconds — allow tiny forward seek
 
 const PLYR_CONTROLS = ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'] as const;

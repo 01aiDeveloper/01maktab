@@ -84,11 +84,13 @@ export function LessonContent() {
   const handleLessonComplete = useCallback(async (id: string) => {
     try {
       console.log('[LessonComplete] POST /lesson/' + id + '/complete');
-      await api.post(`/lesson/${id}/complete`);
-      console.log('[LessonComplete] success → refetching modules');
+      const res = await api.post(`/lesson/${id}/complete`);
+      console.log('[LessonComplete] status:', res.status, 'data:', res.data);
       await queryClient.invalidateQueries({ queryKey: ['modules', courseType, courseId] });
-    } catch (err) {
-      console.error('[LessonComplete] error:', err);
+      await queryClient.refetchQueries({ queryKey: ['modules', courseType, courseId] });
+      console.log('[LessonComplete] modules refetched');
+    } catch (err: any) {
+      console.error('[LessonComplete] error:', err?.response?.status, err?.response?.data || err?.message);
     }
   }, [queryClient, courseType, courseId]);
 
