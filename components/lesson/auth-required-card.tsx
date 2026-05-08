@@ -15,12 +15,12 @@ export function AuthRequiredCard() {
         Bu darsni ko'rish uchun platformada ro'yxatdan o'tishingiz kerak. Ro'yxatdan o'tish bepul va bir necha daqiqa vaqt oladi.
       </p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <Link href="/auth/register">
+        <Link href="/login">
           <Button size="lg" className="rounded-xl w-full sm:w-auto">
             Ro'yxatdan o'tish
           </Button>
         </Link>
-        <Link href="/auth/login">
+        <Link href="/login">
           <Button size="lg" variant="outline" className="rounded-xl w-full sm:w-auto">
             Kirish
           </Button>
