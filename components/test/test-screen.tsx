@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { cn, getMediaUrl } from '@/lib/utils';
 import { sortByOrder } from '@/lib/lesson-utils';
 import type { ModuleTest, TestQuestion } from '@/hooks/use-module-test';
@@ -14,6 +15,7 @@ interface TestScreenProps {
   moduleId: string;
   onBack: () => void;
   onContinue: () => void;
+  submitUrl?: string;
 }
 
 interface SubmitResult {
@@ -34,7 +36,8 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-export function TestScreen({ test, moduleId, onBack, onContinue }: TestScreenProps) {
+export function TestScreen({ test, moduleId, onBack, onContinue, submitUrl }: TestScreenProps) {
+  const queryClient = useQueryClient();
   const [screen, setScreen] = useState<Screen>('start');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>(new Map());
@@ -67,7 +70,7 @@ export function TestScreen({ test, moduleId, onBack, onContinue }: TestScreenPro
           selectedOptionIds: answers.get(q.id) ?? [],
         })),
       };
-      const res = await api.post(`/test/module/${moduleId}/submit`, payload);
+      const res = await api.post(submitUrl ?? `/test/module/${moduleId}/submit`, payload);
       const data = res.data?.data ?? res.data;
       setResult({
         isPassed: data.isPassed,
@@ -77,12 +80,14 @@ export function TestScreen({ test, moduleId, onBack, onContinue }: TestScreenPro
         earnedPoints: data.earnedPoints ?? 0,
         maxPoints: data.maxPoints ?? questions.length,
       });
+      // Invalidate modules so module.test.isPassed reflects new state
+      queryClient.invalidateQueries({ queryKey: ['modules'] });
     } catch {
       setSubmitError("Testni yuborishda xatolik yuz berdi. Qayta urinib ko'ring.");
     } finally {
       setSubmitting(false);
     }
-  }, [answers, questions, moduleId]);
+  }, [answers, questions, moduleId, submitUrl, queryClient]);
 
   const toggleOption = (questionId: number, optionId: number, type: 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE') => {
     setAnswers((prev) => {

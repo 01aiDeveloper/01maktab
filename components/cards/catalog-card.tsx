@@ -5,12 +5,13 @@ import Link from 'next/link';
 import { ArrowUpRight, Clock, Users } from 'lucide-react';
 import { getMediaUrl } from '@/lib/utils';
 
-type CardStatus = 'bought' | 'free' | 'waitlist';
+type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
 
 const STATUS_CONFIG: Record<CardStatus, { label: string; bg: string; text: string }> = {
   bought: { label: 'Sotib olingan', bg: 'bg-emerald-500', text: 'text-white' },
   free: { label: 'Bepul', bg: 'bg-[#EF4444]', text: 'text-white' },
   waitlist: { label: 'Waitlist', bg: 'bg-[#3B5BFF]', text: 'text-white' },
+  presale: { label: 'Pre-sale', bg: 'bg-amber-500', text: 'text-white' },
 };
 
 function formatCount(count: number): string {
@@ -29,12 +30,13 @@ interface CatalogCardProps {
   badge?: string;
   status?: CardStatus;
   enrollmentCount?: number;
+  waitlistCount?: number;
   icon?: string;
   mentorName?: string;
   href: string;
 }
 
-export function CatalogCard({ title, image, badge, status, enrollmentCount, icon, mentorName, href }: CatalogCardProps) {
+export function CatalogCard({ title, image, badge, status, enrollmentCount, waitlistCount, icon, mentorName, href }: CatalogCardProps) {
   const imgSrc = getMediaUrl(image) || '/placeholder.svg';
   const statusInfo = status ? STATUS_CONFIG[status] : null;
 
@@ -48,7 +50,7 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, icon
         <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10 flex flex-col gap-1.5">
           {statusInfo && (
             <div className={`flex items-center gap-1 sm:gap-1.5 ${statusInfo.bg} ${statusInfo.text} px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-semibold`}>
-              {status === 'waitlist' ? (
+              {status === 'waitlist' || status === 'presale' ? (
                 <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
               ) : (
                 <Image src="/images/skills/icon.png" alt="" width={16} height={16} className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -65,7 +67,13 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, icon
           {enrollmentCount != null && enrollmentCount > 0 && (
             <div className="flex items-center gap-1 sm:gap-1.5 bg-[#FAEF3B] text-black px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-semibold">
               <Users className="w-3 h-3 sm:w-4 sm:h-4" />
-              {formatCount(enrollmentCount)} odam kutmoqda
+              {formatCount(enrollmentCount)} sotib oldi
+            </div>
+          )}
+          {!enrollmentCount && waitlistCount != null && waitlistCount > 0 && (
+            <div className="flex items-center gap-1 sm:gap-1.5 bg-[#FAEF3B] text-black px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-semibold">
+              <Users className="w-3 h-3 sm:w-4 sm:h-4" />
+              {formatCount(waitlistCount)} odam kutmoqda
             </div>
           )}
         </div>

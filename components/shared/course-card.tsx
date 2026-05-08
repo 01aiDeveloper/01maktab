@@ -4,18 +4,27 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { EnrollmentBadge } from "@/components/ui/enrollment-badge"
+import { StatusBadge, resolveStatus, type StatusFlags } from "@/components/ui/status-badge"
 
-interface CourseCardProps {
+interface CourseCardProps extends StatusFlags {
   id?: number | string
   slug?: string
   title: string
   description: string
   imageUrl: string
   enrollmentCount?: number
+  waitlistCount?: number
 }
 
-export function CourseCard({ id, slug, title, description, imageUrl, enrollmentCount }: CourseCardProps) {
+export function CourseCard({
+  id, slug, title, description, imageUrl,
+  enrollmentCount, waitlistCount,
+  hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled,
+}: CourseCardProps) {
   const courseSlug = slug || id?.toString() || "course"
+  const status = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled })
+  const countNum = enrollmentCount ?? waitlistCount ?? 0
+  const countKind: 'enrolled' | 'waitlist' = enrollmentCount ? 'enrolled' : 'waitlist'
   
   return (
     <Link href={`/courses/${courseSlug}`}>
@@ -30,9 +39,15 @@ export function CourseCard({ id, slug, title, description, imageUrl, enrollmentC
       />
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
 
-      {enrollmentCount ? (
+      {status ? (
         <div className="absolute top-4 left-4 z-10">
-          <EnrollmentBadge count={enrollmentCount} />
+          <StatusBadge status={status} />
+        </div>
+      ) : null}
+
+      {countNum > 0 ? (
+        <div className={`absolute top-4 z-10 ${status ? 'right-4' : 'left-4'}`}>
+          <EnrollmentBadge count={countNum} kind={countKind} />
         </div>
       ) : null}
 

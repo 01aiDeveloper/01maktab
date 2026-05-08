@@ -10,8 +10,10 @@ import { courseService } from "@/services/course.service"
 import { useApi } from "@/hooks/use-api"
 import { getMediaUrl } from "@/lib/utils"
 import { NoData } from "@/components/shared/no-data"
+import { useAuthStore } from "@/store/auth-store"
 
 export function CoursesSection() {
+  const { user } = useAuthStore()
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     loop: false,
@@ -23,7 +25,7 @@ export function CoursesSection() {
 
   // Fetch courses from API
   const { data: coursesData, loading, error } = useApi(
-    () => courseService.getCourses({ format: "COURSE", pageSize: 10 }),
+    () => courseService.getCourses({ format: "COURSE", pageSize: 10, asClient: !!user }),
     { autoFetch: true }
   )
 
@@ -40,6 +42,10 @@ export function CoursesSection() {
     price: course.price,
     pricingType: course.pricingType,
     enrollmentCount: course.enrollmentCount,
+    waitlistCount: course.waitlistCount,
+    hasPurchased: course.hasPurchased,
+    presalesEnabled: course.presalesEnabled,
+    waitlistEnabled: course.waitlistEnabled,
   }))
 
   return (

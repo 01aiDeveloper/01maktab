@@ -17,6 +17,12 @@ interface LessonHeaderActionsProps {
   prevLesson: { moduleId: number; id: number } | null;
   nextLesson: { moduleId: number; id: number } | null;
   onLessonSelect: (moduleId: number, lessonId: number) => void;
+  isCurrentCompleted?: boolean;
+  onLockedNext?: () => void;
+  hasModuleTestPending?: boolean;
+  onModuleTest?: () => void;
+  isCourseExamReady?: boolean;
+  onCourseExam?: () => void;
 }
 
 export function LessonHeaderActions({
@@ -28,6 +34,12 @@ export function LessonHeaderActions({
   prevLesson,
   nextLesson,
   onLessonSelect,
+  isCurrentCompleted = true,
+  onLockedNext,
+  hasModuleTestPending,
+  onModuleTest,
+  isCourseExamReady,
+  onCourseExam,
 }: LessonHeaderActionsProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -69,11 +81,27 @@ export function LessonHeaderActions({
           </button>
 
           <button
-            disabled={!nextLesson}
-            onClick={() => nextLesson && onLessonSelect(nextLesson.moduleId, nextLesson.id)}
+            disabled={!nextLesson && !hasModuleTestPending && !isCourseExamReady}
+            onClick={() => {
+              if (hasModuleTestPending) {
+                if (!isCurrentCompleted) { onLockedNext?.(); return; }
+                onModuleTest?.();
+                return;
+              }
+              if (isCourseExamReady) {
+                if (!isCurrentCompleted) { onLockedNext?.(); return; }
+                onCourseExam?.();
+                return;
+              }
+              if (!nextLesson) return;
+              if (!isCurrentCompleted) { onLockedNext?.(); return; }
+              onLessonSelect(nextLesson.moduleId, nextLesson.id);
+            }}
             className={cn(
               'w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center transition-colors',
-              nextLesson ? 'hover:bg-gray-100 text-gray-700' : 'text-gray-300 cursor-not-allowed'
+              (nextLesson || hasModuleTestPending || isCourseExamReady)
+                ? 'hover:bg-gray-100 text-gray-700'
+                : 'text-gray-300 cursor-not-allowed'
             )}
           >
             <ArrowRight className="w-4 h-4" />

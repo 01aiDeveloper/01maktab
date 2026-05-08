@@ -25,11 +25,16 @@ interface CatalogItem {
   photo?: string;
   cardImage?: string;
   icon?: string;
+  price?: number;
   mentorId?: number;
   mentor?: { id?: number; fullname?: string } | string;
   mentorName?: string;
   pricingType?: 'FREE' | 'PAID';
+  presalesEnabled?: boolean;
+  waitlistEnabled?: boolean;
+  waitlistCount?: number;
   enrollmentCount?: number;
+  hasPurchased?: boolean;
 }
 
 const detailPaths: Record<TabKey, (id: number) => string> = {
@@ -62,10 +67,12 @@ export function CatalogTabs() {
     professions: 'PROFESSION',
   };
 
+  const listEndpoint = user ? '/course/client' : '/course/public';
+
   const { data: items = [], isLoading: loading } = useQuery<CatalogItem[]>({
-    queryKey: ['catalog', activeTab],
+    queryKey: ['catalog', activeTab, user ? 'client' : 'public'],
     queryFn: async () => {
-      const response = await api.get('/course/public', {
+      const response = await api.get(listEndpoint, {
         params: { format: formats[activeTab], pageSize: 20 },
       });
       const data = response.data?.data?.data || response.data?.data || [];
@@ -142,9 +149,14 @@ export function CatalogTabs() {
       ) : (
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           {items.map((item: CatalogItem) => {
-            const isBought = user ? myItemIds[activeTab].has(item.id) : false;
-            const isFree = item.pricingType === 'FREE';
-            const status: 'bought' | 'free' | 'waitlist' = isBought ? 'bought' : isFree ? 'free' : 'waitlist';
+            const isBought = item.hasPurchased ?? (user ? myItemIds[activeTab].has(item.id) : false);
+            const isFree = item.pricingType === 'FREE' || item.price === 0;
+            const status: 'bought' | 'free' | 'waitlist' | 'presale' =
+              isBought ? 'bought'
+              : isFree ? 'free'
+              : item.presalesEnabled ? 'presale'
+              : item.waitlistEnabled ? 'waitlist'
+              : 'waitlist';
 
             return (
               <CatalogCard
@@ -156,6 +168,7 @@ export function CatalogTabs() {
                 icon={item.icon}
                 status={status}
                 enrollmentCount={item.enrollmentCount}
+                waitlistCount={item.waitlistCount}
                 mentorName={mentorNames[item.id]}
                 href={getItemHref(item)}
               />

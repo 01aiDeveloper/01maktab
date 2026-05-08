@@ -76,6 +76,12 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
                 title={skill.title}
                 iconUrl={skill.icon}
                 enrollmentCount={skill.enrollmentCount}
+                waitlistCount={skill.waitlistCount}
+                price={skill.price}
+                pricingType={skill.pricingType}
+                presalesEnabled={skill.presalesEnabled}
+                waitlistEnabled={skill.waitlistEnabled}
+                hasPurchased={skill.hasPurchased}
               />
             </div>
           ))}
