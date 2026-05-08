@@ -50,6 +50,15 @@ export function UniversalVideoPlayer({
   const hlsRef = useRef<Hls | null>(null);
   const completedRef = useRef(false); // fire onComplete only once
   const maxWatchedRef = useRef(0); // farthest watched timestamp (seconds)
+
+  // Stable refs for callbacks/flags so player effect does not re-run on every render
+  const onEndedRef = useRef(onEnded);
+  const onCompleteRef = useRef(onComplete);
+  const preventSkipRef = useRef(preventSkip);
+  useEffect(() => { onEndedRef.current = onEnded; }, [onEnded]);
+  useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
+  useEffect(() => { preventSkipRef.current = preventSkip; }, [preventSkip]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -96,13 +105,13 @@ export function UniversalVideoPlayer({
       player.on('ready', () => setLoading(false));
       player.on('error', () => { setError('YouTube video yuklanmadi'); setLoading(false); });
 
-      if (onEnded) player.on('ended', onEnded);
+      player.on('ended', () => onEndedRef.current?.());
 
       const fireComplete = (src: string) => {
         if (!completedRef.current) {
           console.log(`[VideoComplete] ${src} → calling complete`);
           completedRef.current = true;
-          onComplete?.();
+          onCompleteRef.current?.();
         }
       };
 
@@ -110,21 +119,20 @@ export function UniversalVideoPlayer({
         const t = player.currentTime ?? 0;
         const dur = player.duration ?? 0;
         if (t > maxWatchedRef.current) maxWatchedRef.current = t;
-        if (onComplete && dur > 0 && t >= dur * COMPLETE_THRESHOLD) {
+        if (onCompleteRef.current && dur > 0 && t >= dur * COMPLETE_THRESHOLD) {
           fireComplete('YouTube 95%');
         }
       });
 
-      player.on('ended', () => onComplete && fireComplete('YouTube ended'));
+      player.on('ended', () => onCompleteRef.current && fireComplete('YouTube ended'));
 
-      if (preventSkip) {
-        player.on('seeking', () => {
-          const t = player.currentTime ?? 0;
-          if (t > maxWatchedRef.current + SEEK_TOLERANCE) {
-            player.currentTime = maxWatchedRef.current;
-          }
-        });
-      }
+      player.on('seeking', () => {
+        if (!preventSkipRef.current) return;
+        const t = player.currentTime ?? 0;
+        if (t > maxWatchedRef.current + SEEK_TOLERANCE) {
+          player.currentTime = maxWatchedRef.current;
+        }
+      });
 
       return () => {
         try { player.destroy(); } catch { /* noop */ }
@@ -144,13 +152,13 @@ export function UniversalVideoPlayer({
       keyboard: { focused: true, global: true },
     });
     plyrRef.current = player;
-    if (onEnded) player.on('ended', onEnded);
+    player.on('ended', () => onEndedRef.current?.());
 
     const triggerComplete = (source: string) => {
       if (!completedRef.current) {
         console.log(`[VideoComplete] stream "${source}" → calling complete`);
         completedRef.current = true;
-        onComplete?.();
+        onCompleteRef.current?.();
       }
     };
 
@@ -159,12 +167,12 @@ export function UniversalVideoPlayer({
       const t = videoEl.currentTime;
       if (t > maxWatchedRef.current) maxWatchedRef.current = t;
       const dur = videoEl.duration;
-      if (onComplete && dur > 0 && t >= dur * COMPLETE_THRESHOLD) {
+      if (onCompleteRef.current && dur > 0 && t >= dur * COMPLETE_THRESHOLD) {
         triggerComplete('95%');
       }
     };
     const onSeeking = () => {
-      if (!preventSkip) return;
+      if (!preventSkipRef.current) return;
       if (videoEl.currentTime > maxWatchedRef.current + SEEK_TOLERANCE) {
         videoEl.currentTime = maxWatchedRef.current;
       }
@@ -210,7 +218,7 @@ export function UniversalVideoPlayer({
         hlsRef.current = null;
       }
     };
-  }, [sourceUrl, isYouTube, onEnded, onComplete, preventSkip]);
+  }, [sourceUrl, isYouTube]);
 
   return (
     <div
