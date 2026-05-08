@@ -6,8 +6,8 @@ import { useCallback } from "react";
 const AUTH_PATH = /\/(login|signup|sign-up|sign-in|auth|profile-setup)(\/|$|\?)/i;
 
 /**
- * Login/auth sahifalariga qaytarmaydigan "ortga" navigatsiyasi.
- * Agar history bo'sh bo'lsa yoki referrer auth sahifasi bo'lsa — fallback ochiladi.
+ * "Ortga" navigatsiyasi — history bor bo'lsa back, aks holda fallback.
+ * Hozirgi sahifa o'zi auth sahifasi bo'lsa fallback (loop oldini olish).
  */
 export function useSmartBack(fallback: string) {
   const router = useRouter();
@@ -18,17 +18,16 @@ export function useSmartBack(fallback: string) {
       return;
     }
 
-    const ref = document.referrer;
-    const sameOrigin = ref.startsWith(window.location.origin);
-    const refPath = sameOrigin ? ref.slice(window.location.origin.length) : "";
-    const isAuthRef = sameOrigin && AUTH_PATH.test(refPath);
-    const currentIsAuth = AUTH_PATH.test(window.location.pathname);
-
-    if (window.history.length <= 1 || !sameOrigin || isAuthRef || currentIsAuth) {
+    if (AUTH_PATH.test(window.location.pathname)) {
       router.push(fallback);
       return;
     }
 
-    router.back();
+    if (window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push(fallback);
   }, [router, fallback]);
 }

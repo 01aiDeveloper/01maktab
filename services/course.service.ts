@@ -12,17 +12,18 @@ interface GetCoursesParams {
   pageSize?: number
   difficulty?: string
   pricingType?: string
+  asClient?: boolean
 }
 
 export const courseService = {
   /**
-   * Get public courses with optional filters
+   * Get courses list. When asClient=true, hits /course/client (returns hasPurchased).
    */
   async getCourses(params: GetCoursesParams = {}) {
-    const { format = "COURSE", pageNumber = 1, pageSize = 10, ...rest } = params
+    const { format = "COURSE", pageNumber = 1, pageSize = 10, asClient, ...rest } = params
 
     const response = await api.get<ApiResponse<PaginatedResponse<Course>>>(
-      "/course/public",
+      asClient ? "/course/client" : "/course/public",
       {
         params: {
           format,

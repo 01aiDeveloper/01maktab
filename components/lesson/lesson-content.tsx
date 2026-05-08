@@ -1,10 +1,11 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import type { AxiosError } from 'axios';
 import { LessonHeaderActions } from '@/components/lesson/lesson-header-actions';
 import { LessonNavButtons } from '@/components/lesson/lesson-nav-buttons';
+import { LessonLockedModal } from '@/components/lesson/lesson-locked-modal';
 import { UniversalVideoPlayer } from '@/components/lesson/universal-video-player';
 import { LessonBlockRenderer } from '@/components/lesson/lesson-block-renderer';
 import { AuthRequiredCard } from '@/components/lesson/auth-required-card';
@@ -39,6 +40,7 @@ export function LessonContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [lockedModalOpen, setLockedModalOpen] = useState(false);
 
   const lessonId = searchParams.get('lessonId') ?? '';
   const courseType = (searchParams.get('courseType') ?? 'course') as 'course' | 'skill' | 'profession';
@@ -96,6 +98,40 @@ export function LessonContent() {
   const nextLesson =
     currentIndex >= 0 && currentIndex < flatLessons.length - 1 ? flatLessons[currentIndex + 1] : null;
 
+  // Module test gating: when on the last lesson of a module that has an unpassed test
+  const currentModule = currentLesson ? modules.find((m) => m.id === currentLesson.moduleId) : null;
+  const isLastLessonOfModule = !!(
+    currentModule && currentLesson &&
+    currentModule.lessons && currentModule.lessons.length > 0 &&
+    currentModule.lessons[currentModule.lessons.length - 1].id === currentLesson.id
+  );
+  const moduleTest = currentModule?.test ?? null;
+  const moduleTestNotPassed = !!moduleTest && moduleTest.isPassed !== true;
+  const moduleTestPending = isLastLessonOfModule && moduleTestNotPassed && moduleTest
+    ? { moduleId: currentModule!.id, testId: moduleTest.id }
+    : null;
+
+  // Course exam gating: last lesson of last module + all module tests passed (or no tests)
+  const isLastModule = !!(currentModule && modules[modules.length - 1]?.id === currentModule.id);
+  const allModuleTestsPassed = modules.every((m) => !m.test || m.test.isPassed === true);
+  const isCourseExamReady = isLastLessonOfModule && isLastModule && allModuleTestsPassed && !moduleTestPending;
+
+  const goToModuleTest = useCallback(() => {
+    if (!moduleTestPending) return;
+    const params = new URLSearchParams({ courseType, courseId });
+    if (lessonId) params.set('lessonId', lessonId);
+    if (nextLesson) {
+      params.set('nextLessonId', String(nextLesson.id));
+      params.set('nextModuleId', String(nextLesson.moduleId));
+    }
+    router.push(`/test/${moduleTestPending.moduleId}?${params.toString()}`);
+  }, [moduleTestPending, courseType, courseId, lessonId, nextLesson, router]);
+
+  const goToCourseExam = useCallback(() => {
+    const params = new URLSearchParams({ courseType, courseId });
+    router.push(`/exam/${courseId}?${params.toString()}`);
+  }, [courseType, courseId, router]);
+
   // Auto-navigate when lessonId is missing: find first uncompleted lesson, or last lesson if all completed
   useEffect(() => {
     if (lessonId || modulesLoading || flatLessons.length === 0) return;
@@ -130,6 +166,12 @@ export function LessonContent() {
           prevLesson={prevLesson}
           nextLesson={nextLesson}
           onLessonSelect={(targetModuleId, targetLessonId) => goToLesson(targetModuleId, targetLessonId)}
+          isCurrentCompleted={currentLesson?.isCompleted ?? true}
+          onLockedNext={() => setLockedModalOpen(true)}
+          hasModuleTestPending={!!moduleTestPending}
+          onModuleTest={goToModuleTest}
+          isCourseExamReady={isCourseExamReady}
+          onCourseExam={goToCourseExam}
         />
         <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
           Dars {lesson.orderId}. {lesson.title}
@@ -146,6 +188,7 @@ export function LessonContent() {
                 sourceUrl={video.link}
                 sourceType={video.linkType}
                 isFirst={index === 0}
+                preventSkip={index === 0 && !currentLesson?.isCompleted}
                 onComplete={index === 0 && !currentLesson?.isCompleted ? () => handleLessonComplete(lessonId) : undefined}
               />
             ))}
@@ -160,9 +203,17 @@ export function LessonContent() {
           nextLesson={nextLesson}
           onPrev={() => prevLesson && goToLesson(prevLesson.moduleId, prevLesson.id)}
           onNext={() => nextLesson && goToLesson(nextLesson.moduleId, nextLesson.id)}
+          isCurrentCompleted={currentLesson?.isCompleted ?? true}
+          onLockedNext={() => setLockedModalOpen(true)}
+          moduleTestPending={moduleTestPending}
+          onModuleTest={goToModuleTest}
+          isCourseExamReady={isCourseExamReady}
+          onCourseExam={goToCourseExam}
           className="mt-10 pt-8 border-t border-gray-100"
         />
       </div>
+
+      <LessonLockedModal open={lockedModalOpen} onClose={() => setLockedModalOpen(false)} />
 
       <div className="h-12" />
     </>

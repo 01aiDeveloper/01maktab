@@ -5,8 +5,9 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getMediaUrl } from '@/lib/utils';
 import { EnrollmentBadge } from '@/components/ui/enrollment-badge';
+import { StatusBadge, resolveStatus, type StatusFlags } from '@/components/ui/status-badge';
 
-interface SkillCardProps {
+interface SkillCardProps extends StatusFlags {
   id?: number;
   slug?: string;
   image: string;
@@ -15,9 +16,17 @@ interface SkillCardProps {
   badge?: string;
   href?: string;
   enrollmentCount?: number;
+  waitlistCount?: number;
 }
 
-export function SkillCard({ id, slug, image, title, iconUrl, badge, href, enrollmentCount }: SkillCardProps) {
+export function SkillCard({
+  id, slug, image, title, iconUrl, badge, href,
+  enrollmentCount, waitlistCount,
+  hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled,
+}: SkillCardProps) {
+  const status = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled });
+  const countNum = enrollmentCount ?? waitlistCount ?? 0;
+  const countKind = enrollmentCount ? 'enrolled' : 'waitlist';
   const cardSlug = slug || id?.toString() || 'skill';
   const linkHref = href || `/skills/${cardSlug}`;
 
@@ -35,16 +44,20 @@ export function SkillCard({ id, slug, image, title, iconUrl, badge, href, enroll
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
 
-        {badge && (
+        {status ? (
+          <div className="absolute top-3 left-3 z-10">
+            <StatusBadge status={status} />
+          </div>
+        ) : badge && (
           <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">
             <Image src={'/images/skills/icon.png'} alt="" width={14} height={14} className="w-3.5 h-3.5" />
             {badge}
           </div>
         )}
 
-        {enrollmentCount ? (
+        {countNum > 0 ? (
           <div className="absolute top-3 right-3 z-10">
-            <EnrollmentBadge count={enrollmentCount} />
+            <EnrollmentBadge count={countNum} kind={countKind} />
           </div>
         ) : null}
 

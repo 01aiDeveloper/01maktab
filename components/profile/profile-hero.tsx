@@ -1,10 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { useSmartBack } from '@/hooks/use-smart-back';
 
 export function ProfileHero() {
+  const goBack = useSmartBack('/');
+
   return (
     <section className="pt-2 pb-4">
       {/* Mobile layout */}
@@ -18,13 +20,14 @@ export function ProfileHero() {
           quality={100}
         />
         {/* Orqaga button top left */}
-        <Link
-          href="/"
-          className="absolute top-4 left-4 inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm z-10"
+        <button
+          type="button"
+          onClick={goBack}
+          className="absolute top-4 left-4 inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm z-10 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Orqaga</span>
-        </Link>
+        </button>
         {/* Profil text bottom */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-6 pt-10 pb-5">
           <h1 className="text-3xl font-bold text-white">Profil</h1>
@@ -35,13 +38,14 @@ export function ProfileHero() {
       <div className="hidden lg:grid grid-cols-[1fr_1.2fr] gap-4 h-60">
         {/* Left: Dark Card */}
         <div className="relative bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-[24px] p-8 flex flex-col justify-between overflow-hidden">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors text-sm w-fit"
+          <button
+            type="button"
+            onClick={goBack}
+            className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors text-sm w-fit cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Orqaga</span>
-          </Link>
+          </button>
           <h1 className="text-4xl font-bold text-white">Profil</h1>
         </div>
 

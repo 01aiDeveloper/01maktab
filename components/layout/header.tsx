@@ -6,7 +6,7 @@ import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 interface MenuItem {
   label: string;
@@ -17,8 +17,13 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const currentTab = searchParams?.get('tab');
+  const [currentTab, setCurrentTab] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    setCurrentTab(params.get('tab'));
+  }, [pathname]);
 
   const menuItems: MenuItem[] = [
     { label: 'Bosh Sahifa', href: '/' },

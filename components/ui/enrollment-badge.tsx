@@ -12,16 +12,19 @@ function formatCount(count: number): string {
 
 interface EnrollmentBadgeProps {
   count: number;
+  kind?: 'enrolled' | 'waitlist';
   className?: string;
 }
 
-export function EnrollmentBadge({ count, className = '' }: EnrollmentBadgeProps) {
+export function EnrollmentBadge({ count, kind = 'waitlist', className = '' }: EnrollmentBadgeProps) {
   if (!count || count <= 0) return null;
+
+  const label = kind === 'enrolled' ? 'sotib oldi' : 'odam kutmoqda';
 
   return (
     <div className={`inline-flex items-center gap-1.5 bg-[#FAEF3B] text-black px-3 py-1.5 rounded-full text-xs font-semibold ${className}`}>
       <Users className="w-3.5 h-3.5" />
-      <span>{formatCount(count)} odam kutmoqda</span>
+      <span>{formatCount(count)} {label}</span>
     </div>
   );
 }

@@ -94,6 +94,11 @@ export interface Career {
   decorImage: string
   enrollmentCount?: number
   waitlistCount?: number
+  price?: number
+  pricingType?: 'FREE' | 'PAID'
+  presalesEnabled?: boolean
+  waitlistEnabled?: boolean
+  hasPurchased?: boolean
 }
 
 // Payment Types
@@ -134,4 +139,10 @@ export interface Skill {
   cardImage?: string
   icon: string | null
   enrollmentCount?: number
+  waitlistCount?: number
+  price?: number
+  pricingType?: 'FREE' | 'PAID'
+  presalesEnabled?: boolean
+  waitlistEnabled?: boolean
+  hasPurchased?: boolean
 }
