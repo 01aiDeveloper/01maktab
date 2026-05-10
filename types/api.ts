@@ -71,6 +71,15 @@ export interface ApiSkillModule {
   tests: ApiSkillTest[];
 }
 
+export interface ApiPresale {
+  id: number;
+  isActive: boolean;
+  originalPrice: number;
+  presalePrice: number;
+  discountPercent: number;
+  enrolledCount: number;
+}
+
 export interface ApiSkill {
   id: number;
   name: string;
@@ -90,6 +99,11 @@ export interface ApiSkill {
   modules: ApiSkillModule[];
   mentor: ApiMentor | null;
   enrollmentCount: number;
+  hasPurchased?: boolean;
+  isEnrolled?: boolean;
+  isInWaitlist?: boolean;
+  preSales?: ApiPresale | null;
+  waitlistCount?: number;
 }
 
 // ─── Course (public detail) ───────────────────────────────────────────────────
@@ -232,10 +246,18 @@ export interface ApiPresale {
 
 export interface ApiWaitlistEntry {
   id: number;
-  courseId: number;
-  queueNumber: number;
-  courseName?: string;
-  coursePhoto?: string;
+  name?: string;
+  title?: string;
+  photo?: string | null;
+  icon?: string | null;
+  decorImage?: string | null;
+  format?: 'SKILL' | 'COURSE' | 'PROFESSION';
+  status?: string;
+  presalesEnabled?: boolean;
+  mentor?: { id: number; fullname: string } | null;
+  limitRemaining?: number | null;
+  soldCount?: number | null;
+  queueNumber?: number;
 }
 
 // ─── Promocode ─────────────────────────────────────────────────────────────

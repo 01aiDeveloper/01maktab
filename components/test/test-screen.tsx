@@ -46,11 +46,12 @@ export function TestScreen({ test, moduleId, onBack, onContinue, submitUrl }: Te
   const [result, setResult] = useState<SubmitResult | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const questions = sortByOrder(test.questions);
-  const currentQuestion: TestQuestion = questions[currentIndex];
+  const questions = sortByOrder(test.questions ?? []);
+  const currentQuestion: TestQuestion | undefined = questions[currentIndex];
   const isLast = currentIndex === questions.length - 1;
-  const selectedIds = answers.get(currentQuestion?.id) ?? [];
+  const selectedIds = answers.get(currentQuestion?.id ?? -1) ?? [];
   const hasAnswer = selectedIds.length > 0;
+  const noQuestions = questions.length === 0;
 
   // Countdown timer
   useEffect(() => {
@@ -113,20 +114,39 @@ export function TestScreen({ test, moduleId, onBack, onContinue, submitUrl }: Te
 
           <h1 className="text-xl font-bold text-gray-900 mb-2">{test.name}</h1>
           <p className="text-sm text-gray-500 mb-8">
-            Materialni mustahkamlash<br />va modulni yakunlash uchun test.
+            {noQuestions
+              ? "Bu testda hali savollar yo'q. Iltimos keyinroq urinib ko'ring."
+              : <>Materialni mustahkamlash<br />va modulni yakunlash uchun test.</>}
           </p>
 
-          <button
-            onClick={() => {
-              setAnswers(new Map());
-              setCurrentIndex(0);
-              setTimeLeft(test.timeLimit * 60);
-              setScreen('quiz');
-            }}
-            className="w-64 h-12 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-medium text-sm transition-colors"
-          >
-            Boshlash
-          </button>
+          {noQuestions ? (
+            <button
+              onClick={onBack}
+              className="w-64 h-12 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-medium text-sm transition-colors"
+            >
+              Orqaga
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setAnswers(new Map());
+                setCurrentIndex(0);
+                setTimeLeft(test.timeLimit * 60);
+                setScreen('quiz');
+              }}
+              className="w-64 h-12 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-medium text-sm transition-colors"
+            >
+              Boshlash
+            </button>
+          )}
+      </div>
+    );
+  }
+
+  if (!currentQuestion) {
+    return (
+      <div className="bg-white rounded-2xl p-10 text-center text-gray-500">
+        Savollar topilmadi.
       </div>
     );
   }

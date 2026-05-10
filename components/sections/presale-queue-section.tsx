@@ -60,7 +60,7 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
   if (!skill) return null;
 
   // Find the current user's queue number for this course
-  const waitlistEntry = waitlistEntries?.find((w) => w.courseId === skill.id);
+  const waitlistEntry = waitlistEntries?.find((w) => w.id === skill.id);
   const queueNumber = waitlistEntry?.queueNumber ?? 0;
 
   const modules: ModuleItem[] = skill.modules.map(toModuleItem);
