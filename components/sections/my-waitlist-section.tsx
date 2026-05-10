@@ -31,40 +31,51 @@ export function MyWaitlistSection() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {entries.map((entry) => (
-          <Link key={entry.id} href={`/catalog`}>
-            <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              {/* Image */}
-              <div className="relative h-40 bg-gradient-to-br from-[#5d7bf5] to-[#7c71f4]">
-                {entry.coursePhoto && (
-                  <Image
-                    src={mediaUrl(entry.coursePhoto)}
-                    alt={entry.courseName ?? "Kurs"}
-                    fill
-                    className="object-cover"
-                  />
-                )}
-              </div>
+        {entries.map((entry) => {
+          const courseTitle = entry.title || entry.name || "Kurs";
+          const detailHref =
+            entry.format === "SKILL"
+              ? `/skills/${entry.id}`
+              : entry.format === "PROFESSION"
+              ? `/professions/${entry.id}`
+              : `/courses/${entry.id}`;
+          return (
+            <Link key={entry.id} href={detailHref}>
+              <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                {/* Image */}
+                <div className="relative h-40 bg-gradient-to-br from-[#5d7bf5] to-[#7c71f4]">
+                  {entry.photo && (
+                    <Image
+                      src={mediaUrl(entry.photo)}
+                      alt={courseTitle}
+                      fill
+                      className="object-cover"
+                    />
+                  )}
+                </div>
 
-              {/* Content */}
-              <div className="p-4 space-y-3">
-                <h3 className="font-suisse font-bold text-gray-900 text-base line-clamp-2">
-                  {entry.courseName ?? `Kurs #${entry.courseId}`}
-                </h3>
-                <div className="flex items-center gap-3 flex-wrap">
-                  <div className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 rounded-full px-3 py-1 text-xs font-medium">
-                    <Clock className="w-3.5 h-3.5" />
-                    Kutilmoqda
-                  </div>
-                  <div className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 rounded-full px-3 py-1 text-xs font-medium">
-                    <Users className="w-3.5 h-3.5" />
-                    Navbat: #{entry.queueNumber}
+                {/* Content */}
+                <div className="p-4 space-y-3">
+                  <h3 className="font-suisse font-bold text-gray-900 text-base line-clamp-2">
+                    {courseTitle}
+                  </h3>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <div className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 rounded-full px-3 py-1 text-xs font-medium">
+                      <Clock className="w-3.5 h-3.5" />
+                      Kutilmoqda
+                    </div>
+                    {typeof entry.queueNumber === "number" && (
+                      <div className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 rounded-full px-3 py-1 text-xs font-medium">
+                        <Users className="w-3.5 h-3.5" />
+                        Navbat: #{entry.queueNumber}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
     </motion.section>
   )

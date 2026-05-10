@@ -22,5 +22,6 @@ export interface Lesson {
   duration: number;
   blocks: LessonBlock[];
   isPublic: boolean;
+  isCompleted?: boolean;
   videos: LessonVideo[];
 }

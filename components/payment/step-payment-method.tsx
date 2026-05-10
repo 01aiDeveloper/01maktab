@@ -4,8 +4,9 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Check, Loader2 } from 'lucide-react';
 import { StepIndicator } from './step-indicator';
-import { useValidatePromocode } from '@/hooks/use-promocode';
+import { useCheckPromocode } from '@/hooks/use-promocode';
 import api from '@/lib/api';
+import type { ApiResponse, ApiPaymentResponse } from '@/types/api';
 
 interface StepPaymentMethodProps {
   courseId: number;
@@ -19,16 +20,6 @@ interface StepPaymentMethodProps {
 }
 
 type PaymentProvider = 'click' | 'payme' | 'uzum';
-
-interface ClickResponse {
-  statusCode: number;
-  data: { link: string };
-}
-
-interface PaymeResponse {
-  statusCode: number;
-  data: { link: string };
-}
 
 export function StepPaymentMethod({
   courseId,
@@ -48,7 +39,7 @@ export function StepPaymentMethod({
   const [promoCode, setPromoCode] = useState('');
   const [promoStatus, setPromoStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [promoError, setPromoError] = useState('');
-  const validatePromocode = useValidatePromocode();
+  const checkPromocode = useCheckPromocode();
 
   const finalPrice = discountedPrice ?? coursePrice;
   const hasDiscount = discountedPrice !== undefined && discountedPrice < coursePrice;
@@ -62,27 +53,43 @@ export function StepPaymentMethod({
     setPromoError('');
 
     try {
-      const result = await validatePromocode.mutateAsync({
+      const result = await checkPromocode.mutateAsync({
         code: promoCode.trim(),
-        courseId,
+        targetId: courseId,
+        price: coursePrice,
+        type: 'course',
       });
 
-      if (result.isValid) {
-        setPromoStatus('success');
-        let newPrice = coursePrice;
-        if (result.discountType === 'PERCENT') {
-          newPrice = Math.round(coursePrice * (1 - result.discountValue / 100));
-        } else {
-          newPrice = Math.max(0, coursePrice - result.discountValue);
-        }
-        onPromocodeApplied?.({ discountedPrice: newPrice, promocodeId: result.id });
+      let newPrice = coursePrice;
+      if (typeof result.finalPrice === 'number') {
+        newPrice = result.finalPrice;
+      } else if (typeof result.discountAmount === 'number') {
+        newPrice = Math.max(0, coursePrice - result.discountAmount);
+      } else if (
+        result.discountType === 'PERCENT' &&
+        typeof result.discountValue === 'number'
+      ) {
+        newPrice = Math.round(coursePrice * (1 - result.discountValue / 100));
+      } else if (
+        result.discountType === 'FIXED' &&
+        typeof result.discountValue === 'number'
+      ) {
+        newPrice = Math.max(0, coursePrice - result.discountValue);
+      }
+
+      setPromoStatus('success');
+      onPromocodeApplied?.({ discountedPrice: newPrice, promocodeId: result.id });
+    } catch (err: unknown) {
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      const apiMsg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setPromoStatus('error');
+      if (status === 404) {
+        setPromoError('Promo kod topilmadi');
+      } else if (apiMsg) {
+        setPromoError(typeof apiMsg === 'string' ? apiMsg : 'Promo kod yaroqsiz');
       } else {
-        setPromoStatus('error');
         setPromoError('Promo kod yaroqsiz');
       }
-    } catch {
-      setPromoStatus('error');
-      setPromoError('Promo kod yaroqsiz');
     }
   };
 
@@ -99,17 +106,21 @@ export function StepPaymentMethod({
       const body: { courseId: number; promocodeId?: number } = { courseId };
       if (promocodeId) body.promocodeId = promocodeId;
 
-      let link: string;
+      const endpoint = paymentProvider === 'click' ? '/click/course' : '/payme/course';
+      const res = await api.post<ApiResponse<ApiPaymentResponse>>(endpoint, body);
+      const data = res.data.data;
 
-      if (paymentProvider === 'click') {
-        const res = await api.post<ClickResponse>('/click/course', body);
-        link = res.data.data.link;
-      } else {
-        const res = await api.post<PaymeResponse>('/payme/course', body);
-        link = res.data.data.link;
+      // Bepul kurs (presale 100% chegirma yoki FREE pricingType) — link talab qilmaydi
+      if (data.free) {
+        onNext();
+        return;
       }
 
-      window.open(link, '_blank', 'noopener,noreferrer');
+      const link = paymentProvider === 'click'
+        ? `https://my.click.uz/services/pay/${data.link}`
+        : data.link;
+
+      window.location.href = link;
     } catch (err) {
       console.error('Payment error:', err);
       setError("To'lov amalga oshmadi. Qayta urinib ko'ring.");
@@ -186,10 +197,10 @@ export function StepPaymentMethod({
           ) : (
             <button
               onClick={handleApplyPromo}
-              disabled={validatePromocode.isPending || !promoCode.trim()}
+              disabled={checkPromocode.isPending || !promoCode.trim()}
               className="h-12 px-5 rounded-xl bg-[#3B5BFF] hover:bg-[#2d4ae6] text-white font-medium text-sm transition-colors disabled:opacity-50 flex items-center gap-1.5"
             >
-              {validatePromocode.isPending ? (
+              {checkPromocode.isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 "Qo'llash"

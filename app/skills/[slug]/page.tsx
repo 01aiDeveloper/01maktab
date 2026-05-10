@@ -153,8 +153,10 @@ export default function SkillDetailPage() {
       : `${skill.price.toLocaleString()} so'm`;
   const courseImage = mediaUrl(skill.photo);
 
-  const isPurchased = !!mySkills?.some((c) => String(c.id) === String(skill.id));
-  const isEnrolled = skill.pricingType === 'FREE' || isPurchased;
+  const isPurchased = !!skill.hasPurchased || !!mySkills?.some((c) => String(c.id) === String(skill.id));
+  const isEnrolled = !!skill.isEnrolled || skill.pricingType === 'FREE' || isPurchased;
+  const presaleActive = !!skill.preSales?.isActive;
+  const isInWaitlist = !!skill.isInWaitlist;
 
   const handleLessonClick = (
     lesson: { id: string | number; isFree?: boolean },
@@ -275,7 +277,7 @@ export default function SkillDetailPage() {
                   </p>
                 )}
 
-                {skillModules?.progress &&
+                {isEnrolled && skillModules?.progress &&
                 skillModules.progress.totalLessonsCount > 0 ? (
                   <div className="space-y-3">
                     <div className="flex items-center gap-2 flex-wrap">
@@ -296,14 +298,25 @@ export default function SkillDetailPage() {
                       />
                     </div>
                     <div className="flex flex-wrap gap-3">
-                      <MainButton
-                        variant="gradient"
-                        size="md"
-                        className="rounded-xl w-fit flex flex-row items-center opacity-50 cursor-not-allowed"
-                        disabled
-                      >
-                        Sotib olingan
-                      </MainButton>
+                      {skill.pricingType === "FREE" ? (
+                        <MainButton
+                          variant="gradient"
+                          size="md"
+                          className="rounded-xl w-fit flex flex-row items-center opacity-70 cursor-not-allowed"
+                          disabled
+                        >
+                          Bepul
+                        </MainButton>
+                      ) : isPurchased ? (
+                        <MainButton
+                          variant="gradient"
+                          size="md"
+                          className="rounded-xl w-fit flex flex-row items-center opacity-50 cursor-not-allowed"
+                          disabled
+                        >
+                          Sotib olingan
+                        </MainButton>
+                      ) : null}
                       <MainButton
                         variant="outline"
                         size="md"
@@ -320,7 +333,7 @@ export default function SkillDetailPage() {
                       </MainButton>
                     </div>
                   </div>
-                ) : (
+                ) : presaleActive ? (
                   <MainButton
                     variant="gradient"
                     size="md"
@@ -329,6 +342,34 @@ export default function SkillDetailPage() {
                     disabled={startLoading}
                   >
                     {startLoading ? "Yuklanmoqda..." : "Oldindan yozilish"}
+                    {startLoading ? (
+                      <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
+                    ) : (
+                      <ArrowRight className="w-4 h-4 inline ml-1" />
+                    )}
+                  </MainButton>
+                ) : isInWaitlist ? (
+                  <MainButton
+                    variant="outline"
+                    size="md"
+                    className="rounded-xl w-fit flex flex-row items-center opacity-70 cursor-not-allowed"
+                    disabled
+                  >
+                    Kutish ro&apos;yxatidasiz
+                  </MainButton>
+                ) : (
+                  <MainButton
+                    variant="gradient"
+                    size="md"
+                    className="rounded-xl w-fit flex flex-row items-center"
+                    onClick={handleStart}
+                    disabled={startLoading}
+                  >
+                    {startLoading
+                      ? "Yuklanmoqda..."
+                      : skill.pricingType === "FREE"
+                      ? "Boshlash"
+                      : "Sotib olish"}
                     {startLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
                     ) : (

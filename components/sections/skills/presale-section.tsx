@@ -23,10 +23,7 @@ function formatPrice(price: number) {
   return price.toLocaleString('uz-UZ').replace(/,/g, ' ');
 }
 
-interface ClickResponse {
-  statusCode: number;
-  data: { link: string };
-}
+import type { ApiResponse, ApiPaymentResponse } from '@/types/api';
 
 /** Static discount badge image */
 function DiscountBadge() {
@@ -72,9 +69,16 @@ export function PresaleSection({
       const body: { courseId: number; promocodeId?: number } = { courseId };
       if (promocodeId) body.promocodeId = promocodeId;
 
-      const res = await api.post<ClickResponse>('/click/course', body);
-      const link = res.data.data.link;
-      window.open(link, '_blank', 'noopener,noreferrer');
+      const res = await api.post<ApiResponse<ApiPaymentResponse>>('/click/course', body);
+      const data = res.data.data;
+      if (data.free) {
+        router.push(`/classroom?welcome=${courseId}`);
+        return;
+      }
+      const link = data.link.startsWith('http')
+        ? data.link
+        : `https://my.click.uz/services/pay/${data.link}`;
+      window.location.href = link;
     } catch {
       router.push(
         `/payment/${courseId}?courseType=${courseType}&discountedPrice=${presalePrice}&discountPercent=${discountPercent}`,
