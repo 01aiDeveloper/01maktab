@@ -13,6 +13,7 @@ import { sortByOrder } from '@/lib/lesson-utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLesson } from '@/hooks/use-lesson';
 import { useCourseModules, useSkillModules, useProfessionModules } from '@/hooks/use-course-modules';
+import { useMyCourses, useMySkills, useMyProfessions } from '@/hooks/use-my-courses';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import api from '@/lib/api';
@@ -57,6 +58,10 @@ export function LessonContent() {
   const skillModules = useSkillModules(courseType === 'skill' ? courseId : undefined);
   const professionModules = useProfessionModules(courseType === 'profession' ? courseId : undefined);
 
+  const { data: myCourses } = useMyCourses();
+  const { data: mySkills } = useMySkills();
+  const { data: myProfessions } = useMyProfessions();
+
   const modulesLoading =
     courseType === 'skill' ? skillModules.isLoading :
     courseType === 'profession' ? professionModules.isLoading :
@@ -69,6 +74,14 @@ export function LessonContent() {
 
   const modules = courseData?.modules ?? [];
 
+  const myList =
+    courseType === 'skill' ? mySkills :
+    courseType === 'profession' ? myProfessions :
+    myCourses;
+  const isFreeCourse = (courseData as any)?.pricingType === 'FREE';
+  const isPurchased = !!myList?.some((c) => String(c.id) === String(courseId));
+  const isEnrolled = isFreeCourse || isPurchased;
+
   // Flat list of all lessons for prev/next navigation
   const flatLessons = modules.flatMap((m) =>
     (m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id, moduleTitle: m.title }))
@@ -76,9 +89,14 @@ export function LessonContent() {
 
   const goToLesson = useCallback(
     (targetModuleId: number, targetLessonId: number) => {
+      const target = flatLessons.find((l) => l.id === targetLessonId);
+      if (target && !target.isPublic && !isEnrolled) {
+        setLockedModalOpen(true);
+        return;
+      }
       router.push(buildLessonUrl(targetModuleId, targetLessonId, courseType, courseId));
     },
-    [router, courseType, courseId],
+    [router, courseType, courseId, flatLessons, isEnrolled],
   );
 
   const handleLessonComplete = useCallback(async (id: string) => {
@@ -160,7 +178,7 @@ export function LessonContent() {
     <>
       <div className="bg-white rounded-2xl p-8 lg:p-12 mb-6">
         <LessonHeaderActions
-          isPublic={lesson.isPublic}
+          isPublic={lesson.isPublic && !isEnrolled}
           modules={modules}
           currentLessonId={Number(lessonId)}
           courseType={courseType}
@@ -174,6 +192,7 @@ export function LessonContent() {
           onModuleTest={goToModuleTest}
           isCourseExamReady={isCourseExamReady}
           onCourseExam={goToCourseExam}
+          isEnrolled={isEnrolled}
         />
         <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
           Dars {lesson.orderId}. {lesson.title}

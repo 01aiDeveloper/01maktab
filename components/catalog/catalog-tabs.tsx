@@ -80,24 +80,35 @@ export function CatalogTabs() {
     },
   });
 
-  // Fetch mentor names from individual detail endpoints
-  const mentorQueries = useQueries({
+  // Fetch detail (mentor + pricing) for each item — list endpoint omits pricingType/hasPurchased
+  const detailQueries = useQueries({
     queries: items.map((item) => ({
-      queryKey: ['catalog-mentor', activeTab, item.id],
+      queryKey: ['catalog-detail', activeTab, item.id],
       queryFn: async () => {
         const res = await api.get(detailPaths[activeTab](item.id));
         const data = res.data?.data;
-        return { id: item.id, mentorName: data?.mentor?.fullname || null };
+        return {
+          id: item.id,
+          mentorName: data?.mentor?.fullname || null,
+          pricingType: data?.pricingType as 'FREE' | 'PAID' | undefined,
+          price: data?.price as number | undefined,
+          hasPurchased: data?.hasPurchased as boolean | undefined,
+        };
       },
       staleTime: 10 * 60 * 1000,
     })),
   });
 
   const mentorNames: Record<number, string> = {};
-  mentorQueries.forEach((q) => {
-    if (q.data?.mentorName) {
-      mentorNames[q.data.id] = q.data.mentorName;
-    }
+  const itemDetail: Record<number, { pricingType?: 'FREE' | 'PAID'; price?: number; hasPurchased?: boolean }> = {};
+  detailQueries.forEach((q) => {
+    if (!q.data) return;
+    if (q.data.mentorName) mentorNames[q.data.id] = q.data.mentorName;
+    itemDetail[q.data.id] = {
+      pricingType: q.data.pricingType,
+      price: q.data.price,
+      hasPurchased: q.data.hasPurchased,
+    };
   });
 
   const setTab = (tab: TabKey) => {
@@ -149,14 +160,18 @@ export function CatalogTabs() {
       ) : (
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           {items.map((item: CatalogItem) => {
-            const isBought = item.hasPurchased ?? (user ? myItemIds[activeTab].has(item.id) : false);
-            const isFree = item.pricingType === 'FREE' || item.price === 0;
+            const detail = itemDetail[item.id];
+            const hasPurchased = detail?.hasPurchased ?? item.hasPurchased;
+            const pricingType = detail?.pricingType ?? item.pricingType;
+            const price = detail?.price ?? item.price;
+            const isBought = hasPurchased ?? (user ? myItemIds[activeTab].has(item.id) : false);
+            const isFree = pricingType === 'FREE' || price === 0;
             const status: 'bought' | 'free' | 'waitlist' | 'presale' =
               isBought ? 'bought'
               : isFree ? 'free'
               : item.presalesEnabled ? 'presale'
               : item.waitlistEnabled ? 'waitlist'
-              : 'waitlist';
+              : 'free';
 
             return (
               <CatalogCard

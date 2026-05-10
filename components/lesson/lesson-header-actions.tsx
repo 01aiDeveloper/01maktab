@@ -23,6 +23,7 @@ interface LessonHeaderActionsProps {
   onModuleTest?: () => void;
   isCourseExamReady?: boolean;
   onCourseExam?: () => void;
+  isEnrolled?: boolean;
 }
 
 export function LessonHeaderActions({
@@ -40,6 +41,7 @@ export function LessonHeaderActions({
   onModuleTest,
   isCourseExamReady,
   onCourseExam,
+  isEnrolled = false,
 }: LessonHeaderActionsProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -54,7 +56,7 @@ export function LessonHeaderActions({
         </Link>
 
         <div className="flex items-center gap-2">
-          {true && (
+          {isPublic && (
             <div className="hidden sm:flex items-center gap-1.5 bg-green-500 text-white px-3 py-1.5 rounded-[10px] text-xs font-medium h-9">
               <Image src="/icons/free-lesson.svg" alt="" width={14} height={14} />
               Bepul sinov darsi
@@ -118,6 +120,7 @@ export function LessonHeaderActions({
         courseId={courseId}
         currentLessonUrlId={String(currentLessonId)}
         onLessonSelect={onLessonSelect}
+        isEnrolled={isEnrolled}
       />
     </>
   );

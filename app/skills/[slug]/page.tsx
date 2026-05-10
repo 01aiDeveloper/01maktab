@@ -17,6 +17,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { MentorCard } from "@/components/cards/mentor-card";
 import { useSkill } from "@/hooks/use-skill";
 import { useSkillModules } from "@/hooks/use-course-modules";
+import { useMySkills } from "@/hooks/use-my-courses";
 import { baseMediaUrl } from "@/lib/utils";
 import type { ApiSkillModule } from "@/types/api";
 import { PageLoader } from "@/components/ui/page-loader";
@@ -80,6 +81,7 @@ export default function SkillDetailPage() {
   const { user } = useAuthStore();
   const { data: skill, isLoading, isError } = useSkill(slug);
   const { data: skillModules } = useSkillModules(skill?.id);
+  const { data: mySkills } = useMySkills();
   const { data: skillBadges } = useCourseBadges(skill?.id);
   const [openModule, setOpenModule] = useState<string>("");
   const [startLoading, setStartLoading] = useState(false);
@@ -151,10 +153,18 @@ export default function SkillDetailPage() {
       : `${skill.price.toLocaleString()} so'm`;
   const courseImage = mediaUrl(skill.photo);
 
+  const isPurchased = !!mySkills?.some((c) => String(c.id) === String(skill.id));
+  const isEnrolled = skill.pricingType === 'FREE' || isPurchased;
+
   const handleLessonClick = (
-    lesson: { id: string | number },
+    lesson: { id: string | number; isFree?: boolean },
     ctx: { module: ModuleItem },
   ) => {
+    if (!lesson.isFree && !isEnrolled) {
+      if (!user) { router.push('/login'); return; }
+      router.push(`/payment/${skill.id}?courseType=skill`);
+      return;
+    }
     router.push(
       `/module/${ctx.module.id}?lessonId=${lesson.id}&courseType=skill&courseId=${skill.id}`,
     );

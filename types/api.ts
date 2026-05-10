@@ -97,6 +97,8 @@ export interface ApiSkill {
 export interface ApiCourseLesson {
   id: number;
   title: string;
+  isPublic?: boolean;
+  isCompleted?: boolean;
 }
 
 export interface ApiCourseModule {
