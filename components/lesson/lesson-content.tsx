@@ -118,6 +118,10 @@ export function LessonContent() {
   const nextLesson =
     currentIndex >= 0 && currentIndex < flatLessons.length - 1 ? flatLessons[currentIndex + 1] : null;
 
+  // Lesson endpoint o'zi `isCompleted` qaytaradi va modules cache'idan ko'ra yangiroq.
+  // Ikkalasidan birortasi true bo'lsa, complete deb hisoblanadi.
+  const isCurrentCompleted = !!lesson?.isCompleted || !!currentLesson?.isCompleted;
+
   // Module test gating: when on the last lesson of a module that has an unpassed test
   const currentModule = currentLesson ? modules.find((m) => m.id === currentLesson.moduleId) : null;
   const isLastLessonOfModule = !!(
@@ -186,7 +190,7 @@ export function LessonContent() {
           prevLesson={prevLesson}
           nextLesson={nextLesson}
           onLessonSelect={(targetModuleId, targetLessonId) => goToLesson(targetModuleId, targetLessonId)}
-          isCurrentCompleted={currentLesson?.isCompleted ?? true}
+          isCurrentCompleted={isCurrentCompleted}
           onLockedNext={() => setLockedModalOpen(true)}
           hasModuleTestPending={!!moduleTestPending}
           onModuleTest={goToModuleTest}
@@ -209,8 +213,8 @@ export function LessonContent() {
                 sourceUrl={video.link}
                 sourceType={video.linkType}
                 isFirst={index === 0}
-                preventSkip={index === 0 && !currentLesson?.isCompleted}
-                onComplete={index === 0 && !currentLesson?.isCompleted ? () => handleLessonComplete(lessonId) : undefined}
+                preventSkip={index === 0 && !isCurrentCompleted}
+                onComplete={index === 0 && !isCurrentCompleted ? () => handleLessonComplete(lessonId) : undefined}
               />
             ))}
           </div>
@@ -224,7 +228,7 @@ export function LessonContent() {
           nextLesson={nextLesson}
           onPrev={() => prevLesson && goToLesson(prevLesson.moduleId, prevLesson.id)}
           onNext={() => nextLesson && goToLesson(nextLesson.moduleId, nextLesson.id)}
-          isCurrentCompleted={currentLesson?.isCompleted ?? true}
+          isCurrentCompleted={isCurrentCompleted}
           onLockedNext={() => setLockedModalOpen(true)}
           moduleTestPending={moduleTestPending}
           onModuleTest={goToModuleTest}
