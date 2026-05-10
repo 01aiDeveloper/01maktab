@@ -103,7 +103,9 @@ function getDarsCount(m: ModuleItem) {
   return m.lessonsCount ?? m.darsCount ?? m.lessons?.filter((x) => x.type !== "test").length ?? 0;
 }
 function getTestCount(m: ModuleItem) {
-  return m.testsCount ?? m.testCount ?? (m.test ? 1 : m.lessons?.filter((x) => x.type === "test").length) ?? 0;
+  if (m.test) return 1;
+  const fromLessons = m.lessons?.filter((x) => x.type === "test").length ?? 0;
+  return m.testsCount ?? m.testCount ?? fromLessons;
 }
 
 export function ModuleModalAccordion({

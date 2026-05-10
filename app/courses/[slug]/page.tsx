@@ -25,6 +25,7 @@ import { HomeGraduatesSection } from '@/components/sections/home/home-graduates-
 import { PartnersSection } from '@/components/sections/home/partners';
 import { useCourse } from '@/hooks/use-course';
 import { useCourseModules } from '@/hooks/use-course-modules';
+import { useMyCourses } from '@/hooks/use-my-courses';
 import { baseMediaUrl } from '@/lib/utils';
 import type { ApiCourseModule, ApiProject } from '@/types/api';
 import { PageLoader } from '@/components/ui/page-loader';
@@ -51,10 +52,10 @@ function toModuleItem(m: ApiCourseModule): ModuleItem {
     title: m.title,
     darsCount: m.lessonCount,
     testCount: m.testCount,
-    lessons: lessons.map((l, i) => ({
+    lessons: lessons.map((l) => ({
       id: l.id,
       title: l.title,
-      isFree: i === 0,
+      isFree: !!l.isPublic,
       type: 'video' as const,
     })),
     test: m.testCount > 0 ? { id: String(m.id), title: 'Modul testi' } : undefined,
@@ -133,6 +134,7 @@ export default function CoursePage() {
   const { data: course, isLoading, isError } = useCourse(slug);
   const { data: courseModules } = useCourseModules(course?.id);
   const { data: courseBadges } = useCourseBadges(course?.id);
+  const { data: myCourses } = useMyCourses();
   const [openModule, setOpenModule] = useState<string>('');
   const [startLoading, setStartLoading] = useState(false);
 
@@ -202,7 +204,15 @@ export default function CoursePage() {
 
   const totalLessons = course.modules.reduce((acc, m) => acc + (m.lessons?.length ?? 0), 0);
 
-  const handleLessonClick = (lesson: { id: string | number }, ctx: { module: ModuleItem }) => {
+  const isPurchased = !!myCourses?.some((c) => String(c.id) === String(course.id));
+  const isEnrolled = course.pricingType === 'FREE' || isPurchased;
+
+  const handleLessonClick = (lesson: { id: string | number; isFree?: boolean }, ctx: { module: ModuleItem }) => {
+    if (!lesson.isFree && !isEnrolled) {
+      if (!user) { router.push('/login'); return; }
+      router.push(`/payment/${course.id}?courseType=course`);
+      return;
+    }
     router.push(`/module/${ctx.module.id}?lessonId=${lesson.id}&courseType=course&courseId=${course.id}`);
   };
 

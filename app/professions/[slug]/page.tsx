@@ -31,6 +31,7 @@ import { ModuleAccordion } from '@/components/shared/module-accordion';
 import type { ModuleItem } from '@/components/shared/module-accordion';
 import { useProfession } from '@/hooks/use-profession';
 import { useProfessionModules } from '@/hooks/use-course-modules';
+import { useMyProfessions } from '@/hooks/use-my-courses';
 import { baseMediaUrl } from '@/lib/utils';
 import type { ApiCourseModule } from '@/types/api';
 import { useSmartBack } from '@/hooks/use-smart-back';
@@ -55,10 +56,10 @@ function toModuleItem(m: ApiCourseModule): ModuleItem {
     title: m.title,
     darsCount: m.lessonCount,
     testCount: m.testCount,
-    lessons: lessons.map((l, i) => ({
+    lessons: lessons.map((l) => ({
       id: l.id,
       title: l.title,
-      isFree: i === 0,
+      isFree: !!l.isPublic,
       type: 'video' as const,
     })),
     test: undefined,
@@ -181,6 +182,7 @@ export default function ProfessionPage() {
   const { user } = useAuthStore();
   const { data: profession, isLoading, isError } = useProfession(slug);
   const { data: professionModules } = useProfessionModules(profession?.id);
+  const { data: myProfessions } = useMyProfessions();
   const [openModule, setOpenModule] = useState<string>('');
   const [startLoading, setStartLoading] = useState(false);
 
@@ -237,7 +239,15 @@ export default function ProfessionPage() {
   const modules: ModuleItem[] = profession.modules.map((m) => toModuleItem(m));
   const mentor = profession.mentor;
 
-  const handleLessonClick = (lesson: { id: string | number }, ctx: { module: ModuleItem }) => {
+  const isPurchased = !!myProfessions?.some((c) => String(c.id) === String(profession.id));
+  const isEnrolled = profession.pricingType === 'FREE' || isPurchased;
+
+  const handleLessonClick = (lesson: { id: string | number; isFree?: boolean }, ctx: { module: ModuleItem }) => {
+    if (!lesson.isFree && !isEnrolled) {
+      if (!user) { router.push('/login'); return; }
+      router.push(`/payment/${profession.id}?courseType=profession`);
+      return;
+    }
     router.push(`/module/${ctx.module.id}?lessonId=${lesson.id}&courseType=profession&courseId=${profession.id}`);
   };
   const courseImage = mediaUrl(profession.photo);

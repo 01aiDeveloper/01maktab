@@ -120,12 +120,9 @@ function getDarsCount(m: ModuleItem) {
   );
 }
 function getTestCount(m: ModuleItem) {
-  return (
-    m.testsCount ??
-    m.testCount ??
-    (m.test ? 1 : m.lessons?.filter((x) => x.type === "test").length) ??
-    0
-  );
+  if (m.test) return 1;
+  const fromLessons = m.lessons?.filter((x) => x.type === "test").length ?? 0;
+  return m.testsCount ?? m.testCount ?? fromLessons;
 }
 
 export function ModuleAccordion({

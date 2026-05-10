@@ -16,9 +16,10 @@ interface LessonModuleModalProps {
   courseId: string;
   currentLessonUrlId?: string;
   onLessonSelect: (moduleId: number, lessonId: number) => void;
+  isEnrolled?: boolean;
 }
 
-function toModuleItem(m: CourseModule): ModuleItem {
+function toModuleItem(m: CourseModule, isEnrolled: boolean): ModuleItem {
   return {
     id: String(m.id),
     title: m.title,
@@ -27,7 +28,7 @@ function toModuleItem(m: CourseModule): ModuleItem {
     lessons: (m.lessons ?? []).map((l) => ({
       id: l.id,
       title: l.title,
-      isFree: l.isPublic,
+      isFree: isEnrolled || l.isPublic,
       isCompleted: l.isCompleted,
     })),
     test: m.test ? { id: String(m.test.id), title: m.test.name } : undefined,
@@ -43,6 +44,7 @@ export function LessonModuleModal({
   courseId,
   currentLessonUrlId,
   onLessonSelect,
+  isEnrolled = false,
 }: LessonModuleModalProps) {
   const router = useRouter();
   const currentModule = modules.find((m) =>
@@ -54,7 +56,7 @@ export function LessonModuleModal({
 
   if (!open) return null;
 
-  const moduleItems: ModuleItem[] = modules.map(toModuleItem);
+  const moduleItems: ModuleItem[] = modules.map((m) => toModuleItem(m, isEnrolled));
 
   return (
     <div
