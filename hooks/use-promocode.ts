@@ -1,15 +1,31 @@
 import { useMutation } from '@tanstack/react-query';
 import api from '@/lib/api';
-import type { ApiResponse, ApiPromocodeValidation } from '@/types/api';
+import type {
+  ApiResponse,
+  ApiPromocodeCheck,
+  PromocodeTargetType,
+} from '@/types/api';
 
-export function useValidatePromocode() {
+interface CheckPromocodeArgs {
+  code: string;
+  targetId: number;
+  price: number;
+  type?: PromocodeTargetType;
+}
+
+export function useCheckPromocode() {
   return useMutation({
-    mutationFn: async ({ code, courseId }: { code: string; courseId: number }) => {
-      const res = await api.post<ApiResponse<ApiPromocodeValidation>>(
-        '/promocode/validate',
-        { code, courseId },
-      );
+    mutationFn: async ({ code, targetId, price, type = 'course' }: CheckPromocodeArgs) => {
+      const res = await api.post<ApiResponse<ApiPromocodeCheck>>('/promocode/check', {
+        code,
+        targetId,
+        price,
+        type,
+      });
       return res.data.data;
     },
   });
 }
+
+// Backward-compat alias for older imports
+export const useValidatePromocode = useCheckPromocode;

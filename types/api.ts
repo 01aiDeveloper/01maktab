@@ -262,12 +262,30 @@ export interface ApiWaitlistEntry {
 
 // ─── Promocode ─────────────────────────────────────────────────────────────
 
-export interface ApiPromocodeValidation {
+export type PromocodeTargetType = 'course' | 'subscription';
+export type PromocodeDiscountType = 'PERCENT' | 'FIXED' | 'PRE_SALES';
+
+export interface ApiPromocodeCheck {
   id: number;
   code: string;
-  discountType: 'PERCENT' | 'FIXED';
-  discountValue: number;
-  isValid: boolean;
+  type?: PromocodeTargetType;
+  targetId?: number;
+  discountType: PromocodeDiscountType;
+  discountValue?: number;
+  discountAmount?: number;
+  originalPrice?: number;
+  finalPrice?: number;
+}
+
+// ─── Payment ────────────────────────────────────────────────────────────────
+
+export interface ApiPaymentResponse {
+  link: string;
+  free: boolean;
+  amount: number;
+  originalPrice: number;
+  discountType: PromocodeDiscountType | null;
+  discountAmount: number;
 }
 
 // ─── Generic API response wrapper ────────────────────────────────────────────
