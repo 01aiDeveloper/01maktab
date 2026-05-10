@@ -298,7 +298,16 @@ export default function SkillDetailPage() {
                       />
                     </div>
                     <div className="flex flex-wrap gap-3">
-                      {isPurchased && (
+                      {skill.pricingType === "FREE" ? (
+                        <MainButton
+                          variant="gradient"
+                          size="md"
+                          className="rounded-xl w-fit flex flex-row items-center opacity-70 cursor-not-allowed"
+                          disabled
+                        >
+                          Bepul
+                        </MainButton>
+                      ) : isPurchased ? (
                         <MainButton
                           variant="gradient"
                           size="md"
@@ -307,7 +316,7 @@ export default function SkillDetailPage() {
                         >
                           Sotib olingan
                         </MainButton>
-                      )}
+                      ) : null}
                       <MainButton
                         variant="outline"
                         size="md"
