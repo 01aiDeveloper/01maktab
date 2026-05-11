@@ -89,8 +89,12 @@ export function TestScreen({
           selectedOptionIds: answers.get(q.id) ?? [],
         })),
       };
-      const res = await api.post(submitUrl ?? `/test/module/${moduleId}/submit`, payload);
+      const finalUrl = submitUrl ?? `/test/module/${moduleId}/submit`;
+      console.log('[TestSubmit] POST', finalUrl, 'mode:', mode);
+      const res = await api.post(finalUrl, payload);
+      console.log('[TestSubmit] status:', res.status, 'raw data:', res.data);
       const data = res.data?.data ?? res.data;
+      console.log('[TestSubmit] unwrapped:', data, 'isPassed:', data.isPassed);
       setResult({
         isPassed: data.isPassed,
         correctAnswers: data.correctAnswers ?? 0,
