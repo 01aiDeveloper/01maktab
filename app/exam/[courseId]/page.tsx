@@ -34,13 +34,22 @@ function ExamContent() {
   const handleContinue = () => router.push(detailHref);
 
   const handleClaim = async () => {
+    console.log('[Certificate] Claim boshlandi', { courseId, courseType, mode });
     try {
       const result = await generateCertificate(courseId);
+      console.log('[Certificate] Response data', result);
+      console.log('[Certificate] file URL:', result?.file);
       if (result.file) {
+        console.log('[Certificate] window.open chaqirilmoqda:', result.file);
         window.open(result.file, '_blank', 'noopener,noreferrer');
+      } else {
+        console.warn('[Certificate] file field bo\'sh!');
       }
-    } catch (e) {
-      console.error('Certificate generation failed', e);
+    } catch (e: any) {
+      console.error('[Certificate] Xato yuz berdi');
+      console.error('Status:', e?.response?.status);
+      console.error('Data:', e?.response?.data);
+      console.error('Full error:', e);
     }
   };
 
