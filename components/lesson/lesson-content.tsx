@@ -72,7 +72,7 @@ export function LessonContent() {
     courseType === 'profession' ? professionModules.data :
     courseModules.data;
 
-  const modules = courseData?.modules ?? [];
+  const modules = sortByOrder(courseData?.modules ?? []);
 
   const myList =
     courseType === 'skill' ? mySkills :
@@ -82,9 +82,9 @@ export function LessonContent() {
   const isPurchased = !!myList?.some((c) => String(c.id) === String(courseId));
   const isEnrolled = isFreeCourse || isPurchased;
 
-  // Flat list of all lessons for prev/next navigation
+  // Flat list of all lessons for prev/next navigation (order-sorted)
   const flatLessons = modules.flatMap((m) =>
-    (m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id, moduleTitle: m.title }))
+    sortByOrder(m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id, moduleTitle: m.title }))
   );
 
   const goToLesson = useCallback(
@@ -124,10 +124,11 @@ export function LessonContent() {
 
   // Module test gating: when on the last lesson of a module that has an unpassed test
   const currentModule = currentLesson ? modules.find((m) => m.id === currentLesson.moduleId) : null;
+  const currentModuleLessonsSorted = currentModule ? sortByOrder(currentModule.lessons ?? []) : [];
   const isLastLessonOfModule = !!(
     currentModule && currentLesson &&
-    currentModule.lessons && currentModule.lessons.length > 0 &&
-    currentModule.lessons[currentModule.lessons.length - 1].id === currentLesson.id
+    currentModuleLessonsSorted.length > 0 &&
+    currentModuleLessonsSorted[currentModuleLessonsSorted.length - 1].id === currentLesson.id
   );
   const moduleTest = currentModule?.test ?? null;
   const moduleTestNotPassed = !!moduleTest && moduleTest.isPassed !== true;

@@ -29,10 +29,12 @@ export function detectVideoType(url: string): 'YOU_TUBE' | 'BUNNY_STREAM' | 'UNK
   return 'UNKNOWN';
 }
 
-export function sortByOrder<T extends { order?: number; orderId?: number }>(items: T[]): T[] {
+export function sortByOrder<T>(items: T[]): T[] {
   return [...items].sort((a, b) => {
-    const aOrder = a.order ?? a.orderId ?? 0;
-    const bOrder = b.order ?? b.orderId ?? 0;
+    const aAny = a as { order?: number; orderId?: number };
+    const bAny = b as { order?: number; orderId?: number };
+    const aOrder = aAny.order ?? aAny.orderId ?? 0;
+    const bOrder = bAny.order ?? bAny.orderId ?? 0;
     return aOrder - bOrder;
   });
 }
