@@ -30,6 +30,7 @@ import { WaitlistSection } from "@/components/sections/skills/waitlist-section";
 import { useCourseBadges } from "@/hooks/use-course-badges";
 import { CourseStartModal } from "@/components/modals/course-start-modal";
 import { useSmartBack } from "@/hooks/use-smart-back";
+import { sortByOrder } from "@/lib/lesson-utils";
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -111,12 +112,15 @@ export default function SkillDetailPage() {
 
   const handleStartCourse = useCallback(() => {
     if (!skill || !skillModules) return;
-    const modules = skillModules.modules ?? [];
-    const firstModule = modules[0];
-    const firstLesson = firstModule?.lessons?.[0];
-    if (firstModule && firstLesson) {
+    const modules = sortByOrder(skillModules.modules ?? []);
+    const flat = modules.flatMap((m) =>
+      sortByOrder(m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id }))
+    );
+    const firstUncompleted = flat.find((l) => !l.isCompleted);
+    const target = firstUncompleted ?? flat[flat.length - 1] ?? null;
+    if (target) {
       router.push(
-        `/module/${firstModule.id}?lessonId=${firstLesson.id}&courseType=skill&courseId=${skill.id}`,
+        `/module/${target.moduleId}?lessonId=${target.id}&courseType=skill&courseId=${skill.id}`,
       );
     }
   }, [skill, skillModules, router]);

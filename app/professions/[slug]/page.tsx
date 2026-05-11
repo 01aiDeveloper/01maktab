@@ -39,6 +39,7 @@ import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
 import { PresaleSection } from '@/components/sections/skills/presale-section';
+import { sortByOrder } from '@/lib/lesson-utils';
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -202,15 +203,18 @@ export default function ProfessionPage() {
         return;
       }
     }
-    const modules = professionModules?.modules ?? [];
-    const firstModule = modules[0];
-    const firstLesson = firstModule?.lessons?.[0];
-    if (firstModule && firstLesson) {
-      router.push(`/module/${firstModule.id}?lessonId=${firstLesson.id}&courseType=profession&courseId=${profession.id}`);
+    const modules = sortByOrder(professionModules?.modules ?? []);
+    const flat = modules.flatMap((m) =>
+      sortByOrder(m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id }))
+    );
+    const firstUncompleted = flat.find((l) => !l.isCompleted);
+    const target = firstUncompleted ?? flat[flat.length - 1] ?? null;
+    if (target) {
+      router.push(`/module/${target.moduleId}?lessonId=${target.id}&courseType=profession&courseId=${profession.id}`);
       return;
     }
     setStartLoading(false);
-  }, [profession, professionModules, router]);
+  }, [profession, professionModules, router, user]);
 
   if (profession && !openModule && profession.modules.length > 0) {
     setOpenModule(String(profession.modules[0].id));
