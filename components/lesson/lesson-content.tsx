@@ -135,10 +135,12 @@ export function LessonContent() {
     ? { moduleId: currentModule!.id, testId: moduleTest.id }
     : null;
 
-  // Course exam gating: last lesson of last module + all module tests passed (or no tests)
-  const isLastModule = !!(currentModule && modules[modules.length - 1]?.id === currentModule.id);
-  const allModuleTestsPassed = modules.every((m) => !m.test || m.test.isPassed === true);
-  const isCourseExamReady = isLastLessonOfModule && isLastModule && allModuleTestsPassed && !moduleTestPending;
+  // Course final exam — eski /exam endpoint deprecate qilindi.
+  // Backend yangi student endpoint (testType=COURSE_FINAL uchun) qo'shilganda qaytadan ulanadi.
+  const isCourseExamReady = false;
+  const goToCourseExam = useCallback(() => {
+    // no-op
+  }, []);
 
   const goToModuleTest = useCallback(() => {
     if (!moduleTestPending) return;
@@ -150,11 +152,6 @@ export function LessonContent() {
     }
     router.push(`/test/${moduleTestPending.moduleId}?${params.toString()}`);
   }, [moduleTestPending, courseType, courseId, lessonId, nextLesson, router]);
-
-  const goToCourseExam = useCallback(() => {
-    const params = new URLSearchParams({ courseType, courseId });
-    router.push(`/exam/${courseId}?${params.toString()}`);
-  }, [courseType, courseId, router]);
 
   // Auto-navigate when lessonId is missing: find first uncompleted lesson, or last lesson if all completed
   useEffect(() => {
