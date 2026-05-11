@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 import { ModuleModalAccordion } from '@/components/shared/module-modal-accordion';
 import type { ModuleItem } from '@/components/shared/module-modal-accordion';
 import type { CourseModule } from './lesson-content';
+import { sortByOrder } from '@/lib/lesson-utils';
 
 interface LessonModuleModalProps {
   open: boolean;
@@ -20,12 +21,13 @@ interface LessonModuleModalProps {
 }
 
 function toModuleItem(m: CourseModule, isEnrolled: boolean): ModuleItem {
+  const sortedLessons = sortByOrder(m.lessons ?? []);
   return {
     id: String(m.id),
     title: m.title,
-    darsCount: (m.lessons ?? []).length,
+    darsCount: sortedLessons.length,
     testCount: m.test ? 1 : 0,
-    lessons: (m.lessons ?? []).map((l) => ({
+    lessons: sortedLessons.map((l) => ({
       id: l.id,
       title: l.title,
       isFree: isEnrolled || l.isPublic,
@@ -56,7 +58,8 @@ export function LessonModuleModal({
 
   if (!open) return null;
 
-  const moduleItems: ModuleItem[] = modules.map((m) => toModuleItem(m, isEnrolled));
+  const sortedModules = sortByOrder(modules);
+  const moduleItems: ModuleItem[] = sortedModules.map((m) => toModuleItem(m, isEnrolled));
 
   return (
     <div
@@ -114,12 +117,13 @@ export function LessonModuleModal({
               const params = new URLSearchParams({ courseType, courseId });
               if (currentLessonUrlId) params.set('lessonId', currentLessonUrlId);
 
-              // Keyingi darsni topish: shu moduldan keyin keluvchi modul/dars
-              const allLessons = modules.flatMap((m) =>
-                (m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id }))
+              // Keyingi darsni topish: shu moduldan keyin keluvchi modul/dars (order'da)
+              const allLessons = sortedModules.flatMap((m) =>
+                sortByOrder(m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id }))
               );
               const testModuleId = Number(ctx.module.id);
-              const lastLessonOfModule = [...(modules.find((m) => m.id === testModuleId)?.lessons ?? [])].pop();
+              const moduleLessons = sortByOrder(sortedModules.find((m) => m.id === testModuleId)?.lessons ?? []);
+              const lastLessonOfModule = moduleLessons[moduleLessons.length - 1];
               const lastIdx = lastLessonOfModule
                 ? allLessons.findIndex((l) => l.id === lastLessonOfModule.id)
                 : -1;
