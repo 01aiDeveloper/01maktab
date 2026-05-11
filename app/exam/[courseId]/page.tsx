@@ -6,6 +6,8 @@ import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { TestScreen } from '@/components/test/test-screen';
 import { useCourseExam } from '@/hooks/use-course-exam';
+import { useCourseInfo } from '@/hooks/use-course-info';
+import { useGenerateCourseCertificate } from '@/hooks/use-course-certificate';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 
@@ -17,14 +19,30 @@ function ExamContent() {
   const courseType = searchParams.get('courseType') ?? 'course';
 
   const { data: exam, isLoading, isError } = useCourseExam(courseId);
+  const { data: courseInfo } = useCourseInfo(courseId, courseType);
+  const { mutateAsync: generateCertificate, isPending: claiming } =
+    useGenerateCourseCertificate();
 
   const detailHref =
     courseType === 'skill' ? `/skills/${courseId}` :
     courseType === 'profession' ? `/professions/${courseId}` :
     `/courses/${courseId}`;
 
+  const mode = courseType === 'skill' ? 'skill' : 'final-course';
+
   const handleBack = () => router.push(detailHref);
   const handleContinue = () => router.push(detailHref);
+
+  const handleClaim = async () => {
+    try {
+      const result = await generateCertificate(courseId);
+      if (result.file) {
+        window.open(result.file, '_blank', 'noopener,noreferrer');
+      }
+    } catch (e) {
+      console.error('Certificate generation failed', e);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -44,6 +62,12 @@ function ExamContent() {
       moduleId={courseId}
       onBack={handleBack}
       onContinue={handleContinue}
+      onClaim={handleClaim}
+      mode={mode}
+      skillName={courseType === 'skill' ? courseInfo?.name : undefined}
+      skillIcon={courseType === 'skill' ? courseInfo?.icon ?? undefined : undefined}
+      courseName={courseInfo?.name}
+      claiming={claiming}
       submitUrl={`/exam/course/${courseId}/submit`}
     />
   );

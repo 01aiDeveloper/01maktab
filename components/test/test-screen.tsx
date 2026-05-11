@@ -8,7 +8,7 @@ import { cn, getMediaUrl } from '@/lib/utils';
 import { sortByOrder } from '@/lib/lesson-utils';
 import type { ModuleTest, TestQuestion } from '@/hooks/use-module-test';
 import api from '@/lib/api';
-import { TestResultModal } from './test-result-modal';
+import { TestResultModal, type ResultMode } from './test-result-modal';
 
 interface TestScreenProps {
   test: ModuleTest;
@@ -16,6 +16,12 @@ interface TestScreenProps {
   onBack: () => void;
   onContinue: () => void;
   submitUrl?: string;
+  mode?: ResultMode;
+  skillName?: string;
+  skillIcon?: string;
+  courseName?: string;
+  claiming?: boolean;
+  onClaim?: () => void;
 }
 
 interface SubmitResult {
@@ -36,7 +42,19 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-export function TestScreen({ test, moduleId, onBack, onContinue, submitUrl }: TestScreenProps) {
+export function TestScreen({
+  test,
+  moduleId,
+  onBack,
+  onContinue,
+  submitUrl,
+  mode = 'intermediate',
+  skillName,
+  skillIcon,
+  courseName,
+  claiming = false,
+  onClaim,
+}: TestScreenProps) {
   const queryClient = useQueryClient();
   const [screen, setScreen] = useState<Screen>('start');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -161,7 +179,13 @@ export function TestScreen({ test, moduleId, onBack, onContinue, submitUrl }: Te
         totalQuestions={result.totalQuestions}
         percentage={result.percentage}
         isPassed={result.isPassed}
+        mode={mode}
+        skillName={skillName}
+        skillIcon={skillIcon}
+        courseName={courseName}
+        claiming={claiming}
         onContinue={onContinue}
+        onClaim={onClaim}
         onRetry={() => {
           setResult(null);
           setAnswers(new Map());
