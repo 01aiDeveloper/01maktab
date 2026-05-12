@@ -2,8 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight, Clock, Users, CheckCircle2 } from 'lucide-react';
-import { CardSlash } from '@/components/ui/icons/card-slash';
+import { ArrowUpRight } from 'lucide-react';
+import { CardSlashSolid, TickCircleSolid, ClockSolid, Profile2UserSolid } from '@/components/ui/icons/badge-icons';
 import { getMediaUrl } from '@/lib/utils';
 
 type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
@@ -54,30 +54,30 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
           {statusInfo && (
             <div className={`inline-flex items-center justify-center gap-2 ${statusInfo.bg} ${statusInfo.text} h-[38px] ${statusInfo.width} px-4 rounded-[12px] text-[20px] leading-[25px] tracking-[-0.05em] font-semibold`}>
               {effectiveStatus === 'waitlist' || effectiveStatus === 'presale' ? (
-                <Clock className="w-[18px] h-[18px]" />
+                <ClockSolid className="w-5 h-5" />
               ) : effectiveStatus === 'bought' ? (
-                <CheckCircle2 className="w-[18px] h-[18px]" />
+                <TickCircleSolid className="w-5 h-5" />
               ) : (
-                <CardSlash className="w-[18px] h-[18px]" />
+                <CardSlashSolid className="w-5 h-5" />
               )}
               {statusInfo.label}
             </div>
           )}
           {!statusInfo && badge && (
             <div className="inline-flex items-center justify-center gap-2 bg-[#1EBB4A] text-white h-[38px] w-[124px] px-4 rounded-[12px] text-[20px] leading-[25px] tracking-[-0.05em] font-semibold">
-              <CardSlash className="w-[18px] h-[18px]" />
+              <CardSlashSolid className="w-5 h-5" />
               {badge}
             </div>
           )}
           {enrollmentCount != null && enrollmentCount > 0 && (
             <div className="inline-flex items-center justify-center gap-2 bg-[#FAEF3B] text-black h-[38px] w-[240px] px-4 rounded-[12px] text-[20px] leading-[25px] tracking-[-0.05em] font-semibold">
-              <Users className="w-[18px] h-[18px]" />
+              <Profile2UserSolid className="w-5 h-5" />
               {formatCount(enrollmentCount)} sotib oldi
             </div>
           )}
           {!enrollmentCount && waitlistCount != null && waitlistCount > 0 && (
             <div className="inline-flex items-center justify-center gap-2 bg-[#FAEF3B] text-black h-[38px] w-[240px] px-4 rounded-[12px] text-[20px] leading-[25px] tracking-[-0.05em] font-semibold">
-              <Users className="w-[18px] h-[18px]" />
+              <Profile2UserSolid className="w-5 h-5" />
               {formatCount(waitlistCount)} odam kutmoqda
             </div>
           )}

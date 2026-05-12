@@ -1,7 +1,6 @@
 'use client';
 
-import { Clock, CheckCircle2 } from 'lucide-react';
-import { CardSlash } from '@/components/ui/icons/card-slash';
+import { CardSlashSolid, TickCircleSolid, ClockSolid } from '@/components/ui/icons/badge-icons';
 
 export type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
 
@@ -39,13 +38,13 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
   const sizeCls = size === 'sm'
     ? 'h-[30px] px-3 text-xs gap-1.5 tracking-[-0.05em]'
     : 'h-[38px] px-4 text-[20px] leading-[25px] tracking-[-0.05em] gap-2';
-  const iconCls = size === 'sm' ? 'w-3.5 h-3.5' : 'w-[18px] h-[18px]';
+  const iconCls = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
   const widthCls = size === 'md' ? info.width : '';
 
   const Icon =
-    status === 'waitlist' || status === 'presale' ? Clock :
-    status === 'bought' ? CheckCircle2 :
-    CardSlash;
+    status === 'waitlist' || status === 'presale' ? ClockSolid :
+    status === 'bought' ? TickCircleSolid :
+    CardSlashSolid;
 
   return (
     <div className={`inline-flex items-center justify-center ${info.bg} ${info.text} ${sizeCls} ${widthCls} rounded-[12px] font-semibold ${className}`}>
