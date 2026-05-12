@@ -22,8 +22,8 @@ export function EnrollmentBadge({ count, kind = 'waitlist', className = '' }: En
   const label = kind === 'enrolled' ? 'sotib oldi' : 'odam kutmoqda';
 
   return (
-    <div className={`inline-flex items-center justify-center gap-2 bg-[#FAEF3B] text-black h-[38px] w-[240px] px-4 rounded-[12px] text-[20px] leading-[25px] tracking-[-0.05em] font-semibold ${className}`}>
-      <Profile2UserSolid className="w-5 h-5" />
+    <div className={`inline-flex items-center justify-center gap-2 bg-[#FAEF3B] text-black h-[34px] w-[216px] px-3.5 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold ${className}`}>
+      <Profile2UserSolid className="w-[22px] h-[22px]" />
       <span>{formatCount(count)} {label}</span>
     </div>
   );
