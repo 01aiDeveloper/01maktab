@@ -52,7 +52,7 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
         {/* Status badge — top left */}
         <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10 flex flex-col gap-1.5">
           {statusInfo && (
-            <div className={`inline-flex items-center gap-2 ${statusInfo.bg} ${statusInfo.text} p-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold`}>
+            <div className={`inline-flex items-center gap-2 ${statusInfo.bg} ${statusInfo.text} px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold`}>
               {effectiveStatus === 'waitlist' || effectiveStatus === 'presale' ? (
                 <ClockSolid className="w-[18px] h-[18px]" />
               ) : effectiveStatus === 'bought' ? (
@@ -64,19 +64,19 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
             </div>
           )}
           {!statusInfo && badge && (
-            <div className="inline-flex items-center gap-2 bg-[#1EBB4A] text-white p-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold">
+            <div className="inline-flex items-center gap-2 bg-[#1EBB4A] text-white px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold">
               <CardSlashSolid className="w-[18px] h-[18px]" />
               {badge}
             </div>
           )}
           {enrollmentCount != null && enrollmentCount > 0 && (
-            <div className="inline-flex items-center gap-2 bg-[#FAEF3B] text-black p-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold">
+            <div className="inline-flex items-center gap-2 bg-[#FAEF3B] text-black px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold">
               <Profile2UserSolid className="w-[22px] h-[22px]" />
               {formatCount(enrollmentCount)} sotib oldi
             </div>
           )}
           {!enrollmentCount && waitlistCount != null && waitlistCount > 0 && (
-            <div className="inline-flex items-center gap-2 bg-[#FAEF3B] text-black p-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold">
+            <div className="inline-flex items-center gap-2 bg-[#FAEF3B] text-black px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold">
               <Profile2UserSolid className="w-[22px] h-[22px]" />
               {formatCount(waitlistCount)} odam kutmoqda
             </div>
