@@ -50,6 +50,11 @@ function ExamContent() {
       console.error('Status:', e?.response?.status);
       console.error('Data:', e?.response?.data);
       console.error('Full error:', e);
+      const status = e?.response?.status;
+      const msg = status === 500
+        ? "Sertifikat hozirda yaratib bo'lmadi. Iltimos, birozdan keyin qayta urinib ko'ring."
+        : (e?.response?.data?.message ?? "Sertifikatni olishda xatolik yuz berdi.");
+      alert(msg);
     }
   };
 
