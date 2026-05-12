@@ -1,6 +1,6 @@
 'use client';
 
-import { Clock, CheckCircle2, Ban } from 'lucide-react';
+import { Clock, CheckCircle2, BanknoteX } from 'lucide-react';
 
 export type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
 
@@ -36,14 +36,14 @@ interface StatusBadgeProps {
 export function StatusBadge({ status, size = 'md', className = '' }: StatusBadgeProps) {
   const info = STATUS_CONFIG[status];
   const sizeCls = size === 'sm'
-    ? 'px-2.5 py-1 text-[10px] gap-1'
-    : 'px-3 py-1.5 text-xs gap-1.5';
-  const iconCls = size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5';
+    ? 'h-[30px] px-3 text-xs gap-1.5'
+    : 'h-[38px] px-4 text-sm gap-2';
+  const iconCls = size === 'sm' ? 'w-3.5 h-3.5' : 'w-[18px] h-[18px]';
 
   const Icon =
     status === 'waitlist' || status === 'presale' ? Clock :
     status === 'bought' ? CheckCircle2 :
-    Ban;
+    BanknoteX;
 
   return (
     <div className={`inline-flex items-center ${info.bg} ${info.text} ${sizeCls} rounded-[12px] font-semibold ${className}`}>

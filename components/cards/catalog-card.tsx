@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight, Clock, Users, CheckCircle2, Ban } from 'lucide-react';
+import { ArrowUpRight, Clock, Users, CheckCircle2, BanknoteX } from 'lucide-react';
 import { getMediaUrl } from '@/lib/utils';
 
 type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
@@ -51,32 +51,32 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
         {/* Status badge — top left */}
         <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10 flex flex-col gap-1.5">
           {statusInfo && (
-            <div className={`flex items-center gap-1 sm:gap-1.5 ${statusInfo.bg} ${statusInfo.text} px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-[12px] text-[10px] sm:text-xs font-semibold`}>
+            <div className={`inline-flex items-center gap-2 ${statusInfo.bg} ${statusInfo.text} h-[38px] px-4 rounded-[12px] text-sm font-semibold`}>
               {effectiveStatus === 'waitlist' || effectiveStatus === 'presale' ? (
-                <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                <Clock className="w-[18px] h-[18px]" />
               ) : effectiveStatus === 'bought' ? (
-                <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                <CheckCircle2 className="w-[18px] h-[18px]" />
               ) : (
-                <Ban className="w-3 h-3 sm:w-4 sm:h-4" />
+                <BanknoteX className="w-[18px] h-[18px]" />
               )}
               {statusInfo.label}
             </div>
           )}
           {!statusInfo && badge && (
-            <div className="flex items-center gap-1 sm:gap-1.5 bg-[#1EBB4A] text-white px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-[12px] text-[10px] sm:text-xs font-semibold">
-              <Ban className="w-3 h-3 sm:w-4 sm:h-4" />
+            <div className="inline-flex items-center gap-2 bg-[#1EBB4A] text-white h-[38px] px-4 rounded-[12px] text-sm font-semibold">
+              <BanknoteX className="w-[18px] h-[18px]" />
               {badge}
             </div>
           )}
           {enrollmentCount != null && enrollmentCount > 0 && (
-            <div className="flex items-center gap-1 sm:gap-1.5 bg-[#FAEF3B] text-black px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-[12px] text-[10px] sm:text-xs font-semibold">
-              <Users className="w-3 h-3 sm:w-4 sm:h-4" />
+            <div className="inline-flex items-center gap-2 bg-[#FAEF3B] text-black h-[38px] px-4 rounded-[12px] text-sm font-semibold">
+              <Users className="w-[18px] h-[18px]" />
               {formatCount(enrollmentCount)} sotib oldi
             </div>
           )}
           {!enrollmentCount && waitlistCount != null && waitlistCount > 0 && (
-            <div className="flex items-center gap-1 sm:gap-1.5 bg-[#FAEF3B] text-black px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold">
-              <Users className="w-3 h-3 sm:w-4 sm:h-4" />
+            <div className="inline-flex items-center gap-2 bg-[#FAEF3B] text-black h-[38px] px-4 rounded-[12px] text-sm font-semibold">
+              <Users className="w-[18px] h-[18px]" />
               {formatCount(waitlistCount)} odam kutmoqda
             </div>
           )}
@@ -84,7 +84,7 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
 
         {/* Icon circle — top right */}
         {icon && (
-          <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-10 w-8 h-8 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+          <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-10 w-8 h-8 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-[18px] bg-white/20 backdrop-blur-sm flex items-center justify-center">
             <Image src={getMediaUrl(icon) || '/placeholder.svg'} alt="" width={24} height={24} className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 object-contain" />
           </div>
         )}
