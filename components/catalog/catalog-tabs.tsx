@@ -186,7 +186,6 @@ export function CatalogTabs() {
                 waitlistCount={item.waitlistCount}
                 mentorName={mentorNames[item.id]}
                 href={getItemHref(item)}
-                hideQueueStatus={activeTab === 'skills'}
               />
             );
           })}
