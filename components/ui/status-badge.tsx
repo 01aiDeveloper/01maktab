@@ -46,7 +46,7 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
     Ban;
 
   return (
-    <div className={`inline-flex items-center ${info.bg} ${info.text} ${sizeCls} rounded-xl font-semibold ${className}`}>
+    <div className={`inline-flex items-center ${info.bg} ${info.text} ${sizeCls} rounded-[12px] font-semibold ${className}`}>
       <Icon className={iconCls} />
       {info.label}
     </div>
