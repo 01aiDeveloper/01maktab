@@ -16,16 +16,6 @@ const nextConfig = {
       },
     ],
   },
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.01ai.uz' }],
-        destination: 'https://01ai.uz/:path*',
-        permanent: true,
-      },
-    ];
-  },
 }
 
 export default nextConfig
