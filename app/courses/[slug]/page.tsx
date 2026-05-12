@@ -210,8 +210,12 @@ export default function CoursePage() {
   const isEnrolled = course.pricingType === 'FREE' || isPurchased;
 
   const handleLessonClick = (lesson: { id: string | number; isFree?: boolean }, ctx: { module: ModuleItem }) => {
-    if (!lesson.isFree && !isEnrolled) {
-      if (!user) { router.push('/login'); return; }
+    if (!user) { router.push('/login'); return; }
+    if (!isPurchased) {
+      if (course.pricingType === 'FREE') {
+        handleStart();
+        return;
+      }
       router.push(`/payment/${course.id}?courseType=course`);
       return;
     }

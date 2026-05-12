@@ -143,7 +143,7 @@ export function Header() {
       {!isMenuOpen && !scrolled && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-2 md:mt-4 text-center hidden md:block pointer-events-auto">
           <a
-            href="https://t.me/mlc_uz"
+            href="https://mlcommunity.uz"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-1 underline hover:text-white/60 transition-colors cursor-pointer"

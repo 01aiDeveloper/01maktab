@@ -41,7 +41,7 @@ export function VideoSection() {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
-        className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] rounded-3xl overflow-hidden border border-gray-200"
+        className="relative w-full h-[450px] md:h-[540px] lg:h-[630px] rounded-3xl overflow-hidden border border-gray-200"
       >
         <video
           ref={videoRef}

@@ -36,7 +36,7 @@ export function MyProfessionsSection() {
         </div>
         <NoData
           message="Bu yer hozircha bo'sh, kasblar qo'shishni boshlang"
-          description="Pastdagi ma'lumotlarni to'ldiring"
+          description="Kurslar ro'yxatiga o'ting"
           buttonText="Kasblarni ko'rish"
           buttonLink="/catalog?tab=professions"
         />

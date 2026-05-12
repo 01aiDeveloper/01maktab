@@ -245,8 +245,12 @@ export default function ProfessionPage() {
   const isEnrolled = profession.pricingType === 'FREE' || isPurchased;
 
   const handleLessonClick = (lesson: { id: string | number; isFree?: boolean }, ctx: { module: ModuleItem }) => {
-    if (!lesson.isFree && !isEnrolled) {
-      if (!user) { router.push('/login'); return; }
+    if (!user) { router.push('/login'); return; }
+    if (!isPurchased) {
+      if (profession.pricingType === 'FREE') {
+        handleStart();
+        return;
+      }
       router.push(`/payment/${profession.id}?courseType=profession`);
       return;
     }

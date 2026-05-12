@@ -36,7 +36,7 @@ export function MyCoursesSection() {
         </div>
         <NoData
           message="Bu yer hozircha bo'sh, kurslar qo'shishni boshlang"
-          description="Pastdagi ma'lumotlarni to'ldiring"
+          description="Kurslar ro'yxatiga o'ting"
           buttonText="Kurslarni ko'rish"
           buttonLink="/catalog?tab=courses"
         />

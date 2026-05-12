@@ -127,7 +127,6 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
           {/* Auth Section - Right */}
           {user ? (
             <div className="flex items-center gap-2 relative">
-              {showVibecoin && <VibecoinBadge amount={coins} isDark={isDark} />}
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
