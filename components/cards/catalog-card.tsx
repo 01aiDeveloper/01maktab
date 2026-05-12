@@ -50,7 +50,7 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
         <Image src={imgSrc} alt={title} fill className="object-cover rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] transition-transform duration-300" />
 
         {/* Status badge — top left */}
-        <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10 flex flex-col gap-1.5">
+        <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10 flex flex-col items-start gap-1.5">
           {statusInfo && (
             <div className={`inline-flex items-center gap-2 ${statusInfo.bg} ${statusInfo.text} px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold`}>
               {effectiveStatus === 'waitlist' || effectiveStatus === 'presale' ? (
