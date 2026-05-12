@@ -89,17 +89,14 @@ export function Header() {
           </div>
 
           {user ? (
-            <Link href="/profile" className="flex items-center gap-2 rounded-xl bg-white pl-1 pr-3 py-1">
-              <Avatar className="h-7 w-7">
+            <Link href="/profile" className="rounded-full bg-white p-1">
+              <Avatar className="h-9 w-9">
                 <AvatarImage src={user?.photo || "/diverse-user-avatars.png"} />
-                <AvatarFallback className="bg-gray-200 text-xs">
+                <AvatarFallback className="bg-gray-100 text-sm font-semibold text-gray-900">
                   {user?.firstname?.[0]?.toUpperCase() || "U"}
                   {user?.lastname?.[0]?.toUpperCase() || ""}
                 </AvatarFallback>
               </Avatar>
-              <span className="hidden lg:block text-sm font-medium text-gray-900">
-                {user?.firstname} {user?.lastname}
-              </span>
             </Link>
           ) : (
             <Link href="/login">
