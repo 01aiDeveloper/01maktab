@@ -82,6 +82,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
                 presalesEnabled={skill.presalesEnabled}
                 waitlistEnabled={skill.waitlistEnabled}
                 hasPurchased={skill.hasPurchased}
+                hideQueueStatus
               />
             </div>
           ))}

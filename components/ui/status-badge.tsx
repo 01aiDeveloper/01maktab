@@ -1,13 +1,12 @@
 'use client';
 
-import Image from 'next/image';
-import { Clock } from 'lucide-react';
+import { Clock, CheckCircle2, Ban } from 'lucide-react';
 
 export type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
 
 const STATUS_CONFIG: Record<CardStatus, { label: string; bg: string; text: string }> = {
-  bought: { label: 'Sotib olingan', bg: 'bg-emerald-500', text: 'text-white' },
-  free: { label: 'Bepul', bg: 'bg-[#EF4444]', text: 'text-white' },
+  bought: { label: 'Sotib olingan', bg: 'bg-[#1EBB4A]', text: 'text-white' },
+  free: { label: 'Bepul', bg: 'bg-[#1EBB4A]', text: 'text-white' },
   waitlist: { label: 'Waitlist', bg: 'bg-[#3B5BFF]', text: 'text-white' },
   presale: { label: 'Pre-sale', bg: 'bg-amber-500', text: 'text-white' },
 };
@@ -41,13 +40,14 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
     : 'px-3 py-1.5 text-xs gap-1.5';
   const iconCls = size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5';
 
+  const Icon =
+    status === 'waitlist' || status === 'presale' ? Clock :
+    status === 'bought' ? CheckCircle2 :
+    Ban;
+
   return (
-    <div className={`inline-flex items-center ${info.bg} ${info.text} ${sizeCls} rounded-lg font-semibold ${className}`}>
-      {status === 'waitlist' || status === 'presale' ? (
-        <Clock className={iconCls} />
-      ) : (
-        <Image src="/images/skills/icon.png" alt="" width={16} height={16} className={iconCls} />
-      )}
+    <div className={`inline-flex items-center ${info.bg} ${info.text} ${sizeCls} rounded-xl font-semibold ${className}`}>
+      <Icon className={iconCls} />
       {info.label}
     </div>
   );

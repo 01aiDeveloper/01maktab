@@ -168,8 +168,12 @@ export default function SkillDetailPage() {
     lesson: { id: string | number; isFree?: boolean },
     ctx: { module: ModuleItem },
   ) => {
-    if (!lesson.isFree && !isEnrolled) {
-      if (!user) { router.push('/login'); return; }
+    if (!user) { router.push('/login'); return; }
+    if (!isPurchased) {
+      if (skill.pricingType === 'FREE') {
+        handleStart();
+        return;
+      }
       router.push(`/payment/${skill.id}?courseType=skill`);
       return;
     }

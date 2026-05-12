@@ -17,14 +17,17 @@ interface SkillCardProps extends StatusFlags {
   href?: string;
   enrollmentCount?: number;
   waitlistCount?: number;
+  hideQueueStatus?: boolean;
 }
 
 export function SkillCard({
   id, slug, image, title, iconUrl, badge, href,
   enrollmentCount, waitlistCount,
   hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled,
+  hideQueueStatus,
 }: SkillCardProps) {
-  const status = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled });
+  const rawStatus = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled });
+  const status = hideQueueStatus && (rawStatus === 'waitlist' || rawStatus === 'presale') ? null : rawStatus;
   const countNum = enrollmentCount ?? waitlistCount ?? 0;
   const countKind = enrollmentCount ? 'enrolled' : 'waitlist';
   const cardSlug = slug || id?.toString() || 'skill';

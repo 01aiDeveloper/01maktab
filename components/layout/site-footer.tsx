@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Send, Instagram, Linkedin } from 'lucide-react';
+import { Send, Instagram, Linkedin, Globe } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth-store';
@@ -24,6 +24,12 @@ const authLinks = [
 const PRIVACY_HREF = '/Maxfiylik_Siyosati_01AI_UZ.pdf';
 
 const socialLinks = [
+  {
+    label: 'ML Community',
+    href: 'https://mlcommunity.uz',
+    icon: <Globe className="w-5 h-5" />,
+    filled: false,
+  },
   {
     label: 'Telegram',
     href: 'https://t.me/mlc_uz',
