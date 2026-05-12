@@ -4,9 +4,12 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuthStore } from '@/store/auth-store';
+import { useMe } from '@/hooks/use-me';
 
 interface MenuItem {
   label: string;
@@ -18,6 +21,8 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const [currentTab, setCurrentTab] = useState<string | null>(null);
+  const { user } = useAuthStore();
+  useMe();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -83,11 +88,26 @@ export function Header() {
             <span className="text-white font-bold tracking-tighter text-xl md:text-2xl">01AI</span>
           </div>
 
-          <Link href="/login">
-            <Button className="bg-[#3b66f5] hover:bg-[#2d52d1] cursor-pointer text-white rounded-xl px-4 md:px-6 h-9 md:h-10 text-xs md:text-sm font-semibold shadow-lg">
-              Kirish
-            </Button>
-          </Link>
+          {user ? (
+            <Link href="/profile" className="flex items-center gap-2 rounded-xl bg-white pl-1 pr-3 py-1">
+              <Avatar className="h-7 w-7">
+                <AvatarImage src={user?.photo || "/diverse-user-avatars.png"} />
+                <AvatarFallback className="bg-gray-200 text-xs">
+                  {user?.firstname?.[0]?.toUpperCase() || "U"}
+                  {user?.lastname?.[0]?.toUpperCase() || ""}
+                </AvatarFallback>
+              </Avatar>
+              <span className="hidden lg:block text-sm font-medium text-gray-900">
+                {user?.firstname} {user?.lastname}
+              </span>
+            </Link>
+          ) : (
+            <Link href="/login">
+              <Button className="bg-[#3b66f5] hover:bg-[#2d52d1] cursor-pointer text-white rounded-xl px-4 md:px-6 h-9 md:h-10 text-xs md:text-sm font-semibold shadow-lg">
+                Kirish
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Dropdown Content */}
