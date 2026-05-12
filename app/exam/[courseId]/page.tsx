@@ -10,6 +10,7 @@ import { useCourseInfo } from '@/hooks/use-course-info';
 import { useGenerateCourseCertificate } from '@/hooks/use-course-certificate';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
+import { getMediaUrl } from '@/lib/utils';
 
 function ExamContent() {
   const params = useParams();
@@ -40,8 +41,9 @@ function ExamContent() {
       console.log('[Certificate] Response data', result);
       console.log('[Certificate] file URL:', result?.file);
       if (result.file) {
-        console.log('[Certificate] window.open chaqirilmoqda:', result.file);
-        window.open(result.file, '_blank', 'noopener,noreferrer');
+        const fullUrl = getMediaUrl(result.file);
+        console.log('[Certificate] window.open chaqirilmoqda:', fullUrl);
+        window.open(fullUrl, '_blank', 'noopener,noreferrer');
       } else {
         console.warn('[Certificate] file field bo\'sh!');
       }
