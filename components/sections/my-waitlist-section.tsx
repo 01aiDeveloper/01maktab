@@ -30,7 +30,7 @@ export function MyWaitlistSection() {
         <h2 className="text-2xl font-bold text-foreground">Kutish ro&apos;yxati</h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
         {entries.map((entry) => {
           const courseTitle = entry.title || entry.name || "Kurs";
           const detailHref =
@@ -40,10 +40,10 @@ export function MyWaitlistSection() {
               ? `/professions/${entry.id}`
               : `/courses/${entry.id}`;
           return (
-            <Link key={entry.id} href={detailHref}>
-              <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <Link key={entry.id} href={detailHref} className="h-full">
+              <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
                 {/* Image */}
-                <div className="relative h-40 bg-gradient-to-br from-[#5d7bf5] to-[#7c71f4]">
+                <div className="relative h-40 bg-gradient-to-br from-[#5d7bf5] to-[#7c71f4] shrink-0">
                   {entry.photo && (
                     <Image
                       src={mediaUrl(entry.photo)}
@@ -55,8 +55,8 @@ export function MyWaitlistSection() {
                 </div>
 
                 {/* Content */}
-                <div className="p-4 space-y-3">
-                  <h3 className="font-suisse font-bold text-gray-900 text-base line-clamp-2">
+                <div className="p-4 space-y-3 flex flex-col flex-1">
+                  <h3 className="font-suisse font-bold text-gray-900 text-base line-clamp-2 flex-1">
                     {courseTitle}
                   </h3>
                   <div className="flex items-center gap-3 flex-wrap">
