@@ -27,7 +27,7 @@ import { useCourse } from '@/hooks/use-course';
 import { useCourseModules } from '@/hooks/use-course-modules';
 import { useMyCourses } from '@/hooks/use-my-courses';
 import { baseMediaUrl } from '@/lib/utils';
-import { sortByOrder } from '@/lib/lesson-utils';
+import { pickResumeLesson } from '@/lib/lesson-utils';
 import type { ApiCourseModule, ApiProject } from '@/types/api';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
@@ -146,21 +146,19 @@ export default function CoursePage() {
     }
     if (!course) return;
     setStartLoading(true);
-    try {
-      await api.post(`/course/${course.id}/enroll`);
-    } catch (err: unknown) {
-      const status = (err as { response?: { status?: number } })?.response?.status;
-      if (status === 400) {
-        router.push(`/payment/${course.id}?courseType=course`);
-        return;
+    const hasProgress = (courseModules?.progress?.totalLessonsCount ?? 0) > 0;
+    if (!hasProgress) {
+      try {
+        await api.post(`/course/${course.id}/enroll`);
+      } catch (err: unknown) {
+        const status = (err as { response?: { status?: number } })?.response?.status;
+        if (status === 400) {
+          router.push(`/payment/${course.id}?courseType=course`);
+          return;
+        }
       }
     }
-    const modules = sortByOrder(courseModules?.modules ?? []);
-    const flat = modules.flatMap((m) =>
-      sortByOrder(m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id }))
-    );
-    const firstUncompleted = flat.find((l) => !l.isCompleted);
-    const target = firstUncompleted ?? flat[flat.length - 1] ?? null;
+    const target = pickResumeLesson(courseModules?.modules, courseModules?.progress);
     if (target) {
       router.push(`/module/${target.moduleId}?lessonId=${target.id}&courseType=course&courseId=${course.id}`);
       return;

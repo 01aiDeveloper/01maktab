@@ -9,7 +9,7 @@ import { LessonLockedModal } from '@/components/lesson/lesson-locked-modal';
 import { UniversalVideoPlayer } from '@/components/lesson/universal-video-player';
 import { LessonBlockRenderer } from '@/components/lesson/lesson-block-renderer';
 import { AuthRequiredCard } from '@/components/lesson/auth-required-card';
-import { sortByOrder } from '@/lib/lesson-utils';
+import { sortByOrder, pickResumeLesson } from '@/lib/lesson-utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLesson } from '@/hooks/use-lesson';
 import { useCourseModules, useSkillModules, useProfessionModules } from '@/hooks/use-course-modules';
@@ -161,11 +161,11 @@ export function LessonContent() {
   useEffect(() => {
     if (lessonId || modulesLoading || flatLessons.length === 0) return;
 
-    const firstUncompleted = flatLessons.find((l) => !l.isCompleted);
-    const target = firstUncompleted ?? flatLessons[flatLessons.length - 1];
+    const target = pickResumeLesson(modules, (courseData as any)?.progress);
+    if (!target) return;
 
     router.replace(buildLessonUrl(target.moduleId, target.id, courseType, courseId));
-  }, [lessonId, modulesLoading, flatLessons, courseType, courseId, router]);
+  }, [lessonId, modulesLoading, flatLessons, modules, courseData, courseType, courseId, router]);
 
   if (!lessonId) return <PageLoader />;
 

@@ -39,7 +39,7 @@ import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
 import { PresaleSection } from '@/components/sections/skills/presale-section';
-import { sortByOrder } from '@/lib/lesson-utils';
+import { pickResumeLesson } from '@/lib/lesson-utils';
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -194,21 +194,19 @@ export default function ProfessionPage() {
     }
     if (!profession) return;
     setStartLoading(true);
-    try {
-      await api.post(`/course/${profession.id}/enroll`);
-    } catch (err: unknown) {
-      const status = (err as { response?: { status?: number } })?.response?.status;
-      if (status === 400) {
-        router.push(`/payment/${profession.id}?courseType=profession`);
-        return;
+    const hasProgress = (professionModules?.progress?.totalLessonsCount ?? 0) > 0;
+    if (!hasProgress) {
+      try {
+        await api.post(`/course/${profession.id}/enroll`);
+      } catch (err: unknown) {
+        const status = (err as { response?: { status?: number } })?.response?.status;
+        if (status === 400) {
+          router.push(`/payment/${profession.id}?courseType=profession`);
+          return;
+        }
       }
     }
-    const modules = sortByOrder(professionModules?.modules ?? []);
-    const flat = modules.flatMap((m) =>
-      sortByOrder(m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id }))
-    );
-    const firstUncompleted = flat.find((l) => !l.isCompleted);
-    const target = firstUncompleted ?? flat[flat.length - 1] ?? null;
+    const target = pickResumeLesson(professionModules?.modules, professionModules?.progress);
     if (target) {
       router.push(`/module/${target.moduleId}?lessonId=${target.id}&courseType=profession&courseId=${profession.id}`);
       return;

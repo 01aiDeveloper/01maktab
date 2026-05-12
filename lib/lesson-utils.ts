@@ -53,3 +53,42 @@ function extractOrder(item: Orderable): number {
 export function sortByOrder<T>(items: T[]): T[] {
   return [...items].sort((a, b) => extractOrder(a as Orderable) - extractOrder(b as Orderable));
 }
+
+type ResumeModule = {
+  id: number;
+  lessons?: { id: number; isCompleted?: boolean }[] | null;
+};
+
+type ResumeProgress = {
+  completedLessonsCount?: number;
+  totalLessonsCount?: number;
+} | null | undefined;
+
+export function pickResumeLesson(
+  modules: ResumeModule[] | null | undefined,
+  progress: ResumeProgress,
+): { moduleId: number; id: number } | null {
+  const mods = sortByOrder(modules ?? []);
+  const flat = mods.flatMap((m) =>
+    sortByOrder(m.lessons ?? []).map((l) => ({ id: l.id, isCompleted: !!l.isCompleted, moduleId: m.id })),
+  );
+  if (flat.length === 0) return null;
+
+  const byFlag = flat.findIndex((l) => !l.isCompleted);
+  const anyCompletedFlag = flat.some((l) => l.isCompleted);
+  const completedCount = progress?.completedLessonsCount ?? 0;
+
+  // Backend may not populate per-lesson `isCompleted`. If no lesson flagged
+  // completed but progress count > 0, trust the count.
+  let idx: number;
+  if (!anyCompletedFlag && completedCount > 0) {
+    idx = Math.min(completedCount, flat.length - 1);
+  } else if (byFlag >= 0) {
+    idx = byFlag;
+  } else {
+    idx = flat.length - 1;
+  }
+
+  const target = flat[idx];
+  return { moduleId: target.moduleId, id: target.id };
+}

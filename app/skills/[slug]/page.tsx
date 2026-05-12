@@ -30,7 +30,7 @@ import { WaitlistSection } from "@/components/sections/skills/waitlist-section";
 import { useCourseBadges } from "@/hooks/use-course-badges";
 import { CourseStartModal } from "@/components/modals/course-start-modal";
 import { useSmartBack } from "@/hooks/use-smart-back";
-import { sortByOrder } from "@/lib/lesson-utils";
+import { pickResumeLesson } from "@/lib/lesson-utils";
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -95,9 +95,16 @@ export default function SkillDetailPage() {
     }
     if (!skill) return;
     setStartLoading(true);
+    const hasProgress = (skillModules?.progress?.totalLessonsCount ?? 0) > 0;
+    if (hasProgress) {
+      const target = pickResumeLesson(skillModules?.modules, skillModules?.progress);
+      if (target) {
+        router.push(`/module/${target.moduleId}?lessonId=${target.id}&courseType=skill&courseId=${skill.id}`);
+        return;
+      }
+    }
     try {
       await api.post(`/course/${skill.id}/enroll`);
-      // Show course start modal on successful enrollment
       setShowStartModal(true);
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response
@@ -108,16 +115,11 @@ export default function SkillDetailPage() {
       }
     }
     setStartLoading(false);
-  }, [user, skill, router]);
+  }, [user, skill, skillModules, router]);
 
   const handleStartCourse = useCallback(() => {
     if (!skill || !skillModules) return;
-    const modules = sortByOrder(skillModules.modules ?? []);
-    const flat = modules.flatMap((m) =>
-      sortByOrder(m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id }))
-    );
-    const firstUncompleted = flat.find((l) => !l.isCompleted);
-    const target = firstUncompleted ?? flat[flat.length - 1] ?? null;
+    const target = pickResumeLesson(skillModules.modules, skillModules.progress);
     if (target) {
       router.push(
         `/module/${target.moduleId}?lessonId=${target.id}&courseType=skill&courseId=${skill.id}`,
