@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight, Clock, Users, CheckCircle2, BanknoteX } from 'lucide-react';
+import { ArrowUpRight, Clock, Users, CheckCircle2 } from 'lucide-react';
+import { CardSlash } from '@/components/ui/icons/card-slash';
 import { getMediaUrl } from '@/lib/utils';
 
 type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
@@ -57,14 +58,14 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
               ) : effectiveStatus === 'bought' ? (
                 <CheckCircle2 className="w-[18px] h-[18px]" />
               ) : (
-                <BanknoteX className="w-[18px] h-[18px]" />
+                <CardSlash className="w-[18px] h-[18px]" />
               )}
               {statusInfo.label}
             </div>
           )}
           {!statusInfo && badge && (
             <div className="inline-flex items-center justify-center gap-2 bg-[#1EBB4A] text-white h-[38px] w-[124px] px-4 rounded-[12px] text-[20px] leading-[25px] tracking-[-0.05em] font-semibold">
-              <BanknoteX className="w-[18px] h-[18px]" />
+              <CardSlash className="w-[18px] h-[18px]" />
               {badge}
             </div>
           )}
