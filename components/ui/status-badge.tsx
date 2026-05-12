@@ -37,7 +37,7 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
   const info = STATUS_CONFIG[status];
   const sizeCls = size === 'sm'
     ? 'p-1.5 text-xs gap-1.5 tracking-[-0.05em]'
-    : 'p-2 text-[18px] leading-[22px] tracking-[-0.05em] gap-2';
+    : 'px-[14px] py-2 text-[18px] leading-[22px] tracking-[-0.05em] gap-2';
   const iconCls = size === 'sm' ? 'w-4 h-4' : 'w-[18px] h-[18px]';
 
   const Icon =
