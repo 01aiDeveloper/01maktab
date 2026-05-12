@@ -51,7 +51,7 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
         {/* Status badge — top left */}
         <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10 flex flex-col gap-1.5">
           {statusInfo && (
-            <div className={`flex items-center gap-1 sm:gap-1.5 ${statusInfo.bg} ${statusInfo.text} px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold`}>
+            <div className={`flex items-center gap-1 sm:gap-1.5 ${statusInfo.bg} ${statusInfo.text} px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-[12px] text-[10px] sm:text-xs font-semibold`}>
               {effectiveStatus === 'waitlist' || effectiveStatus === 'presale' ? (
                 <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
               ) : effectiveStatus === 'bought' ? (
@@ -63,19 +63,19 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
             </div>
           )}
           {!statusInfo && badge && (
-            <div className="flex items-center gap-1 sm:gap-1.5 bg-[#1EBB4A] text-white px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold">
+            <div className="flex items-center gap-1 sm:gap-1.5 bg-[#1EBB4A] text-white px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-[12px] text-[10px] sm:text-xs font-semibold">
               <Ban className="w-3 h-3 sm:w-4 sm:h-4" />
               {badge}
             </div>
           )}
           {enrollmentCount != null && enrollmentCount > 0 && (
-            <div className="flex items-center gap-1 sm:gap-1.5 bg-[#FAEF3B] text-black px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold">
+            <div className="flex items-center gap-1 sm:gap-1.5 bg-[#FAEF3B] text-black px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-[12px] text-[10px] sm:text-xs font-semibold">
               <Users className="w-3 h-3 sm:w-4 sm:h-4" />
               {formatCount(enrollmentCount)} sotib oldi
             </div>
           )}
           {!enrollmentCount && waitlistCount != null && waitlistCount > 0 && (
-            <div className="flex items-center gap-1 sm:gap-1.5 bg-[#FAEF3B] text-black px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold">
+            <div className="flex items-center gap-1 sm:gap-1.5 bg-[#FAEF3B] text-black px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold">
               <Users className="w-3 h-3 sm:w-4 sm:h-4" />
               {formatCount(waitlistCount)} odam kutmoqda
             </div>
