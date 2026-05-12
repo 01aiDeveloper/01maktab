@@ -36,8 +36,8 @@ interface StatusBadgeProps {
 export function StatusBadge({ status, size = 'md', className = '' }: StatusBadgeProps) {
   const info = STATUS_CONFIG[status];
   const sizeCls = size === 'sm'
-    ? 'h-[30px] px-3 text-xs gap-1.5'
-    : 'h-[38px] px-4 text-sm gap-2';
+    ? 'h-[30px] px-3 text-xs gap-1.5 tracking-[-0.05em]'
+    : 'h-[38px] px-4 text-[20px] leading-[25px] tracking-[-0.05em] gap-2';
   const iconCls = size === 'sm' ? 'w-3.5 h-3.5' : 'w-[18px] h-[18px]';
   const widthCls = size === 'md' ? info.width : '';
 
