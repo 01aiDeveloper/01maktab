@@ -1,6 +1,6 @@
 'use client';
 
-import { Users } from 'lucide-react';
+import { Profile2UserSolid } from '@/components/ui/icons/badge-icons';
 
 function formatCount(count: number): string {
   if (count >= 1000) {
@@ -23,7 +23,7 @@ export function EnrollmentBadge({ count, kind = 'waitlist', className = '' }: En
 
   return (
     <div className={`inline-flex items-center justify-center gap-2 bg-[#FAEF3B] text-black h-[38px] w-[240px] px-4 rounded-[12px] text-[20px] leading-[25px] tracking-[-0.05em] font-semibold ${className}`}>
-      <Users className="w-[18px] h-[18px]" />
+      <Profile2UserSolid className="w-5 h-5" />
       <span>{formatCount(count)} {label}</span>
     </div>
   );
