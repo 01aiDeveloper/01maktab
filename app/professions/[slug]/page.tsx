@@ -51,7 +51,7 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`;
 }
 
-function toModuleItem(m: ApiCourseModule): ModuleItem {
+function toModuleItem(m: ApiCourseModule, isEnrolled = false): ModuleItem {
   const lessons = m.lessons ?? [];
   return {
     id: String(m.id),
@@ -61,7 +61,7 @@ function toModuleItem(m: ApiCourseModule): ModuleItem {
     lessons: lessons.map((l) => ({
       id: l.id,
       title: l.title,
-      isFree: !!l.isPublic,
+      isFree: isEnrolled || !!l.isPublic,
       type: 'video' as const,
     })),
     test: undefined,
@@ -219,7 +219,8 @@ export default function ProfessionPage() {
     );
   }
 
-  const modules: ModuleItem[] = profession.modules.map((m) => toModuleItem(m));
+  const isPurchasedForLessons = !!profession.hasPurchased || !!myProfessions?.some((c) => String(c.id) === String(profession.id));
+  const modules: ModuleItem[] = profession.modules.map((m) => toModuleItem(m, isPurchasedForLessons));
   const mentor = profession.mentor;
 
   const isPurchased = !!profession.hasPurchased || !!myProfessions?.some((c) => String(c.id) === String(profession.id));

@@ -49,7 +49,7 @@ function getDifficultyKey(difficulty: string): 'BEGINNER' | 'INTERMEDIATE' | 'AD
   return null;
 }
 
-function toModuleItem(m: ApiSkillModule): ModuleItem {
+function toModuleItem(m: ApiSkillModule, isEnrolled = false): ModuleItem {
   const lessons = m.lessons ?? [];
   const tests = m.tests ?? [];
   return {
@@ -60,7 +60,7 @@ function toModuleItem(m: ApiSkillModule): ModuleItem {
     lessons: lessons.map((l) => ({
       id: l.id,
       title: l.title,
-      isFree: l.isPublic,
+      isFree: isEnrolled || l.isPublic,
       type: "video" as const,
     })),
     test:
@@ -150,7 +150,8 @@ export default function SkillDetailPage() {
   }
 
   const partner = skill.partners[0] ?? null;
-  const modules: ModuleItem[] = skill.modules.map((m) => toModuleItem(m));
+  const isPurchasedForLessons = !!skill.hasPurchased || !!skill.isEnrolled || !!mySkills?.some((c) => String(c.id) === String(skill.id));
+  const modules: ModuleItem[] = skill.modules.map((m) => toModuleItem(m, isPurchasedForLessons));
   const mentor = skill.mentor;
   const priceLabel =
     skill.pricingType === "FREE"

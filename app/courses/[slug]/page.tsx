@@ -47,7 +47,7 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`;
 }
 
-function toModuleItem(m: ApiCourseModule, moduleTestLabel: string): ModuleItem {
+function toModuleItem(m: ApiCourseModule, moduleTestLabel: string, isEnrolled = false): ModuleItem {
   const lessons = m.lessons ?? [];
   return {
     id: String(m.id),
@@ -57,7 +57,7 @@ function toModuleItem(m: ApiCourseModule, moduleTestLabel: string): ModuleItem {
     lessons: lessons.map((l) => ({
       id: l.id,
       title: l.title,
-      isFree: !!l.isPublic,
+      isFree: isEnrolled || !!l.isPublic,
       type: 'video' as const,
     })),
     test: m.testCount > 0 ? { id: String(m.id), title: moduleTestLabel } : undefined,
@@ -165,7 +165,11 @@ export default function CoursePage() {
     );
   }
 
-  const modules: ModuleItem[] = course.modules.map((m) => toModuleItem(m, t('moduleTest')));
+  const isPurchased = !!course.hasPurchased || !!myCourses?.some((c) => String(c.id) === String(course.id));
+  const isAddedToProfile = isPurchased;
+  const isFree = course.pricingType === 'FREE';
+  const isEnrolledForLessons = isAddedToProfile;
+  const modules: ModuleItem[] = course.modules.map((m) => toModuleItem(m, t('moduleTest'), isEnrolledForLessons));
   const projects: Project[] = course.projects.map((p, i) => toProject(p, i, course.projects.length));
   const mentor = course.mentor;
 
@@ -180,10 +184,6 @@ export default function CoursePage() {
   const priceLabel = course.pricingType === 'FREE' ? t('free') : `${course.price.toLocaleString()} ${t('currencySom')}`;
 
   const totalLessons = course.modules.reduce((acc, m) => acc + (m.lessons?.length ?? 0), 0);
-
-  const isPurchased = !!course.hasPurchased || !!myCourses?.some((c) => String(c.id) === String(course.id));
-  const isAddedToProfile = isPurchased;
-  const isFree = course.pricingType === 'FREE';
 
   const handleLessonClick = (lesson: { id: string | number; isFree?: boolean }, ctx: { module: ModuleItem }) => {
     if (!user) { router.push('/login'); return; }
