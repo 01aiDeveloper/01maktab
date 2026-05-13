@@ -64,7 +64,7 @@ export default async function GuestHomePage() {
     <main className="min-h-screen">
       <Header />
       <Hero />
-      <MentorsSection />
+      {/* <MentorsSection /> */}
       <SkillsSection skills={skills} />
       <CareersSection careers={careers} />
       <CoursesSection />

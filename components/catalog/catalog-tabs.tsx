@@ -9,6 +9,7 @@ import { NoData } from '@/components/ui/no-data';
 import { useAuthStore } from '@/store/auth-store';
 import { useMyCourses, useMySkills, useMyProfessions } from '@/hooks/use-my-courses';
 import api from '@/lib/api';
+import { getMediaUrl } from '@/lib/utils';
 
 type TabKey = 'skills' | 'courses' | 'professions';
 
@@ -126,7 +127,8 @@ export function CatalogTabs() {
   };
 
   const getItemImage = (item: CatalogItem) => {
-    return item.cardImage || item.image || item.photo || '/placeholder.svg';
+    const raw = item.cardImage || item.image || item.photo;
+    return raw ? getMediaUrl(raw) : '/placeholder.svg';
   };
 
   return (

@@ -51,65 +51,78 @@ export function LessonHeaderActions({
 
   return (
     <>
-      <div className="flex items-center justify-between mb-8">
-        <Link href={backHref} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
-          <ArrowLeft className="w-4 h-4" />
-          <span>{t('back')}</span>
-        </Link>
-
-        <div className="flex items-center gap-2">
-          {isPublic && (
-            <div className="hidden sm:flex items-center gap-1.5 bg-green-500 text-white px-3 py-1.5 rounded-[10px] text-xs font-medium h-9">
-              <Image src="/icons/free-lesson.svg" alt="" width={14} height={14} />
-              {t('freeTrialLesson')}
-            </div>
-          )}
-
-          <button
-            onClick={() => setModalOpen(true)}
-            className="w-9 h-9 rounded-[10px] border bg-black  flex items-center justify-center  transition-colors"
-            title={t('courseProgram')}
-          >
-            <Image src="/icons/module-menu.svg" alt={t('courseProgram')} width={18} height={18} />
-          </button>
-
-          <button
-            disabled={!prevLesson}
-            onClick={() => prevLesson && onLessonSelect(prevLesson.moduleId, prevLesson.id)}
-            className={cn(
-              'w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center transition-colors',
-              prevLesson ? 'hover:bg-gray-100 text-gray-700' : 'text-gray-300 cursor-not-allowed'
-            )}
+      <div className="sticky top-4 z-30 mb-6">
+        <div className="bg-white rounded-full shadow-[0_2px_20px_rgba(0,0,0,0.06)] flex items-center justify-between pl-6 pr-2 py-2">
+          <Link
+            href={backHref}
+            className="inline-flex items-center gap-2 text-foreground hover:opacity-70 transition-opacity text-sm font-medium"
           >
             <ArrowLeft className="w-4 h-4" />
-          </button>
+            <span>{t('back')}</span>
+          </Link>
 
-          <button
-            disabled={!nextLesson && !hasModuleTestPending && !isCourseExamReady}
-            onClick={() => {
-              if (hasModuleTestPending) {
-                if (!isCurrentCompleted) { onLockedNext?.(); return; }
-                onModuleTest?.();
-                return;
-              }
-              if (isCourseExamReady) {
-                if (!isCurrentCompleted) { onLockedNext?.(); return; }
-                onCourseExam?.();
-                return;
-              }
-              if (!nextLesson) return;
-              if (!isCurrentCompleted) { onLockedNext?.(); return; }
-              onLessonSelect(nextLesson.moduleId, nextLesson.id);
-            }}
-            className={cn(
-              'w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center transition-colors',
-              (nextLesson || hasModuleTestPending || isCourseExamReady)
-                ? 'hover:bg-gray-100 text-gray-700'
-                : 'text-gray-300 cursor-not-allowed'
+          <div className="flex items-center gap-3">
+            {isPublic && (
+              <div className="hidden sm:flex items-center gap-1.5 bg-green-500 text-white px-3 py-1.5 rounded-full text-xs font-medium h-9">
+                <Image src="/icons/free-lesson.svg" alt="" width={14} height={14} />
+                {t('freeTrialLesson')}
+              </div>
             )}
-          >
-            <ArrowRight className="w-4 h-4" />
-          </button>
+
+            <button
+              onClick={() => setModalOpen(true)}
+              className="inline-flex items-center gap-2 h-10 pl-3 pr-4 rounded-full bg-black text-white text-sm font-medium hover:opacity-90 transition-opacity"
+              title={t('courseProgram')}
+            >
+              <Image
+                src="/icons/module-menu.svg"
+                alt={t('courseProgram')}
+                width={18}
+                height={18}
+              />
+              <span>{t('courseProgram')}</span>
+            </button>
+
+            <button
+              disabled={!prevLesson}
+              onClick={() => prevLesson && onLessonSelect(prevLesson.moduleId, prevLesson.id)}
+              className={cn(
+                'w-9 h-9 flex items-center justify-center transition-colors',
+                prevLesson ? 'text-gray-700 hover:text-foreground' : 'text-gray-300 cursor-not-allowed'
+              )}
+              aria-label="prev"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+
+            <button
+              disabled={!nextLesson && !hasModuleTestPending && !isCourseExamReady}
+              onClick={() => {
+                if (hasModuleTestPending) {
+                  if (!isCurrentCompleted) { onLockedNext?.(); return; }
+                  onModuleTest?.();
+                  return;
+                }
+                if (isCourseExamReady) {
+                  if (!isCurrentCompleted) { onLockedNext?.(); return; }
+                  onCourseExam?.();
+                  return;
+                }
+                if (!nextLesson) return;
+                if (!isCurrentCompleted) { onLockedNext?.(); return; }
+                onLessonSelect(nextLesson.moduleId, nextLesson.id);
+              }}
+              className={cn(
+                'w-9 h-9 flex items-center justify-center transition-colors',
+                (nextLesson || hasModuleTestPending || isCourseExamReady)
+                  ? 'text-gray-700 hover:text-foreground'
+                  : 'text-gray-300 cursor-not-allowed'
+              )}
+              aria-label="next"
+            >
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
 

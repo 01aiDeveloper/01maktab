@@ -13,6 +13,14 @@ import { useEffect, useRef, useState } from "react";
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://app-dev.01ai.uz/api/v1";
 
+const UCELL_PARTNER: Partner = {
+  id: 0,
+  name: "Ucell",
+  logo: "/images/partners/Ucell.png",
+  description: "",
+  website: "https://ucell.uz",
+};
+
 interface PartnersSectionProps {
   partners?: Partner[];
   useMediaUrl?: boolean;
@@ -27,7 +35,9 @@ export function PartnersSection({
   showSubtitle = true,
 }: PartnersSectionProps) {
   const t = useTranslations("partners");
-  const [partners, setPartners] = useState<Partner[]>(partnersProp || []);
+  const [partners, setPartners] = useState<Partner[]>(
+    partnersProp ? [UCELL_PARTNER, ...partnersProp] : [UCELL_PARTNER],
+  );
   const [loading, setLoading] = useState(!partnersProp);
 
   const isDark = variant === "dark";
@@ -41,7 +51,7 @@ export function PartnersSection({
   useEffect(() => {
     // Agar props orqali partners berilgan bo'lsa, fetch qilmaymiz
     if (partnersProp) {
-      setPartners(partnersProp);
+      setPartners([UCELL_PARTNER, ...partnersProp]);
       setLoading(false);
       return;
     }
@@ -53,10 +63,10 @@ export function PartnersSection({
           `${API_BASE_URL}/partner/public?pageSize=20`,
         );
         const data = await response.json();
-        setPartners(data?.data?.data || []);
+        setPartners([UCELL_PARTNER, ...(data?.data?.data || [])]);
       } catch (error) {
         console.error("Failed to fetch partners:", error);
-        setPartners([]);
+        setPartners([UCELL_PARTNER]);
       } finally {
         setLoading(false);
       }
@@ -114,21 +124,44 @@ export function PartnersSection({
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
-            {[...partners, ...partners, ...partners].map((partner, index) => (
-              <Link
-                key={`row1-${partner.id}-${index}`}
-                href={`/partners/${partner.id}`}
-                className={`group relative flex h-[203px] w-[412px] shrink-0 items-center justify-center rounded-[16px] border-[3px] ${cardBorderColor} ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"}`}
-              >
+            {[...partners, ...partners, ...partners].map((partner, index) => {
+              const isLocalLogo = partner.logo.startsWith("/");
+              const logoSrc = isLocalLogo
+                ? partner.logo
+                : useMediaUrl
+                  ? getMediaUrl(partner.logo)
+                  : partner.logo;
+              const isExternal = partner.id === 0;
+              const cardClass = `group relative flex h-[203px] w-[412px] shrink-0 items-center justify-center rounded-[16px] border-[3px] ${cardBorderColor} ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"}`;
+              const logoImg = (
                 <Image
-                  src={useMediaUrl ? getMediaUrl(partner.logo) : partner.logo}
+                  src={logoSrc}
                   alt={partner.name}
                   width={180}
                   height={80}
                   className={`object-contain transition-all duration-300 ${isDark ? "brightness-0 invert group-hover:brightness-100 group-hover:invert-0" : "brightness-50 group-hover:brightness-100"}`}
                 />
-              </Link>
-            ))}
+              );
+              return isExternal ? (
+                <a
+                  key={`row1-${partner.id}-${index}`}
+                  href={partner.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cardClass}
+                >
+                  {logoImg}
+                </a>
+              ) : (
+                <Link
+                  key={`row1-${partner.id}-${index}`}
+                  href={`/partners/${partner.id}`}
+                  className={cardClass}
+                >
+                  {logoImg}
+                </Link>
+              );
+            })}
           </motion.div>
         </div>
 

@@ -183,24 +183,24 @@ export function LessonContent() {
 
   return (
     <>
+      <LessonHeaderActions
+        isPublic={lesson.isPublic && !isEnrolled}
+        modules={modules}
+        currentLessonId={Number(lessonId)}
+        courseType={courseType}
+        courseId={courseId}
+        prevLesson={prevLesson}
+        nextLesson={nextLesson}
+        onLessonSelect={(targetModuleId, targetLessonId) => goToLesson(targetModuleId, targetLessonId)}
+        isCurrentCompleted={isCurrentCompleted}
+        onLockedNext={() => setLockedModalOpen(true)}
+        hasModuleTestPending={!!moduleTestPending}
+        onModuleTest={goToModuleTest}
+        isCourseExamReady={isCourseExamReady}
+        onCourseExam={goToCourseExam}
+        isEnrolled={isEnrolled}
+      />
       <div className="bg-white rounded-2xl p-8 lg:p-12 mb-6">
-        <LessonHeaderActions
-          isPublic={lesson.isPublic && !isEnrolled}
-          modules={modules}
-          currentLessonId={Number(lessonId)}
-          courseType={courseType}
-          courseId={courseId}
-          prevLesson={prevLesson}
-          nextLesson={nextLesson}
-          onLessonSelect={(targetModuleId, targetLessonId) => goToLesson(targetModuleId, targetLessonId)}
-          isCurrentCompleted={isCurrentCompleted}
-          onLockedNext={() => setLockedModalOpen(true)}
-          hasModuleTestPending={!!moduleTestPending}
-          onModuleTest={goToModuleTest}
-          isCourseExamReady={isCourseExamReady}
-          onCourseExam={goToCourseExam}
-          isEnrolled={isEnrolled}
-        />
         <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
           {t('lessonHeading', { order: lesson.orderId, title: lesson.title })}
         </h1>
