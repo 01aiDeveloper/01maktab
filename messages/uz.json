@@ -11,6 +11,37 @@
     "promoTitle": "ML Engineer Kasbi",
     "tagline": "ML COMMUNITY Uzbekistan ekspertlari tomonidan yaratilgan"
   },
+  "stories": {
+    "school": {
+      "title": "No'l bir maktab",
+      "description": "Bu O'zbekistonda karyerani boshlash va rivojlantirish onlayn platformasi. Biz yangi kasblarni o'rgatamiz: raqamli ko'nikmalarni rivojlantirasiz, yo'lingizni tanlashga va zamonaviy karyera qurishga yordam beramiz."
+    },
+    "community": {
+      "title": "Hamjamiyatga qanday a'zo bo'laman",
+      "description": "Platformaga ro'yxatdan o'ting va minglab o'quvchilar bilan birga o'rganing. Hamjamiyatimizda mentor yordami, loyiha muhokamasi va karyera imkoniyatlari mavjud.",
+      "advantagesTitle": "Bizning afzalliklarimiz",
+      "adv1Label": "Kurs va yangilanishlarga cheksiz kirish",
+      "adv1Description": "Darslarga istalgan vaqtda qaytib, bilimlaringizni yangilashingiz mumkin",
+      "adv2Label": "Mutaxassislar",
+      "adv2Description": "Kurslar ustida yetakchi mahalliy va xalqaro kompaniyalardan tajribali mutaxassislar ishlaydi.",
+      "adv3Label": "Sertifikat",
+      "adv3Description": "Kursni tamomlaganingizdan so'ng, bilim va malakangizni tasdiqlovchi sertifikat olasiz.",
+      "adv4Label": "Erkin jadval, hech qanday deadline yo'q.",
+      "adv4Description": "O'rganishni ish va shaxsiy hayot bilan oson uyg'unlashtirish mumkin — kuniga atigi 15 daqiqa yetarli.",
+      "adv5Label": "Amaliy topshiriqlar",
+      "adv5Description": "Amaliy topshiriqlarni bajaring, bilimlaringizni mustahkamlash va ko'nikmalarni rivojlantirish uchun."
+    },
+    "profession": {
+      "title": "Kasb bu nima?",
+      "description": "Talab yuqori bo'lgan IT-kasbni egallang va bozorga ishonch bilan kiring. Amaliyot, real loyihalar va zamonaviy texnologiyalar.",
+      "button": "Batafsil"
+    },
+    "skills": {
+      "title": "Skillar nima uchun kerak?",
+      "description": "Skillar — bu siz egallagan aniq ko'nikmalar. Ish beruvchilar ko'nikmalaringizni ko'rib, sizni tanlaydi. Skillarni rivojlantiring va karyerangizni tezlashtiring.",
+      "button": "Skillarni ko'rish"
+    }
+  },
   "footer": {
     "privacy": "Maxfiylik siyosati"
   },
