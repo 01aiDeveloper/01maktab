@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { TestScreen } from '@/components/test/test-screen';
@@ -11,6 +12,7 @@ import { PageError } from '@/components/ui/page-error';
 import { buildLessonUrl } from '@/components/lesson/lesson-content';
 
 function TestContent() {
+  const t = useTranslations('pageError');
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -49,7 +51,7 @@ function TestContent() {
   }
 
   if (isError || !test) {
-    return <PageError title="Test topilmadi" description="Bu test mavjud emas yoki yuklanmadi" showBack />;
+    return <PageError title={t('testNotFound')} description={t('testNotFoundDescription')} showBack />;
   }
 
   return (

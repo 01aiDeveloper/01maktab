@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useSmartBack } from '@/hooks/use-smart-back';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
@@ -8,72 +9,52 @@ import { EventAbout } from '@/components/events/event-about';
 import { EventProgram } from '@/components/events/event-program';
 import { EventBenefits } from '@/components/events/event-benefits';
 
-const EVENT_DATA = {
-  title: 'ML Contest',
-  description: 'Eng kuchlilar bilan bellashing, real masalalarni yeching va stajirovka, sovrinlar va industriya e\'tirofiga imkoniyat qo\'lga kiriting.',
-  date: '02.12.2025',
-  location: 'IT Park, Muminov Street 4',
-  about: {
-    title: 'Tadbir haqida',
-    content: 'ML Contest — bu IT sohasidagi yangi boshlovchi va junior-mutaxassislar uchun amaliy tanlov. Ishtirokchilar real keyslarni hal qiladi, jamoalarda ishlaydi va ish beruvchilar tomonidan qadrlanadigan tajriba oladi.',
-  },
-  program: [
-    {
-      id: 1,
-      title: '1-bosqich. Ro\'yxatdan o\'tish va tanlov',
-      items: [
-        { order: 1, text: 'Ishtirokchilarni onlayn ro\'yxatdan o\'tkazish' },
-        { order: 2, text: 'Yo\'nalish tanlash (Data, Frontend, Backend, UI/UX, QA va boshqalar)' },
-        { order: 3, text: 'Darajani baholash uchun kirish topshirig\'i' },
-      ],
-    },
-    {
-      id: 2,
-      title: '2-bosqich. ML Contest ochilishi',
-      items: [],
-    },
-    {
-      id: 3,
-      title: '3-bosqich. Keyslar ustida ishlash',
-      items: [],
-    },
-    {
-      id: 4,
-      title: '4-bosqich. Yechimlarni taqdim etish',
-      items: [],
-    },
-    {
-      id: 5,
-      title: '5-bosqich. Mukofotlash va networking',
-      items: [],
-    },
-  ],
-  benefits: [
-    'Amaliy tajriba va portfolioda tayyor keys',
-    'IT-ekspertlardan qayta aloqa',
-    'Ishtirokchi sertifikati',
-    'Stajirovkaga yoki hamkor kompaniya jamoasiga kirish imkoniyati',
-  ],
-};
-
 export default function EventPage() {
+  const t = useTranslations('eventPage');
   const goBack = useSmartBack('/');
+
+  const eventData = {
+    title: t('title'),
+    description: t('description'),
+    date: t('date'),
+    location: t('location'),
+    about: {
+      title: t('aboutTitle'),
+      content: t('aboutContent'),
+    },
+    program: [
+      {
+        id: 1,
+        title: t('stage1'),
+        items: [
+          { order: 1, text: t('stage1Item1') },
+          { order: 2, text: t('stage1Item2') },
+          { order: 3, text: t('stage1Item3') },
+        ],
+      },
+      { id: 2, title: t('stage2'), items: [] },
+      { id: 3, title: t('stage3'), items: [] },
+      { id: 4, title: t('stage4'), items: [] },
+      { id: 5, title: t('stage5'), items: [] },
+    ],
+    benefits: [t('benefit1'), t('benefit2'), t('benefit3'), t('benefit4')],
+  };
 
   return (
     <div className="min-h-screen bg-[#0b0b0b]">
       <SiteHeader variant="light" />
 
       <main className="min-h-screen bg-[#0b0b0b]">
-        <EventHero event={EVENT_DATA} onBack={goBack} />
+        <EventHero event={eventData} onBack={goBack} />
 
         <div className="container mx-auto my-12 lg:my-16 max-w-[1200px] space-y-8 lg:space-y-12">
-          <EventAbout title={EVENT_DATA.about.title} content={EVENT_DATA.about.content} />
-          <EventProgram program={EVENT_DATA.program} />
-          <EventBenefits benefits={EVENT_DATA.benefits} />
+          <EventAbout title={eventData.about.title} content={eventData.about.content} />
+          <EventProgram program={eventData.program} />
+          <EventBenefits benefits={eventData.benefits} />
         </div>
       </main>
 
-      <SiteFooter variant='dark' />
+      <SiteFooter variant="dark" />
     </div>
   );
 }

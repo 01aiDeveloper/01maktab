@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { MainButton } from '@/components/ui/main-button';
 
 export interface Partner {
@@ -20,6 +21,7 @@ interface PartnerSectionProps {
 }
 
 export function PartnerSection({ partner, variant = 'default' }: PartnerSectionProps) {
+  const t = useTranslations('partnerSection');
   if (variant === 'light') {
     return (
       <section className="container mx-auto px-4 py-12 lg:py-16">
@@ -46,7 +48,7 @@ export function PartnerSection({ partner, variant = 'default' }: PartnerSectionP
                 iconPosition="right"
                 className="rounded-xl h-11 text-sm"
               >
-                Batafsil
+                {t('details')}
               </MainButton>
             </Link>
           </div>
@@ -79,7 +81,7 @@ export function PartnerSection({ partner, variant = 'default' }: PartnerSectionP
                 iconPosition="right"
                 className="rounded-xl border-0 text-xs"
               >
-                Batafsil
+                {t('details')}
               </MainButton>
             </Link>
           </div>

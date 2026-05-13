@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { MainTitle } from "@/components/ui/main-title";
 import { Subtitle } from "@/components/ui/subtitle";
 import { getMediaUrl } from "@/lib/utils";
@@ -25,6 +26,7 @@ export function PartnersSection({
   variant = "light",
   showSubtitle = true,
 }: PartnersSectionProps) {
+  const t = useTranslations("partners");
   const [partners, setPartners] = useState<Partner[]>(partnersProp || []);
   const [loading, setLoading] = useState(!partnersProp);
 
@@ -79,7 +81,7 @@ export function PartnersSection({
       <div className="container">
         <div className="px-4">
           <MainTitle align="center" textColor={titleColor} animated>
-            Bizning Hamkorlar
+            {t("title")}
           </MainTitle>
           {showSubtitle && (
             <Subtitle
@@ -89,9 +91,7 @@ export function PartnersSection({
               animated
               animationDelay={0.1}
             >
-              Hamkorlarimiz sizga stajerovka, o'qish jarayonida ularning ofisida
-              ekspertlar bilan master-klasslar, birga yaratilgan o'qish
-              dasturlari va boshqa imkoniyatni beradilar.
+              {t("subtitle")}
             </Subtitle>
           )}
         </div>

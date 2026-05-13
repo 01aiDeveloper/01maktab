@@ -4,12 +4,14 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Home } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 interface HeroSectionProps {
   userName?: string;
 }
 
 export function HeroSection({ userName = 'Aziz' }: HeroSectionProps) {
+  const t = useTranslations('userHome');
   return (
     <section className="w-full py-6">
       <div className="container">
@@ -24,7 +26,7 @@ export function HeroSection({ userName = 'Aziz' }: HeroSectionProps) {
             {/* Back Link - desktop only */}
             <Link href="/" className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm transition-colors w-fit">
               <Home className="h-4 w-4" />
-              <span>Bosh sahifaga qaytish</span>
+              <span>{t('backHome')}</span>
             </Link>
 
             {/* Main Heading */}
@@ -34,8 +36,7 @@ export function HeroSection({ userName = 'Aziz' }: HeroSectionProps) {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6 lg:mt-25"
             >
-              {"Biz bilan birga bo'lganingiz uchun rahmat, "}
-              <span className="text-gray-900">{userName}!</span>
+              {t('greeting', { name: userName })}
             </motion.h1>
 
             {/* Subtitle */}
@@ -45,7 +46,7 @@ export function HeroSection({ userName = 'Aziz' }: HeroSectionProps) {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-gray-600 text-base md:text-lg"
             >
-              Har bir yangi bilim sizni orzuyingizga bir qadam yaqinlashtiradi!
+              {t('tagline')}
             </motion.p>
           </motion.div>
 
@@ -59,7 +60,7 @@ export function HeroSection({ userName = 'Aziz' }: HeroSectionProps) {
             {/* Back Link - mobile only, on top of image */}
             <Link href="/" className="lg:hidden absolute top-4 left-4 z-10 inline-flex items-center gap-2 text-white text-sm bg-white/20 backdrop-blur-sm rounded-full px-3 py-1.5 transition-colors hover:bg-white/30">
               <Home className="h-4 w-4" />
-              <span>Bosh sahifaga qaytish</span>
+              <span>{t('backHome')}</span>
             </Link>
             <Image src="/images/hero-img.png" alt="Friendly purple monster mascot" fill className="object-cover object-center" priority />
           </motion.div>

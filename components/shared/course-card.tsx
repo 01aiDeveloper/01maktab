@@ -14,15 +14,18 @@ interface CourseCardProps extends StatusFlags {
   imageUrl: string
   enrollmentCount?: number
   waitlistCount?: number
+  hideQueueStatus?: boolean
 }
 
 export function CourseCard({
   id, slug, title, description, imageUrl,
   enrollmentCount, waitlistCount,
   hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled,
+  hideQueueStatus,
 }: CourseCardProps) {
   const courseSlug = slug || id?.toString() || "course"
-  const status = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled })
+  const rawStatus = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled })
+  const status = hideQueueStatus ? null : rawStatus
   const countNum = enrollmentCount ?? waitlistCount ?? 0
   const countKind: 'enrolled' | 'waitlist' = enrollmentCount ? 'enrolled' : 'waitlist'
   

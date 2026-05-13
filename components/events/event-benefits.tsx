@@ -1,4 +1,7 @@
+'use client';
+
 import { ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
 interface EventBenefitsProps {
@@ -6,10 +9,11 @@ interface EventBenefitsProps {
 }
 
 export function EventBenefits({ benefits }: EventBenefitsProps) {
+  const t = useTranslations('eventSections');
   return (
     <section className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-3xl p-8 lg:p-12">
       <h2 className="text-2xl lg:text-3xl font-bold text-white mb-6">
-        Ishtirokchilar nima oladi
+        {t('benefitsTitle')}
       </h2>
 
       <ul className="space-y-3 mb-8">
@@ -26,7 +30,7 @@ export function EventBenefits({ benefits }: EventBenefitsProps) {
           size="lg"
           className="bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-xl px-8 h-12"
         >
-          Ishtirok etish
+          {t('participate')}
           <ArrowRight className="w-5 h-5" />
         </Button>
       </div>

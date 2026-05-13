@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Heart, CheckCircle2, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 interface CourseStatsSectionProps {
   stats: {
@@ -13,6 +14,7 @@ interface CourseStatsSectionProps {
 }
 
 export function CourseStatsSection({ stats }: CourseStatsSectionProps) {
+  const t = useTranslations('courseSections');
   return (
     <section className="w-full py-8">
       <div className="container mx-auto px-4">
@@ -30,7 +32,7 @@ export function CourseStatsSection({ stats }: CourseStatsSectionProps) {
             <div className="absolute bottom-8 left-8">
               <div className="flex items-center gap-2 mb-3">
                 <Heart className="w-5 h-5 text-white fill-white" />
-                <span className="text-white text-sm font-medium">Talaba Tugatgan</span>
+                <span className="text-white text-sm font-medium">{t('statsGraduates')}</span>
               </div>
               <p className="text-7xl lg:text-8xl font-bold text-white">{stats.graduates.toLocaleString()}</p>
             </div>
@@ -42,7 +44,7 @@ export function CourseStatsSection({ stats }: CourseStatsSectionProps) {
             <div className="bg-[#18181a] rounded-3xl p-8 flex-1 flex flex-col justify-center relative">
               <div className="flex items-center gap-2 mb-6">
                 <CheckCircle2 className="w-5 h-5 text-white" />
-                <span className="text-white text-sm font-medium">Ishga Joylashgan</span>
+                <span className="text-white text-sm font-medium">{t('statsEmployed')}</span>
               </div>
               <p className="text-7xl lg:text-8xl font-bold text-white text-center">{stats.employmentRate}</p>
             </div>
@@ -51,7 +53,7 @@ export function CourseStatsSection({ stats }: CourseStatsSectionProps) {
             <div className="bg-[#5d7bf5] rounded-3xl p-8 flex-1 flex flex-col justify-center relative">
               <div className="flex items-center gap-2 mb-6">
                 <Users className="w-5 h-5 text-white" />
-                <span className="text-white text-sm font-medium">O'rtacha Baho</span>
+                <span className="text-white text-sm font-medium">{t('statsRating')}</span>
               </div>
               <p className="text-7xl lg:text-8xl font-bold text-white text-center">{stats.rating}</p>
             </div>

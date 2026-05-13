@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Clock, Users } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { useMyWaitlist } from "@/hooks/use-waitlist"
 import { baseMediaUrl } from "@/lib/utils"
 
@@ -14,6 +15,7 @@ function mediaUrl(path: string | null | undefined): string {
 }
 
 export function MyWaitlistSection() {
+  const t = useTranslations("userHome")
   const { data: entries, isLoading } = useMyWaitlist()
 
   if (isLoading || !entries || entries.length === 0) return null
@@ -27,12 +29,12 @@ export function MyWaitlistSection() {
       className="py-8"
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-foreground">Kutish ro&apos;yxati</h2>
+        <h2 className="text-2xl font-bold text-foreground">{t("myWaitlist")}</h2>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
         {entries.map((entry) => {
-          const courseTitle = entry.title || entry.name || "Kurs";
+          const courseTitle = entry.title || entry.name || t("unknownCourse");
           const detailHref =
             entry.format === "SKILL"
               ? `/skills/${entry.id}`
@@ -62,12 +64,12 @@ export function MyWaitlistSection() {
                   <div className="flex items-center gap-3 flex-wrap">
                     <div className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 rounded-full px-3 py-1 text-xs font-medium">
                       <Clock className="w-3.5 h-3.5" />
-                      Kutilmoqda
+                      {t("waiting")}
                     </div>
                     {typeof entry.queueNumber === "number" && (
                       <div className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 rounded-full px-3 py-1 text-xs font-medium">
                         <Users className="w-3.5 h-3.5" />
-                        Navbat: #{entry.queueNumber}
+                        {t("queue", { number: entry.queueNumber })}
                       </div>
                     )}
                   </div>

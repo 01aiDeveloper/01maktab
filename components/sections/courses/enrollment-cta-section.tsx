@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { MainButton } from '@/components/ui/main-button';
 
 interface EnrollmentCTASectionProps {
@@ -12,10 +13,13 @@ interface EnrollmentCTASectionProps {
 }
 
 export function EnrollmentCTASection({
-  title = "Hoziroq sinab ko'ring",
-  subtitle = 'Birinchi darslarni bepul boshlang',
+  title,
+  subtitle,
   previewImage = '',
 }: EnrollmentCTASectionProps) {
+  const t = useTranslations('courseSections');
+  const displayTitle = title ?? t('ctaTitle');
+  const displaySubtitle = subtitle ?? t('ctaSubtitle');
   return (
     <section className="w-full py-12 lg:py-16">
       <div className="container mx-auto px-4">
@@ -23,10 +27,10 @@ export function EnrollmentCTASection({
           {/* Header texts */}
           <div className="flex flex-col items-center gap-6 mb-12">
             <h2 className="font-suisse font-semibold text-4xl lg:text-[64px] lg:leading-[81px] tracking-[-0.05em] text-white text-center max-w-5xl">
-              {title}
+              {displayTitle}
             </h2>
             <p className="font-suisse font-normal text-xl lg:text-[40px] lg:leading-[81px] tracking-[-0.05em] text-white text-center max-w-5xl">
-              {subtitle}
+              {displaySubtitle}
             </p>
           </div>
 
@@ -47,7 +51,7 @@ export function EnrollmentCTASection({
                 iconPosition="right"
                 className="text-xl shadow-lg"
               >
-                Hoziroq boshlash
+                {t('ctaButton')}
               </MainButton>
             </Link>
           </div>

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ArrowLeft, ArrowRight, Clock, BarChart3 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useSmartBack } from '@/hooks/use-smart-back';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +18,7 @@ interface SkillHeroSectionProps {
 }
 
 export function SkillHeroSection({ title, description, duration, level, price, image }: SkillHeroSectionProps) {
+  const t = useTranslations('skillHero');
   const goBack = useSmartBack('/catalog?tab=skills');
   return (
     <section className="w-full py-6">
@@ -27,18 +29,14 @@ export function SkillHeroSection({ title, description, duration, level, price, i
           transition={{ duration: 0.6 }}
           className="grid lg:grid-cols-[1.2fr_1fr] gap-8 items-center"
         >
-          {/* Left Content */}
           <div className="space-y-6">
-            {/* Back Button */}
             <button onClick={goBack} className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors cursor-pointer">
               <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm">Orqaga</span>
+              <span className="text-sm">{t('back')}</span>
             </button>
 
-            {/* Title */}
             <h1 className="font-suisse text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight text-balance text-gray-900">{title}</h1>
 
-            {/* Stats Badges */}
             <div className="flex flex-wrap gap-3">
               <Badge variant="secondary" className="bg-gray-100 text-gray-700 border-0 rounded-xl px-4 py-2.5 text-sm">
                 <Clock className="w-4 h-4 mr-2" />
@@ -53,10 +51,8 @@ export function SkillHeroSection({ title, description, duration, level, price, i
               </Badge>
             </div>
 
-            {/* Description */}
             <p className="text-gray-500 text-sm lg:text-base leading-relaxed mb-6">{description}</p>
 
-            {/* CTA Button */}
             <MainButton
               variant="gradient"
               size="lg"
@@ -64,11 +60,10 @@ export function SkillHeroSection({ title, description, duration, level, price, i
               iconPosition="right"
               className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-xl w-fit"
             >
-              Xoziroq boshlash
+              {t('startNow')}
             </MainButton>
           </div>
 
-          {/* Right Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}

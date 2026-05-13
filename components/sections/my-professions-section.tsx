@@ -2,6 +2,7 @@
 
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
+import { useTranslations } from "next-intl"
 import { MyCourseCard } from "@/components/cards/my-course-card"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
@@ -10,6 +11,7 @@ import { PageLoader } from "@/components/ui/page-loader"
 import { useMyProfessions } from "@/hooks/use-my-courses"
 
 export function MyProfessionsSection() {
+  const t = useTranslations("userHome")
   const { data: professions, isLoading } = useMyProfessions()
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -32,12 +34,12 @@ export function MyProfessionsSection() {
     return (
       <section className="py-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-foreground">Kasblarim</h2>
+          <h2 className="text-2xl font-bold text-foreground">{t("myProfessions")}</h2>
         </div>
         <NoData
-          message="Bu yer hozircha bo'sh, kasblar qo'shishni boshlang"
-          description="Kurslar ro'yxatiga o'ting"
-          buttonText="Kasblarni ko'rish"
+          message={t("noProfessionsMessage")}
+          description={t("noCoursesDescription")}
+          buttonText={t("noProfessionsButton")}
           buttonLink="/catalog?tab=professions"
         />
       </section>
@@ -53,7 +55,7 @@ export function MyProfessionsSection() {
       className="py-8 "
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-foreground">Kasblarim</h2>
+        <h2 className="text-2xl font-bold text-foreground">{t("myProfessions")}</h2>
       </div>
 
       <div className="overflow-hidden" ref={emblaRef}>

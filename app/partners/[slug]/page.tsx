@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { getMediaUrl } from '@/lib/utils';
@@ -39,6 +40,7 @@ function extractBlockTexts(blocks: unknown): string[] {
 }
 
 export default function PartnerPage() {
+  const t = useTranslations('partnerPage');
   const params = useParams();
   const partnerId = params.slug as string;
   const goBack = useSmartBack('/');
@@ -79,7 +81,7 @@ export default function PartnerPage() {
       <>
         <SiteHeader variant="light" />
         <main className="min-h-screen flex items-center justify-center">
-          <div className="animate-pulse text-muted-foreground">Yuklanmoqda...</div>
+          <div className="animate-pulse text-muted-foreground">{t('loading')}</div>
         </main>
         <SiteFooter />
       </>
@@ -91,9 +93,9 @@ export default function PartnerPage() {
       <>
         <SiteHeader variant="light" />
         <main className="min-h-screen flex flex-col items-center justify-center gap-4">
-          <p className="text-muted-foreground">Hamkor topilmadi</p>
+          <p className="text-muted-foreground">{t('notFound')}</p>
           <Link href="/" className="text-primary hover:underline">
-            Bosh sahifaga qaytish
+            {t('backHome')}
           </Link>
         </main>
         <SiteFooter />
@@ -118,7 +120,7 @@ export default function PartnerPage() {
               className="lg:hidden absolute top-4 left-4 z-10 inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Orqaga</span>
+              <span>{t('back')}</span>
             </button>
             {partner.image ? (
               <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
@@ -152,7 +154,7 @@ export default function PartnerPage() {
               className="hidden lg:inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 text-sm cursor-pointer w-fit"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Orqaga</span>
+              <span>{t('back')}</span>
             </button>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
               {partner.name}
@@ -165,7 +167,7 @@ export default function PartnerPage() {
             {partner.website && (
               <a href={partner.website} target="_blank" rel="noopener noreferrer">
                 <button className="inline-flex items-center justify-between w-[321px] max-w-full h-[54px] rounded-[10px] px-4 py-[15px] bg-[#3b66f5] hover:bg-[#2d52d1] text-white transition-colors" style={{ fontWeight: 450, fontSize: '20px', lineHeight: '16px' }}>
-                  <span>Hamkor haqida batafsil</span>
+                  <span>{t('moreAbout')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </a>
@@ -177,7 +179,7 @@ export default function PartnerPage() {
         <section className="mb-12 md:mb-16">
           <div className="bg-white rounded-2xl p-6 md:p-8 mb-6">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-              Hamkorlik haqida
+              {t('aboutPartnership')}
             </h2>
             {(() => {
               const textBlocks = extractBlockTexts(partner.blocks);
@@ -223,7 +225,7 @@ export default function PartnerPage() {
             <div className="flex justify-center">
               <a href={partner.website} target="_blank" rel="noopener noreferrer">
                 <button className="inline-flex items-center justify-between w-[321px] max-w-full h-[54px] rounded-[10px] px-4 py-[15px] bg-[#3b66f5] hover:bg-[#2d52d1] text-white transition-colors" style={{ fontWeight: 450, fontSize: '20px', lineHeight: '16px' }}>
-                  <span>Hamkor haqida batafsil</span>
+                  <span>{t('moreAbout')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </a>

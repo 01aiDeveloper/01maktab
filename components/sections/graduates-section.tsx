@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import { getMediaUrl } from '@/lib/utils';
@@ -18,6 +19,7 @@ type Graduate = {
 };
 
 export function GraduatesSection() {
+  const t = useTranslations('graduatesSection');
   const [graduates, setGraduates] = useState<Graduate[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,7 +47,7 @@ export function GraduatesSection() {
     return (
       <section className="w-full bg-black py-16 lg:py-24">
         <div className="container mx-auto px-4">
-          <h2 className="text-white font-bold text-3xl lg:text-4xl mb-12 lg:mb-16">Bizning bitiruvchilar</h2>
+          <h2 className="text-white font-bold text-3xl lg:text-4xl mb-12 lg:mb-16">{t('title')}</h2>
           <div className="flex items-center justify-center py-12">
             <div className="w-12 h-12 border-4 border-gray-700 border-t-[#5d7bf5] rounded-full animate-spin" />
           </div>
@@ -93,7 +95,7 @@ export function GraduatesSection() {
                         size="sm"
                         className="bg-white hover:bg-gray-100 text-black font-medium rounded-full flex items-center gap-2 h-10 px-5"
                       >
-                        Batafsil
+                        {t('details')}
                         <ArrowRight className="w-4 h-4" />
                       </Button>
                     </Link>

@@ -4,13 +4,14 @@ import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import useEmblaCarousel from 'embla-carousel-react';
+import { useTranslations } from 'next-intl';
 import { StoryModal, STORIES } from './feature-cards-modal';
 import { CarouselNavigation } from './ui/carousel-navigation';
 
-const featureCards = [
+const FEATURE_CARD_META = [
   {
     id: 1,
-    title: "No'l bir maktab bu nima?",
+    titleKey: 'card1' as const,
     borderColor: '#ff8c5a',
     gradient: 'linear-gradient(104.46deg, #F96415 -0.24%, #FFA469 101.27%)',
     image: '/images/hero-info-image1.png',
@@ -18,7 +19,7 @@ const featureCards = [
   },
   {
     id: 2,
-    title: "Hamjimiyatga qanday a'zo bo'laman",
+    titleKey: 'card2' as const,
     borderColor: '#60a5fa',
     gradient: 'linear-gradient(104.46deg, #2563eb -0.24%, #60a5fa 101.27%)',
     image: '/images/hero-info-image2.png',
@@ -26,7 +27,7 @@ const featureCards = [
   },
   {
     id: 3,
-    title: 'Kasb bu nima?',
+    titleKey: 'card3' as const,
     borderColor: '#a3e635',
     gradient: 'linear-gradient(104.46deg, #65a30d -0.24%, #a3e635 101.27%)',
     image: '/images/hero-info-image3.png',
@@ -34,7 +35,7 @@ const featureCards = [
   },
   {
     id: 4,
-    title: 'Skillar nima uchun kerak?',
+    titleKey: 'card4' as const,
     borderColor: '#c084fc',
     gradient: 'linear-gradient(104.46deg, #9333ea -0.24%, #c084fc 101.27%)',
     image: '/images/hero-info-image4.png',
@@ -60,6 +61,8 @@ const cardVariants = {
 };
 
 export function FeatureCards() {
+  const t = useTranslations('featureCards');
+  const featureCards = FEATURE_CARD_META.map((c) => ({ ...c, title: t(c.titleKey) }));
   const [activeStoryId, setActiveStoryId] = useState<number | null>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,

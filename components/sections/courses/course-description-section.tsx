@@ -2,6 +2,7 @@
 
 import { NoData } from '@/components/ui/no-data';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 interface CourseDescriptionSectionProps {
   title: string;
@@ -9,6 +10,7 @@ interface CourseDescriptionSectionProps {
 }
 
 export function CourseDescriptionSection({ title, description }: CourseDescriptionSectionProps) {
+  const t = useTranslations('courseSections');
   return (
     <section className="w-full py-8">
       <div className="container mx-auto px-4">
@@ -24,7 +26,7 @@ export function CourseDescriptionSection({ title, description }: CourseDescripti
           {description ? (
             <div className="prose prose-sm lg:prose-base max-w-none text-gray-600" dangerouslySetInnerHTML={{ __html: description }} />
           ) : (
-            <NoData title="Ma'lumot hali qo'shilmagan" />
+            <NoData title={t('infoNotAdded')} />
           )}
         </motion.div>
       </div>

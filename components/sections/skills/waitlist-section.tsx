@@ -3,6 +3,7 @@
 import { ArrowRight, Users, Check, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { MainButton } from '@/components/ui/main-button';
 import { useAuthStore } from '@/store/auth-store';
@@ -15,6 +16,7 @@ interface WaitlistSectionProps {
 }
 
 export function WaitlistSection({ courseId, enrollmentCount = 0 }: WaitlistSectionProps) {
+  const t = useTranslations('waitlist');
   const router = useRouter();
   const { user } = useAuthStore();
   const { data: presale, isLoading: presaleLoading } = usePresale(courseId);
@@ -56,22 +58,22 @@ export function WaitlistSection({ courseId, enrollmentCount = 0 }: WaitlistSecti
               {enrollmentCount > 0 && (
                 <div className="inline-flex items-center gap-2 bg-white/15 rounded-full px-4 py-2 text-white text-sm font-medium">
                   <Users className="w-4 h-4" />
-                  <span>{enrollmentCount} kishi allaqachon yozilgan</span>
+                  <span>{t('alreadyEnrolled', { count: enrollmentCount })}</span>
                 </div>
               )}
               <div className="inline-flex items-center gap-1.5 bg-[#22c55e] rounded-full px-3 py-2 text-white text-sm font-medium">
                 <Check className="w-3.5 h-3.5" />
-                <span>Bepul</span>
+                <span>{t('free')}</span>
               </div>
               <div className="inline-flex items-center gap-1.5 bg-white/15 rounded-full px-3 py-2 text-white text-sm font-medium">
                 <Check className="w-3.5 h-3.5" />
-                <span>Xabarnoma olasiz</span>
+                <span>{t('notification')}</span>
               </div>
             </div>
 
             {/* Heading */}
             <h3 className="text-white font-suisse text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
-              Birinchilar uchun 10% chegirma
+              {t('discountTitle')}
             </h3>
 
             {/* Button */}
@@ -86,7 +88,7 @@ export function WaitlistSection({ courseId, enrollmentCount = 0 }: WaitlistSecti
                 {joinWaitlist.isPending && (
                   <Loader2 className="w-4 h-4 animate-spin inline mr-1" />
                 )}
-                Kutish ro&apos;yxatiga kirish
+                {t('joinWaitlist')}
                 <ArrowRight className="w-4 h-4 inline ml-1" />
               </MainButton>
             </div>

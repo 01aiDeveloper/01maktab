@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { TestScreen } from '@/components/test/test-screen';
@@ -13,6 +14,7 @@ import { PageError } from '@/components/ui/page-error';
 import { getMediaUrl } from '@/lib/utils';
 
 function ExamContent() {
+  const t = useTranslations('pageError');
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -54,8 +56,8 @@ function ExamContent() {
       console.error('Full error:', e);
       const status = e?.response?.status;
       const msg = status === 500
-        ? "Sertifikat hozirda yaratib bo'lmadi. Iltimos, birozdan keyin qayta urinib ko'ring."
-        : (e?.response?.data?.message ?? "Sertifikatni olishda xatolik yuz berdi.");
+        ? t('certificate500')
+        : (e?.response?.data?.message ?? t('certificateError'));
       alert(msg);
     }
   };
@@ -69,7 +71,7 @@ function ExamContent() {
   }
 
   if (isError || !exam) {
-    return <PageError title="Imtihon topilmadi" description="Bu kurs uchun imtihon mavjud emas yoki yuklanmadi" showBack />;
+    return <PageError title={t('examNotFound')} description={t('examNotFoundDescription')} showBack />;
   }
 
   return (

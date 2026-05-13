@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Users, Bell, Clock, BarChart3, Banknote } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { ModuleAccordion } from '@/components/shared/module-accordion';
 import type { ModuleItem } from '@/components/shared/module-accordion';
@@ -27,9 +28,9 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`;
 }
 
-function difficultyLabel(d: string): string {
-  const m: Record<string, string> = { BEGINNER: "Boshlang'ich", INTERMEDIATE: "O'rta", ADVANCED: 'Yuqori' };
-  return m[d] ?? d;
+function getDifficultyKey(d: string): 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | null {
+  if (d === 'BEGINNER' || d === 'INTERMEDIATE' || d === 'ADVANCED') return d;
+  return null;
 }
 
 function toModuleItem(m: ApiSkillModule): ModuleItem {
@@ -51,6 +52,7 @@ function toModuleItem(m: ApiSkillModule): ModuleItem {
 }
 
 export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: PresaleQueuePageProps) {
+  const t = useTranslations('presaleQueue');
   const { data: skill, isLoading: skillLoading } = useSkill(courseSlug);
   const { data: waitlistEntries, isLoading: waitlistLoading } = useMyWaitlist();
 
@@ -71,7 +73,9 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
   const partner = skill.partners[0] ?? null;
   const mentor = skill.mentor;
   const courseImage = mediaUrl(skill.photo);
-  const priceLabel = skill.pricingType === 'FREE' ? 'Bepul' : `${skill.price.toLocaleString()} so'm`;
+  const priceLabel = skill.pricingType === 'FREE' ? t('free') : `${skill.price.toLocaleString()} ${t('currencySom')}`;
+  const difficultyKey = getDifficultyKey(skill.difficulty);
+  const difficultyLabel = difficultyKey ? t(`difficulty.${difficultyKey}`) : skill.difficulty;
 
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
@@ -92,22 +96,22 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
                 className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm transition-colors w-fit mb-4"
               >
                 <ArrowLeft className="h-4 w-4" />
-                <span>Orqaga</span>
+                <span>{t('back')}</span>
               </Link>
 
               <h1 className="font-suisse text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight mb-6">
-                Siz kutish ro&apos;yxatidasiz
+                {t('inWaitlist')}
               </h1>
 
               <div className="space-y-3 mt-auto">
                 <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2.5 text-sm font-medium text-black">
                   <Users className="w-4 h-4" />
-                  <span>Sizning kutish raqamingiz: {queueNumber}</span>
+                  <span>{t('yourQueue', { n: queueNumber })}</span>
                 </div>
 
                 <div className="inline-flex items-center gap-2 bg-black/30 backdrop-blur-sm rounded-full px-4 py-2.5 text-sm text-white">
                   <Bell className="w-4 h-4 shrink-0" />
-                  <span>Telegram bot 01AI va email ga kurs statusi haqida sizga xabar keladi</span>
+                  <span>{t('notification')}</span>
                 </div>
               </div>
             </motion.div>
@@ -132,21 +136,21 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
               <div className="absolute top-6 right-6 flex flex-col gap-2 z-10">
                 <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 backdrop-blur-[119px]">
                   <Clock className="w-3.5 h-3.5 shrink-0" />
-                  Davomiylik: {skill.duration} soat
+                  {t('duration', { hours: skill.duration })}
                 </Badge>
                 <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 backdrop-blur-[119px]">
                   <Banknote className="w-3.5 h-3.5 shrink-0" />
-                  Narxi: {priceLabel}
+                  {t('price', { price: priceLabel })}
                 </Badge>
                 <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 backdrop-blur-[119px]">
                   <BarChart3 className="w-3.5 h-3.5 shrink-0" />
-                  Daraja: {difficultyLabel(skill.difficulty)}
+                  {t('level', { level: difficultyLabel })}
                 </Badge>
               </div>
 
               {partner && (
                 <div className="absolute bottom-6 left-6 right-6 flex items-center gap-3 z-10">
-                  <span className="text-white/70 text-xs">Hamkorlikda yaratilgan:</span>
+                  <span className="text-white/70 text-xs">{t('createdWith')}</span>
                   <div className="bg-white rounded-lg px-3 py-1.5 flex items-center gap-2">
                     {partner.logo && (
                       <Image src={mediaUrl(partner.logo)} alt={partner.name} width={20} height={20} className="object-contain" />
@@ -179,7 +183,7 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
         <section className="w-full py-8">
           <div className="container mx-auto px-4">
             <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
-              Mentor skilla
+              {t('mentorTitle')}
             </h2>
             <MentorCard
               name={mentor.fullname}
@@ -209,14 +213,14 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
               <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
                 <div className="flex-1 text-white">
                   <h2 className="font-suisse text-2xl lg:text-4xl font-bold mb-4">
-                    {partner.name} bilan hamkorlikda
+                    {t('partnerWith', { name: partner.name })}
                   </h2>
                   <p className="text-gray-300 text-sm lg:text-base leading-relaxed mb-6">
                     {partner.description}
                   </p>
                   <Link href={`/partners/${partner.id}`}>
                     <button className="inline-flex items-center gap-2 h-11 px-6 rounded-xl bg-white text-black font-medium text-sm transition-colors hover:bg-gray-100">
-                      Batafsil
+                      {t('details')}
                     </button>
                   </Link>
                 </div>

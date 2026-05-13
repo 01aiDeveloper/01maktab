@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 
 interface LessonNavButtonsProps {
@@ -29,6 +30,7 @@ export function LessonNavButtons({
   onCourseExam,
   className,
 }: LessonNavButtonsProps) {
+  const t = useTranslations('lesson');
   const handleNext = () => {
     if (moduleTestPending) {
       if (!isCurrentCompleted) { onLockedNext?.(); return; }
@@ -49,10 +51,10 @@ export function LessonNavButtons({
   };
 
   const nextLabel = moduleTestPending
-    ? "Modul testiga o'tish"
+    ? t('moduleTestNext')
     : isCourseExamReady
-    ? "Kurs imtihoniga o'tish"
-    : 'Keyingi dars';
+    ? t('courseExamNext')
+    : t('nextLesson');
   const isNextEnabled = !!(nextLesson || moduleTestPending || isCourseExamReady);
   return (
     <div className={cn('flex items-center gap-3 justify-center', className)}>
@@ -66,7 +68,7 @@ export function LessonNavButtons({
             : 'border-gray-200 text-gray-400 opacity-40 cursor-not-allowed',
         )}
       >
-        Oldingi dars
+        {t('prevLesson')}
       </button>
       <button
         disabled={!isNextEnabled}

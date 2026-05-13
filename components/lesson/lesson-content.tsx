@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import type { AxiosError } from 'axios';
 import { LessonHeaderActions } from '@/components/lesson/lesson-header-actions';
 import { LessonNavButtons } from '@/components/lesson/lesson-nav-buttons';
@@ -38,6 +39,7 @@ export function buildLessonUrl(
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function LessonContent() {
+  const t = useTranslations('lesson');
   const searchParams = useSearchParams();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -176,7 +178,7 @@ export function LessonContent() {
   if (status === 401) return <AuthRequiredCard />;
 
   if (isError || !lesson) {
-    return <PageError title="Dars topilmadi" description="Kechirasiz, bu dars mavjud emas" showBack={false} />;
+    return <PageError title={t('lessonNotFound')} description={t('lessonNotFoundDesc')} showBack={false} />;
   }
 
   return (
@@ -200,7 +202,7 @@ export function LessonContent() {
           isEnrolled={isEnrolled}
         />
         <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
-          Dars {lesson.orderId}. {lesson.title}
+          {t('lessonHeading', { order: lesson.orderId, title: lesson.title })}
         </h1>
         {lesson.description && (
           <p className="text-muted-foreground mb-8">{lesson.description}</p>

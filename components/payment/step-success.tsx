@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Check, Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import api from '@/lib/api';
 
 interface StepSuccessProps {
@@ -16,6 +17,7 @@ function getModuleEndpoint(courseType: string, courseId: string) {
 }
 
 export function StepSuccess({ courseId }: StepSuccessProps) {
+  const t = useTranslations('payment');
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseType = searchParams.get('courseType') ?? 'course';
@@ -52,7 +54,7 @@ export function StepSuccess({ courseId }: StepSuccessProps) {
           setLessonUrl(`/courses/${courseId}`);
         }
       } catch {
-        setError("Kursga ulanishda xatolik. Iltimos, qayta urinib ko'ring.");
+        setError(t('enrollError'));
         setLessonUrl(`/courses/${courseId}`);
       } finally {
         setLoading(false);
@@ -75,11 +77,11 @@ export function StepSuccess({ courseId }: StepSuccessProps) {
       </div>
 
       <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-3">
-        To&apos;lov muvaffaqiyatli!
+        {t('successTitle')}
       </h2>
 
       <p className="text-gray-500 text-sm text-center mb-8 max-w-xs mx-auto leading-relaxed">
-        Siz endi to&apos;liq kursga kirishingiz mumkin. Barcha darslar va materiallar ochiq
+        {t('successDescription')}
       </p>
 
       {error && (
@@ -95,11 +97,11 @@ export function StepSuccess({ courseId }: StepSuccessProps) {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Tayyorlanmoqda...
+              {t('preparing')}
             </>
           ) : (
             <>
-              Kursni boshlash
+              {t('startCourse')}
               <ArrowRight className="w-4 h-4" />
             </>
           )}

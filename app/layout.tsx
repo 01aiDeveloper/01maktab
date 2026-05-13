@@ -1,18 +1,20 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { NextIntlClientProvider } from "next-intl"
+import { getLocale, getMessages } from "next-intl/server"
 import { Analytics } from "@vercel/analytics/next"
 import { Providers } from "@/components/providers"
 import "./globals.css"
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 })
 
 export const metadata: Metadata = {
   title: "01AI",
-  description: "01AI", 
+  description: "01AI",
   generator: "01AI",
   icons: {
     icon: [
@@ -25,13 +27,16 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = await getLocale()
+  const messages = await getMessages()
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         {/* {process.env.NODE_ENV === "production" && (
           <script
@@ -57,9 +62,11 @@ export default function RootLayout({
         )} */}
       </head>
       <body className={`${inter.variable} font-sans antialiased overflow-x-hidden`}>
-        <Providers>
-          {children}
-        </Providers>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Providers>
+            {children}
+          </Providers>
+        </NextIntlClientProvider>
         <Analytics />
       </body>
     </html>

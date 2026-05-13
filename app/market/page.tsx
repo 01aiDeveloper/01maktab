@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { useSmartBack } from '@/hooks/use-smart-back';
@@ -12,6 +13,8 @@ import { useSmartBack } from '@/hooks/use-smart-back';
 // import { MarketCtaBanner } from '@/components/market/market-cta-banner';
 
 export default function MarketPage() {
+  const t = useTranslations('market');
+  const tCommon = useTranslations('common');
   const goBack = useSmartBack('/');
 
   return (
@@ -32,7 +35,7 @@ export default function MarketPage() {
                 className="lg:hidden pt-4 pl-4 inline-flex items-center gap-2 text-[#18181A]/50 hover:text-[#18181A] transition-colors text-sm mb-3 cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>Orqaga</span>
+                <span>{tCommon('backShort')}</span>
               </button>
               <div className="absolute inset-0 flex items-center justify-center">
                 <Image src="/icons/lock.svg" alt="lock" width={70} height={70} unoptimized />
@@ -47,11 +50,10 @@ export default function MarketPage() {
                 className="hidden lg:inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors text-sm w-fit cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>Orqaga</span>
+                <span>{tCommon('backShort')}</span>
               </button>
-              <h1 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
-                Market –<br />
-                tez orada
+              <h1 className="text-3xl lg:text-4xl font-bold text-white leading-tight whitespace-pre-line">
+                {t('comingSoonTitle')}
               </h1>
             </div>
 

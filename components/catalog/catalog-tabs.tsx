@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { useQuery, useQueries } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { CatalogCard } from '@/components/cards/catalog-card';
 import { NoData } from '@/components/ui/no-data';
 import { useAuthStore } from '@/store/auth-store';
@@ -11,10 +12,10 @@ import api from '@/lib/api';
 
 type TabKey = 'skills' | 'courses' | 'professions';
 
-const TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: 'skills', label: 'Skillar', icon: '/icons/catalog/1.svg' },
-  { key: 'courses', label: 'Kurslar', icon: '/icons/catalog/2.svg' },
-  { key: 'professions', label: 'Kasblar', icon: '/icons/catalog/3.svg' },
+const TAB_META: { key: TabKey; labelKey: 'tabSkills' | 'tabCourses' | 'tabProfessions'; icon: string }[] = [
+  { key: 'skills', labelKey: 'tabSkills', icon: '/icons/catalog/1.svg' },
+  { key: 'courses', labelKey: 'tabCourses', icon: '/icons/catalog/2.svg' },
+  { key: 'professions', labelKey: 'tabProfessions', icon: '/icons/catalog/3.svg' },
 ];
 
 interface CatalogItem {
@@ -44,6 +45,8 @@ const detailPaths: Record<TabKey, (id: number) => string> = {
 };
 
 export function CatalogTabs() {
+  const t = useTranslations('catalog');
+  const TABS = TAB_META.map((tab) => ({ ...tab, label: t(tab.labelKey) }));
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuthStore();
@@ -156,7 +159,7 @@ export function CatalogTabs() {
           <div className="w-10 h-10 border-4 border-gray-200 border-t-[#3B5BFF] rounded-full animate-spin" />
         </div>
       ) : items.length === 0 ? (
-        <NoData title="Bu yerda hozircha hech narsa yo'q" description="Hozircha ma'lumot yo'q" />
+        <NoData title={t('noItemsTitle')} description={t('noItemsDescription')} />
       ) : (
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           {items.map((item: CatalogItem) => {

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import { MainButton } from "@/components/ui/main-button";
 import { MainTitle } from "@/components/ui/main-title";
@@ -10,24 +11,21 @@ import useEmblaCarousel from "embla-carousel-react";
 import { CarouselNavigation } from "@/components/ui/carousel-navigation";
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation";
 
-const MENTORS = [
+const MENTOR_BASE = [
   {
     name: "Anvar Karimov",
-    role: "Mentor",
     imageUrl: "/images/image.png",
     videoType: "youtube" as const,
     videoSrc: "https://youtube.com/shorts/e11wbC04l1o?si=YKV-M_9nv2OETGDH",
   },
   {
     name: "Nilufar Sadikova",
-    role: "Mentor",
     imageUrl: "/images/image.png",
     videoType: "youtube" as const,
     videoSrc: "https://youtube.com/shorts/e11wbC04l1o?si=YKV-M_9nv2OETGDH",
   },
   {
     name: "Shaxzod Bek",
-    role: "Mentor",
     imageUrl: "/images/image.png",
     videoType: "youtube" as const,
     videoSrc: "https://youtube.com/shorts/e11wbC04l1o?si=YKV-M_9nv2OETGDH",
@@ -35,6 +33,9 @@ const MENTORS = [
 ];
 
 export function MentorsSection() {
+  const t = useTranslations("mentors");
+  const tCommon = useTranslations("common");
+  const MENTORS = MENTOR_BASE.map((m) => ({ ...m, role: t("role") }));
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     loop: false,
@@ -48,7 +49,7 @@ export function MentorsSection() {
       <div className="container">
         <div className="mx-auto max-w-[1296px] text-center">
           <MainTitle align="center" color="white" animated>
-            Sun'iy Intellekt Yangi Davr Texnologiyasi Birinchilardan Bo'ling!
+            {t("title")}
           </MainTitle>
         </div>
 
@@ -91,7 +92,7 @@ export function MentorsSection() {
               size="default"
               className="group w-60 h-13.5 rounded-[10px] px-4 py-3.75 flex flex-row items-center"
             >
-              Bepul Boshlash
+              {tCommon("startFree")}
               <ArrowRight className="h-6 w-6 inline ml-1" />
             </MainButton>
           </Link>

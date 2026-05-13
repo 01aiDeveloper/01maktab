@@ -3,6 +3,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
 import {
@@ -53,11 +54,13 @@ const styles: Record<Variant, any> = {
 export function FAQAccordion({
   faqs,
   variant,
-  title = "Ko'p beriladigan savollar",
+  title,
   titleClassName,
   className,
   emptyState,
 }: Props) {
+  const t = useTranslations("faq");
+  const displayTitle = title ?? t("title");
   const s = styles[variant];
   const list = faqs ?? [];
 
@@ -68,9 +71,9 @@ export function FAQAccordion({
           <div className={cn("rounded-3xl p-6 lg:p-8", s.emptyCard, className)}>
             {emptyState ?? (
               <div>
-                <div className="font-semibold">Hozircha savol yo'q</div>
+                <div className="font-semibold">{t("emptyTitle")}</div>
                 <div className={cn("mt-1 text-sm", s.emptyMuted)}>
-                  FAQ savollar kiritilmagan. Keyinroq qayta tekshirib ko'ring.
+                  {t("emptyDescription")}
                 </div>
               </div>
             )}
@@ -96,7 +99,7 @@ export function FAQAccordion({
               titleClassName
             )}
           >
-            {title}
+            {displayTitle}
           </h2>
 
           <Accordion type="single" collapsible className={cn("space-y-4", className)}>

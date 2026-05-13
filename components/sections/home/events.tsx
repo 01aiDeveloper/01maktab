@@ -1,36 +1,22 @@
 "use client"
 
 import useEmblaCarousel from "embla-carousel-react"
+import { useTranslations } from "next-intl"
 import { EventCard } from "@/components/shared/event-card"
 import { MainTitle } from "@/components/ui/main-title"
 import { Subtitle } from "@/components/ui/subtitle"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
 
-const EVENTS = [
-  {
-    title: "ML Contest",
-    category: "ML Contest",
-    // date: "02.12.2025",
-    locked: true,
-    imageUrl: "/images/event.webp",
-    subtitle: "Ro'yxatdan o'tish tez orada ochiladi"
-  },
-  {
-    title: "ML Party",
-    imageUrl: "/images/event.webp",
-    locked: true,
-    subtitle: "Ro'yxatdan o'tish tez orada ochiladi",
-  },
-  {
-    title: "ML Gap",
-    imageUrl: "/images/event.webp",
-    locked: true,
-    subtitle: "Ro'yxatdan o'tish tez orada ochiladi",
-  },
-]
+const EVENT_META = [
+  { title: "ML Contest", category: "ML Contest", locked: true, imageUrl: "/images/event.webp" },
+  { title: "ML Party", locked: true, imageUrl: "/images/event.webp" },
+  { title: "ML Gap", locked: true, imageUrl: "/images/event.webp" },
+] as const
 
 export function EventsSection() {
+  const t = useTranslations("events")
+  const EVENTS = EVENT_META.map((e) => ({ ...e, subtitle: t("comingSoon") }))
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     loop: false,
@@ -49,7 +35,7 @@ export function EventsSection() {
             color="text-dark"
             animated
           >
-            Tadbirlarmiz Kalendari
+            {t("title")}
           </MainTitle>
           <Subtitle
             align="center"
@@ -58,8 +44,7 @@ export function EventsSection() {
             animated
             animationDelay={0.1}
           >
-            ML Community Uzbekistan hamjamiyatidagi tadbirlarda ishtirok eting, soha vakillari bilan tanishing,
-            bilimingizni oshiring va shu sohaga chuqurroq kiring.
+            {t("subtitle")}
           </Subtitle>
         </div>
 

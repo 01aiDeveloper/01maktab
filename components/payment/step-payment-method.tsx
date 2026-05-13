@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Check, Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { StepIndicator } from './step-indicator';
 import { useCheckPromocode } from '@/hooks/use-promocode';
 import api from '@/lib/api';
@@ -31,6 +32,7 @@ export function StepPaymentMethod({
   promocodeId,
   onPromocodeApplied,
 }: StepPaymentMethodProps) {
+  const t = useTranslations('payment');
   const [paymentProvider, setPaymentProvider] = useState<PaymentProvider>('click');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -84,11 +86,11 @@ export function StepPaymentMethod({
       const apiMsg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
       setPromoStatus('error');
       if (status === 404) {
-        setPromoError('Promo kod topilmadi');
+        setPromoError(t('promoNotFound'));
       } else if (apiMsg) {
-        setPromoError(typeof apiMsg === 'string' ? apiMsg : 'Promo kod yaroqsiz');
+        setPromoError(typeof apiMsg === 'string' ? apiMsg : t('promoInvalid'));
       } else {
-        setPromoError('Promo kod yaroqsiz');
+        setPromoError(t('promoInvalid'));
       }
     }
   };
@@ -123,7 +125,7 @@ export function StepPaymentMethod({
       window.location.href = link;
     } catch (err) {
       console.error('Payment error:', err);
-      setError("To'lov amalga oshmadi. Qayta urinib ko'ring.");
+      setError(t('paymentError'));
     } finally {
       setLoading(false);
     }
@@ -134,7 +136,7 @@ export function StepPaymentMethod({
       <StepIndicator currentStep={2} />
 
       <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-6">
-        2-qadam: To&apos;lov usulini tanlang
+        {t('step2Title')}
       </h2>
 
       {/* Price Display — Figma style */}
@@ -142,11 +144,11 @@ export function StepPaymentMethod({
         {hasDiscount ? (
           <>
             <span className="text-gray-400 text-lg line-through decoration-2">
-              {fmt(coursePrice)} so&apos;m
+              {fmt(coursePrice)} {t('currencySom')}
             </span>
             <span className="text-gray-400 text-lg">&rarr;</span>
             <span className="bg-[#E8F5E9] text-[#2E7D32] text-xl sm:text-2xl font-bold px-4 py-1.5 rounded-xl">
-              {fmt(finalPrice)} so&apos;m
+              {fmt(finalPrice)} {t('currencySom')}
             </span>
             {discountPercent && (
               <span className="bg-[#FFF3E0] text-[#E65100] text-sm font-bold px-3 py-1 rounded-lg">
@@ -156,7 +158,7 @@ export function StepPaymentMethod({
           </>
         ) : (
           <div className="flex items-center justify-between w-full bg-gray-50 rounded-2xl px-6 py-4">
-            <span className="text-gray-500 text-base font-medium">Kurs narxi:</span>
+            <span className="text-gray-500 text-base font-medium">{t('coursePrice')}</span>
             <span className="text-gray-900 text-xl sm:text-2xl font-bold">{fmt(coursePrice)} so&apos;m</span>
           </div>
         )}
@@ -164,7 +166,7 @@ export function StepPaymentMethod({
 
       {/* Promo kod */}
       <div className="mb-6">
-        <label className="block text-sm text-gray-500 mb-1.5">Promo kod</label>
+        <label className="block text-sm text-gray-500 mb-1.5">{t('promoLabel')}</label>
         <div className="flex gap-2">
           <input
             type="text"
@@ -176,7 +178,7 @@ export function StepPaymentMethod({
                 setPromoError('');
               }
             }}
-            placeholder="Promo kodni kiriting"
+            placeholder={t('promoPlaceholder')}
             disabled={promoStatus === 'success'}
             className={`flex-1 h-12 px-4 rounded-xl border bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 transition-colors ${
               promoStatus === 'success'
@@ -192,7 +194,7 @@ export function StepPaymentMethod({
               className="h-12 px-5 rounded-xl bg-green-500 text-white font-medium text-sm flex items-center gap-1.5"
             >
               <Check className="w-4 h-4" strokeWidth={3} />
-              Qo&apos;llanildi
+              {t('promoApplied')}
             </button>
           ) : (
             <button
@@ -203,7 +205,7 @@ export function StepPaymentMethod({
               {checkPromocode.isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                "Qo'llash"
+                t('promoApply')
               )}
             </button>
           )}
@@ -214,7 +216,7 @@ export function StepPaymentMethod({
       </div>
 
       {/* Payment Providers */}
-      <h3 className="text-lg font-bold text-gray-900 text-center mb-4">To&apos;lov usuli</h3>
+      <h3 className="text-lg font-bold text-gray-900 text-center mb-4">{t('paymentMethod')}</h3>
       <div className="flex justify-center gap-3 mb-8">
         {(['click', 'payme', 'uzum'] as PaymentProvider[]).map((provider) => (
           <button
@@ -249,7 +251,7 @@ export function StepPaymentMethod({
           disabled={loading}
           className="flex-1 h-12 rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 font-medium text-sm transition-colors disabled:opacity-50"
         >
-          Orqaga
+          {t('back')}
         </button>
         <button
           onClick={handlePay}
@@ -259,10 +261,10 @@ export function StepPaymentMethod({
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Yuklanmoqda...
+              {t('loading')}
             </>
           ) : (
-            "To'lovga o'tish"
+            t('goToPayment')
           )}
         </button>
       </div>

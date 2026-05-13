@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
+import { useTranslations } from "next-intl"
 import { BenefitCard } from "@/components/cards/benefit-card"
 import Image from "next/image"
 
@@ -18,6 +19,7 @@ interface ProgramBenefitsProps {
 }
 
 export function ProgramBenefits({ benefits }: ProgramBenefitsProps) {
+  const t = useTranslations("programBenefits")
   const [activeIndex, setActiveIndex] = useState(
     benefits.findIndex((b) => b.isDefaultActive) ?? 0
   )
@@ -32,7 +34,7 @@ export function ProgramBenefits({ benefits }: ProgramBenefitsProps) {
           transition={{ duration: 0.5 }}
         >
           <h2 className="font-suisse text-3xl lg:text-4xl font-bold text-white mb-12 text-center">
-            Dasturdan keyin sizda bo'ladi:
+            {t("title")}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

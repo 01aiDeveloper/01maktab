@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import api from '@/lib/api';
 import { NoData } from '@/components/ui/no-data';
 import { MyCertificateCard } from '@/components/cards/my-certificate-card';
@@ -11,6 +12,7 @@ import type { ApiResponse, PaginatedResponse, CourseCertificate } from '@/types/
 const PAGE_SIZE = 12;
 
 export function TabCertificates() {
+  const t = useTranslations('profile');
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useQuery<ApiResponse<PaginatedResponse<CourseCertificate>>>({
@@ -41,7 +43,7 @@ export function TabCertificates() {
     return (
       <div className="pb-8">
         <div className="bg-white rounded-[22px] shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
-          <NoData title="Hozircha hech narsa yo'q" description="Kurs o'tab professional sertifikat oling" />
+          <NoData title={t('noCertificatesTitle')} description={t('noCertificatesDescription')} />
           
         </div>
       </div>

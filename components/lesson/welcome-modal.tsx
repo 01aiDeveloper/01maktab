@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { X, Gift } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
 export function WelcomeModal() {
+  const t = useTranslations('lesson');
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -39,11 +41,11 @@ export function WelcomeModal() {
           </div>
 
           <h2 className="text-3xl font-bold text-foreground mb-4">
-            Tabriklaymiz!
+            {t('welcomeTitle')}
           </h2>
 
           <p className="text-muted-foreground text-base mb-8 leading-relaxed">
-            Siz uchun bepul sinov darslarini ko'rish imkoniyati ochildi
+            {t('welcomeDescription')}
           </p>
 
           <Button
@@ -51,7 +53,7 @@ export function WelcomeModal() {
             onClick={handleClose}
             className="w-full rounded-xl bg-blue-600 hover:bg-blue-700"
           >
-            Boshlash
+            {t('welcomeStart')}
           </Button>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 import { ModuleModalAccordion } from '@/components/shared/module-modal-accordion';
 import type { ModuleItem } from '@/components/shared/module-modal-accordion';
@@ -48,6 +49,7 @@ export function LessonModuleModal({
   onLessonSelect,
   isEnrolled = false,
 }: LessonModuleModalProps) {
+  const t = useTranslations('lesson');
   const router = useRouter();
   const currentModule = modules.find((m) =>
     (m.lessons ?? []).some((l) => l.id === currentLessonId)
@@ -72,7 +74,7 @@ export function LessonModuleModal({
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 shrink-0">
-          <h2 className="font-semibold text-gray-900 text-base">Kurs dasturi</h2>
+          <h2 className="font-semibold text-gray-900 text-base">{t('courseProgram')}</h2>
           <button
             onClick={onClose}
             className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-white transition-colors"

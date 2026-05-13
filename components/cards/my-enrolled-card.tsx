@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { getMediaUrl } from '@/lib/utils';
 
 interface MyEnrolledCardProps {
@@ -25,6 +26,7 @@ export function MyEnrolledCard({
   variant = 'light',
   icon,
 }: MyEnrolledCardProps) {
+  const t = useTranslations('cards');
   const imgSrc = getMediaUrl(image) || '/placeholder.svg';
   const iconSrc = icon ? getMediaUrl(icon) : null;
   const isDark = variant === 'dark';
@@ -99,7 +101,7 @@ export function MyEnrolledCard({
               {title}
             </h3>
             <p className="text-sm mt-1 truncate" style={{ color: isDark ? 'rgba(255,255,255,0.5)' : '#6b7280' }}>
-              Mentor: {mentorName}
+              {t('mentor')}: {mentorName}
             </p>
           </div>
           {/* Pause icon */}

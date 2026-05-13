@@ -5,20 +5,14 @@ import { motion } from 'framer-motion';
 import { Send, Instagram, Linkedin, Globe } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/auth-store';
 
-const guestLinks = [
-  { label: 'Darsxona', href: '/classroom' },
-  { label: 'Barcha Kurslar', href: '/catalog' },
-  { label: 'Hamjamiyat', href: '/community' },
-  { label: 'Market', href: '/market' },
-];
-
-const authLinks = [
-  { label: 'Darsxona', href: '/classroom' },
-  { label: 'Barcha Kurslar', href: '/catalog' },
-  { label: 'Hamjamiyat', href: '/community' },
-  { label: 'Market', href: '/market' },
+const linkMeta = [
+  { key: 'classroom' as const, href: '/classroom' },
+  { key: 'catalog' as const, href: '/catalog' },
+  { key: 'community' as const, href: '/community' },
+  { key: 'market' as const, href: '/market' },
 ];
 
 const PRIVACY_HREF = '/Maxfiylik_Siyosati_01AI_UZ.pdf';
@@ -55,9 +49,11 @@ interface SiteFooterProps {
 }
 
 export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
+  const tNav = useTranslations('nav');
+  const tFooter = useTranslations('footer');
   const [hoveredLogoIndex, setHoveredLogoIndex] = useState<number | null>(null);
   const { user } = useAuthStore();
-  const footerLinks = user ? authLinks : guestLinks;
+  const footerLinks = linkMeta.map((l) => ({ label: tNav(l.key), href: l.href }));
   const pathname = usePathname();
   const [currentTab, setCurrentTab] = useState<string | null>(null);
 
@@ -141,7 +137,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
                 rel="noopener noreferrer"
                 className={`${isDark ? 'text-white hover:text-white' : 'text-foreground hover:text-foreground'} transition-colors font-medium text-base tracking-tight`}
               >
-                Maxfiylik siyosati
+                {tFooter('privacy')}
               </Link>
               <div className="flex items-center gap-3">
                 {socialLinks.map((social, index) => (
@@ -231,7 +227,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
                     className={`${isDark ? 'text-white/70 hover:text-white' : 'text-muted-foreground hover:text-foreground'} transition-colors group`}
                     style={linkStyle}
                   >
-                    Maxfiylik siyosati
+                    {tFooter('privacy')}
                   </Link>
                 </motion.div>
               </motion.div>

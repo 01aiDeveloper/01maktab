@@ -3,8 +3,10 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Check, ArrowDown } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 export function RefundSection() {
+  const t = useTranslations("refund")
   return (
     <section className="w-full py-12 lg:py-16 bg-black">
       <div className="container mx-auto px-4">
@@ -16,7 +18,7 @@ export function RefundSection() {
           transition={{ duration: 0.5 }}
           className="font-suisse text-3xl lg:text-4xl font-bold text-white text-center mb-8 lg:mb-10"
         >
-          Investitsiyangiz 100% qaytariladi
+          {t("title")}
         </motion.h2>
 
         {/* Mobile Layout */}
@@ -50,20 +52,20 @@ export function RefundSection() {
             className="bg-[#1a1a1d] rounded-3xl p-6"
           >
             <h3 className="text-white font-semibold text-lg mb-4">
-              Qanday ishlaydi:
+              {t("howItWorks")}
             </h3>
             
             {/* Centered Flow */}
             <div className="flex flex-col items-center text-center gap-3">
               <p className="text-white text-sm">
-                Dasturni yakunlang
+                {t("completeProgram")}
               </p>
               
               <ArrowDown className="w-5 h-5 text-white/60" />
               
               <div className="inline-flex items-center bg-white rounded-full px-4 py-2">
                 <span className="text-black text-sm font-medium whitespace-nowrap">
-                  100% gacha qaytarish oling
+                  {t("get100")}
                 </span>
               </div>
             </div>
@@ -78,7 +80,7 @@ export function RefundSection() {
             className="bg-[#1a1a1d] rounded-3xl p-6"
           >
             <p className="text-white/80 text-sm leading-relaxed">
-              Dasturni muvaffaqiyatli tugatganingizdan so'ng, hamkor kompaniyalardan birida stajirovka o'tash imkoniyatiga ega bo'lasiz. Siz real loyihalar ustida ishlaysiz va professional tajriba orttrasiz.
+              {t("description")}
             </p>
           </motion.div>
 
@@ -92,19 +94,19 @@ export function RefundSection() {
           >
             <div className="flex flex-col gap-3">
               <h4 className="text-black font-semibold text-base">
-                Shartlar:
+                {t("conditions")}
               </h4>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-green-600 shrink-0" />
                   <span className="text-gray-900 text-sm">
-                    Barcha darslarni tugatish
+                    {t("condition1")}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-green-600 shrink-0" />
                   <span className="text-gray-900 text-sm">
-                    Barcha loyihalarni topshirish
+                    {t("condition2")}
                   </span>
                 </div>
               </div>
@@ -147,19 +149,19 @@ export function RefundSection() {
                 className="bg-[#1a1a1d] rounded-3xl p-8"
               >
                 <h3 className="text-white font-semibold text-xl mb-6">
-                  Qanday ishlaydi:
+                  {t("howItWorks")}
                 </h3>
                 
                 <div className="flex items-center gap-4">
                   <span className="text-white text-base">
-                    Dasturni yakunlang
+                    {t("completeProgram")}
                   </span>
                   
                   <ArrowDown className="w-5 h-5 text-white/60 rotate-[-90deg]" />
                   
                   <div className="inline-flex items-center bg-white rounded-full px-5 py-2.5">
                     <span className="text-black text-base font-medium whitespace-nowrap">
-                      100% gacha qaytarish oling
+                      {t("get100")}
                     </span>
                   </div>
                 </div>
@@ -174,7 +176,7 @@ export function RefundSection() {
                 className="bg-[#1a1a1d] rounded-3xl p-8"
               >
                 <p className="text-white/80 text-base leading-relaxed">
-                  Dasturni muvaffaqiyatli tugatganingizdan so'ng, hamkor kompaniyalardan birida stajirovka o'tash imkoniyatiga ega bo'lasiz. Siz real loyihalar ustida ishlaysiz va professional tajriba orttrasiz.
+                  {t("description")}
                 </p>
               </motion.div>
             </div>
@@ -190,19 +192,19 @@ export function RefundSection() {
           >
             <div className="flex items-center gap-8">
               <h4 className="text-black font-semibold text-lg">
-                Shartlar:
+                {t("conditions")}
               </h4>
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-green-600" />
                   <span className="text-gray-900 text-base">
-                    Barcha darslarni tugatish
+                    {t("condition1")}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-green-600" />
                   <span className="text-gray-900 text-base">
-                    Barcha loyihalarni topshirish
+                    {t("condition2")}
                   </span>
                 </div>
               </div>

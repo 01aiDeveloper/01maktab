@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import api from '@/lib/api';
 import { NoData } from '@/components/ui/no-data';
 import { CustomPagination } from '@/components/ui/custom-pagination';
@@ -9,13 +10,13 @@ import type { ApiResponse, PaginatedResponse, Payment } from '@/types/api.types'
 
 const PAGE_SIZE = 10;
 
-const STATUS_MAP: Record<string, { label: string; className: string }> = {
-  PAID: { label: 'To\'langan', className: 'bg-[#1EBB4A] text-white' },
-  PENDING: { label: 'Kutilmoqda', className: 'bg-[#E6E6E7] text-[#18181A]' },
-  FAILED: { label: 'Xatolik', className: 'bg-red-100 text-red-600' },
-};
-
 export function TabPayments() {
+  const t = useTranslations('profile');
+  const STATUS_MAP: Record<string, { label: string; className: string }> = {
+    PAID: { label: t('statusPaid'), className: 'bg-[#1EBB4A] text-white' },
+    PENDING: { label: t('statusPending'), className: 'bg-[#E6E6E7] text-[#18181A]' },
+    FAILED: { label: t('statusFailed'), className: 'bg-red-100 text-red-600' },
+  };
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useQuery<ApiResponse<PaginatedResponse<Payment>>>({
@@ -46,7 +47,7 @@ export function TabPayments() {
     return (
       <div className="pb-8">
         <div className="bg-white rounded-[22px] shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
-          <NoData title="Hozircha hech narsa yo'q" description="To'langan kurslaringiz shu yerda ko'rinadi" />
+          <NoData title={t('noPaymentsTitle')} description={t('noPaymentsDescription')} />
         </div>
       </div>
     );
@@ -77,7 +78,7 @@ export function TabPayments() {
                   className="font-suisse text-[24px] leading-[25px] tracking-[-0.05em] text-black"
                   style={{ fontWeight: 450 }}
                 >
-                  {item.amount.toLocaleString('uz-UZ')} so'm
+                  {item.amount.toLocaleString('uz-UZ')} {t('currencySom')}
                 </span>
               </div>
 

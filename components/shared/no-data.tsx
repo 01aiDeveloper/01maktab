@@ -1,6 +1,9 @@
+'use client'
+
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface NoDataProps {
   message?: string
@@ -11,12 +14,15 @@ interface NoDataProps {
 }
 
 export function NoData({
-  message = "Ma'lumot topilmadi",
-  description = "Bu yerda hozircha hech qanday ma'lumot yo'q",
+  message,
+  description,
   buttonText,
   buttonLink,
   isDark = false
 }: NoDataProps) {
+  const t = useTranslations('noData')
+  const finalMessage = message ?? t('messageDefault')
+  const finalDescription = description ?? t('descriptionDefault')
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4">
       <div className="relative w-48 h-48 mb-6">
@@ -28,10 +34,10 @@ export function NoData({
         />
       </div>
       <h3 className={`text-lg font-semibold mb-2 ${isDark ? "text-gray-200" : "text-gray-700"}`}>
-        {message}
+        {finalMessage}
       </h3>
       <p className={`text-sm text-center max-w-md mb-6 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-        {description}
+        {finalDescription}
       </p>
       {buttonText && buttonLink && (
         <Link

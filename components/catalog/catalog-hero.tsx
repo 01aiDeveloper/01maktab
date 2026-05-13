@@ -2,9 +2,12 @@
 
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useSmartBack } from '@/hooks/use-smart-back';
 
 export function CatalogHero() {
+  const t = useTranslations('catalog');
+  const tCommon = useTranslations('common');
   const goBack = useSmartBack('/');
 
   return (
@@ -18,9 +21,9 @@ export function CatalogHero() {
             className="inline-flex items-center gap-1.5 sm:gap-2 text-white/50 hover:text-white transition-colors text-xs sm:text-sm w-fit cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span>Orqaga</span>
+            <span>{tCommon('backShort')}</span>
           </button>
-          <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold text-white">Barcha Kurslar</h1>
+          <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold text-white">{t('title')}</h1>
         </div>
 
         {/* Right: Illustration Card */}

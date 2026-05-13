@@ -1,48 +1,35 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useTranslations } from "next-intl"
 import { JourneyCircle } from "@/components/ui/journey-circle"
 import { BookOpen, Briefcase, Sparkles } from "lucide-react"
 
-const journeyData = [
-  {
-    id: 1,
-    icon: <BookOpen className="w-full h-full" />,
-    title: "1-2 oy: Intensiv bosqich",
-    subtitle: "Asoslar va amaliy ko'nikmalar",
-    bullets: [
-      "Haftada 3 marta jonli darslar",
-      "Python, SQL, Data Analysis asoslari",
-      "Birinchi loyihalar",
-    ],
-  },
-  {
-    id: 2,
-    icon: <Briefcase className="w-full h-full" />,
-    title: "3-5 oy: Chuqur o'rganish",
-    subtitle: "Professional daraja",
-    bullets: [
-      "Haftada 2 marta jonli darslar",
-      "Har hafta Support hours",
-      "Hamkorlar ofislarida master-klasslar",
-      "Real loyihalar ustida ishlash",
-      "Portfolio yaratish",
-    ],
-  },
-  {
-    id: 3,
-    icon: <Sparkles className="w-full h-full" />,
-    title: "Qo'shimcha imkoniyatlar",
-    subtitle: "",
-    bullets: [
-      "Support teacher yordami",
-      "Barcha darslar yozuvlari",
-      "MLC tadbirlari",
-    ],
-  },
-]
-
 export function JourneySection() {
+  const t = useTranslations("journey")
+  const journeyData = [
+    {
+      id: 1,
+      icon: <BookOpen className="w-full h-full" />,
+      title: t("phase1Title"),
+      subtitle: t("phase1Subtitle"),
+      bullets: [t("phase1Bullet1"), t("phase1Bullet2"), t("phase1Bullet3")],
+    },
+    {
+      id: 2,
+      icon: <Briefcase className="w-full h-full" />,
+      title: t("phase2Title"),
+      subtitle: t("phase2Subtitle"),
+      bullets: [t("phase2Bullet1"), t("phase2Bullet2"), t("phase2Bullet3"), t("phase2Bullet4"), t("phase2Bullet5")],
+    },
+    {
+      id: 3,
+      icon: <Sparkles className="w-full h-full" />,
+      title: t("phase3Title"),
+      subtitle: "",
+      bullets: [t("phase3Bullet1"), t("phase3Bullet2"), t("phase3Bullet3")],
+    },
+  ]
   return (
     <section className="w-full py-12 lg:py-16">
       <div className="container mx-auto px-4">
@@ -56,11 +43,10 @@ export function JourneySection() {
           {/* Header */}
           <div className="text-center mb-12 lg:mb-16">
             <h2 className="font-suisse text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-4">
-              5 oylik sayohat
+              {t("title")}
             </h2>
             <p className="text-gray-400 text-sm lg:text-base max-w-2xl mx-auto leading-relaxed">
-              5 oylik intensiv dastur: jonli darslar, stajirovka, xalqaro
-              sertifikatlar va kafolatlangan natija. Professional karyerangizni bugun boshlang.
+              {t("subtitle")}
             </p>
           </div>
 

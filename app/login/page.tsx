@@ -1,11 +1,13 @@
 "use client"
 
 import React, { useState, useCallback } from "react"
+import { useTranslations } from "next-intl"
 import api from "@/lib/api"
 import { useAuthStore } from "@/store/auth-store"
 import TelegramLoginButton from "@/components/auth/telegram-login-button"
 
 function LoginContent() {
+  const t = useTranslations("login")
   const { setTokens, setUser } = useAuthStore()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -38,7 +40,7 @@ function LoginContent() {
 
       window.location.href = "/classroom"
     } catch (err: any) {
-      setError(err.response?.data?.message || "Tizimga kirishda xatolik yuz berdi")
+      setError(err.response?.data?.message || t("errorDefault"))
       setIsLoading(false)
     }
   }, [setTokens, setUser])
@@ -62,15 +64,15 @@ function LoginContent() {
       </div>
 
       <div className="flex flex-col items-center text-center max-w-85 w-full">
-        <h1 className="text-[28px] font-bold text-[#18181A] mb-3">Tizimga kirish</h1>
+        <h1 className="text-[28px] font-bold text-[#18181A] mb-3">{t("title")}</h1>
         <p className="text-[15px] text-[#18181A]/60 mb-8 leading-snug">
-          Telegram orqali tizimga kiring
+          {t("subtitle")}
         </p>
 
         <TelegramLoginButton onAuth={handleTelegramAuth} />
 
         {isLoading && (
-          <p className="text-sm text-[#18181A]/40 mt-4">Tekshirilmoqda...</p>
+          <p className="text-sm text-[#18181A]/40 mt-4">{t("loading")}</p>
         )}
 
         {error && (

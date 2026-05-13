@@ -4,36 +4,43 @@ import { useState } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, Settings, User, LogOut, Menu, X } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useAuthStore } from "@/store/auth-store"
 import { useMe } from "@/hooks/use-me"
-
-const defaultNavLinks = [
-  { label: "Darsxona", href: "/classroom" },
-  { label: "Barcha Kurslar", href: "/catalog" },
-  { label: "Hamjamiyat", href: "/community" },
-  { label: "Market", href: "/market" },
-]
-
-const guestMainNavLinks = [
-  { label: "Bosh Sahifa", href: "/" },
-  { label: "Skillar", href: "/catalog?tab=skills" },
-  { label: "Kurslar", href: "/catalog?tab=courses" },
-  { label: "Kasblar", href: "/catalog?tab=professions" },
-]
+import { LanguageSwitcher } from "@/components/language-switcher"
 
 interface CourseHeaderProps {
   variant?: 'light' | 'dark'
 }
 
 export function CourseHeader({ variant = 'dark' }: CourseHeaderProps) {
+  const tNav = useTranslations("nav")
+  const tCourse = useTranslations("courseHeader")
+  const tUser = useTranslations("userMenu")
+  const tCommon = useTranslations("common")
   const [isOpen, setIsOpen] = useState(false)
   const { user, logout } = useAuthStore()
   useMe()
 
   const isDark = variant === 'dark'
+
+  const defaultNavLinks = [
+    { label: tNav("classroom"), href: "/classroom" },
+    { label: tNav("catalog"), href: "/catalog" },
+    { label: tNav("community"), href: "/community" },
+    { label: tNav("market"), href: "/market" },
+  ]
+
+  const guestMainNavLinks = [
+    { label: tNav("home"), href: "/" },
+    { label: tCourse("skills"), href: "/catalog?tab=skills" },
+    { label: tCourse("courses"), href: "/catalog?tab=courses" },
+    { label: tCourse("professions"), href: "/catalog?tab=professions" },
+  ]
+
   const activeNavLinks = user ? defaultNavLinks : guestMainNavLinks
 
   return (
@@ -120,13 +127,13 @@ export function CourseHeader({ variant = 'dark' }: CourseHeaderProps) {
                       <DropdownMenuItem asChild className="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer">
                         <Link href="/profile">
                           <Settings className="h-4 w-4 text-gray-500" />
-                          <span>Sozlash</span>
+                          <span>{tCourse("settings")}</span>
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild className="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer">
                         <Link href="/profile">
                           <User className="h-4 w-4 text-gray-500" />
-                          <span>Profil</span>
+                          <span>{tUser("profile")}</span>
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem
@@ -137,7 +144,7 @@ export function CourseHeader({ variant = 'dark' }: CourseHeaderProps) {
                         className="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer"
                       >
                         <LogOut className="h-4 w-4 text-gray-500" />
-                        <span>Chiqish</span>
+                        <span>{tUser("logout")}</span>
                       </DropdownMenuItem>
                     </motion.div>
                   </DropdownMenuContent>
@@ -156,10 +163,11 @@ export function CourseHeader({ variant = 'dark' }: CourseHeaderProps) {
                   background: 'linear-gradient(135deg, #2A51E6 0%, #4469F6 100%)'
                 } : undefined}
               >
-                Kirish
+                {tCommon("login")}
               </Button>
             </Link>
           )}
+          <LanguageSwitcher isDark={!isDark} />
         </div>
       </div>
     </motion.header>

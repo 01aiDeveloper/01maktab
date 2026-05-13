@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ArrowRight, Users, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { MainButton } from '@/components/ui/main-button';
 import { useAuthStore } from '@/store/auth-store';
@@ -25,7 +26,6 @@ function formatPrice(price: number) {
 
 import type { ApiResponse, ApiPaymentResponse } from '@/types/api';
 
-/** Static discount badge image */
 function DiscountBadge() {
   return (
     <Image
@@ -45,6 +45,7 @@ export function PresaleSection({
   promocodeId,
   onCabinetClick,
 }: PresaleSectionProps) {
+  const t = useTranslations('presale');
   const router = useRouter();
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
@@ -52,7 +53,6 @@ export function PresaleSection({
   const { data: presale, isLoading: presaleLoading } = usePresale(courseId);
   const joinWaitlist = useJoinWaitlist();
 
-  // Don't render if no presale data or presale is not active
   if (presaleLoading || !presale || !presale.isActive) return null;
 
   const { originalPrice, presalePrice, discountPercent, enrolledCount } = presale;
@@ -116,29 +116,25 @@ export function PresaleSection({
               'linear-gradient(93.13deg, #CAE25B -36.46%, #00DB30 102.2%)',
           }}
         >
-          {/* Content */}
           <div className="relative z-10 space-y-3 flex flex-col items-center sm:items-start">
-            {/* Spots badge */}
             <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 text-black text-sm font-medium">
               <Users className="w-4 h-4" />
-              <span>{enrolledCount} kishi allaqachon yozilgan</span>
+              <span>{t('alreadyEnrolled', { count: enrolledCount })}</span>
             </div>
 
-            {/* Price row */}
             <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-4 flex-wrap">
               <span className="text-white line-through decoration-red-500 decoration-2 text-lg lg:text-2xl font-bold italic">
-                {formatPrice(originalPrice)} so&apos;m
+                {formatPrice(originalPrice)} {t('currencySom')}
               </span>
               <span className="text-white text-2xl sm:hidden">&darr;</span>
               <span className="text-white hidden sm:inline text-4xl">
                 &rarr;
               </span>
               <span className="bg-[#FFE500] text-black font-suisse text-3xl lg:text-5xl font-bold tracking-tight rounded-full px-6 py-1 lg:px-8 lg:py-2">
-                {formatPrice(presalePrice)} so&apos;m
+                {formatPrice(presalePrice)} {t('currencySom')}
               </span>
             </div>
 
-            {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full sm:w-auto">
               {isPurchased ? (
                 <>
@@ -148,7 +144,7 @@ export function PresaleSection({
                     className="rounded-xl flex flex-row items-center text-sm opacity-50 cursor-not-allowed"
                     disabled
                   >
-                    Sotib olingan
+                    {t('bought')}
                   </MainButton>
                   <MainButton
                     variant="outline-white"
@@ -156,7 +152,7 @@ export function PresaleSection({
                     className="rounded-xl text-sm border-white hover:bg-white hover:text-green-600"
                     onClick={onCabinetClick}
                   >
-                    Kabinetga o&apos;tish
+                    {t('goToCabinet')}
                     <ArrowRight className="w-4 h-4 inline ml-1" />
                   </MainButton>
                 </>
@@ -170,8 +166,8 @@ export function PresaleSection({
                     disabled={loading}
                   >
                     {loading
-                      ? 'Yuklanmoqda...'
-                      : `Oldindan yozilish – ${formatPrice(presalePrice)} so'm`}
+                      ? t('loading')
+                      : t('preEnrollPrice', { price: formatPrice(presalePrice) })}
                     {!loading && (
                       <ArrowRight className="w-4 h-4 inline ml-1" />
                     )}
@@ -186,7 +182,7 @@ export function PresaleSection({
                     {joinWaitlist.isPending && (
                       <Loader2 className="w-4 h-4 animate-spin inline mr-1" />
                     )}
-                    Kutish ro&apos;yxatiga kirish
+                    {t('joinWaitlist')}
                     <ArrowRight className="w-4 h-4 inline ml-1" />
                   </MainButton>
                 </>
@@ -194,7 +190,6 @@ export function PresaleSection({
             </div>
           </div>
 
-          {/* Dynamic discount badge — bottom-right corner */}
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:right-4 sm:bottom-4 lg:right-6 lg:bottom-6 z-10">
             <DiscountBadge />
           </div>

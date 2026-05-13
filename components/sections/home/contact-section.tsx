@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { MainTitle } from "@/components/ui/main-title"
 import { MainButton } from "@/components/ui/main-button"
 import { useState } from "react"
@@ -17,6 +18,8 @@ const itemVariants = {
 }
 
 export function ContactSection() {
+  const t = useTranslations("contact")
+  const tCommon = useTranslations("common")
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [sent, setSent] = useState(false)
@@ -47,19 +50,19 @@ export function ContactSection() {
             animated
             animationDelay={0.2}
           >
-            Savollaringiz bo'yicha bog'lanamiz
+            {t("title")}
           </MainTitle>
 
           <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:items-end">
               {/* Name Input */}
               <div className="space-y-2 flex-1">
-                <label className="text-sm font-medium text-gray-700">Ismingiz</label>
+                <label className="text-sm font-medium text-gray-700">{t("name")}</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Ism Familiya"
+                  placeholder={t("namePlaceholder")}
                   className="w-full h-12 border border-gray-200 rounded-xl px-4 focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue outline-none transition-all bg-white"
                   required
                 />
@@ -67,12 +70,12 @@ export function ContactSection() {
 
               {/* Phone Input */}
               <div className="space-y-2 flex-1">
-                <label className="text-sm font-medium text-gray-700">Telefoningiz</label>
+                <label className="text-sm font-medium text-gray-700">{t("phone")}</label>
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="998 XX XXX XX XX"
+                  placeholder={t("phonePlaceholder")}
                   className="w-full h-12 border border-gray-200 rounded-xl px-4 focus:ring-2 focus:ring-primary-blue/20 focus:border-primary-blue outline-none transition-all bg-white"
                   required
                 />
@@ -87,7 +90,7 @@ export function ContactSection() {
                 iconPosition="right"
                 className="w-full md:w-61.5 h-12 rounded-[10px] px-4 py-3.75 md:shrink-0"
               >
-                {sent ? "Yuborildi ✓" : "Yuborish"}
+                {sent ? tCommon("sent") : tCommon("send")}
               </MainButton>
             </div>
           </form>

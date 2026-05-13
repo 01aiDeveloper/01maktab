@@ -3,12 +3,14 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, User, LogOut, Menu, X, Info, Trophy, Award, CreditCard, Monitor } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { useAuthStore } from "@/store/auth-store"
 import { useMe } from "@/hooks/use-me"
+import { LanguageSwitcher } from "@/components/language-switcher"
 
 function VibecoinBadge({ amount, isDark }: { amount: number; isDark: boolean }) {
   const formatted = new Intl.NumberFormat("ru-RU").format(amount)
@@ -32,18 +34,22 @@ function VibecoinBadge({ amount, isDark }: { amount: number; isDark: boolean }) 
   )
 }
 
-const navLinks = [
-  { label: "Darsxona", href: "/classroom" },
-  { label: "Barcha Kurslar", href: "/catalog" },
-  { label: "Hamjamiyat", href: "/community" },
-  { label: "Market", href: "/market" },
-]
-
 interface SiteHeaderProps {
   variant?: 'light' | 'dark'
 }
 
 export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
+  const tNav = useTranslations("nav")
+  const tUser = useTranslations("userMenu")
+  const tCommon = useTranslations("common")
+
+  const navLinks = [
+    { label: tNav("classroom"), href: "/classroom" },
+    { label: tNav("catalog"), href: "/catalog" },
+    { label: tNav("community"), href: "/community" },
+    { label: tNav("market"), href: "/market" },
+  ]
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false)
   const { user, logout } = useAuthStore()
@@ -74,7 +80,7 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
             ) : (
               <Menu className={`h-5 w-5 ${!isDark ? 'text-white' : 'text-[#18181A]'}`} />
             )}
-            <span className={`text-xs font-medium ${!isDark ? 'text-white' : 'text-[#18181A]'}`}>Menu</span>
+            <span className={`text-xs font-medium ${!isDark ? 'text-white' : 'text-[#18181A]'}`}>{tNav("menu")}</span>
           </button>
 
           {/* Mobile Menu Dropdown */}
@@ -125,115 +131,118 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
           </nav>
 
           {/* Auth Section - Right */}
-          {user ? (
-            <div className="flex items-center gap-2 relative">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                className={`flex items-center gap-2 rounded-xl pl-1 pr-3 py-1 cursor-pointer ${
-                  isDark ? 'bg-white/10' : 'bg-white'
-                }`}
-              >
-                <Avatar className="h-7 w-7">
-                  <AvatarImage src={user?.photo || "/diverse-user-avatars.png"} />
-                  <AvatarFallback className="bg-gray-200 text-xs">
-                    {user?.firstname?.[0]?.toUpperCase() || "U"}
-                    {user?.lastname?.[0]?.toUpperCase() || ""}
-                  </AvatarFallback>
-                </Avatar>
-                <span className={`hidden lg:block text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {user?.firstname} {user?.lastname}
-                </span>
-                <motion.div animate={{ rotate: isUserDropdownOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                  <ChevronDown className={`h-4 w-4 ${isDark ? 'text-white/70' : 'text-gray-600'}`} />
-                </motion.div>
-              </motion.button>
-              <AnimatePresence>
-                {isUserDropdownOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl border border-gray-200 overflow-hidden z-50 shadow-lg"
-                  >
-                    <Link
-                      href="/profile"
-                      onClick={() => setIsUserDropdownOpen(false)}
-                      className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
-                    >
-                      <User className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm text-gray-900">Profil</span>
-                    </Link>
-                    <Link
-                      href="/profile?tab=info"
-                      onClick={() => setIsUserDropdownOpen(false)}
-                      className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
-                    >
-                      <Info className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm text-gray-900">Ma&apos;lumotlarim</span>
-                    </Link>
-                    <Link
-                      href="/profile?tab=achievements"
-                      onClick={() => setIsUserDropdownOpen(false)}
-                      className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
-                    >
-                      <Trophy className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm text-gray-900">Yutuqlarim</span>
-                    </Link>
-                    <Link
-                      href="/profile?tab=certificates"
-                      onClick={() => setIsUserDropdownOpen(false)}
-                      className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
-                    >
-                      <Award className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm text-gray-900">Sertifikatlarim</span>
-                    </Link>
-                    <Link
-                      href="/profile?tab=payments"
-                      onClick={() => setIsUserDropdownOpen(false)}
-                      className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
-                    >
-                      <CreditCard className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm text-gray-900">To&apos;lovlarim</span>
-                    </Link>
-                    <div
-                      className="flex items-center gap-3 py-2.5 px-3 border-b border-gray-100 cursor-default opacity-50"
-                    >
-                      <Monitor className="h-4 w-4 text-gray-400" />
-                      <span className="text-sm text-gray-400">Qurilmarim –</span>
-                    </div>
-                    <button
-                      onClick={() => {
-                        logout()
-                        window.location.href = "/"
-                      }}
-                      className="w-full flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 text-left"
-                    >
-                      <LogOut className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm text-gray-900">Chiqish</span>
-                    </button>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher isDark={!isDark} />
+            {user ? (
+              <div className="flex items-center gap-2 relative">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className={`flex items-center gap-2 rounded-xl pl-1 pr-3 py-1 cursor-pointer ${
+                    isDark ? 'bg-white/10' : 'bg-white'
+                  }`}
+                >
+                  <Avatar className="h-7 w-7">
+                    <AvatarImage src={user?.photo || "/diverse-user-avatars.png"} />
+                    <AvatarFallback className="bg-gray-200 text-xs">
+                      {user?.firstname?.[0]?.toUpperCase() || "U"}
+                      {user?.lastname?.[0]?.toUpperCase() || ""}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className={`hidden lg:block text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {user?.firstname} {user?.lastname}
+                  </span>
+                  <motion.div animate={{ rotate: isUserDropdownOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                    <ChevronDown className={`h-4 w-4 ${isDark ? 'text-white/70' : 'text-gray-600'}`} />
                   </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ) : (
-            <Link href="/login" className="hidden lg:block">
-              <Button
-                className={`rounded-full px-6 font-medium border-0 ${
-                  isDark
-                    ? 'bg-white text-black hover:bg-gray-100'
-                    : 'text-white hover:opacity-90 transition-opacity'
-                }`}
-                style={!isDark ? {
-                  background: 'linear-gradient(135deg, #2A51E6 0%, #4469F6 100%)'
-                } : undefined}
-              >
-                Kirish
-              </Button>
-            </Link>
-          )}
+                </motion.button>
+                <AnimatePresence>
+                  {isUserDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl border border-gray-200 overflow-hidden z-50 shadow-lg"
+                    >
+                      <Link
+                        href="/profile"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                        className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
+                      >
+                        <User className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm text-gray-900">{tUser("profile")}</span>
+                      </Link>
+                      <Link
+                        href="/profile?tab=info"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                        className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
+                      >
+                        <Info className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm text-gray-900">{tUser("info")}</span>
+                      </Link>
+                      <Link
+                        href="/profile?tab=achievements"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                        className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
+                      >
+                        <Trophy className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm text-gray-900">{tUser("achievements")}</span>
+                      </Link>
+                      <Link
+                        href="/profile?tab=certificates"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                        className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
+                      >
+                        <Award className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm text-gray-900">{tUser("certificates")}</span>
+                      </Link>
+                      <Link
+                        href="/profile?tab=payments"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                        className="flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 border-b border-gray-100"
+                      >
+                        <CreditCard className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm text-gray-900">{tUser("payments")}</span>
+                      </Link>
+                      <div
+                        className="flex items-center gap-3 py-2.5 px-3 border-b border-gray-100 cursor-default opacity-50"
+                      >
+                        <Monitor className="h-4 w-4 text-gray-400" />
+                        <span className="text-sm text-gray-400">{tUser("devices")} –</span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          logout()
+                          window.location.href = "/"
+                        }}
+                        className="w-full flex items-center gap-3 py-2.5 px-3 hover:bg-gray-100 text-left"
+                      >
+                        <LogOut className="h-4 w-4 text-gray-500" />
+                        <span className="text-sm text-gray-900">{tUser("logout")}</span>
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link href="/login" className="hidden lg:block">
+                <Button
+                  className={`rounded-full px-6 font-medium border-0 ${
+                    isDark
+                      ? 'bg-white text-black hover:bg-gray-100'
+                      : 'text-white hover:opacity-90 transition-opacity'
+                  }`}
+                  style={!isDark ? {
+                    background: 'linear-gradient(135deg, #2A51E6 0%, #4469F6 100%)'
+                  } : undefined}
+                >
+                  {tCommon("login")}
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </motion.header>

@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Users, BookCheck, Award, Briefcase, Loader2, Flame } from 'lucide-react';
 import api from '@/lib/api';
@@ -69,116 +70,94 @@ function toModuleItem(m: ApiCourseModule): ModuleItem {
 
 // ─── Static data (o'zgarmaydigan sectionlar uchun) ────────────────────────────
 
-const staticFeatures = [
-  { id: 1, icon: Calendar, label: '5 Oy' },
-  { id: 2, icon: Award, label: '100% pulni qaytarish' },
-  { id: 3, icon: BookCheck, label: '2 Sertifikat' },
-  { id: 4, icon: Briefcase, label: 'Stajirovka' },
-];
-
-const staticBenefits = [
-  {
-    id: 1,
-    title: 'Professional ko\'nikmalar',
-    bullets: ['Python, SQL, ML, Vizualizatsiya', '8+ loyiha portfolioda'],
-    icon: <Image src="/icons/professions/1.webp" alt="Certificate" width={80} height={80} className="opacity-40 grayscale" />,
-    isDefaultActive: true,
-  },
-  {
-    id: 2,
-    title: 'Xalqaro sertifikatlar',
-    bullets: ['IBM sertifikati (xalqaro)', 'AICA sertifikati (akkreditatsiya qilingan)'],
-    icon: <Image src="/icons/professions/2.webp" alt="Certificate" width={80} height={80} className="opacity-40 grayscale" />,
-  },
-  {
-    id: 3,
-    title: 'Amaliy tajriba',
-    bullets: ['Hamkor kompaniyalarda stajirovka', 'Real loyihalar ustida ishlash'],
-    icon: <Image src="/icons/professions/3.webp" alt="Briefcase" width={80} height={80} className="opacity-40 grayscale" />,
-  },
-  {
-    id: 4,
-    title: 'Karyera tayyorgarligi',
-    bullets: ['Professional rezyume', 'Mock interview va tayyorgarlik'],
-    icon: <Image src="/icons/professions/4.png" alt="Career" width={80} height={80} className="opacity-40 grayscale" />,
-  },
-  {
-    id: 5,
-    title: 'Hamjamiyat',
-    bullets: ['MLC hamjamiyatiga kirish', 'Muntazam tadbirlar va networking'],
-    icon: <Image src="/icons/professions/5.png" alt="Community" width={80} height={80} className="opacity-40 grayscale" />,
-  },
-  {
-    id: 6,
-    title: '100% pulni qaytarish',
-    bullets: ['Dasturni tugatgandan keyin', 'Investitsiyalarni to\'liq qaytarish'],
-    icon: <Image src="/icons/professions/6.png" alt="Money back" width={80} height={80} className="opacity-40 grayscale" />,
-  },
-];
-
-const staticCertificates = [
-  {
-    id: 1,
-    title: 'Google Professional Certificate',
-    badgeText: 'Xalqaro sertifikat',
-    badgeColor: 'bg-[#5d7bf5] text-white',
-    bullets: ['Butun dunyoda tan olinadi', 'LinkedIn ga qo\'shing', 'Xalqaro kompaniyalar uchun'],
-    image: '/images/professions/certificate.png',
-  },
-  {
-    id: 2,
-    title: 'MLC Sertifikati',
-    badgeText: 'AICA akkreditatsiyasi',
-    badgeColor: 'bg-[#5d7bf5] text-white',
-    bullets: ['Markaziy Osiyo Sun\'iy Intellekt Assotsiatsiyasi', 'Davlat va xususiy tashkilotlar tomonidan tan olinadi', 'Rasmiy hujjat'],
-    image: '/images/professions/certificate.png',
-  },
-];
-
-const staticCertificatesFootnote =
-  'Kasblar guruhi uchun xalqaro sertifikat yo\'nalishga qarab Google, Microsoft yoki boshqa yetakchi kompaniyalardan bo\'lishi mumkin';
-
-const staticFaqs = [
-  {
-    id: '1',
-    question: 'Kurs yangi boshlovchilar uchun mosmi?',
-    answer:
-      'Dastur yangi boshlovchilar uchun mo\'ljallangan: avval asoslarni o\'rganasiz va bosqichma-bosqich murakkab mavzularga o\'tasiz. Har bir modul amaliyot bilan tugaydi, siz materialni nafaqat tushunasiz, balki amalda qo\'llay olasiz. Boshlash uchun kompyuter bilan ishlashning asosiy ko\'nikmalari yetarli. Agar tajribangiz bo\'lmasa — kurs boshlanishidan oldin kompyuter savodxonligini bepul o\'rgatamiz.',
-  },
-  {
-    id: '2',
-    question: 'Nega aynan 01AI ni tanlashim kerak?',
-    answer: '01AI real loyihalar va mentorlar yordami bilan noyob o\'qitish metodologiyasini taklif etadi.',
-  },
-  {
-    id: '3',
-    question: 'Mentorlaringiz kimlar?',
-    answer: 'Bizning mentorlar — ko\'p yillik tajribaga ega top IT-kompaniyalardan amaliyotchi mutaxassislar.',
-  },
-  {
-    id: '4',
-    question: 'Nega o\'qish shuncha uzoq davom etadi?',
-    answer: 'Sifatli ta\'lim materialni o\'zlashtirish va real loyihalarda amaliyot uchun vaqt talab qiladi.',
-  },
-  {
-    id: '5',
-    question: 'O\'qish davomida pul ishlashni boshlash mumkinmi?',
-    answer: 'Ha, ko\'plab talabalarimiz birinchi modullardan keyin freelance ishlay boshlaydilar.',
-  },
-  {
-    id: '6',
-    question: 'Kurs davomida ishga joylasha olamanmi?',
-    answer: 'Biz ishga joylashishda yordam beramiz va ko\'plab talabalar kursni tugatmasdan ish topadilar.',
-  },
-];
+const FEATURE_ICONS = [Calendar, Award, BookCheck, Briefcase] as const;
+const FEATURE_KEYS = ['duration', 'refund', 'certificates', 'internship'] as const;
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ProfessionPage() {
+  const t = useTranslations('professionDetail');
+  const tCourse = useTranslations('courseDetail');
   const params = useParams();
   const router = useRouter();
   const slug = params?.slug as string;
   const goBack = useSmartBack('/catalog?tab=professions');
+
+  const staticFeatures = FEATURE_ICONS.map((icon, i) => ({
+    id: i + 1,
+    icon,
+    label: t(`features.${FEATURE_KEYS[i]}`),
+  }));
+
+  const staticBenefits = [
+    {
+      id: 1,
+      title: t('benefits.skills'),
+      bullets: [t('benefits.skillsB1'), t('benefits.skillsB2')],
+      icon: <Image src="/icons/professions/1.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+      isDefaultActive: true,
+    },
+    {
+      id: 2,
+      title: t('benefits.certs'),
+      bullets: [t('benefits.certsB1'), t('benefits.certsB2')],
+      icon: <Image src="/icons/professions/2.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+    },
+    {
+      id: 3,
+      title: t('benefits.practice'),
+      bullets: [t('benefits.practiceB1'), t('benefits.practiceB2')],
+      icon: <Image src="/icons/professions/3.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+    },
+    {
+      id: 4,
+      title: t('benefits.career'),
+      bullets: [t('benefits.careerB1'), t('benefits.careerB2')],
+      icon: <Image src="/icons/professions/4.png" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+    },
+    {
+      id: 5,
+      title: t('benefits.community'),
+      bullets: [t('benefits.communityB1'), t('benefits.communityB2')],
+      icon: <Image src="/icons/professions/5.png" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+    },
+    {
+      id: 6,
+      title: t('benefits.refund'),
+      bullets: [t('benefits.refundB1'), t('benefits.refundB2')],
+      icon: <Image src="/icons/professions/6.png" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+    },
+  ];
+
+  const staticCertificates = [
+    {
+      id: 1,
+      title: t('certificates.google'),
+      badgeText: t('certificates.googleBadge'),
+      badgeColor: 'bg-[#5d7bf5] text-white',
+      bullets: [t('certificates.googleB1'), t('certificates.googleB2'), t('certificates.googleB3')],
+      image: '/images/professions/certificate.png',
+    },
+    {
+      id: 2,
+      title: t('certificates.mlc'),
+      badgeText: t('certificates.mlcBadge'),
+      badgeColor: 'bg-[#5d7bf5] text-white',
+      bullets: [t('certificates.mlcB1'), t('certificates.mlcB2'), t('certificates.mlcB3')],
+      image: '/images/professions/certificate.png',
+    },
+  ];
+
+  const staticCertificatesFootnote = t('certificates.footnote');
+
+  const staticFaqs = [
+    { id: '1', question: tCourse('faqs.q1'), answer: tCourse('faqs.a1') },
+    { id: '2', question: tCourse('faqs.q2'), answer: tCourse('faqs.a2') },
+    { id: '3', question: tCourse('faqs.q3'), answer: tCourse('faqs.a3') },
+    { id: '4', question: tCourse('faqs.q4'), answer: tCourse('faqs.a4') },
+    { id: '5', question: tCourse('faqs.q5'), answer: tCourse('faqs.a5') },
+    { id: '6', question: tCourse('faqs.q6'), answer: tCourse('faqs.a6') },
+  ];
 
   const { user } = useAuthStore();
   const { data: profession, isLoading, isError } = useProfession(slug);
@@ -194,25 +173,27 @@ export default function ProfessionPage() {
     }
     if (!profession) return;
     setStartLoading(true);
-    const hasProgress = (professionModules?.progress?.totalLessonsCount ?? 0) > 0;
-    if (!hasProgress) {
-      try {
-        await api.post(`/course/${profession.id}/enroll`);
-      } catch (err: unknown) {
-        const status = (err as { response?: { status?: number } })?.response?.status;
-        if (status === 400) {
-          router.push(`/payment/${profession.id}?courseType=profession`);
-          return;
+    try {
+      const alreadyAdded = !!profession.hasPurchased || !!myProfessions?.some((c) => String(c.id) === String(profession.id));
+      if (!alreadyAdded) {
+        try {
+          await api.post(`/course/${profession.id}/enroll`);
+        } catch (err: unknown) {
+          const status = (err as { response?: { status?: number } })?.response?.status;
+          if (status === 400 && profession.pricingType !== 'FREE') {
+            router.push(`/payment/${profession.id}?courseType=profession`);
+            return;
+          }
         }
       }
+      const target = pickResumeLesson(professionModules?.modules, professionModules?.progress);
+      if (target) {
+        router.push(`/module/${target.moduleId}?lessonId=${target.id}&courseType=profession&courseId=${profession.id}`);
+      }
+    } finally {
+      setStartLoading(false);
     }
-    const target = pickResumeLesson(professionModules?.modules, professionModules?.progress);
-    if (target) {
-      router.push(`/module/${target.moduleId}?lessonId=${target.id}&courseType=profession&courseId=${profession.id}`);
-      return;
-    }
-    setStartLoading(false);
-  }, [profession, professionModules, router, user]);
+  }, [profession, professionModules, myProfessions, router, user]);
 
   if (profession && !openModule && profession.modules.length > 0) {
     setOpenModule(String(profession.modules[0].id));
@@ -241,13 +222,17 @@ export default function ProfessionPage() {
   const modules: ModuleItem[] = profession.modules.map((m) => toModuleItem(m));
   const mentor = profession.mentor;
 
-  const isPurchased = !!myProfessions?.some((c) => String(c.id) === String(profession.id));
-  const isEnrolled = profession.pricingType === 'FREE' || isPurchased;
+  const isPurchased = !!profession.hasPurchased || !!myProfessions?.some((c) => String(c.id) === String(profession.id));
+  const isAddedToProfile = isPurchased;
+  const isFree = profession.pricingType === 'FREE';
+  const completedCount = professionModules?.progress?.completedLessonsCount ?? 0;
+  const totalCount = professionModules?.progress?.totalLessonsCount ?? 0;
+  const hasStarted = isAddedToProfile && completedCount > 0;
 
   const handleLessonClick = (lesson: { id: string | number; isFree?: boolean }, ctx: { module: ModuleItem }) => {
     if (!user) { router.push('/login'); return; }
-    if (!isPurchased) {
-      if (profession.pricingType === 'FREE') {
+    if (!isAddedToProfile) {
+      if (isFree) {
         handleStart();
         return;
       }
@@ -259,7 +244,7 @@ export default function ProfessionPage() {
   const courseImage = mediaUrl(profession.photo);
 
   const startDateLabel = profession.publishDate
-    ? `Start: ${new Date(profession.publishDate).toLocaleDateString('uz-UZ', { day: 'numeric', month: 'long', year: 'numeric' })}`
+    ? t('startDate', { date: new Date(profession.publishDate).toLocaleDateString('uz-UZ', { day: 'numeric', month: 'long', year: 'numeric' }) })
     : null;
 
   return (
@@ -283,13 +268,13 @@ export default function ProfessionPage() {
                 {/* Back Button */}
                 <button onClick={goBack} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit cursor-pointer">
                   <ArrowLeft className="w-4 h-4" />
-                  <span className="text-sm font-medium">Orqaga</span>
+                  <span className="text-sm font-medium">{t('back')}</span>
                 </button>
 
                 {/* Enrollment Badge */}
                 <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-xs w-fit mb-6">
                   <Flame className="w-3.5 h-3.5 mr-2" />
-                  Qabul ochiq
+                  {t('enrollOpen')}
                 </Badge>
 
                 {/* Title */}
@@ -303,58 +288,45 @@ export default function ProfessionPage() {
                 )}
 
                 {/* CTA Button */}
-                {professionModules?.progress && professionModules.progress.totalLessonsCount > 0 ? (
-                  <div className="space-y-3 mb-8">
+                {hasStarted && totalCount > 0 && professionModules?.progress && (
+                  <div className="space-y-3 mb-4">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-xs bg-white/20 backdrop-blur-sm text-white px-3 py-1.5 rounded-full">
-                        Modul: {professionModules.progress.moduleTitile ?? '—'}
+                        {t('moduleLabel', { title: professionModules.progress.moduleTitile ?? '—' })}
                       </span>
                       <span className="text-xs bg-white/20 backdrop-blur-sm text-white px-3 py-1.5 rounded-full">
-                        Dars: {professionModules.progress.completedLessonsCount}/{professionModules.progress.totalLessonsCount}
+                        {t('lessonLabel', { done: completedCount, total: totalCount })}
                       </span>
                     </div>
                     <div className="w-full max-w-sm bg-white/30 rounded-full h-2">
                       <div
                         className="bg-white h-2 rounded-full transition-all duration-500"
-                        style={{ width: `${Math.round((professionModules.progress.completedLessonsCount / professionModules.progress.totalLessonsCount) * 100)}%` }}
+                        style={{ width: `${Math.round((completedCount / totalCount) * 100)}%` }}
                       />
                     </div>
-                    <Button
-                      size="lg"
-                      className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit flex items-center gap-2"
-                      onClick={handleStart}
-                      disabled={startLoading}
-                    >
-                      {startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowLeft className="w-5 h-5 rotate-180" />}
-                      {startLoading ? 'Yuklanmoqda...' : "O'qishni davom ettirish"}
-                    </Button>
                   </div>
-                ) : (
-                  <Button
-                    size="md"
-                    className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit mb-8 flex items-center gap-2"
-                    onClick={handleStart}
-                    disabled={startLoading}
-                  >
-                    {startLoading ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Yuklanmoqda...
-                      </>
-                    ) : (
-                      <>
-                        Boshlash
-                        <ArrowLeft className="w-5 h-5 rotate-180" />
-                      </>
-                    )}
-                  </Button>
                 )}
+                <Button
+                  size="lg"
+                  className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit mb-8 flex items-center gap-2"
+                  onClick={handleStart}
+                  disabled={startLoading}
+                >
+                  {startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowLeft className="w-5 h-5 rotate-180" />}
+                  {startLoading
+                    ? t('loading')
+                    : !isAddedToProfile && !isFree
+                    ? t('start')
+                    : hasStarted
+                    ? t('continueStudy')
+                    : t('start')}
+                </Button>
 
                 {/* Meta Info Pills */}
                 <div className="flex flex-wrap gap-3">
                   <Badge className="text-black border-0 rounded-full px-4 py-2 text-xs flex items-center gap-2" style={{ background: '#A9A9A933', backdropFilter: 'blur(118.8px)' }}>
                     <Users className="w-4 h-4" />
-                    {profession.enrollmentCount} ta o'quvchi
+                    {t('studentsCount', { count: profession.enrollmentCount })}
                   </Badge>
                   {startDateLabel && (
                     <Badge className="text-black border-0 rounded-full px-4 py-2 text-xs flex items-center gap-2" style={{ background: '#A9A9A933', backdropFilter: 'blur(118.8px)' }}>
@@ -432,7 +404,7 @@ export default function ProfessionPage() {
         {mentor && (
           <section id="mentor" className="w-full py-8">
             <div className="container mx-auto px-4">
-              <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-6">Kurs mentori</h2>
+              <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-6">{t('courseMentor')}</h2>
               <MentorCard
                 name={mentor.fullname}
                 role={mentor.position}
@@ -481,7 +453,7 @@ export default function ProfessionPage() {
         {/* Course Program Section */}
         <section id="kurs-dasturi" className="w-full bg-[#101010] py-16 lg:py-24">
           <div className="container mx-auto px-4">
-            <h2 className="text-white font-bold text-3xl lg:text-4xl mb-8 lg:mb-12">Nima o'rganamiz?</h2>
+            <h2 className="text-white font-bold text-3xl lg:text-4xl mb-8 lg:mb-12">{t('whatLearn')}</h2>
             <ModuleAccordion
               variant="dark"
               modules={modules}

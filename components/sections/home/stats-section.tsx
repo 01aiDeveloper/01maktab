@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Users, Briefcase } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 const containerVariants = {
@@ -24,6 +25,7 @@ const itemVariants = {
 };
 
 export function StatsSection() {
+  const t = useTranslations('stats');
   return (
     <section className="min-h-screen flex flex-col justify-center py-8 md:py-10">
       <div className="container">
@@ -41,7 +43,7 @@ export function StatsSection() {
             <div className="w-[46.47px] h-[46.47px] bg-white/20 border border-white/17 backdrop-blur-[7.89px] rounded-[14.67px] flex items-center justify-center">
               <Users className="w-[26.66px] h-[26.66px]" />
             </div>
-            <span className="text-sm md:text-[32px] font-[450] text-white text-center tracking-[-0.05em]">Hozirda Bitiruvchilarimiz</span>
+            <span className="text-sm md:text-[32px] font-[450] text-white text-center tracking-[-0.05em]">{t('graduates')}</span>
           </div>
           <span className="text-4xl md:text-[121.2px] font-[450] text-white text-center tracking-[-0.05em] leading-none">+400</span>
         </motion.div>
@@ -63,7 +65,7 @@ export function StatsSection() {
             <div className="w-[46.47px] h-[46.47px] bg-white/20 border border-white/17 backdrop-blur-[7.89px] rounded-[14.67px] flex items-center justify-center">
               <Briefcase className="w-[26.66px] h-[26.66px]" />
             </div>
-            <span className="text-sm md:text-[32px] font-[450] text-white text-center tracking-[-0.05em]">{"Ishga Kirish Ko'rsatgichi"}</span>
+            <span className="text-sm md:text-[32px] font-[450] text-white text-center tracking-[-0.05em]">{t('employment')}</span>
           </div>
           <span className="text-4xl md:text-[121.2px] font-[450] text-white text-center tracking-[-0.05em] leading-none">83%</span>
         </motion.div>

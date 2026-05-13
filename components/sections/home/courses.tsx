@@ -2,6 +2,7 @@
 
 import { CourseCard } from "@/components/shared/course-card"
 import useEmblaCarousel from "embla-carousel-react"
+import { useTranslations } from "next-intl"
 import { MainTitle } from "@/components/ui/main-title"
 import { Subtitle } from "@/components/ui/subtitle"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
@@ -13,6 +14,7 @@ import { NoData } from "@/components/shared/no-data"
 import { useAuthStore } from "@/store/auth-store"
 
 export function CoursesSection() {
+  const t = useTranslations("courses")
   const { user } = useAuthStore()
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
@@ -57,7 +59,7 @@ export function CoursesSection() {
             color="text-dark"
             animated
           >
-            Kurslar
+            {t("title")}
           </MainTitle>
           <Subtitle
             align="center"
@@ -66,8 +68,7 @@ export function CoursesSection() {
             animated
             animationDelay={0.1}
           >
-            Mutaxassislar tayyorlagan to'liq video-kurslar orqali o'zingizga kerak yo'nalishda chuqur bilim oling — Data
-            Analytics, Machine Learning va boshqalar.
+            {t("subtitle")}
           </Subtitle>
         </div>
       </div>
@@ -82,7 +83,7 @@ export function CoursesSection() {
             <p className="text-red-500">{error}</p>
           </div>
         ) : courses.length === 0 ? (
-          <NoData message="Kurslar topilmadi" description="Hozircha hech qanday kurs mavjud emas" />
+          <NoData message={t("noDataMessage")} description={t("noDataDescription")} />
         ) : (
           <>
             <div className="overflow-hidden" ref={emblaRef}>
@@ -92,7 +93,7 @@ export function CoursesSection() {
                     key={course.id || index}
                     className="flex-[0_0_90%] min-w-0 sm:flex-[0_0_75%] md:flex-[0_0_55%] lg:flex-[0_0_45%]"
                   >
-                    <CourseCard {...course} />
+                    <CourseCard {...course} hideQueueStatus />
                   </div>
                 ))}
               </div>

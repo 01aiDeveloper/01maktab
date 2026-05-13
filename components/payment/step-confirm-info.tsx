@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { StepIndicator } from './step-indicator';
 import { useUpdateProfile } from '@/hooks/use-update-profile';
 
@@ -19,6 +20,7 @@ interface StepConfirmInfoProps {
 }
 
 export function StepConfirmInfo({ userInfo, onNext, onBack }: StepConfirmInfoProps) {
+  const t = useTranslations('payment');
   const [form, setForm] = useState<UserInfo>(userInfo);
   const { updateProfile, isLoading } = useUpdateProfile();
 
@@ -42,13 +44,13 @@ export function StepConfirmInfo({ userInfo, onNext, onBack }: StepConfirmInfoPro
       <StepIndicator currentStep={1} />
 
       <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-8">
-        1-qadam: Ma&apos;lumotlaringizni tasdiqlang
+        {t('step1Title')}
       </h2>
 
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-5 mb-10">
           <div>
-            <label className="block text-sm text-gray-500 mb-1.5">Ism</label>
+            <label className="block text-sm text-gray-500 mb-1.5">{t('firstname')}</label>
             <input
               type="text"
               required
@@ -58,7 +60,7 @@ export function StepConfirmInfo({ userInfo, onNext, onBack }: StepConfirmInfoPro
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-500 mb-1.5">Familiya</label>
+            <label className="block text-sm text-gray-500 mb-1.5">{t('lastname')}</label>
             <input
               type="text"
               required
@@ -68,7 +70,7 @@ export function StepConfirmInfo({ userInfo, onNext, onBack }: StepConfirmInfoPro
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-500 mb-1.5">Telefon raqami</label>
+            <label className="block text-sm text-gray-500 mb-1.5">{t('phone')}</label>
             <input
               type="tel"
               required
@@ -78,7 +80,7 @@ export function StepConfirmInfo({ userInfo, onNext, onBack }: StepConfirmInfoPro
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-500 mb-1.5">E-mail</label>
+            <label className="block text-sm text-gray-500 mb-1.5">{t('email')}</label>
             <input
               type="email"
               required
@@ -95,14 +97,14 @@ export function StepConfirmInfo({ userInfo, onNext, onBack }: StepConfirmInfoPro
             onClick={onBack}
             className="flex-1 h-12 rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 font-medium text-sm transition-colors"
           >
-            Bekor qilish
+            {t('cancel')}
           </button>
           <button
             type="submit"
             disabled={isLoading}
             className="flex-1 h-12 rounded-xl bg-[#3B5BFF] hover:bg-[#2d4ae6] text-white font-medium text-sm transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
           >
-            {isLoading ? <><Loader2 className="w-4 h-4 animate-spin" /> Saqlanmoqda...</> : 'Davom etish'}
+            {isLoading ? <><Loader2 className="w-4 h-4 animate-spin" /> {t('saving')}</> : t('continue')}
           </button>
         </div>
       </form>

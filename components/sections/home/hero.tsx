@@ -3,40 +3,45 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import { MainButton } from "@/components/ui/main-button";
 import { useAuthStore } from "@/store/auth-store";
 
-const SLIDES = [
+const SLIDE_META = [
   {
     id: 1,
-    title: "Data Analyst Kursi",
-    description:
-      "Noldan top-kompaniyada analitikgacha: karyerangiz shu yerdan boshlanadi",
+    key: "dataAnalyst" as const,
     bgColor: "bg-[#e5e7eb]",
     image: "/images/hero4.jpg",
     textColor: "text-white",
     isDark: true,
     partnerLogo: "/icons/tbc_bank_logo.svg",
     partnerName: "TBC Bank",
+    partnerLogoWidth: 120 as number | undefined,
+    partnerLogoHeight: 40 as number | undefined,
   },
   {
     id: 2,
-    title: "ML Engineer Kursi",
-    description:
-      "Noldan top-kompaniyada analitikgacha: karyerangiz shu yerdan boshlanadi",
+    key: "mlEngineer" as const,
     bgColor: "bg-[#111111]",
     image: "/images/hero6.jpg",
     textColor: "text-white",
     isDark: true,
     partnerLogo: "/icons/alif_logo.png",
     partnerName: "Alif",
-    partnerLogoWidth: 80,
-    partnerLogoHeight: 28,
+    partnerLogoWidth: 80 as number | undefined,
+    partnerLogoHeight: 28 as number | undefined,
   },
 ];
 
 export function Hero() {
+  const t = useTranslations("hero");
+  const SLIDES = SLIDE_META.map((s) => ({
+    ...s,
+    title: t(`slides.${s.key}.title`),
+    description: t(`slides.${s.key}.description`),
+  }));
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [isAnimating, setIsAnimating] = React.useState(false);
   const intervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
@@ -48,7 +53,7 @@ export function Hero() {
   }, []);
   const isLoggedIn = hydrated && (isAuthenticated || !!accessToken);
   const ctaHref = isLoggedIn ? '/catalog' : '/login';
-  const ctaLabel = isLoggedIn ? 'Barcha kurslar' : 'Bepul boshlash';
+  const ctaLabel = isLoggedIn ? t('ctaLoggedIn') : t('ctaGuest');
 
   const goToSlide = React.useCallback(
     (idx: number) => {
@@ -129,10 +134,8 @@ export function Hero() {
                           : "bg-black/5 border-black/10"
                       }`}
                     >
-                      <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider leading-tight text-white">
-                        Hamkorlikda
-                        <br />
-                        yaratilgan:
+                      <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider leading-tight text-white whitespace-pre-line">
+                        {t('createdWith')}
                       </span>
                       <div className="flex items-center">
                         <Image

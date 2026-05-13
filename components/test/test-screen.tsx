@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import { cn, getMediaUrl } from '@/lib/utils';
 import { sortByOrder } from '@/lib/lesson-utils';
@@ -55,6 +56,7 @@ export function TestScreen({
   claiming = false,
   onClaim,
 }: TestScreenProps) {
+  const t = useTranslations('test');
   const queryClient = useQueryClient();
   const [screen, setScreen] = useState<Screen>('start');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -106,7 +108,7 @@ export function TestScreen({
       // Invalidate modules so module.test.isPassed reflects new state
       queryClient.invalidateQueries({ queryKey: ['modules'] });
     } catch {
-      setSubmitError("Testni yuborishda xatolik yuz berdi. Qayta urinib ko'ring.");
+      setSubmitError(t('submitError'));
     } finally {
       setSubmitting(false);
     }
@@ -135,10 +137,8 @@ export function TestScreen({
           </div>
 
           <h1 className="text-xl font-bold text-gray-900 mb-2">{test.name}</h1>
-          <p className="text-sm text-gray-500 mb-8">
-            {noQuestions
-              ? "Bu testda hali savollar yo'q. Iltimos keyinroq urinib ko'ring."
-              : <>Materialni mustahkamlash<br />va modulni yakunlash uchun test.</>}
+          <p className="text-sm text-gray-500 mb-8 whitespace-pre-line">
+            {noQuestions ? t('noQuestions') : t('introText')}
           </p>
 
           {noQuestions ? (
@@ -146,7 +146,7 @@ export function TestScreen({
               onClick={onBack}
               className="w-64 h-12 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-medium text-sm transition-colors"
             >
-              Orqaga
+              {t('back')}
             </button>
           ) : (
             <button
@@ -158,7 +158,7 @@ export function TestScreen({
               }}
               className="w-64 h-12 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-medium text-sm transition-colors"
             >
-              Boshlash
+              {t('start')}
             </button>
           )}
       </div>
@@ -168,7 +168,7 @@ export function TestScreen({
   if (!currentQuestion) {
     return (
       <div className="bg-white rounded-2xl p-10 text-center text-gray-500">
-        Savollar topilmadi.
+        {t('noQuestionsFound')}
       </div>
     );
   }
@@ -207,14 +207,14 @@ export function TestScreen({
         className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
-        Orqaga
+        {t('back')}
       </button>
 
       <div>
         {/* Question badge + timer */}
         <div className="flex items-center justify-between mb-6">
           <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-semibold">
-            Savollar {currentIndex + 1}/{questions.length}
+            {t('questionLabel', { current: currentIndex + 1, total: questions.length })}
           </span>
           {test.timeLimit > 0 && (
             <span className={cn(
@@ -322,7 +322,7 @@ export function TestScreen({
                 : 'border-gray-100 text-gray-300 cursor-not-allowed',
             )}
           >
-            Orqaga
+            {t('back')}
           </button>
 
           {isLast ? (
@@ -331,7 +331,7 @@ export function TestScreen({
               disabled={submitting}
               className="flex-1 h-11 rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-medium text-sm transition-colors disabled:opacity-60"
             >
-              {submitting ? 'Yuborilmoqda...' : 'Yakunlash'}
+              {submitting ? t('submitting') : t('finish')}
             </button>
           ) : (
             <button
@@ -344,7 +344,7 @@ export function TestScreen({
                   : 'bg-gray-100 text-gray-400 cursor-not-allowed',
               )}
             >
-              Davom etish
+              {t('continue')}
             </button>
           )}
         </div>

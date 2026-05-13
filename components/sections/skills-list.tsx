@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface SkillsListProps {
   skills: string[];
@@ -11,7 +12,9 @@ interface SkillsListProps {
   delay?: number;
 }
 
-export function SkillsList({ skills, title = "Ko'nikmalar", icon = '/icons/skills.webp', delay = 0 }: SkillsListProps) {
+export function SkillsList({ skills, title, icon = '/icons/skills.webp', delay = 0 }: SkillsListProps) {
+  const t = useTranslations('skillsInstruments');
+  const displayTitle = title ?? t('skills');
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -21,8 +24,8 @@ export function SkillsList({ skills, title = "Ko'nikmalar", icon = '/icons/skill
       className="flex flex-col h-full"
     >
       <h3 className="font-suisse text-xl font-semibold text-gray-900 mb-4 flex items-center gap-3 bg-[#e8e8e8] rounded-3xl p-6">
-        <Image src={icon} alt={title} width={40} height={30} />
-        {title}
+        <Image src={icon} alt={displayTitle} width={40} height={30} />
+        {displayTitle}
       </h3>
       <ul className="flex-1 space-y-3 bg-[#e8e8e8] rounded-3xl p-6">
         {skills.map((skill, index) => (

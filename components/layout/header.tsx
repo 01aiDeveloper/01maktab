@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth-store';
 import { useMe } from '@/hooks/use-me';
+import { LanguageSwitcher } from '@/components/language-switcher';
 
 interface MenuItem {
   label: string;
@@ -17,6 +19,9 @@ interface MenuItem {
 }
 
 export function Header() {
+  const tNav = useTranslations('nav');
+  const tGuest = useTranslations('guestHeader');
+  const tCommon = useTranslations('common');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -31,10 +36,10 @@ export function Header() {
   }, [pathname]);
 
   const menuItems: MenuItem[] = [
-    { label: 'Bosh Sahifa', href: '/' },
-    { label: 'Darsxona', href: '/classroom' },
-    { label: 'Barcha kurslar', href: '/catalog' },
-    { label: 'Hamjamiyat', href: '/community' },
+    { label: tNav('home'), href: '/' },
+    { label: tNav('classroom'), href: '/classroom' },
+    { label: tNav('catalog'), href: '/catalog' },
+    { label: tNav('community'), href: '/community' },
   ];
 
   const isActiveItem = (href: string) => {
@@ -80,7 +85,7 @@ export function Header() {
               className="text-white hover:bg-white/10 cursor-pointer md:hover:bg-white rounded-xl px-2 md:px-3 h-10 flex items-center gap-1 md:gap-2"
             >
               {isMenuOpen ? <X className="w-5 h-5 md:w-4 md:h-4" /> : <Menu className="w-5 h-5 md:w-4 md:h-4" />}
-              <span className="text-xs md:text-sm font-medium hidden sm:inline">Menu</span>
+              <span className="text-xs md:text-sm font-medium hidden sm:inline">{tNav('menu')}</span>
             </Button>
           </div>
 
@@ -88,23 +93,26 @@ export function Header() {
             <span className="text-white font-bold tracking-tighter text-xl md:text-2xl">01AI</span>
           </div>
 
-          {user ? (
-            <Link href="/profile" className="rounded-full bg-white p-1">
-              <Avatar className="h-9 w-9">
-                <AvatarImage src={user?.photo || "/diverse-user-avatars.png"} />
-                <AvatarFallback className="bg-gray-100 text-sm font-semibold text-gray-900">
-                  {user?.firstname?.[0]?.toUpperCase() || "U"}
-                  {user?.lastname?.[0]?.toUpperCase() || ""}
-                </AvatarFallback>
-              </Avatar>
-            </Link>
-          ) : (
-            <Link href="/login">
-              <Button className="bg-[#3b66f5] hover:bg-[#2d52d1] cursor-pointer text-white rounded-xl px-4 md:px-6 h-9 md:h-10 text-xs md:text-sm font-semibold shadow-lg">
-                Kirish
-              </Button>
-            </Link>
-          )}
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher isDark />
+            {user ? (
+              <Link href="/profile" className="rounded-full bg-white p-1">
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src={user?.photo || "/diverse-user-avatars.png"} />
+                  <AvatarFallback className="bg-gray-100 text-sm font-semibold text-gray-900">
+                    {user?.firstname?.[0]?.toUpperCase() || "U"}
+                    {user?.lastname?.[0]?.toUpperCase() || ""}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+            ) : (
+              <Link href="/login">
+                <Button className="bg-[#3b66f5] hover:bg-[#2d52d1] cursor-pointer text-white rounded-xl px-4 md:px-6 h-9 md:h-10 text-xs md:text-sm font-semibold shadow-lg">
+                  {tCommon('login')}
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
 
         {/* Dropdown Content */}
@@ -140,7 +148,7 @@ export function Header() {
               {/* Promo Card */}
               <motion.div className="relative bg-white rounded-[24px] md:rounded-[32px] overflow-hidden group aspect-[4/3] md:aspect-auto md:h-[280px]">
                 <div className="absolute inset-0 p-4 flex flex-col justify-center z-10">
-                  <h3 className="text-[#141414] text-xl md:text-2xl lg:text-3xl font-black leading-tight max-w-[180px]">ML Engineer Kasbi</h3>
+                  <h3 className="text-[#141414] text-xl md:text-2xl lg:text-3xl font-black leading-tight max-w-[180px]">{tGuest('promoTitle')}</h3>
                 </div>
 
                 <div className="absolute left-0 top-0 inset-0 p-0 bg-[#f8f9fa]">
@@ -173,7 +181,7 @@ export function Header() {
               color: "#FFFFFF"
             }}
           >
-            ML COMMUNITY Uzbekistan ekspertlari tomonidan yartilgan
+            {tGuest('tagline')}
             <ArrowUpRight className="w-3.5 h-3.5" />
           </a>
         </motion.div>

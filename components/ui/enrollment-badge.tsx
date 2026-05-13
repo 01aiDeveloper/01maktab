@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Profile2UserSolid } from '@/components/ui/icons/badge-icons';
 
 function formatCount(count: number): string {
@@ -17,9 +18,10 @@ interface EnrollmentBadgeProps {
 }
 
 export function EnrollmentBadge({ count, kind = 'waitlist', className = '' }: EnrollmentBadgeProps) {
+  const t = useTranslations('cards');
   if (!count || count <= 0) return null;
 
-  const label = kind === 'enrolled' ? 'sotib oldi' : 'odam kutmoqda';
+  const label = kind === 'enrolled' ? t('enrolled') : t('waiting');
 
   return (
     <div className={`inline-flex w-fit items-center gap-2 bg-[#FAEF3B] text-black px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold ${className}`}>

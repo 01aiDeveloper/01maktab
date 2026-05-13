@@ -2,6 +2,7 @@
 
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
+import { useTranslations } from "next-intl"
 
 import { SkillCard } from "@/components/cards/skill-card"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
@@ -17,6 +18,7 @@ interface SkillsSectionProps {
 }
 
 export function SkillsSection({ skills }: SkillsSectionProps) {
+  const t = useTranslations("skills")
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
@@ -30,11 +32,11 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
     return (
       <section id="skillar" className="py-8 container">
         <MainTitle align="center" className="mt-4 md:mt-6 lg:mt-8" animated>
-          Skillar
+          {t("title")}
         </MainTitle>
         <NoData
-          message="Skilllar topilmadi"
-          description="Hozircha hech qanday skill mavjud emas"
+          message={t("noDataMessage")}
+          description={t("noDataDescription")}
         />
       </section>
     )
@@ -50,7 +52,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
       className="py-8! container"
     >
       <MainTitle align="center" className="mt-4 md:mt-6 lg:mt-8" animated>
-        Skillar
+        {t("title")}
       </MainTitle>
       <Subtitle
         align="center"
@@ -59,8 +61,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
         animated
         animationDelay={0.1}
       >
-        Bilimingizdagi bo'shliqlarni to'ldiring. Tez va amaliy mini-kurslar
-        orqali Python, SQL, Prompt yozish kabi ko'nikmalarni o'rganing.
+        {t("subtitle")}
       </Subtitle>
 
       <div className="overflow-hidden " ref={emblaRef}>
@@ -82,6 +83,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
                 presalesEnabled={skill.presalesEnabled}
                 waitlistEnabled={skill.waitlistEnabled}
                 hasPurchased={skill.hasPurchased}
+                hideQueueStatus
               />
             </div>
           ))}

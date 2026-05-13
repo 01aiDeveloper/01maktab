@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useAuthStore } from '@/store/auth-store';
 import { useUpdateProfile } from '@/hooks/use-update-profile';
 import { useUploadFile } from '@/hooks/use-upload-file';
@@ -20,6 +21,7 @@ import { format } from 'date-fns';
 import { SuccessModal } from '@/components/ui/success-modal';
 
 export function TabPersonalInfo() {
+  const t = useTranslations('profile');
   const user = useAuthStore((state) => state.user);
   const { updateProfile, isLoading: saving } = useUpdateProfile();
   const { uploadFile, isUploading } = useUploadFile();
@@ -147,7 +149,7 @@ export function TabPersonalInfo() {
           {/* Form Grid - row 1: Ism, Email, Viloyat */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-5">
             <div>
-              <label className="block text-xs text-gray-600 mb-1.5">Ism</label>
+              <label className="block text-xs text-gray-600 mb-1.5">{t('firstname')}</label>
               <Input
                 type="text"
                 value={form.firstname}
@@ -156,11 +158,11 @@ export function TabPersonalInfo() {
               />
             </div>
             <div>
-              <label className="block text-xs text-gray-600 mb-1.5">E-mail</label>
+              <label className="block text-xs text-gray-600 mb-1.5">{t('email')}</label>
               <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <label className="block text-xs text-gray-600 mb-1.5">Viloyat</label>
+              <label className="block text-xs text-gray-600 mb-1.5">{t('region')}</label>
               <Select value={form.region || 'toshkent-viloyati'} onValueChange={(v) => setForm({ ...form, region: v })}>
                 <SelectTrigger className="w-full !h-11 rounded-[10px] border-gray-200 bg-white text-sm text-gray-900 [&>svg:last-child]:ml-auto">
                   <Search className="w-4 h-4 text-gray-600 shrink-0" />
@@ -178,31 +180,31 @@ export function TabPersonalInfo() {
 
             {/* row 2: Familiya, Telefon, Pol */}
             <div>
-              <label className="block text-xs text-gray-600 mb-1.5">Familiya</label>
+              <label className="block text-xs text-gray-600 mb-1.5">{t('lastname')}</label>
               <Input type="text" value={form.lastname} onChange={(e) => setForm({ ...form, lastname: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <label className="block text-xs text-gray-600 mb-1.5">Telefon raqami</label>
+              <label className="block text-xs text-gray-600 mb-1.5">{t('phone')}</label>
               <Input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <label className="block text-xs text-gray-600 mb-1.5">Pol</label>
+              <label className="block text-xs text-gray-600 mb-1.5">{t('gender')}</label>
               <Tabs value={form.gender || 'MALE'} onValueChange={(v) => setForm({ ...form, gender: v })}>
                 <TabsList className="w-full h-11 rounded-[10px] bg-[#F4F4F4] p-1">
-                  <TabsTrigger value="MALE" className="flex-1 rounded-[8px] text-sm font-medium">Erkak</TabsTrigger>
-                  <TabsTrigger value="FEMALE" className="flex-1 rounded-[8px] text-sm font-medium">Ayol</TabsTrigger>
+                  <TabsTrigger value="MALE" className="flex-1 rounded-[8px] text-sm font-medium">{t('male')}</TabsTrigger>
+                  <TabsTrigger value="FEMALE" className="flex-1 rounded-[8px] text-sm font-medium">{t('female')}</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
 
             {/* row 3: Tug'ilgan sana */}
             <div>
-              <label className="block text-xs text-gray-600 mb-1.5">Tug&apos;ilgan sana</label>
+              <label className="block text-xs text-gray-600 mb-1.5">{t('birthday')}</label>
               <Popover>
                 <PopoverTrigger asChild>
                   <button className="w-full !h-11 rounded-[10px] border border-gray-200 bg-white px-4 text-sm text-gray-900 flex items-center justify-between">
                     <span className={form.birthday ? 'text-gray-900' : 'text-gray-600'}>
-                      {form.birthday ? format(new Date(form.birthday), 'dd.MM.yyyy') : 'Sanani tanlang'}
+                      {form.birthday ? format(new Date(form.birthday), 'dd.MM.yyyy') : t('pickDate')}
                     </span>
                     <CalendarIcon className="w-4 h-4 text-gray-600" />
                   </button>
@@ -230,13 +232,13 @@ export function TabPersonalInfo() {
             disabled={saving || isUploading}
             className=" w-full sm:w-fit px-8  sm:px-18 cursor-pointer   h-12 rounded-xl bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium transition-colors disabled:bg-[#D2D2D2] disabled:opacity-100"
           >
-            {isUploading ? 'Yuklanmoqda...' : saving ? 'Saqlanmoqda...' : 'Saqlash'}
+            {isUploading ? t('uploading') : saving ? t('saving') : t('save')}
           </button>
           <button
             onClick={() => setEditing(false)}
             className=" w-full sm:w-fit px-8  sm:px-18 cursor-pointer  h-12 disabled:bg-[#D2D2D2] bg-[#D2D2D2] rounded-xl text-gray-600 text-sm font-medium"
           >
-            Bekor qilish
+            {t('cancel')}
           </button>
         </div>
       </div>
@@ -268,31 +270,31 @@ export function TabPersonalInfo() {
         {/* Info Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5 mb-8">
           <div>
-            <p className="text-xs text-gray-600 mb-1">Ism</p>
+            <p className="text-xs text-gray-600 mb-1">{t('firstname')}</p>
             <p className="text-sm font-medium text-gray-900">{user?.firstname || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-600 mb-1">E-mail</p>
+            <p className="text-xs text-gray-600 mb-1">{t('email')}</p>
             <p className="text-sm font-medium text-gray-900">{user?.email || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-600 mb-1">Viloyat</p>
+            <p className="text-xs text-gray-600 mb-1">{t('region')}</p>
             <p className="text-sm font-medium text-gray-900">{REGIONS.find((r) => r.value === user?.region)?.label || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-600 mb-1">Familiya</p>
+            <p className="text-xs text-gray-600 mb-1">{t('lastname')}</p>
             <p className="text-sm font-medium text-gray-900">{user?.lastname || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-600 mb-1">Telefon raqami</p>
+            <p className="text-xs text-gray-600 mb-1">{t('phone')}</p>
             <p className="text-sm font-medium text-gray-900">{user?.phone || '—'}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-600 mb-1">Jins</p>
-            <p className="text-sm font-medium text-gray-900">{user?.gender === 'FEMALE' ? 'Ayol' : 'Erkak'}</p>
+            <p className="text-xs text-gray-600 mb-1">{t('genderView')}</p>
+            <p className="text-sm font-medium text-gray-900">{user?.gender === 'FEMALE' ? t('female') : t('male')}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-600 mb-1">Tug&apos;ilgan kungi</p>
+            <p className="text-xs text-gray-600 mb-1">{t('birthdayView')}</p>
             <p className="text-sm font-medium text-gray-900">{formatBirthday(user?.birthday || '')}</p>
           </div>
         </div>
@@ -316,14 +318,14 @@ export function TabPersonalInfo() {
           className="w-fit px-8 sm:px-18 cursor-pointer mx-auto flex items-center justify-center gap-2 h-12 rounded-xl bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium transition-colors"
         >
           <Pencil className="w-4 h-4" />
-          O&apos;zgartirish
+          {t('edit')}
         </button>
       </div>
 
       <SuccessModal
         open={successOpen}
         onClose={() => setSuccessOpen(false)}
-        title="O'zgarishlar saqlandi"
+        title={t('savedTitle')}
       />
     </div>
   );

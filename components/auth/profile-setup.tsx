@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { ArrowLeft, ChevronDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -13,6 +14,7 @@ interface ProfileSetupProps {
 }
 
 export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps) {
+  const t = useTranslations('profileSetupStandalone');
   const { updateProfile, isLoading: isSubmitting, error, setError } = useUpdateProfile();
   const [formData, setFormData] = useState({
     firstName: '',
@@ -70,7 +72,7 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
   ];
 
   const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
-  const months = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'];
+  const months = [t('months.1'), t('months.2'), t('months.3'), t('months.4'), t('months.5'), t('months.6'), t('months.7'), t('months.8'), t('months.9'), t('months.10'), t('months.11'), t('months.12')];
   const years = Array.from({ length: 100 }, (_, i) => (2024 - i).toString());
 
   return (
@@ -84,8 +86,8 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
       </div>
 
       <div className="text-center mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-1 flex items-center justify-center gap-2">Keling tanishamiz 👋</h2>
-        <p className="text-sm text-gray-400">Pastdagi ma'lumotlarni to'ldiring</p>
+        <h2 className="text-xl font-bold text-gray-900 mb-1 flex items-center justify-center gap-2">{t('greeting')}</h2>
+        <p className="text-sm text-gray-400">{t('fillBelow')}</p>
       </div>
 
       {error && <p className="text-sm text-red-500 font-medium mb-4 text-center">{error}</p>}
@@ -93,9 +95,9 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
       <form className="w-full space-y-6" onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-gray-600 ml-1">Ism *</label>
+            <label className="text-[13px] font-medium text-gray-600 ml-1">{t('firstnameLabel')}</label>
             <Input
-              placeholder="Ism"
+              placeholder={t('firstnamePlaceholder')}
               className="h-12 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:border-gray-200 transition-all"
               required
               value={formData.firstName}
@@ -103,9 +105,9 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-[13px] font-medium text-gray-600 ml-1">Familiya *</label>
+            <label className="text-[13px] font-medium text-gray-600 ml-1">{t('lastnameLabel')}</label>
             <Input
-              placeholder="Familiya"
+              placeholder={t('lastnamePlaceholder')}
               className="h-12 rounded-xl bg-gray-50 border-transparent focus:bg-white focus:border-gray-200 transition-all"
               required
               value={formData.lastName}
@@ -131,7 +133,7 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
         </div> */}
 
         <div className="space-y-1.5">
-          <label className="text-[13px] font-medium text-gray-600 ml-1">Tug'ilgan kuningiz</label>
+          <label className="text-[13px] font-medium text-gray-600 ml-1">{t('birthdayLabel')}</label>
           <div className="grid grid-cols-3 gap-3">
             <div className="relative">
               <select
@@ -139,7 +141,7 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
                 value={formData.birthDay}
                 onChange={(e) => setFormData({ ...formData, birthDay: e.target.value })}
               >
-                <option value="">Kun</option>
+                <option value="">{t('dayPlaceholder')}</option>
                 {days.map((d) => (
                   <option key={d} value={d}>
                     {d}
@@ -154,7 +156,7 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
                 value={formData.birthMonth}
                 onChange={(e) => setFormData({ ...formData, birthMonth: e.target.value })}
               >
-                <option value="">Oy</option>
+                <option value="">{t('monthPlaceholder')}</option>
                 {months.map((m, i) => (
                   <option key={m} value={i + 1}>
                     {m}
@@ -169,7 +171,7 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
                 value={formData.birthYear}
                 onChange={(e) => setFormData({ ...formData, birthYear: e.target.value })}
               >
-                <option value="">Yil</option>
+                <option value="">{t('yearPlaceholder')}</option>
                 {years.map((y) => (
                   <option key={y} value={y}>
                     {y}
@@ -182,16 +184,16 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-[13px] font-medium text-gray-600 ml-1">Jins</label>
+          <label className="text-[13px] font-medium text-gray-600 ml-1">{t('genderLabel')}</label>
           <div className="relative">
             <select
               className="w-full h-12 rounded-xl bg-gray-50 border-transparent px-4 appearance-none text-gray-900 focus:bg-white focus:border-gray-200 transition-all outline-none"
               value={formData.gender}
               onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
             >
-              <option value="">Jins</option>
-              <option value="MALE">Erkak</option>
-              <option value="FEMALE">Ayol</option>
+              <option value="">{t('genderPlaceholder')}</option>
+              <option value="MALE">{t('male')}</option>
+              <option value="FEMALE">{t('female')}</option>
             </select>
             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           </div>
@@ -221,7 +223,7 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
           disabled={isSubmitting}
           className="w-full bg-[#E5E7EB] hover:bg-gray-300 text-gray-600 font-semibold py-7 rounded-2xl shadow-none mt-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? 'Saqlanmoqda...' : 'Boshlash'}
+          {isSubmitting ? t('saving') : t('start')}
         </Button>
       </form>
     </div>

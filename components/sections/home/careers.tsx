@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import { MainTitle } from '@/components/ui/main-title';
@@ -11,10 +12,7 @@ import { EnrollmentBadge } from '@/components/ui/enrollment-badge';
 import type { Career } from '@/types/api.types';
 
 const STATIC_IMAGES = ['/images/hero4.jpg', '/images/hero6.jpg'];
-const STATIC_TITLES = [
-  'Data Analitik:\n0 dan Ishgacha',
-  "ML Engineer: Suni'y\nIntellekt Yasashni\nO'rganamiz",
-];
+const STATIC_TITLE_KEYS = ['dataAnalyst', 'mlEngineer'] as const;
 
 
 interface CareersSectionProps {
@@ -22,24 +20,29 @@ interface CareersSectionProps {
 }
 
 export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
+  const t = useTranslations('careers');
+  const tCommon = useTranslations('common');
   // console.table(apiCareers.map((c) => ({ id: c.id, name: c.name, description: c.description?.slice(0, 50) })));
   // console.log('[CareersSection] apiCareers count:', apiCareers.length);
 
   // Transform API careers to display format
   const careers = useMemo(() => {
-    return apiCareers.map((career: Career, index: number) => ({
-      id: career.id.toString(),
-      label: career.name,
-      title: STATIC_TITLES[index] || career.name,
-      cardColor: index % 2 === 0 ? 'bg-[#111111]' : 'bg-gray-100',
-      textColor: index % 2 === 0 ? 'text-white' : 'text-black',
-      buttonVariant: (index % 2 === 0 ? 'gradient' : 'black'),
-      titleClassName: index === 1 ? '!lg:text-[55px]' : '',
-      imageUrl: STATIC_IMAGES[index] || '/placeholder.svg',
-      slug: career.slug || career.name.toLowerCase().replace(/\s+/g, '-'),
-      enrollmentCount: career.waitlistCount || career.enrollmentCount || 0,
-    }));
-  }, [apiCareers]);
+    return apiCareers.map((career: Career, index: number) => {
+      const titleKey = STATIC_TITLE_KEYS[index];
+      return {
+        id: career.id.toString(),
+        label: career.name,
+        title: titleKey ? t(`staticTitles.${titleKey}`) : career.name,
+        cardColor: index % 2 === 0 ? 'bg-[#111111]' : 'bg-gray-100',
+        textColor: index % 2 === 0 ? 'text-white' : 'text-black',
+        buttonVariant: (index % 2 === 0 ? 'gradient' : 'black'),
+        titleClassName: index === 1 ? '!lg:text-[55px]' : '',
+        imageUrl: STATIC_IMAGES[index] || '/placeholder.svg',
+        slug: career.slug || career.name.toLowerCase().replace(/\s+/g, '-'),
+        enrollmentCount: career.waitlistCount || career.enrollmentCount || 0,
+      };
+    });
+  }, [apiCareers, t]);
 
   // console.table(careers.map((c) => ({ id: c.id, label: c.label, cardColor: c.cardColor })));
   // console.log('[CareersSection] careers (transformed) count:', careers.length);
@@ -58,11 +61,10 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
       <div className="container">
         <div className="overflow-hidden rounded-[30px] md:rounded-[60px] py-4 md:py-6 text-center">
           <MainTitle align="center" color="white" className="text-white" animated>
-            Kasblar
+            {t('title')}
           </MainTitle>
           <Subtitle align="center" textColor="rgba(255, 255, 255)" className="mx-auto mt-2 md:mt-3 max-w-xl" animated animationDelay={0.1}>
-            Stajerovka, live darslar, mentorlar, student support, kompaniyalardagi real loyihalar va xalqaro sertifikat o'z ichiga oladigan
-            to'liq ta'lim dasturi.
+            {t('subtitle')}
           </Subtitle>
 
           <div className="mt-4 md:mt-6 flex justify-center gap-2 md:gap-3 flex-wrap">
@@ -107,7 +109,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                     className="group mt-6 md:mt-12"
                     href={`/professions/${activeData.id}`}
                   >
-                    Batafsil
+                    {tCommon('details')}
                   </MainButton>
                 </div>
 

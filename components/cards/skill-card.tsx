@@ -27,7 +27,7 @@ export function SkillCard({
   hideQueueStatus,
 }: SkillCardProps) {
   const rawStatus = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled });
-  const status = hideQueueStatus && (rawStatus === 'waitlist' || rawStatus === 'presale') ? null : rawStatus;
+  const status = hideQueueStatus ? null : rawStatus;
   const countNum = enrollmentCount ?? waitlistCount ?? 0;
   const countKind = enrollmentCount ? 'enrolled' : 'waitlist';
   const cardSlug = slug || id?.toString() || 'skill';

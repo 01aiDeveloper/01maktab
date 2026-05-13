@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useUpdateProfile } from '@/hooks/use-update-profile';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -13,34 +14,19 @@ import { REGIONS } from '@/constants/regions';
 import { Search } from 'lucide-react';
 
 const DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1));
-const MONTHS = [
-  { value: '1', label: 'Yanvar' },
-  { value: '2', label: 'Fevral' },
-  { value: '3', label: 'Mart' },
-  { value: '4', label: 'Aprel' },
-  { value: '5', label: 'May' },
-  { value: '6', label: 'Iyun' },
-  { value: '7', label: 'Iyul' },
-  { value: '8', label: 'Avgust' },
-  { value: '9', label: 'Sentabr' },
-  { value: '10', label: 'Oktabr' },
-  { value: '11', label: 'Noyabr' },
-  { value: '12', label: 'Dekabr' },
-];
+const MONTH_VALUES = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] as const;
 const YEARS = Array.from({ length: 100 }, (_, i) => String(new Date().getFullYear() - i));
 
-const schema = z.object({
-  firstName: z.string().min(1, 'Ism kiritilishi shart'),
-  lastName: z.string().min(1, 'Familiya kiritilishi shart'),
-  email: z.string().email("Email noto'g'ri").optional().or(z.literal('')),
-  birthDay: z.string().min(1, 'Kun tanlanishi shart'),
-  birthMonth: z.string().min(1, 'Oy tanlanishi shart'),
-  birthYear: z.string().min(1, 'Yil tanlanishi shart'),
-  region: z.string().min(1, 'Viloyat tanlanishi shart'),
-  gender: z.string().min(1, 'Jins tanlanishi shart'),
-});
-
-type FormValues = z.infer<typeof schema>;
+type FormValues = {
+  firstName: string;
+  lastName: string;
+  email?: string;
+  birthDay: string;
+  birthMonth: string;
+  birthYear: string;
+  region: string;
+  gender: string;
+};
 
 interface ProfileSetupModalProps {
   isOpen: boolean;
@@ -50,7 +36,21 @@ interface ProfileSetupModalProps {
 const inputCls = 'h-12.5! rounded-[10px] border-gray-200 text-sm text-gray-900';
 
 export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
+  const t = useTranslations('profileSetup');
   const { updateProfile, isLoading: isSubmitting, error, setError } = useUpdateProfile();
+
+  const schema = useMemo(() => z.object({
+    firstName: z.string().min(1, t('errFirstname')),
+    lastName: z.string().min(1, t('errLastname')),
+    email: z.string().email(t('errEmail')).optional().or(z.literal('')),
+    birthDay: z.string().min(1, t('errDay')),
+    birthMonth: z.string().min(1, t('errMonth')),
+    birthYear: z.string().min(1, t('errYear')),
+    region: z.string().min(1, t('errRegion')),
+    gender: z.string().min(1, t('errGender')),
+  }), [t]);
+
+  const MONTHS = MONTH_VALUES.map((value) => ({ value, label: t(`months.${value}`) }));
 
   const {
     register,
@@ -123,7 +123,7 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
           </h1>
 
           <div className="text-center mb-2">
-            <h2 className="text-base font-bold text-gray-900">Iltimos ma'lumotlaringizni to'ldiring</h2>
+            <h2 className="text-base font-bold text-gray-900">{t('title')}</h2>
           </div>
 
           {error && <p className="text-xs text-red-500 font-medium mb-2 text-center">{error}</p>}
@@ -133,10 +133,10 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Ismingizni kiriting<span className="text-red-500">*</span>
+                  {t('firstnameLabel')}<span className="text-red-500">*</span>
                 </label>
                 <Input
-                  placeholder="Ismingizni kiriting"
+                  placeholder={t('firstnamePlaceholder')}
                   {...register('firstName')}
                   className={`${inputCls} ${errors.firstName ? 'border-red-400' : ''}`}
                 />
@@ -144,10 +144,10 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
               </div>
               <div>
                 <label className="block text-xs text-gray-600 mb-1">
-                  Familiyangizni kiriting<span className="text-red-500">*</span>
+                  {t('lastnameLabel')}<span className="text-red-500">*</span>
                 </label>
                 <Input
-                  placeholder="Familiyangizni kiriting"
+                  placeholder={t('lastnamePlaceholder')}
                   {...register('lastName')}
                   className={`${inputCls} ${errors.lastName ? 'border-red-400' : ''}`}
                 />
@@ -157,10 +157,10 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
 
             {/* Email */}
             <div>
-              <label className="block text-xs text-gray-600 mb-1">E-mail</label>
+              <label className="block text-xs text-gray-600 mb-1">{t('emailLabel')}</label>
               <Input
                 type="email"
-                placeholder="Emailni kiriting"
+                placeholder={t('emailPlaceholder')}
                 {...register('email')}
                 className={`${inputCls} ${errors.email ? 'border-red-400' : ''}`}
               />
@@ -170,7 +170,7 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
             {/* Tug'ilgan sana */}
             <div>
               <label className="block text-xs text-gray-600 mb-1">
-                Tug'ilgan sana<span className="text-red-500">*</span>
+                {t('birthdayLabel')}<span className="text-red-500">*</span>
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 <div>
@@ -180,7 +180,7 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
                     render={({ field }) => (
                       <Select value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger className={`w-full h-12.5! rounded-[10px] border-gray-200 text-sm ${errors.birthDay ? 'border-red-400' : ''}`}>
-                          <SelectValue placeholder="Kun" />
+                          <SelectValue placeholder={t('dayPlaceholder')} />
                         </SelectTrigger>
                         <SelectContent>
                           {DAYS.map((d) => <SelectItem key={d} value={d}>{d}</SelectItem>)}
@@ -196,7 +196,7 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
                     render={({ field }) => (
                       <Select value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger className={`w-full h-12.5! rounded-[10px] border-gray-200 text-sm ${errors.birthMonth ? 'border-red-400' : ''}`}>
-                          <SelectValue placeholder="Oy" />
+                          <SelectValue placeholder={t('monthPlaceholder')} />
                         </SelectTrigger>
                         <SelectContent>
                           {MONTHS.map((m) => <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>)}
@@ -212,7 +212,7 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
                     render={({ field }) => (
                       <Select value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger className={`w-full h-12.5! rounded-[10px] border-gray-200 text-sm ${errors.birthYear ? 'border-red-400' : ''}`}>
-                          <SelectValue placeholder="Yil" />
+                          <SelectValue placeholder={t('yearPlaceholder')} />
                         </SelectTrigger>
                         <SelectContent>
                           {YEARS.map((y) => <SelectItem key={y} value={y}>{y}</SelectItem>)}
@@ -223,14 +223,14 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
                 </div>
               </div>
               {(errors.birthDay || errors.birthMonth || errors.birthYear) && (
-                <p className="text-xs text-red-500 mt-1">Tug'ilgan sana to'liq kiritilishi shart</p>
+                <p className="text-xs text-red-500 mt-1">{t('errBirthday')}</p>
               )}
             </div>
 
             {/* Viloyat */}
             <div>
               <label className="block text-xs text-gray-600 mb-1">
-                Viloyat<span className="text-red-500">*</span>
+                {t('regionLabel')}<span className="text-red-500">*</span>
               </label>
               <Controller
                 name="region"
@@ -241,7 +241,7 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
                       className={`w-full h-12.5! rounded-[10px] border-gray-200 text-sm [&>svg:last-child]:ml-auto ${errors.region ? 'border-red-400' : ''}`}
                     >
                       <Search className="w-4 h-4 text-gray-400 shrink-0" />
-                      <SelectValue placeholder="Viloyatni tanlang" />
+                      <SelectValue placeholder={t('regionPlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
                       {REGIONS.map((r) => (
@@ -259,7 +259,7 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
             {/* Jins */}
             <div>
               <label className="block text-xs text-gray-600 mb-1">
-                Jins<span className="text-red-500">*</span>
+                {t('genderLabel')}<span className="text-red-500">*</span>
               </label>
               <Controller
                 name="gender"
@@ -268,10 +268,10 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
                   <Tabs value={field.value} onValueChange={field.onChange}>
                     <TabsList className={`w-full h-12.5 rounded-[10px] bg-[#F4F4F4] p-1 ${errors.gender ? 'ring-1 ring-red-400' : ''}`}>
                       <TabsTrigger value="MALE" className="flex-1 rounded-[8px] text-sm font-medium">
-                        Erkak
+                        {t('male')}
                       </TabsTrigger>
                       <TabsTrigger value="FEMALE" className="flex-1 rounded-[8px] text-sm font-medium">
-                        Ayol
+                        {t('female')}
                       </TabsTrigger>
                     </TabsList>
                   </Tabs>
@@ -282,15 +282,15 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
 
             {/* Terms */}
             <p className="text-xs text-center text-gray-500 leading-relaxed">
-              Tugmani bosib, siz{' '}
+              {t('termsBefore')}{' '}
               <a href="/docs/privacy-policy.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline underline-offset-2">
-                shaxsiy ma&apos;lumotlarni qayta ishlash shartlari
+                {t('termsLink')}
               </a>{' '}
-              va{' '}
+              {t('termsAnd')}{' '}
               <a href="/docs/public-offer.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline underline-offset-2">
-                ommaviy taklif
+                {t('publicOfferLink')}
               </a>{' '}
-              bilan rozilik bildirasiz
+              {t('termsAfter')}
             </p>
 
             {/* Submit */}
@@ -300,7 +300,7 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
               className="w-full h-12.5 rounded-[10px] font-semibold text-sm mt-1 transition-opacity cursor-pointer text-white hover:opacity-90 disabled:opacity-100 disabled:bg-[#E5E7EB] disabled:text-gray-400 disabled:cursor-not-allowed"
               style={isFormFilled ? { background: 'linear-gradient(135deg, #2A51E6 0%, #4469F6 100%)' } : undefined}
             >
-              {isSubmitting ? 'Saqlanmoqda...' : 'Kirish  →'}
+              {isSubmitting ? t('saving') : t('submit')}
             </Button>
           </form>
         </div>

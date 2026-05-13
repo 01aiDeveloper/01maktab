@@ -2,9 +2,11 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { ProgressRingCard } from '@/components/cards/progress-ring-card';
 
 export function InternshipStatsSection() {
+  const t = useTranslations('internshipStats');
   return (
     <section className="w-full py-8">
       <div className="container mx-auto px-4">
@@ -27,10 +29,9 @@ export function InternshipStatsSection() {
 
               {/* Right Text Block */}
               <div className="flex-1">
-                <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-3">Stajirovka imkoniyati:</h2>
+                <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-3">{t('title')}</h2>
                 <p className="text-white/70 text-sm lg:text-base leading-relaxed max-w-2xl">
-                  Dasturni muvaffaqiyatli tugatganingizdan so'ng, hamkor kompaniyalardan birida stajirovka o'tash imkoniyatiga ega bo'lasiz.
-                  Siz real loyihalar ustida ishlaysiz va professional tajriba orttrasiz.
+                  {t('description')}
                 </p>
               </div>
             </div>
@@ -39,10 +40,10 @@ export function InternshipStatsSection() {
           {/* Bottom Statistics Cards Grid */}
           <div className="grid lg:grid-cols-2 gap-4">
             {/* Card 1 - Blue 85% */}
-            <ProgressRingCard variant="blue" percent={85} label="Bitiruvchilar stajirovkaga yo'naltirilgan" icon="graduation" />
+            <ProgressRingCard variant="blue" percent={85} label={t('stat1Label')} icon="graduation" />
 
             {/* Card 2 - Dark 60% */}
-            <ProgressRingCard variant="dark" percent={60} label="Stajirovkadan keyin ishga joylashgan" icon="briefcase" />
+            <ProgressRingCard variant="dark" percent={60} label={t('stat2Label')} icon="briefcase" />
           </div>
         </div>
       </div>

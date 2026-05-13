@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Layers, BookMarked, Play, Pause } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { getMediaUrl } from '@/lib/utils';
 import type { MyCourseItem } from '@/hooks/use-my-courses';
 
@@ -13,6 +14,7 @@ interface MyCourseCardProps {
 }
 
 export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
+  const t = useTranslations('cards');
   const photoUrl = getMediaUrl(item.photo);
   const iconUrl = item.icon ? getMediaUrl(item.icon) : null;
 
@@ -41,7 +43,7 @@ export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
           )}
           <span className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white text-[11px] font-medium px-2.5 py-1 rounded-lg">
             <BookMarked className="w-3 h-3" />
-            Dars: {item.completedLessons}/{item.totalLessons}
+            {t('lessonProgress', { done: item.completedLessons, total: item.totalLessons })}
           </span>
         </div>
 
@@ -86,7 +88,7 @@ export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
             </h3>
             {item.mentor?.fullname && (
               <p className="text-sm mt-1 truncate" style={{ color: dark ? 'rgba(255,255,255,0.5)' : '#6b7280' }}>
-                Mentor: {item.mentor.fullname}
+                {t('mentor')}: {item.mentor.fullname}
               </p>
             )}
           </div>

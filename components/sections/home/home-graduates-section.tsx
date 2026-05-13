@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { GraduateCarouselCard } from '@/components/cards/graduate-carousel-card';
 import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
@@ -24,6 +25,7 @@ type GraduatesSectionProps = {
 };
 
 export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
+  const t = useTranslations('graduates');
   const [graduates, setGraduates] = useState<Graduate[]>([]);
   const [loading, setLoading] = useState(true);
   const [emblaRef1, emblaApi1] = useEmblaCarousel({
@@ -114,7 +116,7 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
             className="mb-4 md:mb-6 lg:mb-8"
             animated
           >
-            Bizning Bitiruvchilarimiz
+            {t('title')}
           </MainTitle>
           <div className="flex items-center justify-center py-12">
             <div className="w-12 h-12 border-4 border-gray-200 border-t-[#5d7bf5] rounded-full animate-spin"></div>
@@ -150,7 +152,7 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
           animated
           animationDelay={0.1}
         >
-          Xozirda ish topgan studentlarimiz bir nechasi va ularning hikoyalari.
+          {t('subtitle')}
         </Subtitle>
 
         {/* Mobile: single row slider */}

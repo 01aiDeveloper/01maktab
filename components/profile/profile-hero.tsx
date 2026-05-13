@@ -2,9 +2,12 @@
 
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useSmartBack } from '@/hooks/use-smart-back';
 
 export function ProfileHero() {
+  const t = useTranslations('profile');
+  const tCommon = useTranslations('common');
   const goBack = useSmartBack('/');
 
   return (
@@ -26,11 +29,11 @@ export function ProfileHero() {
           className="absolute top-4 left-4 inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors text-sm z-10 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Orqaga</span>
+          <span>{tCommon('backShort')}</span>
         </button>
         {/* Profil text bottom */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-6 pt-10 pb-5">
-          <h1 className="text-3xl font-bold text-white">Profil</h1>
+          <h1 className="text-3xl font-bold text-white">{t('title')}</h1>
         </div>
       </div>
 
@@ -44,9 +47,9 @@ export function ProfileHero() {
             className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors text-sm w-fit cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Orqaga</span>
+            <span>{tCommon('backShort')}</span>
           </button>
-          <h1 className="text-4xl font-bold text-white">Profil</h1>
+          <h1 className="text-4xl font-bold text-white">{t('title')}</h1>
         </div>
 
         {/* Right: Illustration Card */}

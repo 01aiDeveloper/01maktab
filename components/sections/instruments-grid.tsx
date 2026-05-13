@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 export interface Instrument {
   name: string;
@@ -17,10 +18,12 @@ interface InstrumentsGridProps {
 
 export function InstrumentsGrid({
   instruments,
-  title = 'Instrumentlar',
+  title,
   icon = '/icons/instrument.webp',
   delay = 0.1,
 }: InstrumentsGridProps) {
+  const t = useTranslations('skillsInstruments');
+  const displayTitle = title ?? t('instruments');
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -30,8 +33,8 @@ export function InstrumentsGrid({
       className="flex flex-col h-full"
     >
       <h3 className="font-suisse text-xl font-semibold text-gray-900 mb-4 flex items-center gap-3 bg-[#e8e8e8] rounded-3xl p-6">
-        <Image src={icon} alt={title} width={40} height={30} />
-        {title}
+        <Image src={icon} alt={displayTitle} width={40} height={30} />
+        {displayTitle}
       </h3>
       <div className="flex-1 grid grid-cols-2 gap-4 bg-[#e8e8e8] rounded-3xl p-6 content-start">
         {instruments.map((instrument, index) => (

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { ProfileSetup } from './profile-setup';
 import { Send, ArrowRight } from 'lucide-react';
@@ -8,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export function AuthModal({ isOpen, onOpenChange }: { isOpen: boolean; onOpenChange: (open: boolean) => void }) {
+  const t = useTranslations('auth');
   const [step, setStep] = useState<'INITIAL' | 'OTP' | 'PROFILE'>('INITIAL');
   const [method, setMethod] = useState<'phone' | 'email'>('phone');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -30,7 +32,7 @@ export function AuthModal({ isOpen, onOpenChange }: { isOpen: boolean; onOpenCha
             {step === 'INITIAL' ? (
               <>
                 <h2 className="text-xl font-medium text-gray-800 mb-6 text-center w-full">
-                  {method === 'phone' ? 'Telefon orqali kirish' : 'Pochta orqali kirish'}
+                  {method === 'phone' ? t('loginPhone') : t('loginEmail')}
                 </h2>
                 <div className="w-full bg-gray-100 rounded-xl p-1 flex mb-8">
                   <button
@@ -40,7 +42,7 @@ export function AuthModal({ isOpen, onOpenChange }: { isOpen: boolean; onOpenCha
                       method === 'phone' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'
                     )}
                   >
-                    Telefon
+                    {t('phoneTab')}
                   </button>
                   <button
                     onClick={() => setMethod('email')}
@@ -49,30 +51,30 @@ export function AuthModal({ isOpen, onOpenChange }: { isOpen: boolean; onOpenCha
                       method === 'email' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'
                     )}
                   >
-                    Pochta
+                    {t('emailTab')}
                   </button>
                 </div>
                 <Button
                   onClick={() => setStep('OTP')}
                   className="w-full bg-gray-200 text-gray-600 hover:bg-gray-300 py-6 rounded-2xl shadow-none"
                 >
-                  Kirish
+                  {t('loginButton')}
                 </Button>
                 <div className="w-full mt-8">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="h-px bg-gray-100 flex-1" />
-                    <span className="text-xs font-medium text-gray-400 uppercase tracking-widest">Tez kirish</span>
+                    <span className="text-xs font-medium text-gray-400 uppercase tracking-widest">{t('quickLogin')}</span>
                     <div className="h-px bg-gray-100 flex-1" />
                   </div>
                   <button className="w-full bg-[#54A9EB] text-white font-medium py-4 rounded-2xl flex items-center justify-center gap-3">
                     <Send className="w-5 h-5 fill-current" />
-                    Telegram bilan kirish
+                    {t('telegramLogin')}
                   </button>
                 </div>
               </>
             ) : (
               <>
-                <h2 className="text-xl font-medium text-gray-800 mb-2">Telefon raqamini tasdiqlang</h2>
+                <h2 className="text-xl font-medium text-gray-800 mb-2">{t('confirmPhone')}</h2>
                 <div className="flex gap-2 mb-8 mt-4">
                   {[1, 2, 3, 4, 5, 6].map((i) => (
                     <div
@@ -82,7 +84,7 @@ export function AuthModal({ isOpen, onOpenChange }: { isOpen: boolean; onOpenCha
                   ))}
                 </div>
                 <Button onClick={handleOtpSubmit} className="w-full py-6 rounded-2xl bg-gray-900 text-white flex gap-2">
-                  Keyingisi <ArrowRight className="w-5 h-5" />
+                  {t('next')} <ArrowRight className="w-5 h-5" />
                 </Button>
               </>
             )}

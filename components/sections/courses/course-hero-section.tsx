@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2, Clock, Users, FileText, Heart, Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useSmartBack } from '@/hooks/use-smart-back';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
@@ -41,6 +42,8 @@ interface CourseHeroSectionProps {
   onStart?: () => void;
   startLoading?: boolean;
   badges?: CourseBadgeDisplay[];
+  isAddedToProfile?: boolean;
+  isFree?: boolean;
 }
 
 export function CourseHeroSection({
@@ -59,12 +62,25 @@ export function CourseHeroSection({
   onStart,
   startLoading = false,
   badges = [],
+  isAddedToProfile = false,
+  isFree = false,
 }: CourseHeroSectionProps) {
+  const t = useTranslations('courseHero');
+  const tSkill = useTranslations('skillDetail');
   const goBack = useSmartBack('/catalog?tab=courses');
-  const hasProgress = progress && progress.totalLessonsCount > 0;
-  const progressPercent = hasProgress
-    ? Math.round((progress.completedLessonsCount / progress.totalLessonsCount) * 100)
+  const completedCount = progress?.completedLessonsCount ?? 0;
+  const totalCount = progress?.totalLessonsCount ?? 0;
+  const hasStarted = isAddedToProfile && completedCount > 0;
+  const progressPercent = hasStarted && totalCount > 0
+    ? Math.round((completedCount / totalCount) * 100)
     : 0;
+  const buttonLabel = startLoading
+    ? t('loading')
+    : !isAddedToProfile && !isFree
+    ? tSkill('buy')
+    : hasStarted
+    ? tSkill('continueLesson')
+    : tSkill('startNow');
   return (
     <section className="w-full">
       <div className="container mx-auto px-4 h-[511px] lg:h-[calc(100vh-90px)]">
@@ -89,22 +105,22 @@ export function CourseHeroSection({
             {/* Back button */}
             <button onClick={goBack} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit cursor-pointer">
               <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm font-medium">Orqaga</span>
+              <span className="text-sm font-medium">{t('back')}</span>
             </button>
 
             {/* Stats badges */}
             <div className="flex flex-wrap gap-2 mb-6">
               <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-sm">
                 <BookOpen className="w-4 h-4 mr-2" />
-                {videosCount} soat video darslar
+                {t('videoHours', { count: videosCount })}
               </Badge>
               <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-sm">
                 <CheckCircle2 className="w-4 h-4 mr-2" />
-                {tasksCount} ta mavzu
+                {t('topicsCount', { count: tasksCount })}
               </Badge>
               <Badge className="bg-black text-white border-0 rounded-full px-4 py-2 text-sm">
                 <Users className="w-4 h-4 mr-2" />
-                {projectsCount} ta loyiha
+                {t('projectsCount', { count: projectsCount })}
               </Badge>
             </div>
 
@@ -114,14 +130,14 @@ export function CourseHeroSection({
               {subtitle && (
                 <p className="text-gray-600 text-sm lg:text-base leading-relaxed line-clamp-6">{subtitle}</p>
               )}
-              {hasProgress ? (
+              {hasStarted && progress ? (
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 flex-wrap">
                     <span className="text-xs bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full">
-                      Modul: {progress.moduleTitile ?? '—'}
+                      {t('moduleLabel', { title: progress.moduleTitile ?? '—' })}
                     </span>
                     <span className="text-xs bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full">
-                      Dars: {progress.completedLessonsCount}/{progress.totalLessonsCount}
+                      {t('lessonLabel', { done: progress.completedLessonsCount, total: progress.totalLessonsCount })}
                     </span>
                   </div>
                   <div className="w-full max-w-sm bg-white/30 rounded-full h-2">
@@ -130,31 +146,19 @@ export function CourseHeroSection({
                       style={{ width: `${progressPercent}%` }}
                     />
                   </div>
-                  <MainButton
-                    variant="gradient"
-                    size="md"
-                    icon={startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
-                    iconPosition="right"
-                    className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5]"
-                    onClick={onStart}
-                    disabled={startLoading}
-                  >
-                    {startLoading ? 'Yuklanmoqda...' : "O'qishni davom ettirish"}
-                  </MainButton>
                 </div>
-              ) : (
-                <MainButton
-                  variant="gradient"
-                  size="md"
-                  icon={startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
-                  iconPosition="right"
-                  className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5]"
-                  onClick={onStart}
-                  disabled={startLoading}
-                >
-                  {startLoading ? 'Yuklanmoqda...' : 'Boshlash'}
-                </MainButton>
-              )}
+              ) : null}
+              <MainButton
+                variant="gradient"
+                size="md"
+                icon={startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
+                iconPosition="right"
+                className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5]"
+                onClick={onStart}
+                disabled={startLoading}
+              >
+                {buttonLabel}
+              </MainButton>
             </div>
 
             {/* Course badges (plashkalar) */}
@@ -189,11 +193,11 @@ export function CourseHeroSection({
               </Badge>
               <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-sm">
                 <FileText className="w-4 h-4 mr-2" />
-                Kreativlik talab etmaz
+                {t('noCreativityNeeded')}
               </Badge>
               <Badge variant="secondary" className="bg-white/80 backdrop-blur-sm text-gray-700 border-0 rounded-full px-4 py-2 text-sm">
                 <Heart className="w-4 h-4 mr-2 text-red-500 fill-red-500" />
-                {stats.graduates.toLocaleString()} talaba boshlagan
+                {t('studentsStarted', { count: stats.graduates.toLocaleString() })}
               </Badge>
             </div>
           </div>

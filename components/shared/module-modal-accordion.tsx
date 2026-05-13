@@ -4,6 +4,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
 import {
@@ -124,6 +125,7 @@ export function ModuleModalAccordion({
   className,
   emptyState,
 }: Props) {
+  const t = useTranslations("moduleAccordion");
   const s = styles[variant];
   const list = modules ?? [];
 
@@ -136,9 +138,9 @@ export function ModuleModalAccordion({
               <Image src={moduleIconSrc} alt={moduleIconAlt} width={44} height={44} className="w-11 h-11" />
             </div>
             <div>
-              <div className="font-semibold">Hozircha ma’lumot yo‘q</div>
+              <div className="font-semibold">{t("noInfoTitle")}</div>
               <div className={cn("mt-1 text-sm", s.emptyMuted)}>
-                Modul/lessonlar kiritilmagan. Keyinroq qayta tekshirib ko‘ring.
+                {t("noInfoDescription")}
               </div>
             </div>
           </div>
@@ -177,8 +179,8 @@ export function ModuleModalAccordion({
                 <div className="min-w-0 text-left">
                   <h3 className={s.headerTitle}>{module.title}</h3>
                   <div className="flex items-center gap-3 mt-2">
-                    <span className={s.headerMeta}>Dars: {getDarsCount(module)}</span>
-                    <span className={s.headerMeta}>Test: {getTestCount(module)}</span>
+                    <span className={s.headerMeta}>{t("darsLabel", { count: getDarsCount(module) })}</span>
+                    <span className={s.headerMeta}>{t("testLabel", { count: getTestCount(module) })}</span>
                   </div>
                 </div>
 
@@ -198,10 +200,10 @@ export function ModuleModalAccordion({
                 <div className={s.contentWrap}>
                   {/* lessons */}
                   {(module.lessons ?? []).map((lesson, lessonIndex) => {
-                    let leftLabel = `Dars ${lessonIndex + 1}`;
-                    if (lesson.type === "test") leftLabel = "Test";
-                    else if (lesson.type === "video") leftLabel = `Dars ${lessonIndex + 1}`;
-                    else if (lesson.type === "practice") leftLabel = `Dars ${lessonIndex + 1}`;
+                    let leftLabel = t("darsItem", { n: lessonIndex + 1 });
+                    if (lesson.type === "test") leftLabel = t("test");
+                    else if (lesson.type === "video") leftLabel = t("darsItem", { n: lessonIndex + 1 });
+                    else if (lesson.type === "practice") leftLabel = t("darsItem", { n: lessonIndex + 1 });
 
                     return (
                       <div
@@ -250,7 +252,7 @@ export function ModuleModalAccordion({
                       }}
                     >
                       <div className="flex items-center gap-4 flex-1 min-w-0">
-                        <span className={s.rowLeftLabel}>Test</span>
+                        <span className={s.rowLeftLabel}>{t("test")}</span>
                         <span className={s.rowTitle}>{module.test.title}</span>
                       </div>
                     </div>
@@ -259,7 +261,7 @@ export function ModuleModalAccordion({
               ) : (
                 // ✅ module ichida no-data
                 <div className={cn("px-5 lg:px-6 py-5", variant === "dark" ? "text-gray-400" : "text-gray-500")}>
-                  Bu modulda hozircha darslar yo‘q.
+                  {t("noLessons")}
                 </div>
               )}
             </AccordionContent>
@@ -281,19 +283,18 @@ function DefaultLessonRight({
   freeBadgeClassName: string;
   actionButtonClassName: string;
 }) {
-  // Completed bo'lsa: lock ko'rsatmaymiz (xohlasang keyin check qo‘shamiz)
-  // Hozir default: free bo'lsa badge+button, bo'lmasa "To'liq kursda"+Lock
+  const t = useTranslations("moduleAccordion");
   if (lesson.isFree) {
     return (
       <>
         <Badge className={cn("text-xs rounded-full px-3 py-1.5", freeBadgeClassName)}>
-          Bepul sinov darsi
+          {t("freeTrialBadge")}
         </Badge>
         <Button
           size="sm"
           className={cn("rounded-full text-xs h-8 px-4", actionButtonClassName)}
         >
-          Ko&apos;rish
+          {t("watch")}
         </Button>
       </>
     );
@@ -302,7 +303,7 @@ function DefaultLessonRight({
   return (
     <>
       <Badge className={cn("text-xs rounded-full px-3 py-1.5", variant === "dark" ? "bg-black hover:bg-black text-white" : "bg-black hover:bg-black text-white")}>
-        To&apos;liq kursda
+        {t("fullCourse")}
       </Badge>
       <Lock className={cn("w-5 h-5", variant === "dark" ? "text-gray-400" : "text-gray-400")} />
     </>

@@ -1,22 +1,27 @@
+'use client';
+
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 
 interface PageErrorProps {
   title?: string;
   description?: string;
-  /** Show a "Bosh sahifa" back link */
   showBack?: boolean;
   fullPage?: boolean;
   className?: string;
 }
 
 export function PageError({
-  title = "Ma'lumot topilmadi",
-  description = "Kechirasiz, bu sahifa mavjud emas yoki o'chirilgan.",
+  title,
+  description,
   showBack = true,
   fullPage = false,
   className,
 }: PageErrorProps) {
+  const t = useTranslations('pageError');
+  const displayTitle = title ?? t('title');
+  const displayDescription = description ?? t('description');
   return (
     <div
       className={cn(
@@ -25,7 +30,6 @@ export function PageError({
         className,
       )}
     >
-      {/* Illustration */}
       <div className="relative select-none">
         <span className="text-[96px] font-black text-gray-100 leading-none tracking-tighter">404</span>
         <span className="absolute inset-0 flex items-center justify-center">
@@ -34,8 +38,8 @@ export function PageError({
       </div>
 
       <div className="space-y-2 max-w-sm">
-        <h2 className="text-xl font-bold text-gray-900">{title}</h2>
-        <p className="text-sm text-gray-400 leading-relaxed">{description}</p>
+        <h2 className="text-xl font-bold text-gray-900">{displayTitle}</h2>
+        <p className="text-sm text-gray-400 leading-relaxed">{displayDescription}</p>
       </div>
 
       {showBack && (
@@ -43,7 +47,7 @@ export function PageError({
           href="/"
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#3B5BFF] text-white text-sm font-medium hover:bg-[#2f4de0] transition-colors"
         >
-          Bosh sahifaga qaytish
+          {t('backHome')}
         </Link>
       )}
     </div>

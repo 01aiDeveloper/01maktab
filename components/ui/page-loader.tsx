@@ -1,12 +1,15 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 
 interface PageLoaderProps {
-  /** Full page wrapper (with SiteHeader space). Default: false — inline centering */
   fullPage?: boolean;
   className?: string;
 }
 
 export function PageLoader({ fullPage = false, className }: PageLoaderProps) {
+  const t = useTranslations('common');
   return (
     <div
       className={cn(
@@ -15,15 +18,13 @@ export function PageLoader({ fullPage = false, className }: PageLoaderProps) {
         className,
       )}
     >
-      {/* Outer ring */}
       <div className="relative w-14 h-14">
         <span className="absolute inset-0 rounded-full border-4 border-gray-100" />
         <span className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#3B5BFF] animate-spin" />
-        {/* Inner dot pulse */}
         <span className="absolute inset-[18px] rounded-full bg-[#3B5BFF] animate-ping opacity-60" />
         <span className="absolute inset-[18px] rounded-full bg-[#3B5BFF]" />
       </div>
-      <p className="text-sm text-gray-400 animate-pulse">Yuklanmoqda...</p>
+      <p className="text-sm text-gray-400 animate-pulse">{t('loading')}</p>
     </div>
   );
 }

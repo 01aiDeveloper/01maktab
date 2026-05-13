@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { CountdownTile } from "@/components/ui/countdown-tile";
 
@@ -15,6 +16,7 @@ interface EnrollmentCtaCountdownProps {
 export function EnrollmentCtaCountdown({
   deadline,
 }: EnrollmentCtaCountdownProps) {
+  const t = useTranslations("enrollmentCountdown");
   const [timeLeft, setTimeLeft] = useState({ days: 20, hours: 20, minutes: 0 });
   const [prevTimeLeft, setPrevTimeLeft] = useState({
     days: 20,
@@ -67,12 +69,10 @@ export function EnrollmentCtaCountdown({
           {/* Top Content - Centered */}
           <div className="text-center mb-8">
             <h2 className="text-white font-suisse font-semibold text-3xl md:text-[64px] leading-tight md:leading-[81px] tracking-[-0.05em] text-center mb-3">
-              Karyerangizni bugun boshlang
+              {t("title")}
             </h2>
-            <p className="text-white/100 font-suisse text-xl md:text-[40px] leading-tight md:leading-[47px] tracking-[-0.05em] text-center">
-              Joylar cheklangan.
-              <br />
-              Keyingi oqim 3 oydan keyin.
+            <p className="text-white/100 font-suisse text-xl md:text-[40px] leading-tight md:leading-[47px] tracking-[-0.05em] text-center whitespace-pre-line">
+              {t("subtitle")}
             </p>
           </div>
 
@@ -95,7 +95,7 @@ export function EnrollmentCtaCountdown({
               asChild
             >
               <Link href="/login">
-                Hoziroq ariza qoldiring
+                {t("cta")}
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </Button>

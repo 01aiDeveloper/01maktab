@@ -1,14 +1,22 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { CardSlashSolid, TickCircleSolid, ClockSolid } from '@/components/ui/icons/badge-icons';
 
 export type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
 
-const STATUS_CONFIG: Record<CardStatus, { label: string; bg: string; text: string }> = {
-  bought: { label: 'Sotib olingan', bg: 'bg-[#1EBB4A]', text: 'text-white' },
-  free: { label: 'Bepul', bg: 'bg-[#1EBB4A]', text: 'text-white' },
-  waitlist: { label: 'Waitlist', bg: 'bg-[#3B5BFF]', text: 'text-white' },
-  presale: { label: 'Pre-sale', bg: 'bg-amber-500', text: 'text-white' },
+const STATUS_STYLE: Record<CardStatus, { bg: string; text: string }> = {
+  bought: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
+  free: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
+  waitlist: { bg: 'bg-[#3B5BFF]', text: 'text-white' },
+  presale: { bg: 'bg-amber-500', text: 'text-white' },
+};
+
+const STATUS_KEY: Record<CardStatus, 'statusBought' | 'statusFree' | 'statusWaitlist' | 'statusPresale'> = {
+  bought: 'statusBought',
+  free: 'statusFree',
+  waitlist: 'statusWaitlist',
+  presale: 'statusPresale',
 };
 
 export interface StatusFlags {
@@ -34,7 +42,9 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, size = 'md', className = '' }: StatusBadgeProps) {
-  const info = STATUS_CONFIG[status];
+  const t = useTranslations('cards');
+  const style = STATUS_STYLE[status];
+  const label = t(STATUS_KEY[status]);
   const sizeCls = size === 'sm'
     ? 'p-1.5 text-xs gap-1.5 tracking-[-0.05em]'
     : 'px-[14px] py-2 text-[18px] leading-[22px] tracking-[-0.05em] gap-2';
@@ -46,9 +56,9 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
     CardSlashSolid;
 
   return (
-    <div className={`inline-flex w-fit items-center ${info.bg} ${info.text} ${sizeCls} rounded-[12px] font-semibold ${className}`}>
+    <div className={`inline-flex w-fit items-center ${style.bg} ${style.text} ${sizeCls} rounded-[12px] font-semibold ${className}`}>
       <Icon className={iconCls} />
-      {info.label}
+      {label}
     </div>
   );
 }

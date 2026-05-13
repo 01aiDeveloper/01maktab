@@ -1,6 +1,7 @@
 'use client';
 
 import { X, Lock } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
 interface LessonLockedModalProps {
@@ -13,10 +14,13 @@ interface LessonLockedModalProps {
 export function LessonLockedModal({
   open,
   onClose,
-  title = "Avval darsni yakunlang",
-  description = "Keyingi darsga o'tish uchun avval ushbu dars videosini oxirigacha ko'rib bo'lishingiz kerak.",
+  title,
+  description,
 }: LessonLockedModalProps) {
+  const t = useTranslations('lesson');
   if (!open) return null;
+  const displayTitle = title ?? t('lockedTitle');
+  const displayDescription = description ?? t('lockedDescription');
 
   return (
     <div
@@ -30,7 +34,7 @@ export function LessonLockedModal({
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-          aria-label="Yopish"
+          aria-label={t('close')}
         >
           <X className="w-6 h-6" />
         </button>
@@ -40,16 +44,16 @@ export function LessonLockedModal({
             <Lock className="w-8 h-8 text-amber-600" />
           </div>
 
-          <h2 className="text-2xl font-bold text-foreground mb-3">{title}</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-3">{displayTitle}</h2>
 
-          <p className="text-muted-foreground text-sm mb-7 leading-relaxed">{description}</p>
+          <p className="text-muted-foreground text-sm mb-7 leading-relaxed">{displayDescription}</p>
 
           <Button
             size="lg"
             onClick={onClose}
             className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 text-white"
           >
-            Tushunarli
+            {t('lockedConfirm')}
           </Button>
         </div>
       </div>

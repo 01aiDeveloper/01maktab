@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { NoData } from '@/components/ui/no-data';
 
 interface LearningOutcome {
@@ -13,8 +14,9 @@ interface LearningOutcomesSectionProps {
   title?: string;
 }
 
-export function LearningOutcomesSection({ courseOutcomes, title = "Bu kursda nimani o'rganasiz?" }: LearningOutcomesSectionProps) {
-
+export function LearningOutcomesSection({ courseOutcomes, title }: LearningOutcomesSectionProps) {
+  const t = useTranslations('courseSections');
+  const displayTitle = title ?? t('learningOutcomesTitle');
   return (
     <section className="w-full py-8">
       <div className="container mx-auto px-4">
@@ -25,11 +27,11 @@ export function LearningOutcomesSection({ courseOutcomes, title = "Bu kursda nim
           transition={{ duration: 0.5 }}
           className="bg-white rounded-3xl p-8 lg:p-12"
         >
-          <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">Bu skillda nima o'rganasiz?</h2>
+          <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">{displayTitle}</h2>
           {courseOutcomes ? (
             <div className="prose prose-sm lg:prose-base max-w-none text-gray-600" dangerouslySetInnerHTML={{ __html: courseOutcomes }} />
           ) : (
-            <NoData title="Ma'lumot hali qo'shilmagan" />
+            <NoData title={t('infoNotAdded')} />
           )}
         </motion.div>
       </div>

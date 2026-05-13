@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import useEmblaCarousel from 'embla-carousel-react';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
@@ -20,6 +21,7 @@ import { PageError } from '@/components/ui/page-error';
 import { useSmartBack } from '@/hooks/use-smart-back';
 
 export default function GraduateStoryPage() {
+  const t = useTranslations('graduatePage');
   const params = useParams();
   const goBack = useSmartBack('/');
   const [story, setStory] = useState<GraduateStory | null>(null);
@@ -106,8 +108,8 @@ export default function GraduateStoryPage() {
       <>
         <SiteHeader variant="light" />
         <PageError
-          title="Hikoya topilmadi"
-          description="Kechirasiz, bu hikoya mavjud emas yoki o'chirilgan."
+          title={t('notFoundTitle')}
+          description={t('notFoundDesc')}
           showBack={false}
         />
         <SiteFooter />
@@ -137,7 +139,7 @@ export default function GraduateStoryPage() {
                 className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-8 transition-colors w-fit cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span className="text-sm font-medium">Orqaga</span>
+                <span className="text-sm font-medium">{t('back')}</span>
               </button>
               {/* Title */}
               <h1 className="font-suisse font-bold text-3xl md:text-4xl lg:text-[48px] lg:leading-[1.1] text-[#18181A] mb-6 tracking-[-0.02em]">
@@ -157,7 +159,7 @@ export default function GraduateStoryPage() {
 
               {/* CTA Button */}
               <Link href="/login" className="inline-flex items-center gap-2 bg-[#3b66f5] hover:bg-[#2d52d1] text-white rounded-full px-8 py-3 h-12 w-fit text-base font-medium transition-colors">
-                Hoziroq boshlash
+                {t('startNow')}
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </motion.div>
@@ -175,7 +177,7 @@ export default function GraduateStoryPage() {
                 className="lg:hidden absolute top-4 left-4 z-10 inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors w-fit cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span className="text-sm font-medium">Orqaga</span>
+                <span className="text-sm font-medium">{t('back')}</span>
               </button>
               <Image
                 src={getMediaUrl(story.photo)}
@@ -200,7 +202,7 @@ export default function GraduateStoryPage() {
           <section className="w-full py-16 lg:py-24">
             <div className="container mx-auto px-4">
               <h2 className="font-suisse font-bold text-3xl lg:text-[48px] lg:leading-[1.1] text-[#18181A] tracking-[-0.02em] mb-8 lg:mb-12">
-                Boshqa hikoyalarni ko'rish
+                {t('otherStories')}
               </h2>
 
               <div className="overflow-hidden" ref={emblaRef}>

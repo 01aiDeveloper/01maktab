@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { SiteHeader } from '@/components/site-header';
 import { HeroSection } from '@/components/hero-section';
 import { FeatureCards } from '@/components/feature-cards';
@@ -19,6 +20,7 @@ import { MainButton } from '@/components/ui/main-button';
 import api from '@/lib/api';
 
 export default function PrivateHomePage() {
+  const t = useTranslations('userHome');
   const { user, setUser, isAuthenticated } = useAuthStore();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
@@ -58,7 +60,7 @@ export default function PrivateHomePage() {
     <div className="min-h-screen bg-[#f5f5f5]">
       <SiteHeader variant="light" />
       <main>
-        <HeroSection userName={user?.firstname || 'Foydalanuvchi'} />
+        <HeroSection userName={user?.firstname || t('defaultUser')} />
         <FeatureCards />
 
         <div className="container space-y-8 pb-16">
@@ -83,11 +85,10 @@ export default function PrivateHomePage() {
                 className="text-center text-[#18181A] max-w-3xl"
                 style={{ fontWeight: 600, fontSize: '36px', lineHeight: '41px', letterSpacing: '-0.05em' }}
               >
-                Siz ham ularning orasida bo&apos;lishingiz mumkin. Bizdan sharoit - sizdan harakat. Harakatni &quot;01AI&quot;da davom
-                eting!
+                {t('ctaText')}
               </p>
               <MainButton size="md" href="/catalog" className="!h-[54px] !text-[20px] !gap-[39px] !px-4">
-                Hoziroq boshlash →
+                {t('ctaButton')}
               </MainButton>
             </div>
           </div>

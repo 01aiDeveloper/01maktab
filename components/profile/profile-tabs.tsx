@@ -2,14 +2,15 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 type TabKey = 'info' | 'achievements' | 'certificates' | 'payments';
 
-const TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: 'info', label: "Ma'lumotlarim", icon: '/icons/profile/2.webp' },
-  { key: 'achievements', label: 'Yutuqlarim', icon: '/icons/profile/1.webp' },
-  { key: 'certificates', label: 'Sertifikatlarim', icon: '/icons/profile/3.webp' },
-  { key: 'payments', label: "To'lovlarim", icon: '/icons/profile/4.png' },
+const TAB_META: { key: TabKey; labelKey: 'tabInfo' | 'tabAchievements' | 'tabCertificates' | 'tabPayments'; icon: string }[] = [
+  { key: 'info', labelKey: 'tabInfo', icon: '/icons/profile/2.webp' },
+  { key: 'achievements', labelKey: 'tabAchievements', icon: '/icons/profile/1.webp' },
+  { key: 'certificates', labelKey: 'tabCertificates', icon: '/icons/profile/3.webp' },
+  { key: 'payments', labelKey: 'tabPayments', icon: '/icons/profile/4.png' },
 ];
 
 interface ProfileTabsProps {
@@ -17,6 +18,8 @@ interface ProfileTabsProps {
 }
 
 export function ProfileTabs({ activeTab }: ProfileTabsProps) {
+  const t = useTranslations('profile');
+  const TABS = TAB_META.map((tab) => ({ ...tab, label: t(tab.labelKey) }));
   const router = useRouter();
 
   const setTab = (tab: TabKey) => {

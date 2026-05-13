@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { LessonModuleModal } from './lesson-module-modal';
 import type { CourseModule, CourseType } from './lesson-content';
@@ -43,6 +44,7 @@ export function LessonHeaderActions({
   onCourseExam,
   isEnrolled = false,
 }: LessonHeaderActionsProps) {
+  const t = useTranslations('lesson');
   const [modalOpen, setModalOpen] = useState(false);
 
   const backHref = courseId ? `/${courseType === 'course' ? 'courses' : courseType === 'skill' ? 'skills' : 'professions'}/${courseId}` : '/';
@@ -52,23 +54,23 @@ export function LessonHeaderActions({
       <div className="flex items-center justify-between mb-8">
         <Link href={backHref} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
           <ArrowLeft className="w-4 h-4" />
-          <span>Orqaga</span>
+          <span>{t('back')}</span>
         </Link>
 
         <div className="flex items-center gap-2">
           {isPublic && (
             <div className="hidden sm:flex items-center gap-1.5 bg-green-500 text-white px-3 py-1.5 rounded-[10px] text-xs font-medium h-9">
               <Image src="/icons/free-lesson.svg" alt="" width={14} height={14} />
-              Bepul sinov darsi
+              {t('freeTrialLesson')}
             </div>
           )}
 
           <button
             onClick={() => setModalOpen(true)}
             className="w-9 h-9 rounded-[10px] border bg-black  flex items-center justify-center  transition-colors"
-            title="Kurs dasturi"
+            title={t('courseProgram')}
           >
-            <Image src="/icons/module-menu.svg" alt="Kurs dasturi" width={18} height={18} />
+            <Image src="/icons/module-menu.svg" alt={t('courseProgram')} width={18} height={18} />
           </button>
 
           <button

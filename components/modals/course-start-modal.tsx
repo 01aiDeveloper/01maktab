@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { MainButton } from '@/components/ui/main-button';
 
@@ -17,6 +18,7 @@ export function CourseStartModal({
   onStartCourse,
   courseName,
 }: CourseStartModalProps) {
+  const t = useTranslations('courseStartModal');
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent
@@ -32,12 +34,12 @@ export function CourseStartModal({
 
         {/* Title */}
         <h2 className="text-2xl font-bold text-gray-900 leading-tight">
-          Kurs boshlandi!
+          {t('title')}
         </h2>
 
         {/* Description */}
         <p className="text-sm text-gray-500 leading-relaxed">
-          Endi o&apos;rganishni boshlashingiz mumkin
+          {t('description')}
         </p>
 
         {/* Buttons */}
@@ -48,7 +50,7 @@ export function CourseStartModal({
             className="rounded-xl w-full flex flex-row items-center justify-center"
             onClick={onStartCourse}
           >
-            Kursni boshlash
+            {t('startCourse')}
             <ArrowRight className="w-4 h-4 ml-2" />
           </MainButton>
           <MainButton
@@ -57,7 +59,7 @@ export function CourseStartModal({
             className="rounded-xl w-full border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-700 hover:border-gray-300"
             onClick={onClose}
           >
-            Keyinroq
+            {t('later')}
           </MainButton>
         </div>
       </DialogContent>

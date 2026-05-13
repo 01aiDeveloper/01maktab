@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 interface Certificate {
   id: number;
@@ -18,12 +19,13 @@ interface CertificatesSectionProps {
 }
 
 export function CertificatesSection({ certificates, footnote }: CertificatesSectionProps) {
+  const t = useTranslations('certificatesSection');
   return (
     <section className="w-full py-12 lg:py-16">
       <div className="container mx-auto px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
           {/* Section Title */}
-          <h2 className="font-suisse text-3xl lg:text-4xl font-bold text-white text-center mb-8 lg:mb-12">2 ta qimmatli sertifikat</h2>
+          <h2 className="font-suisse text-3xl lg:text-4xl font-bold text-white text-center mb-8 lg:mb-12">{t('title')}</h2>
 
           {/* Certificates Grid */}
           <div className="grid lg:grid-cols-2 gap-6 mb-6">

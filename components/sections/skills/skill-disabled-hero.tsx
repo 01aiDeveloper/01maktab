@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ArrowLeft, Clock, BarChart3 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useSmartBack } from '@/hooks/use-smart-back';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
@@ -17,13 +18,11 @@ interface SkillDisabledHeroProps {
   icon?: string;
 }
 
-function difficultyLabel(difficulty: string): string {
-  const map: Record<string, string> = {
-    BEGINNER: "Boshlang'ich",
-    INTERMEDIATE: "O'rta",
-    ADVANCED: 'Yuqori',
-  };
-  return map[difficulty] ?? difficulty;
+function getDifficultyKey(difficulty: string): 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | null {
+  if (difficulty === 'BEGINNER' || difficulty === 'INTERMEDIATE' || difficulty === 'ADVANCED') {
+    return difficulty;
+  }
+  return null;
 }
 
 export function SkillDisabledHero({
@@ -35,14 +34,16 @@ export function SkillDisabledHero({
   courseImage,
   icon,
 }: SkillDisabledHeroProps) {
+  const t = useTranslations('skillHero');
   const goBack = useSmartBack('/catalog?tab=skills');
-  const priceLabel = price === 0 ? 'Bepul' : `${price.toLocaleString()} so'm`;
+  const priceLabel = price === 0 ? t('free') : `${price.toLocaleString()} ${t('currencySom')}`;
+  const difficultyKey = getDifficultyKey(difficulty);
+  const difficultyLabel = difficultyKey ? t(`difficulty.${difficultyKey}`) : difficulty;
 
   return (
     <section className="w-full py-6">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Image Card — grayscale overlay for disabled */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -63,27 +64,26 @@ export function SkillDisabledHero({
               className="absolute top-6 left-6 inline-flex lg:hidden items-center gap-2 text-white text-sm transition-colors w-fit z-10 cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span>Orqaga</span>
+              <span>{t('back')}</span>
             </button>
 
-            {/* Disabled badge */}
             <div className="absolute top-6 left-6 lg:top-auto lg:left-auto lg:bottom-6 lg:right-6 z-10">
               <Badge className="bg-orange-500 text-white border-0 rounded-full px-4 py-2 text-xs font-semibold">
-                Sotuvga chiqmagan
+                {t('notOnSale')}
               </Badge>
             </div>
 
             <div className="absolute bottom-6 left-6 flex flex-wrap gap-2">
               <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 shadow-sm backdrop-blur-[119px]">
                 <Clock className="w-3.5 h-3.5 shrink-0" />
-                Davomiylik: {duration} soat
+                {t('duration', { hours: duration })}
               </Badge>
               <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium backdrop-blur-[119px]">
-                Narxi: {priceLabel}
+                {t('price', { price: priceLabel })}
               </Badge>
               <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 shadow-sm backdrop-blur-[119px]">
                 <BarChart3 className="w-3.5 h-3.5 shrink-0" />
-                Daraja: {difficultyLabel(difficulty)}
+                {t('level', { level: difficultyLabel })}
               </Badge>
             </div>
 
@@ -101,7 +101,6 @@ export function SkillDisabledHero({
             )}
           </motion.div>
 
-          {/* Left Column */}
           <div className="flex flex-col gap-4 lg:col-span-2 order-last lg:order-first">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -114,7 +113,7 @@ export function SkillDisabledHero({
                 className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6 transition-colors w-fit cursor-pointer"
               >
                 <ArrowLeft className="h-4 w-4" />
-                <span>Orqaga</span>
+                <span>{t('back')}</span>
               </button>
 
               <h1 className="font-suisse text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
@@ -133,7 +132,7 @@ export function SkillDisabledHero({
                 className="rounded-xl w-fit flex flex-row items-center opacity-50 cursor-not-allowed"
                 disabled
               >
-                Oldindan ro&apos;yxatdan o&apos;tish
+                {t('preRegister')}
               </MainButton>
             </motion.div>
           </div>

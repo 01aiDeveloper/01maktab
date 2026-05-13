@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import api from "@/lib/api";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -41,13 +42,11 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`;
 }
 
-function difficultyLabel(difficulty: string): string {
-  const map: Record<string, string> = {
-    BEGINNER: "Boshlang'ich",
-    INTERMEDIATE: "O'rta",
-    ADVANCED: "Yuqori",
-  };
-  return map[difficulty] ?? difficulty;
+function getDifficultyKey(difficulty: string): 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | null {
+  if (difficulty === 'BEGINNER' || difficulty === 'INTERMEDIATE' || difficulty === 'ADVANCED') {
+    return difficulty;
+  }
+  return null;
 }
 
 function toModuleItem(m: ApiSkillModule): ModuleItem {
@@ -74,6 +73,7 @@ function toModuleItem(m: ApiSkillModule): ModuleItem {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function SkillDetailPage() {
+  const t = useTranslations('skillDetail');
   const params = useParams();
   const router = useRouter();
   const slug = params?.slug as string;
@@ -88,36 +88,7 @@ export default function SkillDetailPage() {
   const [startLoading, setStartLoading] = useState(false);
   const [showStartModal, setShowStartModal] = useState(false);
 
-  const handleStart = useCallback(async () => {
-    if (!user) {
-      router.push("/login");
-      return;
-    }
-    if (!skill) return;
-    setStartLoading(true);
-    const hasProgress = (skillModules?.progress?.totalLessonsCount ?? 0) > 0;
-    if (hasProgress) {
-      const target = pickResumeLesson(skillModules?.modules, skillModules?.progress);
-      if (target) {
-        router.push(`/module/${target.moduleId}?lessonId=${target.id}&courseType=skill&courseId=${skill.id}`);
-        return;
-      }
-    }
-    try {
-      await api.post(`/course/${skill.id}/enroll`);
-      setShowStartModal(true);
-    } catch (err: unknown) {
-      const status = (err as { response?: { status?: number } })?.response
-        ?.status;
-      if (status === 400) {
-        router.push(`/payment/${skill.id}?courseType=skill`);
-        return;
-      }
-    }
-    setStartLoading(false);
-  }, [user, skill, skillModules, router]);
-
-  const handleStartCourse = useCallback(() => {
+  const goToFirstLesson = useCallback(() => {
     if (!skill || !skillModules) return;
     const target = pickResumeLesson(skillModules.modules, skillModules.progress);
     if (target) {
@@ -126,6 +97,34 @@ export default function SkillDetailPage() {
       );
     }
   }, [skill, skillModules, router]);
+
+  const handleStart = useCallback(async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+    if (!skill) return;
+    setStartLoading(true);
+    try {
+      const alreadyAdded = !!skill.hasPurchased || !!skill.isEnrolled || !!mySkills?.some((c) => String(c.id) === String(skill.id));
+      if (!alreadyAdded) {
+        try {
+          await api.post(`/course/${skill.id}/enroll`);
+        } catch (err: unknown) {
+          const status = (err as { response?: { status?: number } })?.response?.status;
+          if (status === 400 && skill.pricingType !== 'FREE') {
+            router.push(`/payment/${skill.id}?courseType=skill`);
+            return;
+          }
+        }
+      }
+      goToFirstLesson();
+    } finally {
+      setStartLoading(false);
+    }
+  }, [user, skill, mySkills, router, goToFirstLesson]);
+
+  const handleStartCourse = goToFirstLesson;
 
   if (skill && !openModule && skill.modules.length > 0) {
     setOpenModule(String(skill.modules[0].id));
@@ -155,12 +154,19 @@ export default function SkillDetailPage() {
   const mentor = skill.mentor;
   const priceLabel =
     skill.pricingType === "FREE"
-      ? "Bepul"
-      : `${skill.price.toLocaleString()} so'm`;
+      ? t('free')
+      : `${skill.price.toLocaleString()} ${t('currencySom')}`;
+  const difficultyKey = getDifficultyKey(skill.difficulty);
+  const difficultyLabel = difficultyKey ? t(`difficulty.${difficultyKey}`) : skill.difficulty;
   const courseImage = mediaUrl(skill.photo);
 
   const isPurchased = !!skill.hasPurchased || !!mySkills?.some((c) => String(c.id) === String(skill.id));
-  const isEnrolled = !!skill.isEnrolled || skill.pricingType === 'FREE' || isPurchased;
+  // isAddedToProfile — kursni o'quvchi explicit ravishda profilga qo'shgan
+  const isAddedToProfile = !!skill.isEnrolled || isPurchased;
+  const isFree = skill.pricingType === 'FREE';
+  const completedCount = skillModules?.progress?.completedLessonsCount ?? 0;
+  const totalCount = skillModules?.progress?.totalLessonsCount ?? 0;
+  const hasStarted = isAddedToProfile && completedCount > 0;
   const presaleActive = !!skill.preSales?.isActive;
   const isInWaitlist = !!skill.isInWaitlist;
 
@@ -169,8 +175,8 @@ export default function SkillDetailPage() {
     ctx: { module: ModuleItem },
   ) => {
     if (!user) { router.push('/login'); return; }
-    if (!isPurchased) {
-      if (skill.pricingType === 'FREE') {
+    if (!isAddedToProfile) {
+      if (isFree) {
         handleStart();
         return;
       }
@@ -226,19 +232,19 @@ export default function SkillDetailPage() {
                 className="absolute top-6 left-6 inline-flex lg:hidden items-center gap-2 text-white text-sm transition-colors w-fit z-10 cursor-pointer"
               >
                 <ArrowLeft className="h-4 w-4" />
-                <span>Orqaga</span>
+                <span>{t('back')}</span>
               </button>
               <div className="absolute bottom-6 left-6 flex flex-wrap gap-2">
                 <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 shadow-sm backdrop-blur-[119px]">
                   <Clock className="w-3.5 h-3.5 shrink-0" />
-                  Davomiylik: {skill.duration} soat
+                  {t('duration', { hours: skill.duration })}
                 </Badge>
                 <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium backdrop-blur-[119px]">
-                  Narxi: {priceLabel}
+                  {t('price', { price: priceLabel })}
                 </Badge>
                 <Badge className="bg-white/20 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium flex items-center gap-1.5 shadow-sm backdrop-blur-[119px]">
                   <BarChart3 className="w-3.5 h-3.5 shrink-0" />
-                  Daraja: {difficultyLabel(skill.difficulty)}
+                  {t('level', { level: difficultyLabel })}
                 </Badge>
                 {skillBadges?.map((badge) => (
                   <Badge key={badge.id} className="bg-[#5d7bf5]/80 text-white border-0 rounded-full px-3 py-1.5 text-xs font-medium backdrop-blur-[119px]" title={badge.description}>
@@ -274,7 +280,7 @@ export default function SkillDetailPage() {
                   className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6 transition-colors w-fit cursor-pointer"
                 >
                   <ArrowLeft className="h-4 w-4" />
-                  <span>Orqaga</span>
+                  <span>{t('back')}</span>
                 </button>
 
                 <h1 className="font-suisse text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
@@ -287,63 +293,7 @@ export default function SkillDetailPage() {
                   </p>
                 )}
 
-                {isEnrolled && skillModules?.progress &&
-                skillModules.progress.totalLessonsCount > 0 ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">
-                        Modul: {skillModules.progress.moduleTitile ?? "—"}
-                      </span>
-                      <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">
-                        Dars: {skillModules.progress.completedLessonsCount}/
-                        {skillModules.progress.totalLessonsCount}
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-[#5d7bf5] h-2 rounded-full transition-all duration-500"
-                        style={{
-                          width: `${Math.round((skillModules.progress.completedLessonsCount / skillModules.progress.totalLessonsCount) * 100)}%`,
-                        }}
-                      />
-                    </div>
-                    <div className="flex flex-wrap gap-3">
-                      {skill.pricingType === "FREE" ? (
-                        <MainButton
-                          variant="gradient"
-                          size="md"
-                          className="rounded-xl w-fit flex flex-row items-center opacity-70 cursor-not-allowed"
-                          disabled
-                        >
-                          Bepul
-                        </MainButton>
-                      ) : isPurchased ? (
-                        <MainButton
-                          variant="gradient"
-                          size="md"
-                          className="rounded-xl w-fit flex flex-row items-center opacity-50 cursor-not-allowed"
-                          disabled
-                        >
-                          Sotib olingan
-                        </MainButton>
-                      ) : null}
-                      <MainButton
-                        variant="outline"
-                        size="md"
-                        className="rounded-xl w-fit flex flex-row items-center"
-                        onClick={handleStartCourse}
-                        disabled={startLoading}
-                      >
-                        {startLoading ? "Yuklanmoqda..." : "Kabinetga o'tish"}
-                        {startLoading ? (
-                          <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
-                        ) : (
-                          <ArrowRight className="w-4 h-4 inline ml-1" />
-                        )}
-                      </MainButton>
-                    </div>
-                  </div>
-                ) : presaleActive ? (
+                {presaleActive ? (
                   <MainButton
                     variant="gradient"
                     size="md"
@@ -351,7 +301,7 @@ export default function SkillDetailPage() {
                     onClick={handleStart}
                     disabled={startLoading}
                   >
-                    {startLoading ? "Yuklanmoqda..." : "Oldindan yozilish"}
+                    {startLoading ? t('loading') : t('preEnroll')}
                     {startLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
                     ) : (
@@ -365,9 +315,9 @@ export default function SkillDetailPage() {
                     className="rounded-xl w-fit flex flex-row items-center opacity-70 cursor-not-allowed"
                     disabled
                   >
-                    Kutish ro&apos;yxatidasiz
+                    {t('inWaitlist')}
                   </MainButton>
-                ) : (
+                ) : !isAddedToProfile && !isFree ? (
                   <MainButton
                     variant="gradient"
                     size="md"
@@ -375,17 +325,48 @@ export default function SkillDetailPage() {
                     onClick={handleStart}
                     disabled={startLoading}
                   >
-                    {startLoading
-                      ? "Yuklanmoqda..."
-                      : skill.pricingType === "FREE"
-                      ? "Boshlash"
-                      : "Sotib olish"}
+                    {startLoading ? t('loading') : t('buy')}
                     {startLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
                     ) : (
                       <ArrowRight className="w-4 h-4 inline ml-1" />
                     )}
                   </MainButton>
+                ) : (
+                  <div className="space-y-3">
+                    {hasStarted && totalCount > 0 && (
+                      <>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">
+                            {t('module', { title: skillModules?.progress?.moduleTitile ?? "—" })}
+                          </span>
+                          <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-full">
+                            {t('lesson', { done: completedCount, total: totalCount })}
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-[#5d7bf5] h-2 rounded-full transition-all duration-500"
+                            style={{ width: `${Math.round((completedCount / totalCount) * 100)}%` }}
+                          />
+                        </div>
+                      </>
+                    )}
+                    <MainButton
+                      variant="gradient"
+                      size="md"
+                      className="rounded-xl w-fit flex flex-row items-center"
+                      onClick={handleStart}
+                      disabled={startLoading}
+                    >
+                      {startLoading ? t('loading') : hasStarted ? t('continueLesson') : t('startNow')}
+                      {startLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
+                      ) : (
+                        <ArrowRight className="w-4 h-4 inline ml-1" />
+                      )}
+                    </MainButton>
+                  </div>
                 )}
               </motion.div>
 
@@ -414,7 +395,7 @@ export default function SkillDetailPage() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-suisse font-bold text-gray-900 text-lg lg:text-xl mb-2">
-                      Hamkorlik - {partner.name}
+                      {t('partnership', { name: partner.name })}
                     </h3>
                     <p className="text-gray-600 text-xs lg:text-sm leading-relaxed mb-3">
                       {partner.description}
@@ -425,7 +406,7 @@ export default function SkillDetailPage() {
                         size="sm"
                         className="rounded-xl border-0 text-xs flex flex-row items-center"
                       >
-                        Batafsil
+                        {t('details')}
                         <ArrowRight className="w-3 h-3 inline ml-1" />
                       </MainButton>
                     </Link>
@@ -453,7 +434,7 @@ export default function SkillDetailPage() {
             className="bg-white rounded-3xl p-8 lg:p-12"
           >
             <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
-              Bu skillda nima o'rganasiz?
+              {t('learningTitle')}
             </h2>
             {skill.courseOutcomes ? (
               <div
@@ -461,7 +442,7 @@ export default function SkillDetailPage() {
                 dangerouslySetInnerHTML={{ __html: skill.courseOutcomes }}
               />
             ) : (
-              <NoData title="Ma'lumot hali qo'shilmagan" />
+              <NoData title={t('infoNotAdded')} />
             )}
           </motion.div>
         </div>
@@ -471,7 +452,7 @@ export default function SkillDetailPage() {
       <section id="kurs-dasturi" className="w-full py-8">
         <div className="container mx-auto px-4">
           <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
-            Kurs dasturi
+            {t('programTitle')}
           </h2>
           <ModuleAccordion
             variant="light"
@@ -491,7 +472,7 @@ export default function SkillDetailPage() {
         <section id="mentor" className="w-full py-8">
           <div className="container mx-auto px-4">
             <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
-              Skill mentori
+              {t('mentorTitle')}
             </h2>
             <MentorCard
               name={mentor.fullname}
@@ -519,7 +500,13 @@ export default function SkillDetailPage() {
             onClick={handleStart}
             disabled={startLoading}
           >
-            {startLoading ? "Yuklanmoqda..." : "Hoziroq boshlash"}
+            {startLoading
+              ? t('loading')
+              : !isAddedToProfile && !isFree
+              ? t('buy')
+              : hasStarted
+              ? t('continueLesson')
+              : t('startNow')}
             {startLoading ? (
               <Loader2 className="w-5 h-5 animate-spin inline ml-1" />
             ) : (
@@ -543,7 +530,7 @@ export default function SkillDetailPage() {
               <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
                 <div className="flex-1 text-white">
                   <h2 className="font-suisse text-2xl lg:text-4xl font-bold mb-4">
-                    {partner.name} bilan hamkorlikda
+                    {t('partnerWith', { name: partner.name })}
                   </h2>
                   <p className="text-gray-300 text-sm lg:text-base leading-relaxed mb-6">
                     {partner.description}
@@ -554,7 +541,7 @@ export default function SkillDetailPage() {
                       size="lg"
                       className="rounded-xl h-11 text-sm flex flex-row items-center"
                     >
-                      Batafsil
+                      {t('details')}
                       <ArrowRight className="w-4 h-4 inline ml-1" />
                     </MainButton>
                   </Link>
@@ -578,7 +565,7 @@ export default function SkillDetailPage() {
               </div>
             </motion.div>
           ) : (
-            <NoData title="Hamkor ma'lumoti mavjud emas" />
+            <NoData title={t('noPartner')} />
           )}
         </div>
       </section>

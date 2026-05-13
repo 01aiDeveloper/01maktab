@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { motion } from "framer-motion"
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 
 interface MentorCardProps {
@@ -27,6 +28,7 @@ export function MentorCard({
   variant = "light",
   className,
 }: MentorCardProps) {
+  const t = useTranslations("cards")
   const isDark = variant === "dark"
   
   // Get initials for fallback
@@ -94,7 +96,7 @@ export function MentorCard({
             "mt-2 text-sm sm:text-base",
             isDark ? "text-gray-400" : "text-gray-500"
           )}>
-            {role} s {company}
+            {t("roleAtCompany", { role, company })}
           </p>
           <div className={cn(
             "mt-4 space-y-1 text-sm sm:text-base leading-relaxed",

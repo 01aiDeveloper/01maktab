@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowLeft, ArrowRight, Calendar, MapPin } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
 interface EventHeroProps {
@@ -14,6 +15,7 @@ interface EventHeroProps {
 }
 
 export function EventHero({ event, onBack }: EventHeroProps) {
+  const t = useTranslations('eventSections');
   return (
     <section className="container mx-auto px-4 py-8 lg:py-12">
       <div
@@ -38,7 +40,7 @@ export function EventHero({ event, onBack }: EventHeroProps) {
             className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors mb-8 lg:mb-12"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm font-medium">Orqaga</span>
+            <span className="text-sm font-medium">{t('back')}</span>
           </button>
 
           {/* Center Content */}
@@ -67,7 +69,7 @@ export function EventHero({ event, onBack }: EventHeroProps) {
 
             {/* CTA Button */}
             <Button className="bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-xl px-8 py-6 h-auto text-base font-medium">
-              Ishtirok etish
+              {t('participate')}
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>

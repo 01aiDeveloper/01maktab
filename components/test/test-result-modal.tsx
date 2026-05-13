@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { getMediaUrl } from '@/lib/utils';
 
 export type ResultMode = 'intermediate' | 'final-course' | 'skill';
@@ -35,6 +36,7 @@ export function TestResultModal({
   onRetry,
   onClaim,
 }: TestResultModalProps) {
+  const t = useTranslations('test');
   // ─── SKILL — full blue card with badge ─────────────────────────
   if (isPassed && mode === 'skill') {
     return (
@@ -54,10 +56,9 @@ export function TestResultModal({
             <div className="text-2xl font-bold mb-3">{skillName}</div>
           )}
 
-          <h2 className="text-2xl font-bold mb-2">Tabriklaymiz!</h2>
+          <h2 className="text-2xl font-bold mb-2">{t('congrats')}</h2>
           <p className="text-sm text-white/80 mb-8 leading-relaxed">
-            Siz skillni yakunladingiz va endi siz
-            {skillName ? ` ${skillName}` : ''} ustasi. Iltimos, yutug'ingizni oching.
+            {t('skillCompleted', { skill: skillName ? ` ${skillName}` : '' })}
           </p>
 
           <button
@@ -65,7 +66,7 @@ export function TestResultModal({
             disabled={claiming}
             className="inline-flex items-center justify-center gap-2 px-8 h-12 rounded-xl bg-white text-gray-900 font-medium text-sm transition-colors hover:bg-gray-100 disabled:opacity-60"
           >
-            {claiming ? 'Yuklanmoqda...' : 'Ochish'}
+            {claiming ? t('loading') : t('claim')}
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -94,26 +95,18 @@ export function TestResultModal({
               </div>
             </div>
             <div className="text-3xl font-bold text-gray-900 mb-2">
-              Balingiz: {correctAnswers}/{totalQuestions}
+              {t('score', { correct: correctAnswers, total: totalQuestions })}
             </div>
           </>
         )}
 
         <h2 className="text-xl font-bold text-gray-900 mb-2">
-          {isPassed ? 'Tabriklaymiz!' : "Qayta urinib ko'ring"}
+          {isPassed ? t('congrats') : t('tryAgain')}
         </h2>
         <p className="text-sm text-gray-500 mb-8 leading-relaxed">
-          {!isPassed && `Siz ${percentage}% to'pladingiz. O'tish uchun ko'proq kerak. Iltimos testni qaytadan toping.`}
-          {isPassed && mode === 'final-course' && (
-            <>
-              Siz yakuniy testdan o'tdingiz va
-              {courseName ? ` ${courseName}` : ''} kursini yakunladingiz.
-              Iltimos, professional sertifikatingizni oling.
-            </>
-          )}
-          {isPassed && mode === 'intermediate' && (
-            <>Siz {percentage}% to'pladingiz va testdan muvaffaqiyatli o'tdingiz. O'qishni davom ettirishingiz mumkin.</>
-          )}
+          {!isPassed && t('needMore', { percentage })}
+          {isPassed && mode === 'final-course' && t('finalCoursePassed', { course: courseName ? ` ${courseName}` : '' })}
+          {isPassed && mode === 'intermediate' && t('intermediatePassed', { percentage })}
         </p>
 
         {!isPassed && (
@@ -121,7 +114,7 @@ export function TestResultModal({
             onClick={onRetry}
             className="inline-flex items-center justify-center gap-2 px-8 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors"
           >
-            Boshlash
+            {t('start')}
             <ArrowRight className="w-4 h-4" />
           </button>
         )}
@@ -131,7 +124,7 @@ export function TestResultModal({
             onClick={onContinue}
             className="inline-flex items-center justify-center gap-2 px-8 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors"
           >
-            Davom etish
+            {t('continue')}
             <ArrowRight className="w-4 h-4" />
           </button>
         )}
@@ -142,7 +135,7 @@ export function TestResultModal({
             disabled={claiming}
             className="inline-flex items-center justify-center gap-2 px-8 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors disabled:opacity-60"
           >
-            {claiming ? 'Yuklanmoqda...' : 'Olib ketish'}
+            {claiming ? t('loading') : t('takeCertificate')}
             <ArrowRight className="w-4 h-4" />
           </button>
         )}

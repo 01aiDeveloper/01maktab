@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { getMediaUrl } from '@/lib/utils';
 import api from '@/lib/api';
 import { NoData } from '@/components/ui/no-data';
@@ -13,6 +14,7 @@ import { CustomPagination } from '@/components/ui/custom-pagination';
 const PAGE_SIZE = 8;
 
 export function TabAchievements() {
+  const t = useTranslations('profile');
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useQuery<ApiResponse<PaginatedResponse<CourseBadge>>>({
@@ -43,7 +45,7 @@ export function TabAchievements() {
     return (
       <div className="pb-8">
         <div className="bg-white rounded-[22px] shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
-          <NoData title="Hozircha hech narsa yo'q" description="Kurs o'tib yutuqlar qozonin" />
+          <NoData title={t('noBadgesTitle')} description={t('noBadgesDescription')} />
         </div>
       </div>
     );
@@ -51,7 +53,7 @@ export function TabAchievements() {
 
   return (
     <div className="pb-8">
-      <MainTitle className="text-xl font-bold text-gray-900 mb-4">Skillar</MainTitle>
+      <MainTitle className="text-xl font-bold text-gray-900 mb-4">{t('skills')}</MainTitle>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {items.map((item) => (

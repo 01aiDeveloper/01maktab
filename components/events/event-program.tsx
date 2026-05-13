@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ChevronDown, Send } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface ProgramItem {
   order: number;
@@ -19,6 +20,7 @@ interface EventProgramProps {
 }
 
 export function EventProgram({ program }: EventProgramProps) {
+  const t = useTranslations('eventSections');
   const [openIndex, setOpenIndex] = useState(0);
 
   const toggleAccordion = (index: number) => {
@@ -28,7 +30,7 @@ export function EventProgram({ program }: EventProgramProps) {
   return (
     <section>
       <h2 className="text-3xl lg:text-4xl font-bold text-white mb-8 lg:mb-12">
-        Tadbir dasturi
+        {t('programTitle')}
       </h2>
 
       <div className="space-y-4">

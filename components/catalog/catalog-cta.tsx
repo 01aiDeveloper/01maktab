@@ -1,20 +1,18 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-
-const CTA_TEXTS: Record<string, string> = {
-  skills:
-    "Skillar orqali bilimingizni bo\u2018shliqlarni to\u2018ldiring. Tez va amaliy mini-kurslar orqali Python, SQL, Prompt yozish kabi ko\u2018nikmalarni o\u2018rganing.",
-  courses:
-    "Kurslar bu mutaxassislar tayyorlagan to\u2018liq video-kurslar orqali o\u2018zingizga kerak yo\u2018nalishda chuqur bilim oling \u2014 Data Analytics, Machine Learning va boshqalar faqat \u201C01AI\u201Dda",
-  professions:
-    "Kasblar bu stajerovka, live darslar, mentorlar, student support, kompaniyalardagi real loyihalar va xalqaro sertifikat o\u2018z ichiga oladigan to\u2018liq ta\u2018lim dasturlari faqat \u201C01AI\u201Dda",
-};
+import { useTranslations } from 'next-intl';
 
 export function CatalogCta() {
+  const t = useTranslations('catalog');
   const searchParams = useSearchParams();
   const tab = searchParams.get('tab') || 'skills';
-  const text = CTA_TEXTS[tab] || CTA_TEXTS.skills;
+  const text =
+    tab === 'courses'
+      ? t('ctaCourses')
+      : tab === 'professions'
+        ? t('ctaProfessions')
+        : t('ctaSkills');
 
   return (
     <section className="container pb-12! pt-4!">
