@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useLayoutEffect, useRef, useState, useTransition } from "react"
+import { useEffect, useRef, useState, useTransition } from "react"
 import { createPortal } from "react-dom"
 import { useRouter } from "next/navigation"
 import { useLocale } from "next-intl"
@@ -21,9 +21,9 @@ interface LanguageSwitcherProps {
 export function LanguageSwitcher({ isDark = false }: LanguageSwitcherProps) {
   const locale = useLocale() as Locale
   const [isOpen, setIsOpen] = useState(false)
-  const [isPending, startTransition] = useTransition()
-  const [mounted, setMounted] = useState(false)
   const [coords, setCoords] = useState<{ top: number; right: number } | null>(null)
+  const [mounted, setMounted] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const router = useRouter()
 
@@ -31,23 +31,32 @@ export function LanguageSwitcher({ isDark = false }: LanguageSwitcherProps) {
 
   const current = options.find((o) => o.value === locale) ?? options[0]
 
-  const updateCoords = () => {
+  const computeCoords = () => {
     const el = triggerRef.current
-    if (!el) return
+    if (!el) return null
     const rect = el.getBoundingClientRect()
-    setCoords({ top: rect.bottom + 8, right: window.innerWidth - rect.right })
+    return { top: rect.bottom + 8, right: window.innerWidth - rect.right }
   }
 
-  useLayoutEffect(() => {
+  const toggleOpen = () => {
+    if (!isOpen) {
+      const c = computeCoords()
+      if (c) setCoords(c)
+    }
+    setIsOpen((v) => !v)
+  }
+
+  useEffect(() => {
     if (!isOpen) return
-    updateCoords()
-    const onScroll = () => updateCoords()
-    const onResize = () => updateCoords()
+    const onScroll = () => {
+      const c = computeCoords()
+      if (c) setCoords(c)
+    }
     window.addEventListener("scroll", onScroll, true)
-    window.addEventListener("resize", onResize)
+    window.addEventListener("resize", onScroll)
     return () => {
       window.removeEventListener("scroll", onScroll, true)
-      window.removeEventListener("resize", onResize)
+      window.removeEventListener("resize", onScroll)
     }
   }, [isOpen])
 
@@ -60,40 +69,12 @@ export function LanguageSwitcher({ isDark = false }: LanguageSwitcherProps) {
     })
   }
 
-  const dropdown = isOpen && coords && (
-    <>
-      <div className="fixed inset-0 z-[100]" onClick={() => setIsOpen(false)} />
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -8 }}
-        transition={{ duration: 0.18 }}
-        className="fixed w-40 bg-white rounded-xl border border-gray-200 overflow-hidden z-[101] shadow-lg"
-        style={{ top: coords.top, right: coords.right }}
-      >
-        {options.map((opt) => {
-          const active = opt.value === locale
-          return (
-            <button
-              key={opt.value}
-              onClick={() => handleSelect(opt.value)}
-              className="w-full flex items-center justify-between gap-2 py-2.5 px-3 hover:bg-gray-100 text-left"
-            >
-              <span className="text-sm text-gray-900">{opt.label}</span>
-              {active && <Check className="h-4 w-4 text-[#3B5BFF]" />}
-            </button>
-          )
-        })}
-      </motion.div>
-    </>
-  )
-
   return (
     <div className="relative">
       <button
         ref={triggerRef}
         type="button"
-        onClick={() => setIsOpen((v) => !v)}
+        onClick={toggleOpen}
         disabled={isPending}
         className={`flex items-center gap-1.5 rounded-xl px-3 h-9 text-sm font-semibold transition-colors ${
           isDark
@@ -108,9 +89,39 @@ export function LanguageSwitcher({ isDark = false }: LanguageSwitcherProps) {
         </motion.span>
       </button>
 
-      {mounted && typeof document !== "undefined" && (
-        <AnimatePresence>{dropdown && createPortal(dropdown, document.body)}</AnimatePresence>
-      )}
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {isOpen && coords && (
+              <>
+                <div className="fixed inset-0 z-[100]" onClick={() => setIsOpen(false)} />
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.18 }}
+                  className="fixed w-40 bg-white rounded-xl border border-gray-200 overflow-hidden z-[101] shadow-lg"
+                  style={{ top: coords.top, right: coords.right }}
+                >
+                  {options.map((opt) => {
+                    const active = opt.value === locale
+                    return (
+                      <button
+                        key={opt.value}
+                        onClick={() => handleSelect(opt.value)}
+                        className="w-full flex items-center justify-between gap-2 py-2.5 px-3 hover:bg-gray-100 text-left"
+                      >
+                        <span className="text-sm text-gray-900">{opt.label}</span>
+                        {active && <Check className="h-4 w-4 text-[#3B5BFF]" />}
+                      </button>
+                    )
+                  })}
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>,
+          document.body,
+        )}
     </div>
   )
 }
