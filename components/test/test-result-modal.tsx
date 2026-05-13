@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getMediaUrl } from '@/lib/utils';
@@ -37,6 +39,13 @@ export function TestResultModal({
   onClaim,
 }: TestResultModalProps) {
   const t = useTranslations('test');
+  const [claimed, setClaimed] = useState(false);
+
+  const handleClaim = () => {
+    onClaim?.();
+    setClaimed(true);
+  };
+
   // ─── SKILL — full blue card with badge ─────────────────────────
   if (isPassed && mode === 'skill') {
     return (
@@ -61,14 +70,25 @@ export function TestResultModal({
             {t('skillCompleted', { skill: skillName ? ` ${skillName}` : '' })}
           </p>
 
-          <button
-            onClick={onClaim}
-            disabled={claiming}
-            className="inline-flex items-center justify-center gap-2 px-8 h-12 rounded-xl bg-white text-gray-900 font-medium text-sm transition-colors hover:bg-gray-100 disabled:opacity-60"
-          >
-            {claiming ? t('loading') : t('claim')}
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <div className="flex flex-col items-center gap-3">
+            <button
+              onClick={handleClaim}
+              disabled={claiming}
+              className="inline-flex items-center justify-center gap-2 px-8 h-12 rounded-xl bg-white text-gray-900 font-medium text-sm transition-colors hover:bg-gray-100 disabled:opacity-60"
+            >
+              {claiming ? t('loading') : t('claim')}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            {claimed && (
+              <Link
+                href="/classroom"
+                className="inline-flex items-center justify-center gap-2 px-8 h-12 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm transition-colors border border-white/30"
+              >
+                {t('goToClassroom')}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -130,14 +150,25 @@ export function TestResultModal({
         )}
 
         {isPassed && mode === 'final-course' && (
-          <button
-            onClick={onClaim}
-            disabled={claiming}
-            className="inline-flex items-center justify-center gap-2 px-8 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors disabled:opacity-60"
-          >
-            {claiming ? t('loading') : t('takeCertificate')}
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <div className="flex flex-col items-center gap-3">
+            <button
+              onClick={handleClaim}
+              disabled={claiming}
+              className="inline-flex items-center justify-center gap-2 px-8 h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-colors disabled:opacity-60"
+            >
+              {claiming ? t('loading') : t('takeCertificate')}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            {claimed && (
+              <Link
+                href="/classroom"
+                className="inline-flex items-center justify-center gap-2 px-8 h-12 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium text-sm transition-colors"
+              >
+                {t('goToClassroom')}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
+          </div>
         )}
       </div>
     </div>

@@ -449,7 +449,8 @@
     "needMore": "Siz {percentage}% to'pladingiz. O'tish uchun ko'proq kerak. Iltimos testni qaytadan toping.",
     "finalCoursePassed": "Siz yakuniy testdan o'tdingiz va{course} kursini yakunladingiz. Iltimos, professional sertifikatingizni oling.",
     "intermediatePassed": "Siz {percentage}% to'pladingiz va testdan muvaffaqiyatli o'tdingiz. O'qishni davom ettirishingiz mumkin.",
-    "takeCertificate": "Olib ketish"
+    "takeCertificate": "Olib ketish",
+    "goToClassroom": "Darsxonaga qaytish"
   },
   "pageError": {
     "title": "Ma'lumot topilmadi",
