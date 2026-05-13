@@ -1,11 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-
-export type Locale = 'uz' | 'ru';
-export const locales: Locale[] = ['uz', 'ru'];
-export const defaultLocale: Locale = 'uz';
-const COOKIE_NAME = 'NEXT_LOCALE';
+import { COOKIE_NAME, defaultLocale, locales, type Locale } from './config';
 
 export async function getUserLocale(): Promise<Locale> {
   const store = await cookies();

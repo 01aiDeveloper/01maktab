@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation"
 import { useLocale } from "next-intl"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, Check } from "lucide-react"
-import { setUserLocale, type Locale } from "@/i18n/locale"
+import { setUserLocale } from "@/i18n/locale"
+import type { Locale } from "@/i18n/config"
 
 const options: { value: Locale; label: string; short: string }[] = [
   { value: "uz", label: "O'zbekcha", short: "UZ" },
