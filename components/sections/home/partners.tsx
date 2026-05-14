@@ -133,13 +133,35 @@ export function PartnersSection({
                   : partner.logo;
               const isExternal = partner.id === 0;
               const cardClass = `group relative flex h-[203px] w-[412px] shrink-0 items-center justify-center rounded-[16px] border-[3px] ${cardBorderColor} ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"}`;
-              const logoImg = (
+              // Ucell PNG oq matn ekan — CSS mask orqali rangga bo'yaymiz.
+              // Default: kulrang, hover: Ucell brend binafsha (#6E2DAE).
+              const logoImg = isExternal ? (
+                <div
+                  role="img"
+                  aria-label={partner.name}
+                  className="w-[180px] h-[80px] bg-gray-500 group-hover:bg-[#6E2DAE] transition-colors duration-300"
+                  style={{
+                    WebkitMaskImage: `url(${logoSrc})`,
+                    maskImage: `url(${logoSrc})`,
+                    WebkitMaskRepeat: "no-repeat",
+                    maskRepeat: "no-repeat",
+                    WebkitMaskPosition: "center",
+                    maskPosition: "center",
+                    WebkitMaskSize: "contain",
+                    maskSize: "contain",
+                  }}
+                />
+              ) : (
                 <Image
                   src={logoSrc}
                   alt={partner.name}
                   width={180}
                   height={80}
-                  className={`object-contain transition-all duration-300 ${isDark ? "brightness-0 invert group-hover:brightness-100 group-hover:invert-0" : "brightness-50 group-hover:brightness-100"}`}
+                  className={`object-contain transition-all duration-300 ${
+                    isDark
+                      ? "brightness-0 invert group-hover:brightness-100 group-hover:invert-0"
+                      : "brightness-50 group-hover:brightness-100"
+                  }`}
                 />
               );
               return isExternal ? (
