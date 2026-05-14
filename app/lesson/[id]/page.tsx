@@ -10,7 +10,7 @@ export default function LessonPage() {
 
       <WelcomeModal />
 
-      <main className="min-h-screen bg-[#f5f5f5] py-8">
+      <main className="min-h-screen bg-[#f5f5f5] pt-3 pb-8">
         <div className="container mx-auto px-4 max-w-[1100px]">
           <LessonContent />
         </div>
