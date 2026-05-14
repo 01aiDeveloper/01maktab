@@ -77,9 +77,9 @@ function toProject(p: ApiProject, index: number, total: number): Project {
 
 
 const staticStats = {
-  graduates: 1247,
-  employmentRate: '78%',
-  rating: '4.8/5',
+  graduates: '127+',
+  employmentRate: '92%',
+  rating: '800$',
 };
 
 // ─── Page ─────────────────────────────────────────────────────────────────────

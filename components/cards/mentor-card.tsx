@@ -84,8 +84,18 @@ export function MentorCard({
         "flex-1 rounded-3xl w-full p-6 sm:p-10 flex flex-col sm:flex-row gap-6 items-start justify-between relative overflow-hidden",
         isDark ? "bg-[#18181a]" : "bg-white"
       )}>
+        {/* Decorative Illustration - Bottom right corner (matn orqasida) */}
+        <div className="absolute -bottom-4 sm:-bottom-6 right-0 w-24 h-24 sm:w-40 sm:h-40 opacity-90 pointer-events-none z-0">
+          <Image
+            src={decorationUrl}
+            alt="Decoration"
+            fill
+            className="object-contain"
+          />
+        </div>
+
         {/* Text Content */}
-        <div className="flex-1 min-w-0 pr-16 sm:pr-0">
+        <div className="relative z-10 flex-1 min-w-0 pr-16 sm:pr-0">
           <h3 className={cn(
             "font-suisse text-2xl sm:text-3xl font-bold leading-tight",
             isDark ? "text-white" : "text-gray-900"
@@ -105,16 +115,6 @@ export function MentorCard({
             <p>{experience}</p>
             <p>{technologies}</p>
           </div>
-        </div>
-
-        {/* Decorative Illustration - Bottom right corner */}
-        <div className="absolute -bottom-4 sm:-bottom-6 right-0 w-24 h-24 sm:w-40 sm:h-40 opacity-90 pointer-events-none">
-          <Image
-            src={decorationUrl}
-            alt="Decoration"
-            fill
-            className="object-contain"
-          />
         </div>
       </div>
     </motion.div>
