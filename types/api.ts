@@ -71,15 +71,6 @@ export interface ApiSkillModule {
   tests: ApiSkillTest[];
 }
 
-export interface ApiPresale {
-  id: number;
-  isActive: boolean;
-  originalPrice: number;
-  presalePrice: number;
-  discountPercent: number;
-  enrolledCount: number;
-}
-
 export interface ApiSkill {
   id: number;
   name: string;
@@ -240,6 +231,10 @@ export interface ApiPresale {
   isActive: boolean;
   startDate: string | null;
   endDate: string | null;
+  /** Optional max pre-sales slots (0/null = no limit) */
+  limit?: number | null;
+  /** Server-computed remaining slots (only when limit > 0) */
+  limitRemaining?: number | null;
 }
 
 // ─── Waitlist ────────────────────────────────────────────────────────────────

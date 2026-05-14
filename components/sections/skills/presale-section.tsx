@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { ArrowRight, Users, Loader2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowRight, Users, Loader2, Clock, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -11,6 +11,24 @@ import { useAuthStore } from '@/store/auth-store';
 import { usePresale } from '@/hooks/use-presale';
 import { useJoinWaitlist } from '@/hooks/use-waitlist';
 import api from '@/lib/api';
+
+function useCountdown(endDate: string | null | undefined) {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    if (!endDate) return;
+    const id = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(id);
+  }, [endDate]);
+  if (!endDate) return null;
+  const end = new Date(endDate).getTime();
+  if (Number.isNaN(end)) return null;
+  const diff = end - now;
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, expired: true };
+  const days = Math.floor(diff / 86_400_000);
+  const hours = Math.floor((diff % 86_400_000) / 3_600_000);
+  const minutes = Math.floor((diff % 3_600_000) / 60_000);
+  return { days, hours, minutes, expired: false };
+}
 
 interface PresaleSectionProps {
   isPurchased?: boolean;
@@ -52,10 +70,28 @@ export function PresaleSection({
 
   const { data: presale, isLoading: presaleLoading } = usePresale(courseId);
   const joinWaitlist = useJoinWaitlist();
+  const countdown = useCountdown(presale?.endDate);
 
   if (presaleLoading || !presale || !presale.isActive) return null;
 
-  const { originalPrice, presalePrice, discountPercent, enrolledCount } = presale;
+  const {
+    originalPrice,
+    presalePrice,
+    discountPercent,
+    enrolledCount,
+    limit,
+    limitRemaining,
+  } = presale;
+  const hasLimit = typeof limit === 'number' && limit > 0;
+  const remaining = typeof limitRemaining === 'number' ? limitRemaining : null;
+  const showCountdown = countdown && !countdown.expired;
+  const countdownLabel = countdown
+    ? countdown.days > 0
+      ? t('endsInDaysHours', { days: countdown.days, hours: countdown.hours })
+      : countdown.hours > 0
+        ? t('endsInHoursMinutes', { hours: countdown.hours, minutes: countdown.minutes })
+        : t('endsInMinutes', { minutes: countdown.minutes })
+    : null;
 
   const handlePresale = async () => {
     if (!user) {
@@ -117,9 +153,27 @@ export function PresaleSection({
           }}
         >
           <div className="relative z-10 space-y-3 flex flex-col items-center sm:items-start">
-            <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 text-black text-sm font-medium">
-              <Users className="w-4 h-4" />
-              <span>{t('alreadyEnrolled', { count: enrolledCount })}</span>
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+              <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 text-black text-sm font-medium">
+                <Users className="w-4 h-4" />
+                <span>{t('alreadyEnrolled', { count: enrolledCount })}</span>
+              </div>
+
+              {showCountdown && (
+                <div className="inline-flex items-center gap-2 bg-black/85 text-white rounded-full px-4 py-2 text-sm font-medium">
+                  <Clock className="w-4 h-4" />
+                  <span>
+                    {t('endsIn')} {countdownLabel}
+                  </span>
+                </div>
+              )}
+
+              {hasLimit && remaining !== null && (
+                <div className="inline-flex items-center gap-2 bg-[#FFE500] text-black rounded-full px-4 py-2 text-sm font-semibold">
+                  <Flame className="w-4 h-4" />
+                  <span>{t('slotsRemaining', { remaining, total: limit })}</span>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-4 flex-wrap">

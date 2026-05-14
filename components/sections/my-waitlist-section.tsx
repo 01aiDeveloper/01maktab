@@ -1,11 +1,12 @@
 "use client"
 
+import type { MouseEvent } from "react"
 import { motion } from "framer-motion"
-import { Clock, Users } from "lucide-react"
+import { Clock, Users, X, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
-import { useMyWaitlist } from "@/hooks/use-waitlist"
+import { useMyWaitlist, useLeaveWaitlist } from "@/hooks/use-waitlist"
 import { baseMediaUrl } from "@/lib/utils"
 
 function mediaUrl(path: string | null | undefined): string {
@@ -17,6 +18,14 @@ function mediaUrl(path: string | null | undefined): string {
 export function MyWaitlistSection() {
   const t = useTranslations("userHome")
   const { data: entries, isLoading } = useMyWaitlist()
+  const leaveWaitlist = useLeaveWaitlist()
+
+  const handleRemove = (e: MouseEvent, courseId: number) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!window.confirm(t("removeWaitlistConfirm"))) return
+    leaveWaitlist.mutate(courseId)
+  }
 
   if (isLoading || !entries || entries.length === 0) return null
 
@@ -42,7 +51,21 @@ export function MyWaitlistSection() {
               ? `/professions/${entry.id}`
               : `/courses/${entry.id}`;
           return (
-            <Link key={entry.id} href={detailHref} className="h-full">
+            <Link key={entry.id} href={detailHref} className="h-full relative group">
+              <button
+                type="button"
+                onClick={(e) => handleRemove(e, entry.id)}
+                disabled={leaveWaitlist.isPending}
+                aria-label={t("removeFromWaitlist")}
+                title={t("removeFromWaitlist")}
+                className="absolute top-3 right-3 z-10 inline-flex items-center justify-center w-8 h-8 rounded-full bg-black/55 text-white hover:bg-black/75 transition-colors disabled:opacity-50"
+              >
+                {leaveWaitlist.isPending && leaveWaitlist.variables === entry.id ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <X className="w-4 h-4" />
+                )}
+              </button>
               <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
                 {/* Image */}
                 <div className="relative h-40 bg-gradient-to-br from-[#5d7bf5] to-[#7c71f4] shrink-0">

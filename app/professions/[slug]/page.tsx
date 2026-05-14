@@ -40,6 +40,8 @@ import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
 import { PresaleSection } from '@/components/sections/skills/presale-section';
+import { PresaleDisabledSection } from '@/components/sections/skills/presale-disabled-section';
+import { WaitlistSection } from '@/components/sections/skills/waitlist-section';
 import { pickResumeLesson } from '@/lib/lesson-utils';
 
 
@@ -341,8 +343,15 @@ export default function ProfessionPage() {
           </div>
         </section>
 
-        {/* Presale Section */}
+        {/* Presale / Waitlist Section */}
         <PresaleSection courseId={profession?.id} courseType="profession" />
+        {profession?.id && <PresaleDisabledSection courseId={profession.id} />}
+        {profession?.id && (
+          <WaitlistSection
+            courseId={profession.id}
+            enrollmentCount={profession.enrollmentCount}
+          />
+        )}
 
         {/* Feature Pills Row */}
         <section className="w-full py-6">

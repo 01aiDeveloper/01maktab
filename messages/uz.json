@@ -235,6 +235,8 @@
     "waiting": "Kutilmoqda",
     "queue": "Navbat: #{number}",
     "unknownCourse": "Kurs",
+    "removeFromWaitlist": "Ro'yxatdan chiqarish",
+    "removeWaitlistConfirm": "Bu kursni kutish ro'yxatidan o'chirasizmi?",
     "noCoursesMessage": "Bu yer hozircha bo'sh, kurslar qo'shishni boshlang",
     "noCoursesDescription": "Kurslar ro'yxatiga o'ting",
     "noCoursesButton": "Kurslarni ko'rish",
@@ -277,7 +279,12 @@
     "loading": "Yuklanmoqda...",
     "preEnrollPrice": "Oldindan yozilish – {price} so'm",
     "joinWaitlist": "Kutish ro'yxatiga kirish",
-    "currencySom": "so'm"
+    "currencySom": "so'm",
+    "endsIn": "Chegirma tugashiga",
+    "endsInDaysHours": "{days} kun {hours} soat",
+    "endsInHoursMinutes": "{hours} soat {minutes} daqiqa",
+    "endsInMinutes": "{minutes} daqiqa",
+    "slotsRemaining": "Qoldi: {remaining} ta / {total} dan"
   },
   "waitlist": {
     "alreadyEnrolled": "{count} kishi allaqachon yozilgan",

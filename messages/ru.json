@@ -235,6 +235,8 @@
     "waiting": "В ожидании",
     "queue": "Очередь: #{number}",
     "unknownCourse": "Курс",
+    "removeFromWaitlist": "Убрать из списка",
+    "removeWaitlistConfirm": "Убрать этот курс из списка ожидания?",
     "noCoursesMessage": "Здесь пока пусто — начните добавлять курсы",
     "noCoursesDescription": "Перейти к списку курсов",
     "noCoursesButton": "Смотреть курсы",
@@ -281,7 +283,12 @@
     "loading": "Загрузка...",
     "preEnrollPrice": "Записаться заранее – {price} сум",
     "joinWaitlist": "Записаться в лист ожидания",
-    "currencySom": "сум"
+    "currencySom": "сум",
+    "endsIn": "Скидка заканчивается через",
+    "endsInDaysHours": "{days} дн. {hours} ч.",
+    "endsInHoursMinutes": "{hours} ч. {minutes} мин.",
+    "endsInMinutes": "{minutes} мин.",
+    "slotsRemaining": "Осталось мест: {remaining} из {total}"
   },
   "waitlist": {
     "alreadyEnrolled": "{count} человек уже записались",
