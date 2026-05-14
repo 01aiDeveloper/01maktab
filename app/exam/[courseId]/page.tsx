@@ -37,23 +37,21 @@ function ExamContent() {
   const handleContinue = () => router.push(detailHref);
 
   const handleClaim = async () => {
-    console.log('[Certificate] Claim boshlandi', { courseId, courseType, mode });
+    const newTab = window.open('about:blank', '_blank');
     try {
       const result = await generateCertificate(courseId);
-      console.log('[Certificate] Response data', result);
-      console.log('[Certificate] file URL:', result?.file);
       if (result.file) {
         const fullUrl = getMediaUrl(result.file);
-        console.log('[Certificate] window.open chaqirilmoqda:', fullUrl);
-        window.open(fullUrl, '_blank', 'noopener,noreferrer');
-      } else {
-        console.warn('[Certificate] file field bo\'sh!');
+        if (newTab && !newTab.closed) {
+          newTab.location.href = fullUrl;
+        } else {
+          window.location.href = fullUrl;
+        }
+      } else if (newTab && !newTab.closed) {
+        newTab.close();
       }
     } catch (e: any) {
-      console.error('[Certificate] Xato yuz berdi');
-      console.error('Status:', e?.response?.status);
-      console.error('Data:', e?.response?.data);
-      console.error('Full error:', e);
+      if (newTab && !newTab.closed) newTab.close();
       const status = e?.response?.status;
       const msg = status === 500
         ? t('certificate500')
