@@ -7,8 +7,15 @@ interface SingleImageBlockProps {
 
 export function SingleImageBlock({ url }: SingleImageBlockProps) {
   return (
-    <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-sm">
-      <Image src={getMediaUrl(url)} alt="Lesson image" fill className="object-cover" />
+    <div className="w-full rounded-3xl overflow-hidden shadow-sm">
+      <Image
+        src={getMediaUrl(url)}
+        alt="Lesson image"
+        width={0}
+        height={0}
+        sizes="100vw"
+        className="w-full h-auto"
+      />
     </div>
   );
 }
