@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { AxiosError } from 'axios';
@@ -120,9 +120,20 @@ export function LessonContent() {
   const nextLesson =
     currentIndex >= 0 && currentIndex < flatLessons.length - 1 ? flatLessons[currentIndex + 1] : null;
 
-  // Lesson endpoint o'zi `isCompleted` qaytaradi va modules cache'idan ko'ra yangiroq.
-  // Ikkalasidan birortasi true bo'lsa, complete deb hisoblanadi.
-  const isCurrentCompleted = !!lesson?.isCompleted || !!currentLesson?.isCompleted;
+  // Videosi yo'q darslar avtomatik complete (gate yo'q).
+  const hasVideo = !!lesson?.videos && lesson.videos.length > 0;
+  const isCurrentCompleted =
+    !hasVideo || !!lesson?.isCompleted || !!currentLesson?.isCompleted;
+
+  // Videosi yo'q darsda backend'ga complete signalini bir marta yuborib qo'yamiz.
+  const autoCompleteFiredRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!lesson || hasVideo) return;
+    if (lesson.isCompleted || currentLesson?.isCompleted) return;
+    if (autoCompleteFiredRef.current.has(lessonId)) return;
+    autoCompleteFiredRef.current.add(lessonId);
+    handleLessonComplete(lessonId);
+  }, [lesson, hasVideo, currentLesson?.isCompleted, lessonId, handleLessonComplete]);
 
   // Module test gating: when on the last lesson of a module that has an unpassed test
   const currentModule = currentLesson ? modules.find((m) => m.id === currentLesson.moduleId) : null;
