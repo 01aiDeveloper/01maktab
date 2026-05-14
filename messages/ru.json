@@ -438,7 +438,10 @@
     "courseProgram": "Программа курса",
     "lessonHeading": "Урок {order}. {title}",
     "lessonNotFound": "Урок не найден",
-    "lessonNotFoundDesc": "К сожалению, такого урока нет"
+    "lessonNotFoundDesc": "К сожалению, такого урока нет",
+    "infoImportant": "Важно",
+    "infoTip": "Совет",
+    "infoAttention": "Внимание"
   },
   "test": {
     "introText": "Тест для закрепления материала\nи завершения модуля.",

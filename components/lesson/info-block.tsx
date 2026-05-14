@@ -1,16 +1,19 @@
 import React from 'react';
 import { AlertCircle, Info, Lightbulb } from 'lucide-react';
 import DOMPurify from 'isomorphic-dompurify';
+import { useTranslations } from 'next-intl';
 
 interface InfoBlockProps {
   text: string;
   status: string;
 }
 
-const STATUS_CONFIG: Record<string, { icon: React.ElementType; title: string; bgColor: string; borderColor: string; iconColor: string; textColor: string }> = {
+type StatusKey = 'Important' | 'Tip' | 'Advice' | 'Attention';
+
+const STATUS_CONFIG: Record<StatusKey, { icon: React.ElementType; titleKey: 'infoImportant' | 'infoTip' | 'infoAttention'; bgColor: string; borderColor: string; iconColor: string; textColor: string }> = {
   Important: {
     icon: AlertCircle,
-    title: 'Muhim',
+    titleKey: 'infoImportant',
     bgColor: 'bg-yellow-50',
     borderColor: 'border-yellow-200',
     iconColor: 'text-yellow-600',
@@ -18,7 +21,7 @@ const STATUS_CONFIG: Record<string, { icon: React.ElementType; title: string; bg
   },
   Tip: {
     icon: Lightbulb,
-    title: 'Maslahat',
+    titleKey: 'infoTip',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
     iconColor: 'text-green-600',
@@ -26,7 +29,7 @@ const STATUS_CONFIG: Record<string, { icon: React.ElementType; title: string; bg
   },
   Advice: {
     icon: Lightbulb,
-    title: 'Maslahat',
+    titleKey: 'infoTip',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
     iconColor: 'text-green-600',
@@ -34,7 +37,7 @@ const STATUS_CONFIG: Record<string, { icon: React.ElementType; title: string; bg
   },
   Attention: {
     icon: Info,
-    title: 'Diqqat',
+    titleKey: 'infoAttention',
     bgColor: 'bg-red-50',
     borderColor: 'border-red-200',
     iconColor: 'text-red-600',
@@ -43,7 +46,8 @@ const STATUS_CONFIG: Record<string, { icon: React.ElementType; title: string; bg
 };
 
 export function InfoBlock({ text, status }: InfoBlockProps) {
-  const config = STATUS_CONFIG[status] ?? STATUS_CONFIG['Important'];
+  const t = useTranslations('lesson');
+  const config = STATUS_CONFIG[status as StatusKey] ?? STATUS_CONFIG.Important;
   const Icon = config.icon;
 
   return (
@@ -53,7 +57,7 @@ export function InfoBlock({ text, status }: InfoBlockProps) {
           <Icon className="w-5 h-5" />
         </div>
         <div className="flex-1">
-          <h4 className={`font-semibold text-lg mb-2 ${config.textColor}`}>{config.title}</h4>
+          <h4 className={`font-semibold text-lg mb-2 ${config.textColor}`}>{t(config.titleKey)}</h4>
           <div className={`prose prose-sm ${config.textColor}`} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(text) }} />
         </div>
       </div>

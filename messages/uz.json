@@ -434,7 +434,10 @@
     "courseProgram": "Kurs dasturi",
     "lessonHeading": "Dars {order}. {title}",
     "lessonNotFound": "Dars topilmadi",
-    "lessonNotFoundDesc": "Kechirasiz, bu dars mavjud emas"
+    "lessonNotFoundDesc": "Kechirasiz, bu dars mavjud emas",
+    "infoImportant": "Muhim",
+    "infoTip": "Maslahat",
+    "infoAttention": "Diqqat"
   },
   "test": {
     "introText": "Materialni mustahkamlash\nva modulni yakunlash uchun test.",
