@@ -7,6 +7,8 @@ export interface MyCourseItem {
   name: string;
   title: string;
   photo: string;
+  /** Katalog/bosh sahifa kartochka rasmi (vertikal) */
+  cardImage?: string | null;
   icon: string;
   decorImage: string;
   moduleTitle: string;

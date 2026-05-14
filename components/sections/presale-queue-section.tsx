@@ -72,7 +72,7 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
 
   const partner = skill.partners[0] ?? null;
   const mentor = skill.mentor;
-  const courseImage = mediaUrl(skill.photo);
+  const courseImage = mediaUrl(skill.cardImage || skill.photo);
   const priceLabel = skill.pricingType === 'FREE' ? t('free') : `${skill.price.toLocaleString()} ${t('currencySom')}`;
   const difficultyKey = getDifficultyKey(skill.difficulty);
   const difficultyLabel = difficultyKey ? t(`difficulty.${difficultyKey}`) : skill.difficulty;

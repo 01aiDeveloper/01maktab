@@ -15,7 +15,7 @@ interface MyCourseCardProps {
 
 export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
   const t = useTranslations('cards');
-  const photoUrl = getMediaUrl(item.photo);
+  const photoUrl = getMediaUrl(item.cardImage || item.photo);
   const iconUrl = item.icon ? getMediaUrl(item.icon) : null;
 
   return (

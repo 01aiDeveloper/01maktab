@@ -60,7 +60,7 @@ export function MyCoursesSection() {
           {courses.map((course) => (
             <div key={course.id} className="flex-[0_0_calc(33.333%-12px)] min-w-0">
               <MyEnrolledCard
-                image={course.photo}
+                image={course.cardImage || course.photo}
                 title={course.title || course.name}
                 mentorName={course.mentor?.fullname || ''}
                 moduleLabel={course.moduleTitle}

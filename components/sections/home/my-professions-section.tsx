@@ -16,6 +16,7 @@ interface Profession {
   title: string;
   description: string;
   photo: string;
+  cardImage?: string | null;
   icon: string | null;
 }
 
@@ -45,7 +46,7 @@ export function MyProfessionsSection() {
           const apiProfessions = response.data.data.data.map(
             (prof: Profession) => ({
               id: prof.id,
-              image: getMediaUrl(prof.photo),
+              image: getMediaUrl(prof.cardImage || prof.photo),
               title: prof.title || prof.name,
               instructor: "Ustoz: Khikmatilla Pulatov", // Default value
               progress: "Dars: 0/10", // Default value
