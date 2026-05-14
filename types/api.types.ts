@@ -113,7 +113,12 @@ export interface Payment {
 // Course Certificate Types
 export interface CourseCertificate {
   id: number
+  /** PDF fayli (yuklash uchun) */
   file: string
+  /** Preview rasm (sertifikat thumbnail) */
+  thumbnail?: string
+  /** Shablon rasmi (preview bo'lmasa, fallback) */
+  template?: string
   title: string
   createdAt: string
 }

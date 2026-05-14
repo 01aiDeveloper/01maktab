@@ -12,6 +12,13 @@ interface MyCertificateCardProps {
 
 export function MyCertificateCard({ item, dark = false }: MyCertificateCardProps) {
   const fileUrl = item.file ? getMediaUrl(item.file) : null;
+  // Preview rasm: thumbnail bor bo'lsa undan, bo'lmasa shablon rasmi.
+  // PDF faylni <Image>'da ko'rsatib bo'lmaydi.
+  const previewSrc = item.thumbnail
+    ? getMediaUrl(item.thumbnail)
+    : item.template
+      ? getMediaUrl(item.template)
+      : null;
 
   const handleDownload = () => {
     if (!fileUrl) return;
@@ -32,9 +39,9 @@ export function MyCertificateCard({ item, dark = false }: MyCertificateCardProps
           style={{ background: 'linear-gradient(180deg, #888888 0%, #000000 100%)' }}
         />
 
-        {fileUrl && (
+        {previewSrc && (
           <Image
-            src={fileUrl}
+            src={previewSrc}
             alt={item.title}
             fill
             className="object-cover rounded-[20px] overflow-hidden opacity-60"
