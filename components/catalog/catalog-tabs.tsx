@@ -84,7 +84,7 @@ export function CatalogTabs() {
     },
   });
 
-  // Fetch detail (mentor + pricing) for each item — list endpoint omits pricingType/hasPurchased
+  // Fetch detail (mentor + pricing + cardImage) — list endpoint ba'zi maydonlarni qaytarmaydi
   const detailQueries = useQueries({
     queries: items.map((item) => ({
       queryKey: ['catalog-detail', activeTab, item.id],
@@ -97,6 +97,8 @@ export function CatalogTabs() {
           pricingType: data?.pricingType as 'FREE' | 'PAID' | undefined,
           price: data?.price as number | undefined,
           hasPurchased: data?.hasPurchased as boolean | undefined,
+          cardImage: (data?.cardImage as string | undefined) || undefined,
+          photo: (data?.photo as string | undefined) || undefined,
         };
       },
       staleTime: 10 * 60 * 1000,
@@ -104,7 +106,10 @@ export function CatalogTabs() {
   });
 
   const mentorNames: Record<number, string> = {};
-  const itemDetail: Record<number, { pricingType?: 'FREE' | 'PAID'; price?: number; hasPurchased?: boolean }> = {};
+  const itemDetail: Record<
+    number,
+    { pricingType?: 'FREE' | 'PAID'; price?: number; hasPurchased?: boolean; cardImage?: string; photo?: string }
+  > = {};
   detailQueries.forEach((q) => {
     if (!q.data) return;
     if (q.data.mentorName) mentorNames[q.data.id] = q.data.mentorName;
@@ -112,6 +117,8 @@ export function CatalogTabs() {
       pricingType: q.data.pricingType,
       price: q.data.price,
       hasPurchased: q.data.hasPurchased,
+      cardImage: q.data.cardImage,
+      photo: q.data.photo,
     };
   });
 
@@ -127,7 +134,9 @@ export function CatalogTabs() {
   };
 
   const getItemImage = (item: CatalogItem) => {
-    const raw = item.cardImage || item.image || item.photo;
+    const detail = itemDetail[item.id];
+    const raw =
+      detail?.cardImage || item.cardImage || detail?.photo || item.image || item.photo;
     return raw ? getMediaUrl(raw) : '/placeholder.svg';
   };
 
