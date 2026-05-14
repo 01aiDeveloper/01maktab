@@ -144,7 +144,7 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
           className="mb-4 md:mb-6 "
           animated
         >
-          Bizning Bitiruvchilarimiz
+          {t('title')}
         </MainTitle>
         <Subtitle
           align="center"

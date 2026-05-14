@@ -27,7 +27,10 @@ export function TabAchievements() {
     },
   });
 
-  const items = data?.data?.data ?? [];
+  const allItems = data?.data?.data ?? [];
+  // Faqat real olingan (claimed) badge'larni ko'rsatamiz — backend qaytargan
+  // template/test badge'larni (isClaimed=false, kulrang) yashiramiz.
+  const items = allItems.filter((item) => item.isClaimed);
   const pagination = data?.data?.meta?.pagination;
   const pageCount = pagination?.pageCount ?? 1;
 
