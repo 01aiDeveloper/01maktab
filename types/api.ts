@@ -95,6 +95,8 @@ export interface ApiSkill {
   isInWaitlist?: boolean;
   preSales?: ApiPresale | null;
   waitlistCount?: number;
+  presalesEnabled?: boolean;
+  waitlistEnabled?: boolean;
 }
 
 // ─── Course (public detail) ───────────────────────────────────────────────────
@@ -142,6 +144,8 @@ export interface ApiCourse {
   projects: ApiProject[];
   certificates: ApiCertificate[];
   enrollmentCount: number;
+  presalesEnabled?: boolean;
+  waitlistEnabled?: boolean;
 }
 
 // ─── Profession (public detail) ───────────────────────────────────────────────
@@ -168,6 +172,8 @@ export interface ApiProfession {
   certificates: ApiCertificate[];
   graduates: ApiGraduate[];
   enrollmentCount: number;
+  presalesEnabled?: boolean;
+  waitlistEnabled?: boolean;
 }
 
 // ─── Module list (authenticated) ─────────────────────────────────────────────

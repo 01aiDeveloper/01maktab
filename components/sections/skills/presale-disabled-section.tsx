@@ -7,16 +7,18 @@ import { usePresale } from '@/hooks/use-presale';
 
 interface PresaleDisabledSectionProps {
   courseId?: number;
+  enabled?: boolean;
 }
 
 function formatPrice(price: number) {
   return price.toLocaleString('uz-UZ').replace(/,/g, ' ');
 }
 
-export function PresaleDisabledSection({ courseId }: PresaleDisabledSectionProps) {
+export function PresaleDisabledSection({ courseId, enabled }: PresaleDisabledSectionProps) {
   const t = useTranslations('presaleDisabled');
-  const { data: presale, isLoading } = usePresale(courseId);
+  const { data: presale, isLoading } = usePresale(enabled ? courseId : undefined);
 
+  if (!enabled) return null;
   if (isLoading || !presale || presale.isActive) return null;
 
   const { originalPrice, presalePrice, discountPercent } = presale;

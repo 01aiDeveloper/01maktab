@@ -229,9 +229,9 @@ export default function CoursePage() {
       />
 
       {/* Presale Section */}
-      <PresaleSection courseId={course.id} courseType="course" />
-      <PresaleDisabledSection courseId={course.id} />
-      <WaitlistSection courseId={course.id} enrollmentCount={course.enrollmentCount} />
+      <PresaleSection courseId={course.id} courseType="course" enabled={course.presalesEnabled} />
+      <PresaleDisabledSection courseId={course.id} enabled={course.presalesEnabled} />
+      <WaitlistSection courseId={course.id} enrollmentCount={course.enrollmentCount} enabled={course.waitlistEnabled} />
 
       {/* Course Description Section */}
       <CourseDescriptionSection title={course.title} description={course.description} />

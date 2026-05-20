@@ -13,16 +13,17 @@ import { useJoinWaitlist } from '@/hooks/use-waitlist';
 interface WaitlistSectionProps {
   courseId?: number;
   enrollmentCount?: number;
+  enabled?: boolean;
 }
 
-export function WaitlistSection({ courseId, enrollmentCount = 0 }: WaitlistSectionProps) {
+export function WaitlistSection({ courseId, enrollmentCount = 0, enabled }: WaitlistSectionProps) {
   const t = useTranslations('waitlist');
   const router = useRouter();
   const { user } = useAuthStore();
-  const { data: presale, isLoading: presaleLoading } = usePresale(courseId);
+  const { data: presale, isLoading: presaleLoading } = usePresale(enabled ? courseId : undefined);
   const joinWaitlist = useJoinWaitlist();
 
-  // Show only when no presale exists (presale section handles active/disabled cases)
+  if (!enabled) return null;
   if (presaleLoading || presale) return null;
 
   const handleWaitlist = async () => {

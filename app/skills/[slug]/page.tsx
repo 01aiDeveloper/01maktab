@@ -421,9 +421,9 @@ export default function SkillDetailPage() {
 
 
       {/* Presale Section */}
-      <PresaleSection courseId={skill?.id} courseType="skill" />
-      <PresaleDisabledSection courseId={skill?.id} />
-      <WaitlistSection courseId={skill?.id} enrollmentCount={skill?.enrollmentCount} />
+      <PresaleSection courseId={skill?.id} courseType="skill" enabled={skill?.presalesEnabled} />
+      <PresaleDisabledSection courseId={skill?.id} enabled={skill?.presalesEnabled} />
+      <WaitlistSection courseId={skill?.id} enrollmentCount={skill?.enrollmentCount} enabled={skill?.waitlistEnabled} />
 
       <section className="w-full py-8">
         <div className="container mx-auto px-4">

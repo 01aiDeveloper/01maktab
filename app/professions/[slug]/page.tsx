@@ -344,12 +344,13 @@ export default function ProfessionPage() {
         </section>
 
         {/* Presale / Waitlist Section */}
-        <PresaleSection courseId={profession?.id} courseType="profession" />
-        {profession?.id && <PresaleDisabledSection courseId={profession.id} />}
+        <PresaleSection courseId={profession?.id} courseType="profession" enabled={profession?.presalesEnabled} />
+        {profession?.id && <PresaleDisabledSection courseId={profession.id} enabled={profession.presalesEnabled} />}
         {profession?.id && (
           <WaitlistSection
             courseId={profession.id}
             enrollmentCount={profession.enrollmentCount}
+            enabled={profession.waitlistEnabled}
           />
         )}
 

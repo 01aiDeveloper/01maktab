@@ -36,6 +36,7 @@ interface PresaleSectionProps {
   courseType?: 'skill' | 'course' | 'profession';
   promocodeId?: number;
   onCabinetClick?: () => void;
+  enabled?: boolean;
 }
 
 function formatPrice(price: number) {
@@ -62,16 +63,18 @@ export function PresaleSection({
   courseType = 'skill',
   promocodeId,
   onCabinetClick,
+  enabled,
 }: PresaleSectionProps) {
   const t = useTranslations('presale');
   const router = useRouter();
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
-  const { data: presale, isLoading: presaleLoading } = usePresale(courseId);
+  const { data: presale, isLoading: presaleLoading } = usePresale(enabled ? courseId : undefined);
   const joinWaitlist = useJoinWaitlist();
   const countdown = useCountdown(presale?.endDate);
 
+  if (!enabled) return null;
   if (presaleLoading || !presale || !presale.isActive) return null;
 
   const {
