@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
@@ -48,16 +49,24 @@ interface CatalogCardProps {
 
 export function CatalogCard({ title, image, badge, status, enrollmentCount, waitlistCount, icon, mentorName, href, hideQueueStatus }: CatalogCardProps) {
   const t = useTranslations('cards');
-  const imgSrc = getMediaUrl(image) || '/placeholder.svg';
+  const initialSrc = getMediaUrl(image) || '/placeholder.svg';
+  const [imgSrc, setImgSrc] = useState(initialSrc);
   const effectiveStatus = hideQueueStatus && (status === 'waitlist' || status === 'presale') ? undefined : status;
   const statusStyle = effectiveStatus ? STATUS_STYLE[effectiveStatus] : null;
   const statusLabel = effectiveStatus ? t(STATUS_KEY[effectiveStatus]) : null;
 
   return (
     <Link href={href} className="block group">
-      <div className="relative rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] cursor-pointer aspect-[425/512]">
+      <div className="relative rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] cursor-pointer aspect-[425/512] overflow-hidden bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]">
         {/* Full-cover image */}
-        <Image src={imgSrc} alt={title} fill className="object-cover rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] transition-transform duration-300" />
+        <Image
+          src={imgSrc}
+          alt={title}
+          fill
+          sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 280px"
+          className="object-cover object-center rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] transition-transform duration-300"
+          onError={() => setImgSrc('/placeholder.svg')}
+        />
 
         {/* Status badge — top left */}
         <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10 flex flex-col items-start gap-1.5">

@@ -121,6 +121,14 @@ export interface CourseCertificate {
   template?: string
   title: string
   createdAt: string
+  /** Kurs (backend kursni populate qiladi) */
+  course?: {
+    id: number
+    name?: string
+    title?: string
+  }
+  courseName?: string
+  courseTitle?: string
 }
 
 // Course Badge Types

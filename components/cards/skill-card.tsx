@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -32,19 +33,22 @@ export function SkillCard({
   const countKind = enrollmentCount ? 'enrolled' : 'waitlist';
   const cardSlug = slug || id?.toString() || 'skill';
   const linkHref = href || `/skills/${cardSlug}`;
+  const [imgSrc, setImgSrc] = useState(getMediaUrl(image) || '/placeholder.svg');
 
   return (
     <Link href={linkHref}>
       <motion.div
         whileHover={{ scale: 1.01, y: -1 }}
         transition={{ type: 'spring', stiffness: 300 }}
-        className="relative overflow-hidden rounded-3xl aspect-3/4 min-w-[160px] cursor-pointer group"
+        className="relative overflow-hidden rounded-3xl aspect-3/4 min-w-[160px] cursor-pointer group bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]"
       >
         <Image
-          src={getMediaUrl(image) || '/placeholder.svg'}
+          src={imgSrc}
           alt={title}
           fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 640px) 83vw, (max-width: 1024px) 33vw, 280px"
+          className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
+          onError={() => setImgSrc('/placeholder.svg')}
         />
 
         {status ? (
@@ -58,8 +62,12 @@ export function SkillCard({
           </div>
         )}
 
+        <div className="absolute top-3 left-3 w-[57px] h-[57px] bg-white/20 border border-white/[0.17] backdrop-blur-[9.68px] rounded-[18px] flex items-center justify-center z-10">
+          <Image src={iconUrl ? getMediaUrl(iconUrl) : '/images/skills/icon.png'} alt={title} width={39} height={39} />
+        </div>
+
         {countNum > 0 ? (
-          <div className="absolute top-3 left-3 z-10">
+          <div className="absolute top-3 left-[76px] z-10">
             <EnrollmentBadge count={countNum} kind={countKind} />
           </div>
         ) : null}

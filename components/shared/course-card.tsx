@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -28,17 +29,20 @@ export function CourseCard({
   const status = hideQueueStatus ? null : rawStatus
   const countNum = enrollmentCount ?? waitlistCount ?? 0
   const countKind: 'enrolled' | 'waitlist' = enrollmentCount ? 'enrolled' : 'waitlist'
-  
+  const [imgSrc, setImgSrc] = useState(imageUrl || "/placeholder.svg")
+
   return (
     <Link href={`/courses/${courseSlug}`}>
       <motion.div
-        className="group relative w-full aspect-[654/430] overflow-hidden rounded-xl sm:rounded-[40px] shadow-sm"
+        className="group relative w-full aspect-[654/430] overflow-hidden rounded-xl sm:rounded-[40px] shadow-sm bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]"
       >
       <Image
-        src={imageUrl || "/placeholder.svg"}
+        src={imgSrc}
         alt={title}
         fill
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
+        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 55vw, 600px"
+        className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+        onError={() => setImgSrc("/placeholder.svg")}
       />
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
 

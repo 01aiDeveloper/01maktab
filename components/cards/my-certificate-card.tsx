@@ -64,7 +64,7 @@ export function MyCertificateCard({ item, dark = false }: MyCertificateCardProps
               className="font-bold text-base leading-snug line-clamp-2"
               style={{ color: dark ? '#ffffff' : '#1a1a1a' }}
             >
-              {item.title}
+              {item.course?.title || item.course?.name || item.courseTitle || item.courseName || item.title}
             </h3>
             <p className="text-sm mt-1 truncate" style={{ color: dark ? 'rgba(255,255,255,0.5)' : '#6b7280' }}>
               {new Date(item.createdAt).toLocaleDateString('ru-RU')}

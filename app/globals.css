@@ -225,3 +225,23 @@
   margin: 0 auto;
   width: 100%;
 }
+
+/* Quill editor output (.prose blokda admin yozgan formatlash ko'rinsin) */
+.prose .ql-size-small { font-size: 0.75em; }
+.prose .ql-size-large { font-size: 1.5em; }
+.prose .ql-size-huge { font-size: 2.5em; }
+.prose .ql-align-center { text-align: center; }
+.prose .ql-align-right { text-align: right; }
+.prose .ql-align-justify { text-align: justify; }
+.prose .ql-indent-1 { padding-left: 3em; }
+.prose .ql-indent-2 { padding-left: 6em; }
+.prose .ql-indent-3 { padding-left: 9em; }
+.prose .ql-indent-4 { padding-left: 12em; }
+.prose .ql-indent-5 { padding-left: 15em; }
+.prose .ql-indent-6 { padding-left: 18em; }
+.prose .ql-indent-7 { padding-left: 21em; }
+.prose .ql-indent-8 { padding-left: 24em; }
+.prose s, .prose strike { text-decoration: line-through; }
+.prose u { text-decoration: underline; }
+.prose sub { vertical-align: sub; font-size: smaller; }
+.prose sup { vertical-align: super; font-size: smaller; }

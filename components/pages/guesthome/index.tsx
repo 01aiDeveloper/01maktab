@@ -65,9 +65,9 @@ export default async function GuestHomePage() {
       <Header />
       <Hero />
       {/* <MentorsSection /> */}
-      <SkillsSection skills={skills} />
-      <CareersSection careers={careers} />
       <CoursesSection />
+      <CareersSection careers={careers} />
+      <SkillsSection skills={skills} />
       <MockupSection />
       {/* <VideoSection /> */}
       <EventsSection />
