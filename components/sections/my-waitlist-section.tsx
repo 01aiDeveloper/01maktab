@@ -1,13 +1,15 @@
 "use client"
 
 import type { MouseEvent } from "react"
+import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
-import { Check, Users, X, Loader2, ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Loader2, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
 import { useMyWaitlist, useLeaveWaitlist } from "@/hooks/use-waitlist"
 import { baseMediaUrl } from "@/lib/utils"
+import { StatusBadge } from "@/components/ui/status-badge"
 
 function mediaUrl(path: string | null | undefined): string {
   if (!path) return ""
@@ -15,18 +17,11 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`
 }
 
-function formatCount(n: number): string {
-  if (n >= 1000) {
-    const k = n / 1000
-    return k % 1 === 0 ? `${k}K` : `${k.toFixed(1)}K`
-  }
-  return String(n)
-}
-
 export function MyWaitlistSection() {
   const t = useTranslations("userHome")
   const { data: entries, isLoading } = useMyWaitlist()
   const leaveWaitlist = useLeaveWaitlist()
+  const [emblaRef] = useEmblaCarousel({ loop: false, align: "start", slidesToScroll: 1 })
 
   const handleRemove = (e: MouseEvent, courseId: number) => {
     e.preventDefault()
@@ -46,84 +41,82 @@ export function MyWaitlistSection() {
       className="py-8"
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-3xl font-bold text-[#18181A] tracking-[-0.04em]">{t("myWaitlist")}</h2>
+        <h2 className="text-2xl font-bold text-foreground">{t("myWaitlist")}</h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        {entries.map((entry) => {
-          const courseTitle = entry.title || entry.name || t("unknownCourse")
-          const detailHref =
-            entry.format === "SKILL"
-              ? `/skills/${entry.id}`
-              : entry.format === "PROFESSION"
-              ? `/professions/${entry.id}`
-              : `/courses/${entry.id}`
-          const mentorName = entry.mentor?.fullname
-          const waitingCount =
-            typeof entry.soldCount === "number" && entry.soldCount > 0
-              ? entry.soldCount
-              : typeof entry.queueNumber === "number"
-              ? entry.queueNumber
-              : null
-          return (
-            <Link key={entry.id} href={detailHref} className="group relative block">
-              <div className="bg-white rounded-3xl overflow-hidden shadow-[0_2px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)] transition-shadow flex flex-col">
-                <div className="relative h-56 bg-gradient-to-br from-[#5d7bf5] to-[#7c71f4]">
-                  {entry.photo && (
-                    <Image
-                      src={mediaUrl(entry.photo)}
-                      alt={courseTitle}
-                      fill
-                      className="object-cover"
-                    />
-                  )}
-
-                  <div className="absolute top-3 right-3 flex flex-col items-end gap-2 z-10">
-                    <span className="inline-flex items-center gap-1.5 bg-[#FF7A1A] text-white px-3 py-1.5 rounded-xl text-xs font-semibold">
-                      <Check className="w-3.5 h-3.5" />
-                      {t("waiting")}
-                    </span>
-                    {waitingCount !== null && (
-                      <span className="inline-flex items-center gap-1.5 bg-[#18181A] text-white px-3 py-1.5 rounded-xl text-xs font-semibold">
-                        <Users className="w-3.5 h-3.5" />
-                        {t("peopleWaiting", { count: formatCount(waitingCount) })}
-                      </span>
-                    )}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => handleRemove(e, entry.id)}
-                    disabled={leaveWaitlist.isPending}
-                    aria-label={t("removeFromWaitlist")}
-                    title={t("removeFromWaitlist")}
-                    className="absolute top-3 left-3 z-10 inline-flex items-center justify-center w-8 h-8 rounded-full bg-black/55 text-white hover:bg-black/75 transition-colors disabled:opacity-50 opacity-0 group-hover:opacity-100"
-                  >
-                    {leaveWaitlist.isPending && leaveWaitlist.variables === entry.id ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex gap-3">
+          {entries.map((entry) => {
+            const courseTitle = entry.title || entry.name || t("unknownCourse")
+            const detailHref =
+              entry.format === "SKILL"
+                ? `/skills/${entry.id}`
+                : entry.format === "PROFESSION"
+                ? `/professions/${entry.id}`
+                : `/courses/${entry.id}`
+            const mentorName = entry.mentor?.fullname
+            const photoUrl = mediaUrl(entry.photo)
+            return (
+              <div
+                key={entry.id}
+                className="flex-[0_0_85%] sm:flex-[0_0_calc(50%-8px)] lg:flex-[0_0_calc(33.333%-12px)] min-w-0"
+              >
+                <Link href={detailHref} className="block group">
+                  <div className="relative rounded-3xl cursor-pointer h-102 border-0">
+                    {photoUrl ? (
+                      <Image
+                        src={photoUrl}
+                        alt={courseTitle}
+                        fill
+                        className="object-cover rounded-[20px] overflow-hidden"
+                      />
                     ) : (
-                      <X className="w-4 h-4" />
+                      <div className="absolute inset-0 rounded-[20px] bg-gradient-to-br from-[#5d7bf5] to-[#7c71f4]" />
                     )}
-                  </button>
-                </div>
 
-                <div className="flex items-start justify-between gap-3 p-5">
-                  <div className="min-w-0">
-                    <h3 className="font-bold text-[#18181A] text-lg leading-tight line-clamp-2">
-                      {courseTitle}
-                    </h3>
-                    {mentorName && (
-                      <p className="text-sm text-gray-500 mt-1">
-                        {t("mentorLabel")} {mentorName}
-                      </p>
-                    )}
+                    <div className="absolute top-3 right-3 z-10">
+                      <StatusBadge status="waitlist" size="sm" />
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => handleRemove(e, entry.id)}
+                      disabled={leaveWaitlist.isPending}
+                      aria-label={t("removeFromWaitlist")}
+                      title={t("removeFromWaitlist")}
+                      className="absolute top-3 left-3 z-10 inline-flex items-center justify-center w-8 h-8 rounded-full bg-black/55 text-white hover:bg-black/75 transition-colors disabled:opacity-50 opacity-0 group-hover:opacity-100"
+                    >
+                      {leaveWaitlist.isPending && leaveWaitlist.variables === entry.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <X className="w-4 h-4" />
+                      )}
+                    </button>
+
+                    <div
+                      className="absolute z-10 rounded-[20px] flex items-center justify-between gap-2 px-4 bg-white"
+                      style={{ bottom: "-4px", left: "-2px", right: "-2px", height: "126px" }}
+                    >
+                      <div className="min-w-0">
+                        <h3 className="font-bold text-base leading-snug line-clamp-2 text-[#1a1a1a]">
+                          {courseTitle}
+                        </h3>
+                        {mentorName && (
+                          <p className="text-sm mt-1 truncate text-gray-500">
+                            {t("mentorLabel")} {mentorName}
+                          </p>
+                        )}
+                      </div>
+                      <div className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-[#1a1a1a]">
+                        <ArrowUpRight className="w-4 h-4 text-white" />
+                      </div>
+                    </div>
                   </div>
-                  <ArrowUpRight className="w-5 h-5 text-[#18181A] shrink-0 mt-1" />
-                </div>
+                </Link>
               </div>
-            </Link>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
     </motion.section>
   )
