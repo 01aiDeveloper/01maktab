@@ -8,7 +8,7 @@ export type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
 const STATUS_STYLE: Record<CardStatus, { bg: string; text: string }> = {
   bought: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
   free: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
-  waitlist: { bg: 'bg-[#3B5BFF]', text: 'text-white' },
+  waitlist: { bg: 'bg-[#FF7700]', text: 'text-white' },
   presale: { bg: 'bg-amber-500', text: 'text-white' },
 };
 
@@ -51,8 +51,8 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
   const iconCls = size === 'sm' ? 'w-4 h-4' : 'w-[18px] h-[18px]';
 
   const Icon =
-    status === 'waitlist' || status === 'presale' ? ClockSolid :
-    status === 'bought' ? TickCircleSolid :
+    status === 'presale' ? ClockSolid :
+    status === 'waitlist' || status === 'bought' ? TickCircleSolid :
     CardSlashSolid;
 
   return (
