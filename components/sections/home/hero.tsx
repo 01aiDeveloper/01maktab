@@ -33,6 +33,18 @@ const SLIDE_META = [
     partnerLogoWidth: 80 as number | undefined,
     partnerLogoHeight: 28 as number | undefined,
   },
+  {
+    id: 3,
+    key: "ucellDemo" as const,
+    bgColor: "bg-[#C9C2FF]",
+    image: "/images/bannerUcell.png",
+    textColor: "text-foreground",
+    isDark: false,
+    partnerLogo: "/images/partners/Ucell.png",
+    partnerName: "Ucell",
+    partnerLogoWidth: 80 as number | undefined,
+    partnerLogoHeight: 28 as number | undefined,
+  },
 ];
 
 export function Hero() {
@@ -105,7 +117,7 @@ export function Hero() {
                   className="object-cover object-[85%] md:object-right"
                   priority={index === 0}
                 />
-                <div className="absolute inset-0 bg-black/40" />
+                {slide.isDark && <div className="absolute inset-0 bg-black/40" />}
               </div>
 
               <div className="container relative z-10 h-full flex items-center px-4 md:px-6">
@@ -134,7 +146,7 @@ export function Hero() {
                           : "bg-black/5 border-black/10"
                       }`}
                     >
-                      <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider leading-tight text-white whitespace-pre-line">
+                      <span className={`text-[10px] md:text-[11px] font-bold uppercase tracking-wider leading-tight whitespace-pre-line ${slide.isDark ? 'text-white' : 'text-foreground'}`}>
                         {t('createdWith')}
                       </span>
                       <div className="flex items-center">

@@ -64,7 +64,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
         {t("subtitle")}
       </Subtitle>
 
-      <div className="overflow-hidden " ref={emblaRef}>
+      <div className="overflow-hidden py-3 -my-3" ref={emblaRef}>
         <div className="flex gap-3">
           {skills.map((skill) => (
             <div

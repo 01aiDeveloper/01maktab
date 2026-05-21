@@ -51,26 +51,23 @@ export function SkillCard({
           onError={() => setImgSrc('/placeholder.svg')}
         />
 
-        {status ? (
-          <div className="absolute top-3 right-3 z-10">
-            <StatusBadge status={status} />
+        <div className="absolute top-3 left-3 right-3 z-10 flex items-center justify-between gap-2">
+          <div className="w-[57px] h-[57px] bg-white/20 border border-white/[0.17] backdrop-blur-[9.68px] rounded-[18px] flex items-center justify-center shrink-0">
+            <Image src={iconUrl ? getMediaUrl(iconUrl) : '/images/skills/icon.png'} alt={title} width={39} height={39} />
           </div>
-        ) : badge && (
-          <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">
-            <Image src={'/images/skills/icon.png'} alt="" width={14} height={14} className="w-3.5 h-3.5" />
-            {badge}
-          </div>
-        )}
 
-        <div className="absolute top-3 left-3 w-[57px] h-[57px] bg-white/20 border border-white/[0.17] backdrop-blur-[9.68px] rounded-[18px] flex items-center justify-center z-10">
-          <Image src={iconUrl ? getMediaUrl(iconUrl) : '/images/skills/icon.png'} alt={title} width={39} height={39} />
+          <div className="flex items-center gap-2">
+            {countNum > 0 && <EnrollmentBadge count={countNum} kind={countKind} />}
+            {status ? (
+              <StatusBadge status={status} />
+            ) : badge ? (
+              <div className="flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">
+                <Image src={'/images/skills/icon.png'} alt="" width={14} height={14} className="w-3.5 h-3.5" />
+                {badge}
+              </div>
+            ) : null}
+          </div>
         </div>
-
-        {countNum > 0 ? (
-          <div className="absolute top-3 left-[76px] z-10">
-            <EnrollmentBadge count={countNum} kind={countKind} />
-          </div>
-        ) : null}
 
         <div className="absolute bottom-0 left-0 right-0 flex items-center px-4.5 h-[104px] bg-white/20 backdrop-blur-[53.25px] rounded-[25px]">
           <h3 className="text-white flex-1 text-2xl font-semibold leading-[25px] tracking-[-0.05em]">

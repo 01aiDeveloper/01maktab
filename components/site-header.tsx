@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { useAuthStore } from "@/store/auth-store"
 import { useMe } from "@/hooks/use-me"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { NotificationPanel } from "@/components/shared/notification-panel"
 
 function VibecoinBadge({ amount, isDark }: { amount: number; isDark: boolean }) {
   const formatted = new Intl.NumberFormat("ru-RU").format(amount)
@@ -133,6 +134,7 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
           {/* Auth Section - Right */}
           <div className="flex items-center gap-2">
             <LanguageSwitcher isDark={!isDark} />
+            {user && <NotificationPanel isDark={!isDark} />}
             {user ? (
               <div className="flex items-center gap-2 relative">
                 <motion.button

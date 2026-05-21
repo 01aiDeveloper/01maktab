@@ -8,18 +8,10 @@ import { MainTitle } from "@/components/ui/main-title";
 import { Subtitle } from "@/components/ui/subtitle";
 import { getMediaUrl } from "@/lib/utils";
 import type { Partner } from "@/types/api.types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://app-dev.01ai.uz/api/v1";
-
-const UCELL_PARTNER: Partner = {
-  id: 0,
-  name: "Ucell",
-  logo: "/images/partners/Ucell.png",
-  description: "",
-  website: "https://ucell.uz",
-};
 
 interface PartnersSectionProps {
   partners?: Partner[];
@@ -35,9 +27,7 @@ export function PartnersSection({
   showSubtitle = true,
 }: PartnersSectionProps) {
   const t = useTranslations("partners");
-  const [partners, setPartners] = useState<Partner[]>(
-    partnersProp ? [UCELL_PARTNER, ...partnersProp] : [UCELL_PARTNER],
-  );
+  const [partners, setPartners] = useState<Partner[]>(partnersProp ?? []);
   const [loading, setLoading] = useState(!partnersProp);
 
   const isDark = variant === "dark";
@@ -49,24 +39,22 @@ export function PartnersSection({
   const borderColor = isDark ? "border-gray-800" : "border-gray-100";
 
   useEffect(() => {
-    // Agar props orqali partners berilgan bo'lsa, fetch qilmaymiz
     if (partnersProp) {
-      setPartners([UCELL_PARTNER, ...partnersProp]);
+      setPartners(partnersProp);
       setLoading(false);
       return;
     }
 
-    // Props orqali berilmagan bo'lsa, API dan fetch qilamiz
     async function fetchPartners() {
       try {
         const response = await fetch(
           `${API_BASE_URL}/partner/public?pageSize=20`,
         );
         const data = await response.json();
-        setPartners([UCELL_PARTNER, ...(data?.data?.data || [])]);
+        setPartners(data?.data?.data || []);
       } catch (error) {
         console.error("Failed to fetch partners:", error);
-        setPartners([UCELL_PARTNER]);
+        setPartners([]);
       } finally {
         setLoading(false);
       }
@@ -131,56 +119,24 @@ export function PartnersSection({
                 : useMediaUrl
                   ? getMediaUrl(partner.logo)
                   : partner.logo;
-              const isExternal = partner.id === 0;
               const cardClass = `group relative flex h-[203px] w-[412px] shrink-0 items-center justify-center rounded-[16px] border-[3px] ${cardBorderColor} ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"}`;
-              // Ucell PNG oq matn ekan — CSS mask orqali rangga bo'yaymiz.
-              // Default: kulrang, hover: Ucell brend binafsha (#6E2DAE).
-              const logoImg = isExternal ? (
-                <div
-                  role="img"
-                  aria-label={partner.name}
-                  className="w-[180px] h-[80px] bg-gray-500 group-hover:bg-[#6E2DAE] transition-colors duration-300"
-                  style={{
-                    WebkitMaskImage: `url(${logoSrc})`,
-                    maskImage: `url(${logoSrc})`,
-                    WebkitMaskRepeat: "no-repeat",
-                    maskRepeat: "no-repeat",
-                    WebkitMaskPosition: "center",
-                    maskPosition: "center",
-                    WebkitMaskSize: "contain",
-                    maskSize: "contain",
-                  }}
-                />
-              ) : (
-                <Image
-                  src={logoSrc}
-                  alt={partner.name}
-                  width={180}
-                  height={80}
-                  className={`object-contain transition-all duration-300 ${
-                    isDark
-                      ? "brightness-0 invert group-hover:brightness-100 group-hover:invert-0"
-                      : "brightness-50 group-hover:brightness-100"
-                  }`}
-                />
-              );
-              return isExternal ? (
-                <a
-                  key={`row1-${partner.id}-${index}`}
-                  href={partner.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cardClass}
-                >
-                  {logoImg}
-                </a>
-              ) : (
+              return (
                 <Link
                   key={`row1-${partner.id}-${index}`}
                   href={`/partners/${partner.id}`}
                   className={cardClass}
                 >
-                  {logoImg}
+                  <Image
+                    src={logoSrc}
+                    alt={partner.name}
+                    width={180}
+                    height={80}
+                    className={`object-contain transition-all duration-300 ${
+                      isDark
+                        ? "brightness-0 invert group-hover:brightness-100 group-hover:invert-0"
+                        : "brightness-50 group-hover:brightness-100"
+                    }`}
+                  />
                 </Link>
               );
             })}

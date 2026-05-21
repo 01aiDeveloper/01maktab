@@ -57,6 +57,10 @@
       "mlEngineer": {
         "title": "Курс ML Engineer",
         "description": "С нуля до инженера в топ-компании: ваша карьера начинается здесь"
+      },
+      "ucellDemo": {
+        "title": "Демо. Корпоративная нейрограмотность",
+        "description": "Базовый курс по AI: от основ до практических инструментов"
       }
     }
   },
@@ -65,6 +69,29 @@
     "skills": "Скиллы",
     "courses": "Курсы",
     "professions": "Профессии"
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "week": "Эта неделя",
+    "month": "Этот месяц",
+    "empty": "Уведомлений пока нет",
+    "tabs": {
+      "all": "Все",
+      "courses": "Курсы",
+      "events": "События"
+    },
+    "hoursAgo": "{n} ч назад",
+    "daysAgo": "{n} дн назад",
+    "waitlistAvailablePrefix": "Курс из вашего списка ожидания",
+    "waitlistAvailableSuffix": "теперь доступен.",
+    "homeworkAvailable": "домашнее задание курса теперь доступно.",
+    "newPresalePrefix": "Новинка! Из вашего pre-sales списка курс",
+    "newPresaleSuffix": "теперь доступен.",
+    "reminder": "Напоминание:",
+    "finalDeadline": "финальный дедлайн проекта {date}",
+    "balanceAdded": "На ваш баланс добавлено +{amount} VibeCoin.",
+    "hackathonPrefix": "Ваша заявка на",
+    "hackathonSuffix": "принята."
   },
   "userMenu": {
     "profile": "Профиль",
@@ -231,9 +258,11 @@
     "myCourses": "Мои курсы",
     "myProfessions": "Мои профессии",
     "mySkills": "Мои скиллы",
-    "myWaitlist": "Список ожидания",
+    "myWaitlist": "Мой список ожидания",
     "waiting": "В ожидании",
     "queue": "Очередь: #{number}",
+    "peopleWaiting": "{count} человек ждёт",
+    "mentorLabel": "Ментор:",
     "unknownCourse": "Курс",
     "removeFromWaitlist": "Убрать из списка",
     "removeWaitlistConfirm": "Убрать этот курс из списка ожидания?",

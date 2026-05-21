@@ -57,6 +57,10 @@
       "mlEngineer": {
         "title": "ML Engineer Kursi",
         "description": "Noldan top-kompaniyada analitikgacha: karyerangiz shu yerdan boshlanadi"
+      },
+      "ucellDemo": {
+        "title": "Demo. Korporativ neyrosavodxonlik",
+        "description": "AI bo'yicha asosiy kurs: asoslardan amaliy vositalargacha"
       }
     }
   },
@@ -65,6 +69,29 @@
     "skills": "Skillar",
     "courses": "Kurslar",
     "professions": "Kasblar"
+  },
+  "notifications": {
+    "title": "Xabarnoma",
+    "week": "Bu Hafta",
+    "month": "Bu Oy",
+    "empty": "Hozircha xabarnomalar yo'q",
+    "tabs": {
+      "all": "Hammasi",
+      "courses": "Kurslar",
+      "events": "Tadbirlar"
+    },
+    "hoursAgo": "{n} soat oldin",
+    "daysAgo": "{n} kun oldin",
+    "waitlistAvailablePrefix": "Sizning kutish ro'yxatingizdagi",
+    "waitlistAvailableSuffix": "kursi endi mavjud.",
+    "homeworkAvailable": "kursi uy vazifasi endi mavjud.",
+    "newPresalePrefix": "Yangilik! Sizning pre-sales ro'yxatingizdagi",
+    "newPresaleSuffix": "endi mavjud.",
+    "reminder": "Eslatma:",
+    "finalDeadline": "yakuniy proyekt dedlayn {date}",
+    "balanceAdded": "Sizning balansingizga +{amount} VibeCoin qo'shildi.",
+    "hackathonPrefix": "Sizning",
+    "hackathonSuffix": "tadbir registratsiya formangiz qabul qilindi."
   },
   "userMenu": {
     "profile": "Profil",
@@ -231,9 +258,11 @@
     "myCourses": "Kurslarim",
     "myProfessions": "Kasblarim",
     "mySkills": "Skillarim",
-    "myWaitlist": "Kutish ro'yxati",
+    "myWaitlist": "Kutish ro'yxatim",
     "waiting": "Kutilmoqda",
     "queue": "Navbat: #{number}",
+    "peopleWaiting": "{count} odam kutmoqda",
+    "mentorLabel": "Mentor:",
     "unknownCourse": "Kurs",
     "removeFromWaitlist": "Ro'yxatdan chiqarish",
     "removeWaitlistConfirm": "Bu kursni kutish ro'yxatidan o'chirasizmi?",
