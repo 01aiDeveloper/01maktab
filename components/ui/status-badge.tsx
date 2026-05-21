@@ -46,9 +46,9 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
   const style = STATUS_STYLE[status];
   const label = t(STATUS_KEY[status]);
   const sizeCls = size === 'sm'
-    ? 'p-1.5 text-xs gap-1.5 tracking-[-0.05em]'
-    : 'px-[14px] py-2 text-[18px] leading-[22px] tracking-[-0.05em] gap-2';
-  const iconCls = size === 'sm' ? 'w-4 h-4' : 'w-[18px] h-[18px]';
+    ? 'p-1.5 text-xs gap-1.5 tracking-[-0.05em] font-semibold'
+    : 'h-[38px] px-[17px] text-[20px] leading-[25px] tracking-[-0.05em] gap-2 font-[450]';
+  const iconCls = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
 
   const Icon =
     status === 'presale' ? ClockSolid :
@@ -56,7 +56,7 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
     CardSlashSolid;
 
   return (
-    <div className={`inline-flex w-fit items-center ${style.bg} ${style.text} ${sizeCls} rounded-[12px] font-semibold ${className}`}>
+    <div className={`inline-flex w-fit items-center ${style.bg} ${style.text} ${sizeCls} rounded-[11px] ${className}`}>
       <Icon className={iconCls} />
       {label}
     </div>
