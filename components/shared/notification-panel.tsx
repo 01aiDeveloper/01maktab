@@ -137,24 +137,26 @@ export function NotificationPanel({ isDark = true }: NotificationPanelProps) {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.15 }}
-            className="absolute top-full right-0 mt-3 w-[420px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl border border-gray-100 shadow-xl z-50 overflow-hidden"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "tween", duration: 0.25, ease: "easeOut" }}
+            className="fixed top-0 right-0 bottom-0 h-screen w-full max-w-[480px] bg-white shadow-2xl z-50 flex flex-col"
+            role="dialog"
+            aria-modal="true"
           >
-            <div className="flex items-center justify-between px-5 pt-5 pb-3">
+            <div className="flex items-center justify-between px-6 pt-6 pb-4">
               <h3 className="text-2xl font-bold text-[#18181A]">{t("title")}</h3>
               <button
                 onClick={() => setOpen(false)}
                 className="text-gray-500 hover:text-gray-900 transition-colors"
                 aria-label="Close"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </button>
             </div>
 
-            <div className="px-5">
+            <div className="px-6 pb-4">
               <div className="inline-flex items-center gap-1 bg-[#F4F4F6] rounded-full p-1">
                 {(["all", "courses", "events"] as Tab[]).map((tab) => (
                   <button
@@ -172,11 +174,11 @@ export function NotificationPanel({ isDark = true }: NotificationPanelProps) {
               </div>
             </div>
 
-            <div className="max-h-[480px] overflow-y-auto px-5 py-4 space-y-5">
+            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
               {week.length > 0 && (
                 <div>
-                  <p className="text-base font-bold text-[#18181A] mb-2">{t("week")}</p>
-                  <ul className="space-y-3">
+                  <p className="text-base font-bold text-[#18181A] mb-3">{t("week")}</p>
+                  <ul className="space-y-4">
                     {week.map((n) => (
                       <NotificationRow key={n.id} item={n} />
                     ))}
@@ -186,8 +188,8 @@ export function NotificationPanel({ isDark = true }: NotificationPanelProps) {
 
               {month.length > 0 && (
                 <div>
-                  <p className="text-base font-bold text-[#18181A] mb-2">{t("month")}</p>
-                  <ul className="space-y-3">
+                  <p className="text-base font-bold text-[#18181A] mb-3">{t("month")}</p>
+                  <ul className="space-y-4">
                     {month.map((n) => (
                       <NotificationRow key={n.id} item={n} />
                     ))}
