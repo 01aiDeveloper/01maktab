@@ -172,7 +172,7 @@ export function CatalogTabs() {
       ) : items.length === 0 ? (
         <NoData title={t('noItemsTitle')} description={t('noItemsDescription')} />
       ) : (
-        <div className="grid grid-cols-3 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {items.map((item: CatalogItem) => {
             const detail = itemDetail[item.id];
             const hasPurchased = detail?.hasPurchased ?? item.hasPurchased;
