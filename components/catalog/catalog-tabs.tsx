@@ -172,7 +172,7 @@ export function CatalogTabs() {
       ) : items.length === 0 ? (
         <NoData title={t('noItemsTitle')} description={t('noItemsDescription')} />
       ) : (
-        <div className="flex overflow-x-auto snap-x snap-mandatory -mx-4 px-4 gap-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:overflow-visible sm:mx-0 sm:px-0 sm:snap-none">
+        <div className="grid grid-flow-col grid-rows-2 auto-cols-[70%] overflow-x-auto snap-x snap-mandatory -mx-4 px-4 gap-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid-flow-row sm:grid-rows-none sm:auto-cols-auto sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:overflow-visible sm:mx-0 sm:px-0 sm:snap-none">
           {items.map((item: CatalogItem) => {
             const detail = itemDetail[item.id];
             const hasPurchased = detail?.hasPurchased ?? item.hasPurchased;
@@ -188,7 +188,7 @@ export function CatalogTabs() {
               : 'free';
 
             return (
-              <div key={item.id} className="w-[82%] shrink-0 snap-start sm:w-auto sm:shrink">
+              <div key={item.id} className="snap-start">
                 <CatalogCard
                   id={item.id}
                   slug={item.slug}
