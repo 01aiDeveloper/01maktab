@@ -8,7 +8,7 @@ import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
 const courses = [
   {
     id: 1,
-    image: "/images/course1.png",
+    image: "/images/course1.webp",
     title: "Data Science",
     instructor: "Ustoz: Khikmatilla Pulatov",
     progress: "Dars: 3/10",

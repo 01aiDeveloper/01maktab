@@ -35,7 +35,7 @@ export function PartnerSection({ partner, variant = 'default' }: PartnerSectionP
           <div className="max-w-3xl mx-auto">
             <div className="flex justify-center mb-6">
               <div className="relative h-16 w-32">
-                <Image src={partner.logo} alt={partner.name} fill className="object-contain" />
+                <Image src={partner.logo} alt={partner.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-contain" />
               </div>
             </div>
             <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-4">{partner.title}</h2>
@@ -68,7 +68,7 @@ export function PartnerSection({ partner, variant = 'default' }: PartnerSectionP
       >
         <div className="grid lg:grid-cols-[auto_1fr] gap-6 items-center">
           <div className="relative h-16 w-32 shrink-0">
-            <Image src={partner.logo} alt={partner.name} fill className="object-contain" />
+            <Image src={partner.logo} alt={partner.name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-contain" />
           </div>
           <div>
             <h3 className="font-suisse font-bold text-gray-900 text-lg lg:text-xl mb-2">{partner.title}</h3>

@@ -121,7 +121,7 @@ export default function ProfessionPage() {
       id: 5,
       title: t('benefits.community'),
       bullets: [t('benefits.communityB1'), t('benefits.communityB2')],
-      icon: <Image src="/icons/professions/5.png" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+      icon: <Image src="/icons/professions/5.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
     },
     {
       id: 6,
@@ -264,7 +264,7 @@ export default function ProfessionPage() {
               className="rounded-[29px] lg:rounded-[40px] overflow-hidden relative h-full"
             >
               {/* Background Image */}
-              {courseImage && <Image src={courseImage} alt={profession.title} fill className="object-cover" priority />}
+              {courseImage && <Image src={courseImage} alt={profession.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" priority />}
 
               {/* Content Overlay */}
               <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center h-full">

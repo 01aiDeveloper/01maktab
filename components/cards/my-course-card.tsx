@@ -26,7 +26,7 @@ export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
           <Image
             src={photoUrl}
             alt={item.title || item.name}
-            fill
+            fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover rounded-[20px] overflow-hidden transition-transform duration-300 "
           />
         ) : (

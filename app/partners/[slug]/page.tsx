@@ -127,7 +127,7 @@ export default function PartnerPage() {
                 <Image
                   src={getMediaUrl(partner.image)}
                   alt={partner.name}
-                  fill
+                  fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-cover"
                   priority
                 />
@@ -137,7 +137,7 @@ export default function PartnerPage() {
                 <Image
                   src={getMediaUrl(partner.logo)}
                   alt={partner.name}
-                  fill
+                  fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-contain"
                   priority
                 />
@@ -208,7 +208,7 @@ export default function PartnerPage() {
                   <Image
                     src={getMediaUrl(blockImages[0])}
                     alt={`${partner.name}`}
-                    fill
+                    fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover"
                   />
                 </div>

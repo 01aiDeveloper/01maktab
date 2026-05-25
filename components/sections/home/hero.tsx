@@ -26,7 +26,7 @@ const SLIDE_META: SlideMeta[] = [
     id: 1,
     key: "ucellDemo",
     bgColor: "bg-[#C9C2FF]",
-    image: "/images/bannerUcell.png",
+    image: "/images/bannerUcell.webp",
     textColor: "text-foreground",
     isDark: false,
     partnerLogo: "/images/partners/Ucell.png",
@@ -38,7 +38,7 @@ const SLIDE_META: SlideMeta[] = [
     id: 2,
     key: "aiCreator",
     bgColor: "bg-[#111111]",
-    image: "/images/AIIjodkor.jpg",
+    image: "/images/AIIjodkor.webp",
     textColor: "text-white",
     isDark: true,
   },
@@ -46,7 +46,7 @@ const SLIDE_META: SlideMeta[] = [
     id: 3,
     key: "aiStartup",
     bgColor: "bg-[#111111]",
-    image: "/images/AIStartUp.jpg",
+    image: "/images/AIStartUp.webp",
     textColor: "text-white",
     isDark: true,
   },
@@ -118,7 +118,7 @@ export function Hero() {
                 <Image
                   src={slide.image || "/placeholder.svg"}
                   alt={slide.title}
-                  fill
+                  fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-cover object-[85%] md:object-right"
                   priority={index === 0}
                 />

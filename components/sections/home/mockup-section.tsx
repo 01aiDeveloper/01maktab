@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
-import Hls from "hls.js"
+import type HlsType from "hls.js"
 
 const VIDEO_SRC =
   "https://video.01ai.uz/2c9eb729-1ae9-4434-a5bf-e477bade2f1b/playlist.m3u8"
@@ -14,7 +14,8 @@ export function MockupSection() {
     const video = videoRef.current
     if (!video) return
 
-    let hls: Hls | null = null
+    let hls: HlsType | null = null
+    let cancelled = false
 
     const tryPlay = () => {
       const p = video.play()
@@ -24,17 +25,23 @@ export function MockupSection() {
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = VIDEO_SRC
       video.addEventListener("loadedmetadata", tryPlay, { once: true })
-    } else if (Hls.isSupported()) {
-      hls = new Hls({ enableWorker: true })
-      hls.loadSource(VIDEO_SRC)
-      hls.attachMedia(video)
-      hls.on(Hls.Events.MANIFEST_PARSED, tryPlay)
     } else {
-      video.src = VIDEO_SRC
-      video.addEventListener("loadedmetadata", tryPlay, { once: true })
+      import("hls.js").then(({ default: Hls }) => {
+        if (cancelled || !videoRef.current) return
+        if (Hls.isSupported()) {
+          hls = new Hls({ enableWorker: true })
+          hls.loadSource(VIDEO_SRC)
+          hls.attachMedia(video)
+          hls.on(Hls.Events.MANIFEST_PARSED, tryPlay)
+        } else {
+          video.src = VIDEO_SRC
+          video.addEventListener("loadedmetadata", tryPlay, { once: true })
+        }
+      })
     }
 
     return () => {
+      cancelled = true
       video.removeEventListener("loadedmetadata", tryPlay)
       hls?.destroy()
     }

@@ -2,10 +2,10 @@ import type { MarketProduct } from '@/types/market';
 
 const galleryImages = [
   '/images/market/productImage.jpg',
-  '/images/market/fc11384341fccf8afbe7b99e8eab4878a9400f3c.jpg',
-  '/images/market/36659399c1838898b73ca91a3fa4eca5befc1317.png',
-  '/images/market/427c5f3cfdec7def0ec8fb6871140f05da711477.png',
-  '/images/market/c625fc9999adc3f6eb83662601bbabad0c80ea47.png',
+  '/images/market/fc11384341fccf8afbe7b99e8eab4878a9400f3c.webp',
+  '/images/market/36659399c1838898b73ca91a3fa4eca5befc1317.webp',
+  '/images/market/427c5f3cfdec7def0ec8fb6871140f05da711477.webp',
+  '/images/market/c625fc9999adc3f6eb83662601bbabad0c80ea47.webp',
 ];
 
 const baseColors = [

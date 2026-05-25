@@ -29,7 +29,7 @@ export function EventCard({
         <Image
           src={imageUrl || "/placeholder.svg"}
           alt={title}
-          fill
+          fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="object-cover blur-[6px] scale-110"
         />
 
@@ -69,7 +69,7 @@ export function EventCard({
       <Image
         src={imageUrl || "/placeholder.svg"}
         alt={title}
-        fill
+        fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
         className="object-cover transition-transform duration-700 group-hover:scale-105"
       />
 

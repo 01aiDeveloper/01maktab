@@ -18,7 +18,7 @@ export function MentorCommunicationSection() {
         >
           {/* Left Media Card */}
           <div className="relative rounded-3xl overflow-hidden min-h-[300px] lg:min-h-[500px] bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
-            <Image src="/icons/professions/bg.gif" alt="Live mentoring" fill className="object-cover" />
+            <Image src="/icons/professions/bg.webp" alt="Live mentoring" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
 
             {/* Dark overlay */}
             <div className="absolute inset-0 bg-black/70"></div>

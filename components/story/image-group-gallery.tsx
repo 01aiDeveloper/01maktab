@@ -68,7 +68,7 @@ export function ImageGroupGallery({ images }: ImageGroupGalleryProps) {
                   <Image
                     src={getMediaUrl(images[i])}
                     alt={`Gallery image ${i + 1}`}
-                    fill
+                    fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover"
                   />
                 </motion.div>
@@ -83,7 +83,7 @@ export function ImageGroupGallery({ images }: ImageGroupGalleryProps) {
                   <Image
                     src={getMediaUrl(images[i + 1])}
                     alt={`Gallery image ${i + 2}`}
-                    fill
+                    fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover"
                   />
                 </motion.div>
@@ -146,7 +146,7 @@ export function ImageGroupGallery({ images }: ImageGroupGalleryProps) {
               <Image
                 src={getMediaUrl(images[currentIndex])}
                 alt={`Image ${currentIndex + 1}`}
-                fill
+                fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                 className="object-contain"
               />
             </motion.div>

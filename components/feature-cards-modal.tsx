@@ -260,7 +260,7 @@ export function StoryModal({ story, onClose, onPrev, onNext, hasPrev, hasNext }:
                   <Image
                     src={slide.image}
                     alt={slide.title}
-                    fill
+                    fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     quality={100}
                     className={`object-contain ${slide.imagePosition ?? 'object-right-bottom'}`}
                     priority

@@ -11,7 +11,7 @@ import { MainButton } from '@/components/ui/main-button';
 import { EnrollmentBadge } from '@/components/ui/enrollment-badge';
 import type { Career } from '@/types/api.types';
 
-const STATIC_IMAGES = ['/images/hero4.jpg', '/images/hero6.jpg'];
+const STATIC_IMAGES = ['/images/hero4.webp', '/images/hero6.webp'];
 const STATIC_TITLE_KEYS = ['dataAnalyst', 'mlEngineer'] as const;
 
 
@@ -118,7 +118,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                   <Image
                     src={activeData.imageUrl}
                     alt={activeData.title}
-                    fill
+                    fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover object-right"
                     priority
                   />

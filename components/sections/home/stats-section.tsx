@@ -50,7 +50,7 @@ export function StatsSection() {
 
         {/* Team photo 1 - right side of row 1 */}
         <motion.div variants={itemVariants} className="rounded-[14px] overflow-hidden h-52.5 md:h-80 order-2 md:order-2">
-          <Image src="/images/Statistics_1.jpg" alt="01AI jamoasi" width={600} height={400} className="w-full h-full object-cover" />
+          <Image src="/images/Statistics_1.webp" alt="01AI jamoasi" width={600} height={400} className="w-full h-full object-cover" />
         </motion.div>
 
         {/* Row 2 */}

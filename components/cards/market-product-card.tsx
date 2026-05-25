@@ -25,7 +25,7 @@ function formatSum(value: number) {
 
 const CoinIcon = ({ className }: { className?: string }) => (
   <Image
-    src="/images/market/VC.png"
+    src="/images/market/VC.webp"
     alt="VC"
     width={30}
     height={40}

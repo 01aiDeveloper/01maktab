@@ -29,9 +29,9 @@ export function CatalogHero() {
         {/* Right: Illustration Card */}
         <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 rounded-[20px] sm:rounded-[24px] overflow-hidden">
           <Image
-            src="/images/profile-hero.png"
+            src="/images/profile-hero.webp"
             alt="Catalog"
-            fill
+            fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover"
             priority
             quality={100}

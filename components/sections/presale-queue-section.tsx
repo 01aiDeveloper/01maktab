@@ -127,7 +127,7 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
                 <Image
                   src={courseImage}
                   alt={skill.title}
-                  fill
+                  fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-cover"
                   priority
                 />
@@ -230,7 +230,7 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
                       <Image
                         src={mediaUrl(partner.logo)}
                         alt={partner.name}
-                        fill
+                        fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                         className="object-contain p-8"
                       />
                     ) : (

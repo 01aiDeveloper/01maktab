@@ -36,7 +36,7 @@ export function RefundSection() {
                 <Image
                   src="/icons/professions/refund-icon.webp"
                   alt="Investment return"
-                  fill
+                  fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-contain"
                 />
               </div>
@@ -131,7 +131,7 @@ export function RefundSection() {
                   <Image
                     src="/icons/professions/refund-icon.webp"
                     alt="Investment return"
-                    fill
+                    fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-contain"
                   />
                 </div>
