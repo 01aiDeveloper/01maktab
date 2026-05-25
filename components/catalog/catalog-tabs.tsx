@@ -84,6 +84,26 @@ export function CatalogTabs() {
     },
   });
 
+  // /course/client cardImage'ni qaytarmaydi — public listdan id->cardImage map olamiz
+  const { data: cardImageMap = {} } = useQuery<Record<number, string>>({
+    queryKey: ['catalog-cardimage', activeTab],
+    queryFn: async () => {
+      const response = await api.get('/course/public', {
+        params: { format: formats[activeTab], pageSize: 20 },
+      });
+      const data = response.data?.data?.data || response.data?.data || [];
+      const map: Record<number, string> = {};
+      if (Array.isArray(data)) {
+        for (const item of data) {
+          if (item?.id != null && item?.cardImage) map[item.id] = item.cardImage;
+        }
+      }
+      return map;
+    },
+    enabled: !!user,
+    staleTime: 10 * 60 * 1000,
+  });
+
   // Fetch detail (mentor + pricing + cardImage) — list endpoint ba'zi maydonlarni qaytarmaydi
   const detailQueries = useQueries({
     queries: items.map((item) => ({
@@ -135,7 +155,7 @@ export function CatalogTabs() {
 
   const getItemImage = (item: CatalogItem) => {
     const detail = itemDetail[item.id];
-    const raw = detail?.cardImage || item.cardImage;
+    const raw = detail?.cardImage || item.cardImage || cardImageMap[item.id];
     return raw ? getMediaUrl(raw) : '/placeholder.svg';
   };
 
