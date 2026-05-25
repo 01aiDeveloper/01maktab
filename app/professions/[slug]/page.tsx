@@ -121,7 +121,7 @@ export default function ProfessionPage() {
       id: 5,
       title: t('benefits.community'),
       bullets: [t('benefits.communityB1'), t('benefits.communityB2')],
-      icon: <Image quality={95} src="/icons/professions/5.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+      icon: <Image quality={95} src="/icons/professions/5.png" alt="" width={80} height={80} className="opacity-40 grayscale" />,
     },
     {
       id: 6,

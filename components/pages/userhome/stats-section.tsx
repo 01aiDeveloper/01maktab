@@ -47,13 +47,13 @@ export function StatsSection() {
 
         {/* Team photo 1 - right side of row 1 */}
         <motion.div variants={itemVariants} className="rounded-3xl overflow-hidden min-h-[220px]">
-          <Image quality={95} src="/images/team1.webp" alt="01AI jamoasi" width={600} height={400} className="w-full h-full object-cover" />
+          <Image quality={95} src="/images/team1.png" alt="01AI jamoasi" width={600} height={400} className="w-full h-full object-cover" />
         </motion.div>
 
         {/* Row 2 */}
         {/* Team photo 2 - left side of row 2 */}
         <motion.div variants={itemVariants} className="rounded-3xl overflow-hidden min-h-[220px]">
-          <Image quality={95} src="/images/team2.webp" alt="Jamoa ishlayapti" width={600} height={400} className="w-full h-full object-cover" />
+          <Image quality={95} src="/images/team2.png" alt="Jamoa ishlayapti" width={600} height={400} className="w-full h-full object-cover" />
         </motion.div>
 
         {/* Blue card - Employment rate - right side of row 2 */}

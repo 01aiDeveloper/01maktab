@@ -11,7 +11,7 @@ import { MainButton } from '@/components/ui/main-button';
 import { EnrollmentBadge } from '@/components/ui/enrollment-badge';
 import type { Career } from '@/types/api.types';
 
-const STATIC_IMAGES = ['/images/hero4.webp', '/images/hero6.webp'];
+const STATIC_IMAGES = ['/images/hero4.jpg', '/images/hero6.jpg'];
 const STATIC_TITLE_KEYS = ['dataAnalyst', 'mlEngineer'] as const;
 
 

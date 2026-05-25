@@ -15,7 +15,7 @@ export function ProfileHero() {
       {/* Mobile layout */}
       <div className="lg:hidden relative rounded-[24px] overflow-hidden h-64">
         <Image
-          src="/images/profile-hero.webp"
+          src="/images/profile-hero.png"
           alt="Profile"
           fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="object-cover"
@@ -55,7 +55,7 @@ export function ProfileHero() {
         {/* Right: Illustration Card */}
         <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 rounded-[24px] overflow-hidden">
           <Image
-            src="/images/profile-hero.webp"
+            src="/images/profile-hero.png"
             alt="Profile"
             fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover"

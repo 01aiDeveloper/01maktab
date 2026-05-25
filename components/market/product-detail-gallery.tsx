@@ -16,7 +16,7 @@ const statusLabel: Record<ProductStatus, React.ReactNode> = {
   OUT_OF_STOCK: 'Нет в наличии',
   COIN_ONLY: (
     <span className="inline-flex items-center gap-1">
-      Только за <Image quality={95} src="/images/market/VC.webp" alt="VC" width={15} height={20} className="w-4 h-5 align-middle" />
+      Только за <Image quality={95} src="/images/market/VC.png" alt="VC" width={15} height={20} className="w-4 h-5 align-middle" />
     </span>
   ),
   SOON: 'Скоро',

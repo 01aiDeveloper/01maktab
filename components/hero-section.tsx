@@ -62,7 +62,7 @@ export function HeroSection({ userName = 'Aziz' }: HeroSectionProps) {
               <Home className="h-4 w-4" />
               <span>{t('backHome')}</span>
             </Link>
-            <Image quality={95} src="/images/hero-img.webp" alt="Friendly purple monster mascot" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover object-center" priority />
+            <Image quality={95} src="/images/hero-img.png" alt="Friendly purple monster mascot" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover object-center" priority />
           </motion.div>
         </div>
       </div>
