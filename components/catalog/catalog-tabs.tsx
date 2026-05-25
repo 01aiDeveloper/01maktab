@@ -135,8 +135,7 @@ export function CatalogTabs() {
 
   const getItemImage = (item: CatalogItem) => {
     const detail = itemDetail[item.id];
-    const raw =
-      detail?.cardImage || item.cardImage || detail?.photo || item.image || item.photo;
+    const raw = detail?.cardImage || item.cardImage;
     return raw ? getMediaUrl(raw) : '/placeholder.svg';
   };
 
