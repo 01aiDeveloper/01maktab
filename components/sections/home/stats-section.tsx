@@ -67,7 +67,7 @@ export function StatsSection() {
             </div>
             <span className="text-sm md:text-[32px] font-[450] text-white text-center tracking-[-0.05em]">{t('employment')}</span>
           </div>
-          <span className="text-4xl md:text-[121.2px] font-[450] text-white text-center tracking-[-0.05em] leading-none">83%</span>
+          <span className="text-4xl md:text-[121.2px] font-[450] text-white text-center tracking-[-0.05em] leading-none">70%</span>
         </motion.div>
       </motion.div>
       </div>

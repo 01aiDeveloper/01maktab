@@ -50,13 +50,13 @@
     "ctaLoggedIn": "Barcha kurslar",
     "ctaGuest": "Bepul boshlash",
     "slides": {
-      "dataAnalyst": {
-        "title": "Data Analyst Kursi",
-        "description": "Noldan top-kompaniyada analitikgacha: karyerangiz shu yerdan boshlanadi"
+      "aiCreator": {
+        "title": "AI Creator",
+        "description": "AI vositalari yordamida yangi avlod kontent yarating"
       },
-      "mlEngineer": {
-        "title": "ML Engineer Kursi",
-        "description": "Noldan top-kompaniyada analitikgacha: karyerangiz shu yerdan boshlanadi"
+      "aiStartup": {
+        "title": "AI in StartUp",
+        "description": "Sun'iy intellekt yordamida o'z startapingizni boshlang"
       },
       "ucellDemo": {
         "title": "Demo. Korporativ neyrosavodxonlik",

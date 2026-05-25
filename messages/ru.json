@@ -50,13 +50,13 @@
     "ctaLoggedIn": "Все курсы",
     "ctaGuest": "Начать бесплатно",
     "slides": {
-      "dataAnalyst": {
-        "title": "Курс Data Analyst",
-        "description": "С нуля до аналитика в топ-компании: ваша карьера начинается здесь"
+      "aiCreator": {
+        "title": "AI Creator",
+        "description": "Создавайте контент нового поколения с помощью AI-инструментов"
       },
-      "mlEngineer": {
-        "title": "Курс ML Engineer",
-        "description": "С нуля до инженера в топ-компании: ваша карьера начинается здесь"
+      "aiStartup": {
+        "title": "AI in StartUp",
+        "description": "Запустите свой стартап с помощью искусственного интеллекта"
       },
       "ucellDemo": {
         "title": "Демо. Корпоративная нейрограмотность",

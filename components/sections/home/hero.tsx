@@ -8,42 +8,47 @@ import { ArrowRight } from "lucide-react";
 import { MainButton } from "@/components/ui/main-button";
 import { useAuthStore } from "@/store/auth-store";
 
-const SLIDE_META = [
+type SlideMeta = {
+  id: number;
+  key: "ucellDemo" | "aiCreator" | "aiStartup";
+  bgColor: string;
+  image: string;
+  textColor: string;
+  isDark: boolean;
+  partnerLogo?: string;
+  partnerName?: string;
+  partnerLogoWidth?: number;
+  partnerLogoHeight?: number;
+};
+
+const SLIDE_META: SlideMeta[] = [
   {
     id: 1,
-    key: "ucellDemo" as const,
+    key: "ucellDemo",
     bgColor: "bg-[#C9C2FF]",
     image: "/images/bannerUcell.png",
     textColor: "text-foreground",
     isDark: false,
     partnerLogo: "/images/partners/Ucell.png",
     partnerName: "Ucell",
-    partnerLogoWidth: 80 as number | undefined,
-    partnerLogoHeight: 28 as number | undefined,
+    partnerLogoWidth: 80,
+    partnerLogoHeight: 28,
   },
   {
     id: 2,
-    key: "dataAnalyst" as const,
-    bgColor: "bg-[#e5e7eb]",
-    image: "/images/hero4.jpg",
+    key: "aiCreator",
+    bgColor: "bg-[#111111]",
+    image: "/images/AIIjodkor.jpg",
     textColor: "text-white",
     isDark: true,
-    partnerLogo: "/icons/tbc_bank_logo.svg",
-    partnerName: "TBC Bank",
-    partnerLogoWidth: 120 as number | undefined,
-    partnerLogoHeight: 40 as number | undefined,
   },
   {
     id: 3,
-    key: "mlEngineer" as const,
+    key: "aiStartup",
     bgColor: "bg-[#111111]",
-    image: "/images/hero6.jpg",
+    image: "/images/AIStartUp.jpg",
     textColor: "text-white",
     isDark: true,
-    partnerLogo: "/icons/alif_logo.png",
-    partnerName: "Alif",
-    partnerLogoWidth: 80 as number | undefined,
-    partnerLogoHeight: 28 as number | undefined,
   },
 ];
 
@@ -139,26 +144,28 @@ export function Hero() {
                   </p>
 
                   <div className="mt-6 md:mt-14 flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 md:gap-6">
-                    <div
-                      className={`backdrop-blur-2xl rounded-xl px-4 md:px-6 h-13 md:h-15 w-48.25 md:w-auto border flex items-center gap-3 md:gap-4 ${
-                        slide.isDark
-                          ? "bg-white/10 border-white/20"
-                          : "bg-black/5 border-black/10"
-                      }`}
-                    >
-                      <span className={`text-[10px] md:text-[11px] font-bold uppercase tracking-wider leading-tight whitespace-pre-line ${slide.isDark ? 'text-white' : 'text-foreground'}`}>
-                        {t('createdWith')}
-                      </span>
-                      <div className="flex items-center">
-                        <Image
-                          src={slide.partnerLogo}
-                          alt={slide.partnerName}
-                          width={slide.partnerLogoWidth ?? 120}
-                          height={slide.partnerLogoHeight ?? 40}
-                          className="object-contain"
-                        />
+                    {slide.partnerLogo && (
+                      <div
+                        className={`backdrop-blur-2xl rounded-xl px-4 md:px-6 h-13 md:h-15 w-48.25 md:w-auto border flex items-center gap-3 md:gap-4 ${
+                          slide.isDark
+                            ? "bg-white/10 border-white/20"
+                            : "bg-black/5 border-black/10"
+                        }`}
+                      >
+                        <span className={`text-[10px] md:text-[11px] font-bold uppercase tracking-wider leading-tight whitespace-pre-line ${slide.isDark ? 'text-white' : 'text-foreground'}`}>
+                          {t('createdWith')}
+                        </span>
+                        <div className="flex items-center">
+                          <Image
+                            src={slide.partnerLogo}
+                            alt={slide.partnerName ?? ''}
+                            width={slide.partnerLogoWidth ?? 120}
+                            height={slide.partnerLogoHeight ?? 40}
+                            className="object-contain"
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <Link href={ctaHref}>
                       <MainButton
                         variant="gradient"
