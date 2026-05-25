@@ -84,9 +84,9 @@ export function CatalogTabs() {
     },
   });
 
-  // /course/client cardImage'ni qaytarmaydi — public listdan id->cardImage map olamiz
-  const { data: cardImageMap = {} } = useQuery<Record<number, string>>({
-    queryKey: ['catalog-cardimage', activeTab],
+  // /course/client cardImage/photo'ni qaytarmaydi — public listdan id->image map olamiz
+  const { data: publicImageMap = {} } = useQuery<Record<number, string>>({
+    queryKey: ['catalog-image', activeTab],
     queryFn: async () => {
       const response = await api.get('/course/public', {
         params: { format: formats[activeTab], pageSize: 20 },
@@ -95,7 +95,9 @@ export function CatalogTabs() {
       const map: Record<number, string> = {};
       if (Array.isArray(data)) {
         for (const item of data) {
-          if (item?.id != null && item?.cardImage) map[item.id] = item.cardImage;
+          if (item?.id == null) continue;
+          const img = activeTab === 'skills' ? item?.photo : item?.cardImage;
+          if (img) map[item.id] = img;
         }
       }
       return map;
@@ -155,7 +157,9 @@ export function CatalogTabs() {
 
   const getItemImage = (item: CatalogItem) => {
     const detail = itemDetail[item.id];
-    const raw = detail?.cardImage || item.cardImage || cardImageMap[item.id];
+    const raw = activeTab === 'skills'
+      ? (detail?.photo || item.photo || publicImageMap[item.id])
+      : (detail?.cardImage || item.cardImage || publicImageMap[item.id]);
     return raw ? getMediaUrl(raw) : '/placeholder.svg';
   };
 
