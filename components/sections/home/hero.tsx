@@ -116,11 +116,12 @@ export function Hero() {
             >
               <div className={`absolute inset-0 ${slide.bgColor}`}>
                 <Image
-                  quality={95} src={slide.image || "/placeholder.svg"}
+                  src={slide.image || "/placeholder.svg"}
                   alt={slide.title}
-                  fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  fill sizes="100vw"
                   className="object-cover object-[85%] md:object-right"
                   priority={index === 0}
+                  unoptimized
                 />
                 {slide.isDark && <div className="absolute inset-0 bg-black/40" />}
               </div>

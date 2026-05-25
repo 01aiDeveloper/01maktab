@@ -116,11 +116,12 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                 {/* Image — full background */}
                 <div className="relative w-full h-64 md:absolute md:inset-0 md:h-full z-0">
                   <Image
-                    quality={95} src={activeData.imageUrl}
+                    src={activeData.imageUrl}
                     alt={activeData.title}
-                    fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                    fill sizes="100vw"
                     className="object-cover object-right"
                     priority
+                    unoptimized
                   />
                   {/* Gradient overlay — text o'qilishi uchun */}
                   <div className={`absolute inset-0 ${activeData.textColor === 'text-white' ? 'bg-gradient-to-r from-[#111111] via-[#111111]/80 to-transparent' : 'bg-gradient-to-r from-gray-100 via-gray-100/80 to-transparent'}`} />
