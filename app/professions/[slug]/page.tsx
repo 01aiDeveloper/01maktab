@@ -96,38 +96,38 @@ export default function ProfessionPage() {
       id: 1,
       title: t('benefits.skills'),
       bullets: [t('benefits.skillsB1'), t('benefits.skillsB2')],
-      icon: <Image src="/icons/professions/1.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+      icon: <Image quality={95} src="/icons/professions/1.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
       isDefaultActive: true,
     },
     {
       id: 2,
       title: t('benefits.certs'),
       bullets: [t('benefits.certsB1'), t('benefits.certsB2')],
-      icon: <Image src="/icons/professions/2.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+      icon: <Image quality={95} src="/icons/professions/2.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
     },
     {
       id: 3,
       title: t('benefits.practice'),
       bullets: [t('benefits.practiceB1'), t('benefits.practiceB2')],
-      icon: <Image src="/icons/professions/3.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+      icon: <Image quality={95} src="/icons/professions/3.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
     },
     {
       id: 4,
       title: t('benefits.career'),
       bullets: [t('benefits.careerB1'), t('benefits.careerB2')],
-      icon: <Image src="/icons/professions/4.png" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+      icon: <Image quality={95} src="/icons/professions/4.png" alt="" width={80} height={80} className="opacity-40 grayscale" />,
     },
     {
       id: 5,
       title: t('benefits.community'),
       bullets: [t('benefits.communityB1'), t('benefits.communityB2')],
-      icon: <Image src="/icons/professions/5.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+      icon: <Image quality={95} src="/icons/professions/5.webp" alt="" width={80} height={80} className="opacity-40 grayscale" />,
     },
     {
       id: 6,
       title: t('benefits.refund'),
       bullets: [t('benefits.refundB1'), t('benefits.refundB2')],
-      icon: <Image src="/icons/professions/6.png" alt="" width={80} height={80} className="opacity-40 grayscale" />,
+      icon: <Image quality={95} src="/icons/professions/6.png" alt="" width={80} height={80} className="opacity-40 grayscale" />,
     },
   ];
 
@@ -264,7 +264,7 @@ export default function ProfessionPage() {
               className="rounded-[29px] lg:rounded-[40px] overflow-hidden relative h-full"
             >
               {/* Background Image */}
-              {courseImage && <Image src={courseImage} alt={profession.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" priority />}
+              {courseImage && <Image quality={95} src={courseImage} alt={profession.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" priority />}
 
               {/* Content Overlay */}
               <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center h-full">

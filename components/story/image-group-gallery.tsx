@@ -66,7 +66,7 @@ export function ImageGroupGallery({ images }: ImageGroupGalleryProps) {
                   onClick={() => openLightbox(i)}
                 >
                   <Image
-                    src={getMediaUrl(images[i])}
+                    quality={95} src={getMediaUrl(images[i])}
                     alt={`Gallery image ${i + 1}`}
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover"
@@ -81,7 +81,7 @@ export function ImageGroupGallery({ images }: ImageGroupGalleryProps) {
                   onClick={() => openLightbox(i + 1)}
                 >
                   <Image
-                    src={getMediaUrl(images[i + 1])}
+                    quality={95} src={getMediaUrl(images[i + 1])}
                     alt={`Gallery image ${i + 2}`}
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover"
@@ -144,7 +144,7 @@ export function ImageGroupGallery({ images }: ImageGroupGalleryProps) {
               onClick={(e) => e.stopPropagation()}
             >
               <Image
-                src={getMediaUrl(images[currentIndex])}
+                quality={95} src={getMediaUrl(images[currentIndex])}
                 alt={`Image ${currentIndex + 1}`}
                 fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                 className="object-contain"

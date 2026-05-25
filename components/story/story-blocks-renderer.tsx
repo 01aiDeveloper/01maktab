@@ -32,7 +32,7 @@ export function StoryBlocksRenderer({ blocks }: StoryBlocksRendererProps) {
           {block.type === "image" && "url" in block && (
             <div className="relative w-full aspect-[4/3] rounded-[24px] overflow-hidden">
               <Image
-                src={getMediaUrl(block.url)}
+                quality={95} src={getMediaUrl(block.url)}
                 alt="Story image"
                 fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                 className="object-cover"

@@ -25,7 +25,7 @@ function formatSum(value: number) {
 
 const CoinIcon = ({ className }: { className?: string }) => (
   <Image
-    src="/images/market/VC.webp"
+    quality={95} src="/images/market/VC.webp"
     alt="VC"
     width={30}
     height={40}
@@ -61,7 +61,7 @@ export function MarketProductCard({ product }: MarketProductCardProps) {
         {/* Image fill */}
         <div className="absolute inset-0">
           <Image
-            src={cover}
+            quality={95} src={cover}
             alt={product.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"

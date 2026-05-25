@@ -24,7 +24,7 @@ export function SkillsList({ skills, title, icon = '/icons/skills.webp', delay =
       className="flex flex-col h-full"
     >
       <h3 className="font-suisse text-xl font-semibold text-gray-900 mb-4 flex items-center gap-3 bg-[#e8e8e8] rounded-3xl p-6">
-        <Image src={icon} alt={displayTitle} width={40} height={30} />
+        <Image quality={95} src={icon} alt={displayTitle} width={40} height={30} />
         {displayTitle}
       </h3>
       <ul className="flex-1 space-y-3 bg-[#e8e8e8] rounded-3xl p-6">

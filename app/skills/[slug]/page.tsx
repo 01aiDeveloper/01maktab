@@ -221,7 +221,7 @@ export default function SkillDetailPage() {
             >
               {courseImage && (
                 <Image
-                  src={courseImage}
+                  quality={95} src={courseImage}
                   alt={skill.title}
                   fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-cover"
@@ -256,7 +256,7 @@ export default function SkillDetailPage() {
               {skill.icon && (
                 <div className="absolute top-6 right-6 w-12 h-12 lg:w-14 lg:h-14 bg-white/25 rounded-full flex items-center justify-center shadow-lg">
                   <Image
-                    src={mediaUrl(skill.icon)}
+                    quality={95} src={mediaUrl(skill.icon)}
                     alt="icon"
                     width={28}
                     height={28}
@@ -382,7 +382,7 @@ export default function SkillDetailPage() {
                   <div className="w-20 h-20 lg:w-36 lg:h-36 bg-white rounded-2xl flex items-center justify-center shrink-0">
                     {partner.logo ? (
                       <Image
-                        src={mediaUrl(partner.logo)}
+                        quality={95} src={mediaUrl(partner.logo)}
                         alt={partner.name}
                         width={80}
                         height={80}
@@ -551,7 +551,7 @@ export default function SkillDetailPage() {
                   <div className="bg-white rounded-2xl flex items-center justify-center aspect-square lg:aspect-auto lg:h-64 relative overflow-hidden">
                     {partner.logo ? (
                       <Image
-                        src={mediaUrl(partner.logo)}
+                        quality={95} src={mediaUrl(partner.logo)}
                         alt={partner.name}
                         fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                         className="object-cover"

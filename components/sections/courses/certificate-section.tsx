@@ -29,7 +29,7 @@ export function CertificateSection({ certificate, title }: CertificateSectionPro
           <div className="grid lg:grid-cols-2 gap-4">
             {/* Left - Certificate Image Card */}
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-              <Image src={certificate.image} alt="Certificate" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
+              <Image quality={95} src={certificate.image} alt="Certificate" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
             </div>
 
             {/* Right - Dark Text Card */}

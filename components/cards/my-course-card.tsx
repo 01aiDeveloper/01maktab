@@ -24,7 +24,7 @@ export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
         {/* Full-cover image */}
         {photoUrl ? (
           <Image
-            src={photoUrl}
+            quality={95} src={photoUrl}
             alt={item.title || item.name}
             fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover rounded-[20px] overflow-hidden transition-transform duration-300 "
@@ -62,7 +62,7 @@ export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
             }}
           >
             <Image
-              src={iconUrl}
+              quality={95} src={iconUrl}
               alt="course icon"
               width={40}
               height={40}

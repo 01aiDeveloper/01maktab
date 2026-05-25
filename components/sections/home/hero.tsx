@@ -116,7 +116,7 @@ export function Hero() {
             >
               <div className={`absolute inset-0 ${slide.bgColor}`}>
                 <Image
-                  src={slide.image || "/placeholder.svg"}
+                  quality={95} src={slide.image || "/placeholder.svg"}
                   alt={slide.title}
                   fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-cover object-[85%] md:object-right"
@@ -157,7 +157,7 @@ export function Hero() {
                         </span>
                         <div className="flex items-center">
                           <Image
-                            src={slide.partnerLogo}
+                            quality={95} src={slide.partnerLogo}
                             alt={slide.partnerName ?? ''}
                             width={slide.partnerLogoWidth ?? 120}
                             height={slide.partnerLogoHeight ?? 40}

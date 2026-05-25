@@ -127,7 +127,7 @@ export function PartnersSection({
                   className={cardClass}
                 >
                   <Image
-                    src={logoSrc}
+                    quality={95} src={logoSrc}
                     alt={partner.name}
                     width={180}
                     height={80}

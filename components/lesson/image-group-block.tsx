@@ -12,7 +12,7 @@ export function ImageGroupBlock({ images }: ImageGroupBlockProps) {
     return (
       <div className="w-full rounded-2xl overflow-hidden">
         <Image
-          src={getMediaUrl(images[0])}
+          quality={95} src={getMediaUrl(images[0])}
           alt="Lesson image"
           width={0}
           height={0}
@@ -28,7 +28,7 @@ export function ImageGroupBlock({ images }: ImageGroupBlockProps) {
       {images.map((image, index) => (
         <div key={index} className="w-full rounded-2xl overflow-hidden">
           <Image
-            src={getMediaUrl(image)}
+            quality={95} src={getMediaUrl(image)}
             alt={`Lesson image ${index + 1}`}
             width={0}
             height={0}

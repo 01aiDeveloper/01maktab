@@ -18,7 +18,7 @@ export function GraduateCarouselCard({
     <div className="relative group cursor-pointer rounded-[25px] overflow-hidden min-h-100 h-full">
       {/* Background Image */}
       <Image
-        src={image}
+        quality={95} src={image}
         alt={name}
         fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
         className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -28,7 +28,7 @@ export function GraduateCarouselCard({
       <div className="absolute left-0 right-0 bottom-0 h-[110px] bg-white/20 backdrop-blur-[51px] rounded-[25px]">
         {/* Arrow icon */}
         <div className="absolute w-10 h-10 right-[10px] top-[7px] flex items-center justify-center">
-          <Image src="/icons/main-arrow.svg" alt="arrow" width={20} height={20} unoptimized />
+          <Image quality={95} src="/icons/main-arrow.svg" alt="arrow" width={20} height={20} unoptimized />
         </div>
 
         {/* Text */}

@@ -47,13 +47,13 @@ export function StatsSection() {
 
         {/* Team photo 1 - right side of row 1 */}
         <motion.div variants={itemVariants} className="rounded-3xl overflow-hidden min-h-[220px]">
-          <Image src="/images/team1.webp" alt="01AI jamoasi" width={600} height={400} className="w-full h-full object-cover" />
+          <Image quality={95} src="/images/team1.webp" alt="01AI jamoasi" width={600} height={400} className="w-full h-full object-cover" />
         </motion.div>
 
         {/* Row 2 */}
         {/* Team photo 2 - left side of row 2 */}
         <motion.div variants={itemVariants} className="rounded-3xl overflow-hidden min-h-[220px]">
-          <Image src="/images/team2.webp" alt="Jamoa ishlayapti" width={600} height={400} className="w-full h-full object-cover" />
+          <Image quality={95} src="/images/team2.webp" alt="Jamoa ishlayapti" width={600} height={400} className="w-full h-full object-cover" />
         </motion.div>
 
         {/* Blue card - Employment rate - right side of row 2 */}
@@ -70,7 +70,7 @@ export function StatsSection() {
         {/* Row 3 */}
         {/* 3D Illustration card */}
         <motion.div variants={itemVariants} className="bg-[#e8e8e8] rounded-3xl p-6 flex items-center justify-center min-h-[200px]">
-          <Image src="/images/3d-cylinder.jpg" alt="3D illustration" width={200} height={200} className="object-contain max-h-[180px]" />
+          <Image quality={95} src="/images/3d-cylinder.jpg" alt="3D illustration" width={200} height={200} className="object-contain max-h-[180px]" />
         </motion.div>
 
         {/* Motivational text card */}

@@ -64,7 +64,7 @@ export function LessonHeaderActions({
           <div className="flex items-center gap-3">
             {isPublic && (
               <div className="hidden sm:flex items-center gap-1.5 bg-green-500 text-white px-3 py-1.5 rounded-full text-xs font-medium h-9">
-                <Image src="/icons/free-lesson.svg" alt="" width={14} height={14} />
+                <Image quality={95} src="/icons/free-lesson.svg" alt="" width={14} height={14} />
                 {t('freeTrialLesson')}
               </div>
             )}
@@ -75,7 +75,7 @@ export function LessonHeaderActions({
               title={t('courseProgram')}
             >
               <Image
-                src="/icons/module-menu.svg"
+                quality={95} src="/icons/module-menu.svg"
                 alt={t('courseProgram')}
                 width={18}
                 height={18}

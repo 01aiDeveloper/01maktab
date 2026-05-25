@@ -23,7 +23,7 @@ export function InternshipStatsSection() {
               {/* Left Icon/Illustration */}
               <div className="w-24 h-24 lg:w-1/5 lg:h-28 flex-shrink-0 relative flex items-center justify-center">
                 {/* <div className="w-full h-full bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-2xl flex items-center justify-center"> */}
-                  <Image src="/icons/professions/internship.webp" alt="Internship icon" width={164} height={164} className="object-contain" />
+                  <Image quality={95} src="/icons/professions/internship.webp" alt="Internship icon" width={164} height={164} className="object-contain" />
                 {/* </div> */}
               </div>
 

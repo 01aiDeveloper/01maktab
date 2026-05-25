@@ -144,7 +144,7 @@ export function FeatureCards() {
                           transform: 'rotate(3.09deg)',
                         }}
                       >
-                        <Image src={card.image} alt={card.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className={`object-contain ${card.imagePosition}`} />
+                        <Image quality={95} src={card.image} alt={card.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className={`object-contain ${card.imagePosition}`} />
                       </div>
                     </div>
                   </motion.button>

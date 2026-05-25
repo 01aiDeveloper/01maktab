@@ -36,7 +36,7 @@ export function MarketHero() {
           className="relative rounded-3xl overflow-hidden bg-[#3B5BFF] aspect-[641/360]"
         >
           <Image
-            src="/images/market/banner.webp"
+            quality={95} src="/images/market/banner.webp"
             alt="Market banner"
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"

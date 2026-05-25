@@ -27,7 +27,7 @@ export function EventCard({
         className="group relative aspect-[372/508] w-full overflow-hidden rounded-[40px] bg-gray-100"
       >
         <Image
-          src={imageUrl || "/placeholder.svg"}
+          quality={95} src={imageUrl || "/placeholder.svg"}
           alt={title}
           fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="object-cover blur-[6px] scale-110"
@@ -40,7 +40,7 @@ export function EventCard({
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
           <div className="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-white/20 backdrop-blur-[5.64px]">
             <Image
-              src="/icons/lock.svg"
+              quality={95} src="/icons/lock.svg"
               alt="lock"
               width={24}
               height={24}
@@ -67,7 +67,7 @@ export function EventCard({
       className="group relative aspect-[372/508] w-full overflow-hidden rounded-[40px] bg-gray-100"
     >
       <Image
-        src={imageUrl || "/placeholder.svg"}
+        quality={95} src={imageUrl || "/placeholder.svg"}
         alt={title}
         fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
         className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -92,7 +92,7 @@ export function EventCard({
       <div className="absolute top-6 right-5 z-10">
         <div className="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-white/20 backdrop-blur-[5.64px]">
           <Image
-            src="/icons/main-arrow.svg"
+            quality={95} src="/icons/main-arrow.svg"
             alt="arrow"
             width={22.38}
             height={22.38}

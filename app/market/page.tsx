@@ -38,7 +38,7 @@ export default function MarketPage() {
                 <span>{tCommon('backShort')}</span>
               </button>
               <div className="absolute inset-0 flex items-center justify-center">
-                <Image src="/icons/lock.svg" alt="lock" width={70} height={70} unoptimized />
+                <Image quality={95} src="/icons/lock.svg" alt="lock" width={70} height={70} unoptimized />
               </div>
             </div>
 
@@ -62,7 +62,7 @@ export default function MarketPage() {
               className="hidden lg:flex items-center justify-center relative rounded-[40px] overflow-hidden h-60"
               style={{ background: 'linear-gradient(270deg, #C6B0CD 0%, #9E9AA2 35%, #C0B6B8 65%, #BD92AB 100%)' }}
             >
-              <Image src="/icons/lock.svg" alt="lock" width={70} height={70} unoptimized />
+              <Image quality={95} src="/icons/lock.svg" alt="lock" width={70} height={70} unoptimized />
             </div>
           </div>
         </section>

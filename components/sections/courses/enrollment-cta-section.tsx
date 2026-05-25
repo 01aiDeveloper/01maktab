@@ -37,7 +37,7 @@ export function EnrollmentCTASection({
           {/* Image preview container - larger */}
           <div className="relative max-w-[856px] mx-auto rounded-[40px] overflow-hidden shadow-2xl mb-16">
             <div className="aspect-video relative bg-gray-900">
-              <Image src={'/images/courses/try-now.png'} alt="Course preview" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-contain" />
+              <Image quality={95} src={'/images/courses/try-now.png'} alt="Course preview" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-contain" />
             </div>
           </div>
 

@@ -64,7 +64,7 @@ export function ProjectsCarouselSection({ projects, title = '5 ta real loyiha' }
                     {/* Left - Project Image with rounded corners */}
                     <div className="bg-gradient-to-br from-[#22c55e] via-[#16a34a] to-[#15803d] rounded-3xl p-8 lg:p-12 flex items-center justify-center relative min-h-[400px] lg:min-h-[500px]">
                       <div className="relative w-full max-w-md aspect-[4/3]">
-                        <Image src={project.image} alt={project.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-contain" />
+                        <Image quality={95} src={project.image} alt={project.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-contain" />
                       </div>
                       {/* Decorative spheres */}
                       <div className="absolute bottom-8 left-8 w-24 h-24 bg-white/10 backdrop-blur-sm rounded-full" />

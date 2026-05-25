@@ -70,7 +70,7 @@ export function SkillHeroSection({ title, description, duration, level, price, i
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative aspect-square lg:aspect-[4/3] rounded-3xl overflow-hidden"
           >
-            <Image src={image} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" priority />
+            <Image quality={95} src={image} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" priority />
           </motion.div>
         </motion.div>
       </div>

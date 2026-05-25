@@ -31,7 +31,10 @@ for (const file of files) {
   if (s.size < MIN_SIZE) continue;
   const out = file.slice(0, -ext.length) + ".webp";
   try {
-    await sharp(file).webp({ quality: 82, effort: 6 }).toFile(out);
+    const opts = ext === ".png"
+      ? { lossless: true, effort: 6 }
+      : { quality: 100, effort: 6, smartSubsample: true };
+    await sharp(file).webp(opts).toFile(out);
     const ns = (await stat(out)).size;
     const saved = s.size - ns;
     totalSaved += saved;

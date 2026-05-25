@@ -180,7 +180,7 @@ export default function GraduateStoryPage() {
                 <span className="text-sm font-medium">{t('back')}</span>
               </button>
               <Image
-                src={getMediaUrl(story.photo)}
+                quality={95} src={getMediaUrl(story.photo)}
                 alt={story.fullname}
                 fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                 className="object-cover"

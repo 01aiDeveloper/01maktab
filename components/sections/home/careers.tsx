@@ -116,7 +116,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                 {/* Image — full background */}
                 <div className="relative w-full h-64 md:absolute md:inset-0 md:h-full z-0">
                   <Image
-                    src={activeData.imageUrl}
+                    quality={95} src={activeData.imageUrl}
                     alt={activeData.title}
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover object-right"
