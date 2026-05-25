@@ -226,22 +226,96 @@
   width: 100%;
 }
 
-/* Quill editor output (.prose blokda admin yozgan formatlash ko'rinsin) */
-.prose .ql-size-small { font-size: 0.75em; }
-.prose .ql-size-large { font-size: 1.5em; }
-.prose .ql-size-huge { font-size: 2.5em; }
-.prose .ql-align-center { text-align: center; }
-.prose .ql-align-right { text-align: right; }
-.prose .ql-align-justify { text-align: justify; }
-.prose .ql-indent-1 { padding-left: 3em; }
-.prose .ql-indent-2 { padding-left: 6em; }
-.prose .ql-indent-3 { padding-left: 9em; }
-.prose .ql-indent-4 { padding-left: 12em; }
-.prose .ql-indent-5 { padding-left: 15em; }
-.prose .ql-indent-6 { padding-left: 18em; }
-.prose .ql-indent-7 { padding-left: 21em; }
-.prose .ql-indent-8 { padding-left: 24em; }
-.prose s, .prose strike { text-decoration: line-through; }
-.prose u { text-decoration: underline; }
-.prose sub { vertical-align: sub; font-size: smaller; }
-.prose sup { vertical-align: super; font-size: smaller; }
+/* Quill editor output — admin Quill chiqishi sayt qismida bir xil ko'rinishi uchun */
+.ql-content,
+.prose:where(.ql-content),
+.prose {
+  --ql-base-size: 16px;
+}
+
+.ql-content,
+.prose {
+  font-family: inherit;
+  line-height: 1.42;
+  color: inherit;
+  font-size: 1rem;
+}
+
+.ql-content p,
+.prose p { margin: 0 0 0.5em 0; }
+
+.ql-content h1, .prose h1 { font-size: 2em; font-weight: 700; margin: 0 0 0.5em 0; line-height: 1.2; }
+.ql-content h2, .prose h2 { font-size: 1.5em; font-weight: 700; margin: 0 0 0.5em 0; line-height: 1.2; }
+.ql-content h3, .prose h3 { font-size: 1.17em; font-weight: 700; margin: 0 0 0.5em 0; line-height: 1.2; }
+.ql-content h4, .prose h4 { font-size: 1em; font-weight: 700; margin: 0 0 0.5em 0; }
+.ql-content h5, .prose h5 { font-size: 0.83em; font-weight: 700; margin: 0 0 0.5em 0; }
+.ql-content h6, .prose h6 { font-size: 0.67em; font-weight: 700; margin: 0 0 0.5em 0; }
+
+.ql-content strong, .prose strong, .ql-content b, .prose b { font-weight: 700; }
+.ql-content em, .prose em, .ql-content i, .prose i { font-style: italic; }
+.ql-content u, .prose u { text-decoration: underline; }
+.ql-content s, .prose s, .ql-content strike, .prose strike { text-decoration: line-through; }
+.ql-content sub, .prose sub { vertical-align: sub; font-size: smaller; }
+.ql-content sup, .prose sup { vertical-align: super; font-size: smaller; }
+
+.ql-content blockquote,
+.prose blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 16px;
+  margin: 0 0 0.5em 0;
+  font-style: normal;
+  quotes: none;
+  color: inherit;
+}
+.ql-content blockquote::before,
+.ql-content blockquote::after,
+.prose blockquote::before,
+.prose blockquote::after { content: none; }
+
+.ql-content ol,
+.ql-content ul,
+.prose ol,
+.prose ul { padding-left: 1.5em; margin: 0 0 0.5em 0; }
+.ql-content ol, .prose ol { list-style-type: decimal; }
+.ql-content ul, .prose ul { list-style-type: disc; }
+.ql-content li, .prose li { margin: 0; }
+
+.ql-content a, .prose a { color: #06c; text-decoration: underline; }
+
+.ql-content pre,
+.prose pre {
+  background: #f4f4f4;
+  border-radius: 3px;
+  padding: 10px;
+  margin: 0 0 0.5em 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  white-space: pre-wrap;
+}
+.ql-content code,
+.prose code {
+  background: #f0f0f0;
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.ql-content img, .prose img { display: inline-block; max-width: 100%; }
+
+.ql-content .ql-size-small, .prose .ql-size-small { font-size: 0.75em; }
+.ql-content .ql-size-large, .prose .ql-size-large { font-size: 1.5em; }
+.ql-content .ql-size-huge, .prose .ql-size-huge { font-size: 2.5em; }
+
+.ql-content .ql-align-center, .prose .ql-align-center { text-align: center; }
+.ql-content .ql-align-right, .prose .ql-align-right { text-align: right; }
+.ql-content .ql-align-justify, .prose .ql-align-justify { text-align: justify; }
+
+.ql-content .ql-indent-1, .prose .ql-indent-1 { padding-left: 3em; }
+.ql-content .ql-indent-2, .prose .ql-indent-2 { padding-left: 6em; }
+.ql-content .ql-indent-3, .prose .ql-indent-3 { padding-left: 9em; }
+.ql-content .ql-indent-4, .prose .ql-indent-4 { padding-left: 12em; }
+.ql-content .ql-indent-5, .prose .ql-indent-5 { padding-left: 15em; }
+.ql-content .ql-indent-6, .prose .ql-indent-6 { padding-left: 18em; }
+.ql-content .ql-indent-7, .prose .ql-indent-7 { padding-left: 21em; }
+.ql-content .ql-indent-8, .prose .ql-indent-8 { padding-left: 24em; }
+
+.ql-content .ql-font-serif, .prose .ql-font-serif { font-family: Georgia, Times New Roman, serif; }
+.ql-content .ql-font-monospace, .prose .ql-font-monospace { font-family: Monaco, Courier New, monospace; }
