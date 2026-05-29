@@ -100,6 +100,9 @@ export function CourseHeroSection({
             quality={100}
           />
 
+          {/* Readability overlay: chap tarafda matn uchun yorqin gradient */}
+          <div className="absolute inset-0 z-0 bg-gradient-to-r from-white/95 via-white/80 to-white/10" />
+
           {/* Content Overlay */}
           <div className="relative z-10 p-6 lg:p-12 flex flex-col justify-center h-full">
             {/* Back button */}

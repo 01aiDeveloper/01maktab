@@ -51,11 +51,11 @@
     "ctaGuest": "Начать бесплатно",
     "slides": {
       "aiCreator": {
-        "title": "AI Creator",
+        "title": "AI Ijodkor",
         "description": "Создавайте контент нового поколения с помощью AI-инструментов"
       },
       "aiStartup": {
-        "title": "AI in StartUp",
+        "title": "AI Startup",
         "description": "Запустите свой стартап с помощью искусственного интеллекта"
       },
       "ucellDemo": {
@@ -173,6 +173,7 @@
     "statusFree": "Бесплатно",
     "statusWaitlist": "В ожидании",
     "statusPresale": "Pre-sale",
+    "statusAvailable": "Курс доступен",
     "enrolled": "купили",
     "waiting": "человек ждёт",
     "mentor": "Ментор",
@@ -444,7 +445,9 @@
     "result": "Результат: {value}",
     "freeTrialBadge": "Бесплатный пробный урок",
     "watch": "Смотреть",
-    "fullCourse": "В полном курсе"
+    "fullCourse": "В полном курсе",
+    "lockedTitle": "Модули закрыты",
+    "lockedDescription": "Курс в процессе разработки."
   },
   "lesson": {
     "authTitle": "Зарегистрируйтесь, чтобы просмотреть урок",

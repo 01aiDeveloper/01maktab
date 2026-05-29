@@ -319,3 +319,21 @@
 
 .ql-content .ql-font-serif, .prose .ql-font-serif { font-family: Georgia, Times New Roman, serif; }
 .ql-content .ql-font-monospace, .prose .ql-font-monospace { font-family: Monaco, Courier New, monospace; }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+::view-transition-old(root) {
+  animation-name: fade-out;
+}
+::view-transition-new(root) {
+  animation-name: fade-in;
+}
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+}

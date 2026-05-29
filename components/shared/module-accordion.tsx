@@ -36,6 +36,7 @@ export type ModuleItem = {
   lessons: LessonItem[];
   test?: { id?: string; title: string } | { title: string };
   result?: string;
+  isLocked?: boolean;
 };
 
 type Variant = "dark" | "light";
@@ -44,6 +45,11 @@ type Props = {
   modules?: ModuleItem[];
 
   variant: Variant;
+
+  // overlay variant: all modules locked, blur+central icon+text
+  overlayLocked?: boolean;
+  overlayTitle?: string;
+  overlayDescription?: string;
 
   // accordion controlled (optional)
   value?: string;
@@ -129,6 +135,9 @@ function getTestCount(m: ModuleItem) {
 export function ModuleAccordion({
   modules,
   variant,
+  overlayLocked,
+  overlayTitle,
+  overlayDescription,
   value,
   onValueChange,
   moduleIconSrc = "/images/common/folder.png",
@@ -175,11 +184,27 @@ export function ModuleAccordion({
   const accordionProps =
     value !== undefined && onValueChange ? { value, onValueChange } : {};
 
+  const overlay = overlayLocked ? (
+    <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center gap-2 px-4 text-center">
+      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-black shadow-lg">
+        <Lock className="h-6 w-6 text-white" />
+      </div>
+      <div className={cn("text-lg font-semibold", variant === "dark" ? "text-white" : "text-gray-900")}>
+        {overlayTitle ?? t("lockedTitle")}
+      </div>
+      <div className={cn("text-sm", variant === "dark" ? "text-gray-400" : "text-gray-500")}>
+        {overlayDescription ?? t("lockedDescription")}
+      </div>
+    </div>
+  ) : null;
+
   return (
+    <div className={cn("relative", overlayLocked && "select-none")}>
+      {overlay}
     <Accordion
       type="single"
       collapsible
-      className={cn("space-y-3", className)}
+      className={cn("space-y-3", overlayLocked && "blur-sm pointer-events-none", className)}
       {...accordionProps}
     >
       {list.map((module, moduleIndex) => (
@@ -190,8 +215,10 @@ export function ModuleAccordion({
           viewport={{ once: true }}
           transition={{ duration: 0.4, delay: moduleIndex * 0.1 }}
         >
-          <AccordionItem value={module.id} className={s.moduleItem}>
-            <AccordionTrigger className={s.trigger}>
+          <AccordionItem value={module.id} className={cn(s.moduleItem, module.isLocked && "opacity-70")}>
+            <AccordionTrigger
+              className={cn(s.trigger, module.isLocked && "cursor-not-allowed pointer-events-none [&>svg:last-child]:hidden")}
+            >
               {/* Trigger content: left + optional middle + (chevron is built-in) */}
               <div className="flex items-center gap-4 flex-1 min-w-0">
                 <Image
@@ -215,7 +242,11 @@ export function ModuleAccordion({
                 </div>
 
                 {/* ✅ O'RTADAGI SLOT: module header ichida badge/button/status */}
-                {renderModuleMiddle ? (
+                {module.isLocked ? (
+                  <div className="ml-auto shrink-0 flex items-center gap-2">
+                    <Lock className={cn("w-5 h-5", variant === "dark" ? "text-gray-400" : "text-gray-500")} />
+                  </div>
+                ) : renderModuleMiddle ? (
                   <div className="ml-auto shrink-0">
                     {renderModuleMiddle(module)}
                   </div>
@@ -317,6 +348,7 @@ export function ModuleAccordion({
         </motion.div>
       ))}
     </Accordion>
+    </div>
   );
 }
 

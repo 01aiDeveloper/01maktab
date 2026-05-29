@@ -121,7 +121,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
                     fill sizes="100vw"
                     className="object-cover object-right"
                     priority
-                    unoptimized
+                    quality={85}
                   />
                   {/* Gradient overlay — text o'qilishi uchun */}
                   <div className={`absolute inset-0 ${activeData.textColor === 'text-white' ? 'bg-gradient-to-r from-[#111111] via-[#111111]/80 to-transparent' : 'bg-gradient-to-r from-gray-100 via-gray-100/80 to-transparent'}`} />

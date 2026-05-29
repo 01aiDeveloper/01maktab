@@ -24,6 +24,22 @@ type SlideMeta = {
 const SLIDE_META: SlideMeta[] = [
   {
     id: 1,
+    key: "aiCreator",
+    bgColor: "bg-[#111111]",
+    image: "/images/AIIjodkor.jpg",
+    textColor: "text-white",
+    isDark: true,
+  },
+  {
+    id: 2,
+    key: "aiStartup",
+    bgColor: "bg-[#111111]",
+    image: "/images/AIStartUp.jpg",
+    textColor: "text-white",
+    isDark: true,
+  },
+  {
+    id: 3,
     key: "ucellDemo",
     bgColor: "bg-[#C9C2FF]",
     image: "/images/bannerUcell.png",
@@ -33,22 +49,6 @@ const SLIDE_META: SlideMeta[] = [
     partnerName: "Ucell",
     partnerLogoWidth: 80,
     partnerLogoHeight: 28,
-  },
-  {
-    id: 2,
-    key: "aiCreator",
-    bgColor: "bg-[#111111]",
-    image: "/images/AIIjodkor.jpg",
-    textColor: "text-white",
-    isDark: true,
-  },
-  {
-    id: 3,
-    key: "aiStartup",
-    bgColor: "bg-[#111111]",
-    image: "/images/AIStartUp.jpg",
-    textColor: "text-white",
-    isDark: true,
   },
 ];
 
@@ -121,7 +121,7 @@ export function Hero() {
                   fill sizes="100vw"
                   className="object-cover object-[85%] md:object-right"
                   priority={index === 0}
-                  unoptimized
+                  quality={85}
                 />
                 {slide.isDark && <div className="absolute inset-0 bg-black/40" />}
               </div>

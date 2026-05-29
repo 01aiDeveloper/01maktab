@@ -51,11 +51,11 @@
     "ctaGuest": "Bepul boshlash",
     "slides": {
       "aiCreator": {
-        "title": "AI Creator",
+        "title": "AI Ijodkor",
         "description": "AI vositalari yordamida yangi avlod kontent yarating"
       },
       "aiStartup": {
-        "title": "AI in StartUp",
+        "title": "AI Startup",
         "description": "Sun'iy intellekt yordamida o'z startapingizni boshlang"
       },
       "ucellDemo": {
@@ -173,6 +173,7 @@
     "statusFree": "Bepul",
     "statusWaitlist": "Kutilmoqda",
     "statusPresale": "Pre-sale",
+    "statusAvailable": "Kurs mavjud",
     "enrolled": "sotib oldi",
     "waiting": "odam kutmoqda",
     "mentor": "Mentor",
@@ -440,7 +441,9 @@
     "result": "Natija: {value}",
     "freeTrialBadge": "Bepul sinov darsi",
     "watch": "Ko'rish",
-    "fullCourse": "To'liq kursda"
+    "fullCourse": "To'liq kursda",
+    "lockedTitle": "Modullar yopiq",
+    "lockedDescription": "Kurs ishlab chiqish jarayonida."
   },
   "lesson": {
     "authTitle": "Darsni ko'rish uchun ro'yxatdan o'ting",

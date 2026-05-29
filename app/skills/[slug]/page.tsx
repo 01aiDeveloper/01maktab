@@ -151,6 +151,7 @@ export default function SkillDetailPage() {
 
   const partner = skill.partners[0] ?? null;
   const isPurchasedForLessons = !!skill.hasPurchased || !!skill.isEnrolled || !!mySkills?.some((c) => String(c.id) === String(skill.id));
+  const isSkillReady = skill.modules.some((m) => (m.lessons?.length ?? 0) > 0 || (m.tests?.length ?? 0) > 0);
   const modules: ModuleItem[] = skill.modules.map((m) => toModuleItem(m, isPurchasedForLessons));
   const mentor = skill.mentor;
   const priceLabel =
@@ -458,6 +459,7 @@ export default function SkillDetailPage() {
           <ModuleAccordion
             variant="light"
             modules={modules}
+            overlayLocked={!isSkillReady}
             value={openModule}
             onValueChange={setOpenModule}
             freeBadgeClassName="bg-orange-500 hover:bg-orange-500 text-white"

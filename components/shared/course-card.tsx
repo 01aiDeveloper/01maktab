@@ -26,7 +26,7 @@ export function CourseCard({
 }: CourseCardProps) {
   const courseSlug = slug || id?.toString() || "course"
   const rawStatus = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled })
-  const status = hideQueueStatus ? null : rawStatus
+  const status = hideQueueStatus && (rawStatus === 'waitlist' || rawStatus === 'presale') ? null : rawStatus
   const countNum = enrollmentCount ?? waitlistCount ?? 0
   const countKind: 'enrolled' | 'waitlist' = enrollmentCount ? 'enrolled' : 'waitlist'
   const [imgSrc, setImgSrc] = useState(imageUrl || "/placeholder.svg")

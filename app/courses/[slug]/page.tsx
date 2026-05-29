@@ -47,7 +47,7 @@ function mediaUrl(path: string | null | undefined): string {
   return `${baseMediaUrl}/${path}`;
 }
 
-function toModuleItem(m: ApiCourseModule, moduleTestLabel: string, isEnrolled = false): ModuleItem {
+function toModuleItem(m: ApiCourseModule, moduleTestLabel: string, isEnrolled = false, isLocked = false): ModuleItem {
   const lessons = m.lessons ?? [];
   return {
     id: String(m.id),
@@ -61,6 +61,7 @@ function toModuleItem(m: ApiCourseModule, moduleTestLabel: string, isEnrolled = 
       type: 'video' as const,
     })),
     test: m.testCount > 0 ? { id: String(m.id), title: moduleTestLabel } : undefined,
+    isLocked,
   };
 }
 
@@ -169,7 +170,15 @@ export default function CoursePage() {
   const isAddedToProfile = isPurchased;
   const isFree = course.pricingType === 'FREE';
   const isEnrolledForLessons = isAddedToProfile;
-  const modules: ModuleItem[] = course.modules.map((m) => toModuleItem(m, t('moduleTest'), isEnrolledForLessons));
+  const isCourseReady = course.modules.some((m) => (m.lessons?.length ?? 0) > 0 || m.testCount > 0);
+  const modules: ModuleItem[] = course.modules.map((m) =>
+    toModuleItem(
+      m,
+      t('moduleTest'),
+      isEnrolledForLessons,
+      !isCourseReady || ((m.lessons?.length ?? 0) === 0 && m.testCount === 0),
+    ),
+  );
   const projects: Project[] = course.projects.map((p, i) => toProject(p, i, course.projects.length));
   const mentor = course.mentor;
 
@@ -276,6 +285,7 @@ export default function CoursePage() {
           <ModuleAccordion
             variant="light"
             modules={modules}
+            overlayLocked={!isCourseReady}
             value={openModule}
             onValueChange={setOpenModule}
             freeBadgeClassName="bg-green-500 hover:bg-green-500 text-white"

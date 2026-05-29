@@ -222,6 +222,7 @@ export default function ProfessionPage() {
   }
 
   const isPurchasedForLessons = !!profession.hasPurchased || !!myProfessions?.some((c) => String(c.id) === String(profession.id));
+  const isProfessionReady = profession.modules.some((m) => (m.lessons?.length ?? 0) > 0 || m.testCount > 0);
   const modules: ModuleItem[] = profession.modules.map((m) => toModuleItem(m, isPurchasedForLessons));
   const mentor = profession.mentor;
 
@@ -265,6 +266,9 @@ export default function ProfessionPage() {
             >
               {/* Background Image */}
               {courseImage && <Image quality={95} src={courseImage} alt={profession.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" priority />}
+
+              {/* Readability overlay */}
+              <div className="absolute inset-0 z-0 bg-gradient-to-r from-white/95 via-white/80 to-white/10" />
 
               {/* Content Overlay */}
               <div className="relative z-10 p-8 lg:p-12 flex flex-col justify-center h-full">
@@ -468,6 +472,7 @@ export default function ProfessionPage() {
             <ModuleAccordion
               variant="dark"
               modules={modules}
+              overlayLocked={!isProfessionReady}
               value={openModule}
               onValueChange={setOpenModule}
               onLessonClick={handleLessonClick}

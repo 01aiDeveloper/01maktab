@@ -63,10 +63,19 @@ export function LanguageSwitcher({ isDark = false }: LanguageSwitcherProps) {
   const handleSelect = (value: Locale) => {
     setIsOpen(false)
     if (value === locale) return
-    startTransition(async () => {
-      await setUserLocale(value)
-      router.refresh()
-    })
+    const run = () =>
+      startTransition(async () => {
+        await setUserLocale(value)
+        router.refresh()
+      })
+    const doc = document as Document & {
+      startViewTransition?: (cb: () => void | Promise<void>) => { finished: Promise<void> }
+    }
+    if (typeof doc.startViewTransition === "function") {
+      doc.startViewTransition(run)
+    } else {
+      run()
+    }
   }
 
   return (

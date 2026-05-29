@@ -3,20 +3,22 @@
 import { useTranslations } from 'next-intl';
 import { CardSlashSolid, TickCircleSolid, ClockSolid } from '@/components/ui/icons/badge-icons';
 
-export type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
+export type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale' | 'available';
 
 const STATUS_STYLE: Record<CardStatus, { bg: string; text: string }> = {
   bought: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
   free: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
   waitlist: { bg: 'bg-[#FF7700]', text: 'text-white' },
   presale: { bg: 'bg-amber-500', text: 'text-white' },
+  available: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
 };
 
-const STATUS_KEY: Record<CardStatus, 'statusBought' | 'statusFree' | 'statusWaitlist' | 'statusPresale'> = {
+const STATUS_KEY: Record<CardStatus, 'statusBought' | 'statusFree' | 'statusWaitlist' | 'statusPresale' | 'statusAvailable'> = {
   bought: 'statusBought',
   free: 'statusFree',
   waitlist: 'statusWaitlist',
   presale: 'statusPresale',
+  available: 'statusAvailable',
 };
 
 export interface StatusFlags {
@@ -32,6 +34,7 @@ export function resolveStatus(f: StatusFlags): CardStatus | null {
   if (f.pricingType === 'FREE' || f.price === 0) return 'free';
   if (f.presalesEnabled) return 'presale';
   if (f.waitlistEnabled) return 'waitlist';
+  if (f.pricingType === 'PAID') return 'available';
   return null;
 }
 
@@ -52,7 +55,7 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
 
   const Icon =
     status === 'presale' ? ClockSolid :
-    status === 'waitlist' || status === 'bought' ? TickCircleSolid :
+    status === 'waitlist' || status === 'bought' || status === 'available' ? TickCircleSolid :
     CardSlashSolid;
 
   return (

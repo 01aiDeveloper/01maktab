@@ -66,22 +66,21 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className={`relative z-50 w-full py-4 bg-transparent`}
-      // className={`sticky top-0 z-50 w-full ${isDark ? 'bg-[#101010]' : 'bg-transparent'}`}
+      className={`sticky top-0 z-50 w-full py-4 bg-transparent`}
     >
       <div className="container mx-auto px-4 py-3">
-        <div className={`flex h-14 items-center justify-between px-6 rounded-[23px] border relative ${isDark ? ' bg-[#F4F4F6] border-gray-200' : 'bg-[#1a1a1a] border-white/10'}`}>
+        <div className={`flex h-14 items-center justify-between gap-3 px-3 sm:px-6 rounded-[23px] border relative ${isDark ? ' bg-[#F4F4F6] border-gray-200' : 'bg-[#1a1a1a] border-white/10'}`}>
           {/* Mobile Menu Button - Left (lg:hidden) */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden flex items-center gap-2"
+            className="lg:hidden flex items-center gap-2 shrink-0"
           >
             {isMobileMenuOpen ? (
               <X className={`h-5 w-5 ${!isDark ? 'text-white' : 'text-[#18181A]'}`} />
             ) : (
               <Menu className={`h-5 w-5 ${!isDark ? 'text-white' : 'text-[#18181A]'}`} />
             )}
-            <span className={`text-xs font-medium ${!isDark ? 'text-white' : 'text-[#18181A]'}`}>{tNav("menu")}</span>
+            <span className={`hidden sm:inline text-xs font-medium ${!isDark ? 'text-white' : 'text-[#18181A]'}`}>{tNav("menu")}</span>
           </button>
 
           {/* Mobile Menu Dropdown */}
@@ -108,7 +107,7 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
           </AnimatePresence>
 
           {/* Logo - Left on Desktop, Center on Mobile */}
-          <Link href="/" className="flex items-center gap-1 lg:static absolute left-1/2 lg:left-auto transform lg:transform-none -translate-x-1/2 lg:translate-x-0">
+          <Link href="/" className="flex items-center gap-1 shrink-0">
             <span className={`font-bold text-xl tracking-tight ${!isDark ? 'text-white' : 'text-[#18181A]'}`}>
               01<span className="font-normal">AI</span>
             </span>
@@ -132,7 +131,7 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
           </nav>
 
           {/* Auth Section - Right */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <LanguageSwitcher isDark={!isDark} />
             {user && <NotificationPanel isDark={!isDark} />}
             {user ? (
