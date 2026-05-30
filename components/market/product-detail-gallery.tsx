@@ -16,7 +16,7 @@ const statusLabel: Record<ProductStatus, React.ReactNode> = {
   OUT_OF_STOCK: 'Нет в наличии',
   COIN_ONLY: (
     <span className="inline-flex items-center gap-1">
-      Только за <Image quality={95} src="/images/market/VC.png" alt="VC" width={15} height={20} className="w-4 h-5 align-middle" />
+      Только за <Image quality={100} src="/images/market/VC.png" alt="VC" width={15} height={20} className="w-4 h-5 align-middle" />
     </span>
   ),
   SOON: 'Скоро',
@@ -58,7 +58,7 @@ export function ProductDetailGallery({ product }: ProductDetailGalleryProps) {
 
         {main && (
           <Image
-            quality={95} src={main}
+            quality={100} src={main}
             alt={product.title}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
@@ -84,7 +84,7 @@ export function ProductDetailGallery({ product }: ProductDetailGalleryProps) {
                   : 'opacity-80 hover:opacity-100',
               )}
             >
-              <Image quality={95} src={img} alt="" fill sizes="33vw" className="object-cover object-top" />
+              <Image quality={100} src={img} alt="" fill sizes="33vw" className="object-cover object-top" />
             </button>
           ))}
         </div>

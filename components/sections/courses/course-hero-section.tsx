@@ -175,7 +175,7 @@ export function CourseHeroSection({
                   >
                     {badge.icon && (
                       <Image
-                        quality={95} src={badge.icon.startsWith('http') ? badge.icon : `${baseMediaUrl}/${badge.icon}`}
+                        quality={100} src={badge.icon.startsWith('http') ? badge.icon : `${baseMediaUrl}/${badge.icon}`}
                         alt={badge.title}
                         width={18}
                         height={18}

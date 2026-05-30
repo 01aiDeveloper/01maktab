@@ -27,7 +27,7 @@ export function NoData({
     <div className="flex flex-col items-center justify-center py-12 px-4">
       <div className="relative w-48 h-48 mb-6">
         <Image
-          quality={95} src="/images/common/nodata.png"
+          quality={100} src="/images/common/nodata.png"
           alt="No data"
           fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className={`object-contain ${isDark ? "opacity-40" : "opacity-60"}`}

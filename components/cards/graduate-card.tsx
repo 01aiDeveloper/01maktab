@@ -35,7 +35,7 @@ export function GraduateCard({
         {/* Left: Portrait Image */}
         <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-gray-800">
           <Image
-            quality={95} src={image}
+            quality={100} src={image}
             alt={name}
             fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover"
@@ -89,7 +89,7 @@ export function GraduateCard({
         {/* Image on Top */}
         <div className="relative aspect-[3/4] w-full">
           <Image
-            quality={95} src={image}
+            quality={100} src={image}
             alt={name}
             fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover"

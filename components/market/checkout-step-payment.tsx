@@ -78,7 +78,7 @@ export function CheckoutStepPayment({
               {formatPrice(price)}
             </span>
             {isCoin ? (
-              <Image quality={95} src="/images/market/VC.png" alt="VC" width={18} height={24} className="w-5 h-6" />
+              <Image quality={100} src="/images/market/VC.png" alt="VC" width={18} height={24} className="w-5 h-6" />
             ) : (
               <span className="text-lg sm:text-xl font-bold text-gray-900">сум</span>
             )}
@@ -135,7 +135,7 @@ export function CheckoutStepPayment({
         {product.images[0] && (
           <div className="w-[122px] h-[119px] sm:w-[244px] sm:h-[238px] rounded-2xl overflow-hidden flex-shrink-0 bg-gray-100">
             <Image
-              quality={95} src={product.images[0]}
+              quality={100} src={product.images[0]}
               alt={product.title}
               width={244}
               height={238}
@@ -162,7 +162,7 @@ export function CheckoutStepPayment({
                 )}
               >
                 <Image
-                  quality={95} src={`/icons/payment/${provider}.svg`}
+                  quality={100} src={`/icons/payment/${provider}.svg`}
                   alt={provider}
                   width={72}
                   height={28}

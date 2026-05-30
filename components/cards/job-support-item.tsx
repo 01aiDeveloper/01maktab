@@ -42,7 +42,7 @@ export function JobSupportItem({
       <div className="absolute bottom-0 right-4 lg:right-8 w-32 h-32 lg:w-40 lg:h-40">
         <div className="relative w-full h-full">
           <Image
-            quality={95} src={illustration}
+            quality={100} src={illustration}
             alt={title}
             fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-contain object-bottom"

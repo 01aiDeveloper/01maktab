@@ -229,7 +229,7 @@ export function StepPaymentMethod({
             }`}
           >
             <Image
-              quality={95} src={`/icons/payment/${provider}.svg`}
+              quality={100} src={`/icons/payment/${provider}.svg`}
               alt={provider}
               width={72}
               height={28}

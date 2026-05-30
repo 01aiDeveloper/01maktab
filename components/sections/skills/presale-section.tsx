@@ -48,7 +48,7 @@ import type { ApiResponse, ApiPaymentResponse } from '@/types/api';
 function DiscountBadge() {
   return (
     <Image
-      quality={95} src="/images/skills/maxsusTaklif.png"
+      quality={100} src="/images/skills/maxsusTaklif.png"
       alt="Maxsus taklif"
       width={160}
       height={160}

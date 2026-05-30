@@ -44,7 +44,7 @@ export function CertificatesSection({ certificates, footnote }: CertificatesSect
 
                   {/* Background Image */}
                   <Image
-                    quality={95} src={`/images/professions/certificate-bg${index + 1}.webp`}
+                    quality={100} src={`/images/professions/certificate-bg${index + 1}.webp`}
                     alt="Certificate background"
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover brightness-[0.3]"
@@ -53,7 +53,7 @@ export function CertificatesSection({ certificates, footnote }: CertificatesSect
                   {/* Certificate Image Centered */}
                   <div className="absolute inset-0 flex items-center justify-center p-8 z-20">
                     <div className="relative w-full max-w-[300px] aspect-[4/3]">
-                      <Image quality={95} src={cert.image} alt={cert.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-contain drop-shadow-2xl" />
+                      <Image quality={100} src={cert.image} alt={cert.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-contain drop-shadow-2xl" />
                     </div>
                   </div>
                 </div>

@@ -133,7 +133,7 @@ export function TestScreen({
       <div className="bg-white rounded-2xl p-10 lg:p-16 w-full text-center shadow-sm min-h-[480px] flex flex-col items-center justify-center">
           {/* Icon */}
           <div className="flex justify-center mb-5">
-            <Image quality={95} src="/icons/file.svg" alt="" width={56} height={56} />
+            <Image quality={100} src="/icons/file.svg" alt="" width={56} height={56} />
           </div>
 
           <h1 className="text-xl font-bold text-gray-900 mb-2">{test.name}</h1>
@@ -230,7 +230,7 @@ export function TestScreen({
         {currentQuestion.image && (
           <div className="relative w-full max-h-56 rounded-xl mb-5 bg-gray-50 overflow-hidden">
             <Image
-              quality={95} src={getMediaUrl(currentQuestion.image)}
+              quality={100} src={getMediaUrl(currentQuestion.image)}
               alt=""
               width={800}
               height={224}
@@ -270,7 +270,7 @@ export function TestScreen({
                     dangerouslySetInnerHTML={{ __html: option.text }}
                   />
                   {option.image && (
-                    <Image quality={95} src={getMediaUrl(option.image)} alt="" width={200} height={96} className="mt-1 max-h-24 object-contain rounded-lg" />
+                    <Image quality={100} src={getMediaUrl(option.image)} alt="" width={200} height={96} className="mt-1 max-h-24 object-contain rounded-lg" />
                   )}
                 </label>
               );
@@ -298,7 +298,7 @@ export function TestScreen({
                   <span dangerouslySetInnerHTML={{ __html: option.text }} />
                 </div>
                 {option.image && (
-                  <Image quality={95} src={getMediaUrl(option.image)} alt="" width={200} height={96} className="max-h-24 object-contain rounded-lg" />
+                  <Image quality={100} src={getMediaUrl(option.image)} alt="" width={200} height={96} className="max-h-24 object-contain rounded-lg" />
                 )}
               </div>
             );

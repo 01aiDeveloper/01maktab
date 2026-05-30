@@ -43,7 +43,7 @@ export function SkillCard({
         className="relative overflow-hidden rounded-3xl aspect-3/4 min-w-[160px] cursor-pointer group bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]"
       >
         <Image
-          quality={95} src={imgSrc}
+          quality={100} src={imgSrc}
           alt={title}
           fill
           sizes="(max-width: 640px) 83vw, (max-width: 1024px) 33vw, 280px"
@@ -53,7 +53,7 @@ export function SkillCard({
 
         <div className="absolute top-3 left-3 right-3 z-10 flex items-center justify-between gap-2">
           <div className="w-[57px] h-[57px] bg-white/20 border border-white/[0.17] backdrop-blur-[9.68px] rounded-[18px] flex items-center justify-center shrink-0">
-            <Image quality={95} src={iconUrl ? getMediaUrl(iconUrl) : '/images/skills/icon.png'} alt={title} width={39} height={39} />
+            <Image quality={100} src={iconUrl ? getMediaUrl(iconUrl) : '/images/skills/icon.png'} alt={title} width={39} height={39} />
           </div>
 
           <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ export function SkillCard({
               <StatusBadge status={status} />
             ) : badge ? (
               <div className="flex items-center gap-1.5 bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">
-                <Image quality={95} src={'/images/skills/icon.png'} alt="" width={14} height={14} className="w-3.5 h-3.5" />
+                <Image quality={100} src={'/images/skills/icon.png'} alt="" width={14} height={14} className="w-3.5 h-3.5" />
                 {badge}
               </div>
             ) : null}
@@ -74,7 +74,7 @@ export function SkillCard({
             {title}
           </h3>
           <div className="absolute top-3 right-2.5">
-            <Image quality={95} src="/icons/main-arrow.svg" alt="arrow" width={20} height={20} unoptimized />
+            <Image quality={100} src="/icons/main-arrow.svg" alt="arrow" width={20} height={20} unoptimized />
           </div>
         </div>
 

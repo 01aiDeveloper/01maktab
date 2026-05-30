@@ -27,7 +27,7 @@ export function TrialVideoSection({
 
         <div className="relative max-w-[1175px] mx-auto rounded-[32px] overflow-hidden border-4 border-[#0066FF] shadow-2xl">
           <div className="aspect-video relative bg-gradient-to-br from-blue-900 to-blue-950">
-            <Image quality={95} src={videoImage} alt="Trial video" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
+            <Image quality={100} src={videoImage} alt="Trial video" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
           </div>
         </div>
 

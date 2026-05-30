@@ -49,7 +49,7 @@ export function ProfileTabs({ activeTab }: ProfileTabsProps) {
               }`}
             >
               <Image
-                quality={95} src={tab.icon}
+                quality={100} src={tab.icon}
                 alt={tab.label}
                 width={32}
                 height={32}

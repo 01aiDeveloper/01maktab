@@ -180,7 +180,7 @@ export function CatalogTabs() {
                 isActive ? 'text-[#1A1A1A]' : 'text-gray-400 hover:text-gray-600'
               }`}
             >
-              <Image quality={95} src={tab.icon} alt={tab.label} width={32} height={32} className={`w-8 h-8 object-contain ${!isActive ? 'grayscale opacity-50' : ''}`} />
+              <Image quality={100} src={tab.icon} alt={tab.label} width={32} height={32} className={`w-8 h-8 object-contain ${!isActive ? 'grayscale opacity-50' : ''}`} />
               {tab.label}
               {isActive && (
                 <span className="absolute bottom-0 left-4 right-4 h-[2.5px] bg-[#3B5BFF] rounded-full" />

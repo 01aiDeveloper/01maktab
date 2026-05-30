@@ -27,7 +27,7 @@ export function CourseStatsSection({ stats }: CourseStatsSectionProps) {
         >
           {/* Left Large Image Card */}
           <div className="relative rounded-3xl overflow-hidden min-h-[300px] lg:min-h-[400px]">
-            <Image quality={95} src="/images/completeTeam.jpg" alt="Graduates" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
+            <Image quality={100} src="/images/completeTeam.jpg" alt="Graduates" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
             <div className="absolute bottom-8 left-8">
               <div className="flex items-center gap-2 mb-3">

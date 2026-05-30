@@ -18,7 +18,7 @@ export function CourseCard({ image, title, instructor, progress }: CourseCardPro
       className="relative overflow-hidden rounded-3xl aspect-[4/3] min-w-[200px] cursor-pointer group"
     >
       <Image
-        quality={95} src={image || "/placeholder.svg"}
+        quality={100} src={image || "/placeholder.svg"}
         alt={title}
         fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
         className="object-cover transition-transform duration-300 group-hover:scale-105"

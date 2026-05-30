@@ -103,7 +103,7 @@ export function ProductGalleryLightbox({
               style={{ transform: `scale(${zoom})` }}
             >
               <Image
-                quality={95} src={current}
+                quality={100} src={current}
                 alt={`Image ${index + 1}`}
                 fill
                 sizes="60vw"
@@ -151,7 +151,7 @@ export function ProductGalleryLightbox({
                   : 'opacity-50 hover:opacity-80',
               )}
             >
-              <Image quality={95} src={src} alt="" fill sizes="100px" className="object-cover" />
+              <Image quality={100} src={src} alt="" fill sizes="100px" className="object-cover" />
             </button>
           ))}
         </div>

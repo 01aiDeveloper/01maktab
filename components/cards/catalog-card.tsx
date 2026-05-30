@@ -60,7 +60,7 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
       <div className="relative rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] cursor-pointer aspect-[425/512] overflow-hidden bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]">
         {/* Full-cover image */}
         <Image
-          quality={95} src={imgSrc}
+          quality={100} src={imgSrc}
           alt={title}
           fill
           sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 280px"
@@ -105,7 +105,7 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
         {/* Icon circle — top right */}
         {icon && (
           <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-10 w-8 h-8 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-[18px] bg-white/20 backdrop-blur-sm flex items-center justify-center">
-            <Image quality={95} src={getMediaUrl(icon) || '/placeholder.svg'} alt="" width={24} height={24} className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 object-contain" />
+            <Image quality={100} src={getMediaUrl(icon) || '/placeholder.svg'} alt="" width={24} height={24} className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 object-contain" />
           </div>
         )}
 

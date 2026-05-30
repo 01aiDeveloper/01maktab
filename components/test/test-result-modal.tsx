@@ -54,9 +54,9 @@ export function TestResultModal({
           <div className="flex justify-center mb-5">
             <div className="w-20 h-20 rounded-2xl bg-blue-500/40 backdrop-blur-sm flex items-center justify-center">
               {skillIcon ? (
-                <Image quality={95} src={getMediaUrl(skillIcon)} alt="" width={48} height={48} className="object-contain" />
+                <Image quality={100} src={getMediaUrl(skillIcon)} alt="" width={48} height={48} className="object-contain" />
               ) : (
-                <Image quality={95} src="/icons/confetti.svg" alt="" width={44} height={44} />
+                <Image quality={100} src="/icons/confetti.svg" alt="" width={44} height={44} />
               )}
             </div>
           </div>
@@ -101,7 +101,7 @@ export function TestResultModal({
         {isPassed ? (
           <div className="flex items-center justify-center gap-4 mb-5">
             <div className="w-16 h-16 rounded-2xl bg-blue-500 flex items-center justify-center shrink-0">
-              <Image quality={95} src="/icons/confetti.svg" alt="" width={36} height={36} />
+              <Image quality={100} src="/icons/confetti.svg" alt="" width={36} height={36} />
             </div>
             <div className="text-5xl font-bold text-blue-500">
               {correctAnswers}/{totalQuestions}
@@ -111,7 +111,7 @@ export function TestResultModal({
           <>
             <div className="flex justify-center mb-4">
               <div className="w-16 h-16 rounded-2xl bg-blue-500 flex items-center justify-center">
-                <Image quality={95} src="/icons/sad.svg" alt="" width={36} height={36} />
+                <Image quality={100} src="/icons/sad.svg" alt="" width={36} height={36} />
               </div>
             </div>
             <div className="text-3xl font-bold text-gray-900 mb-2">

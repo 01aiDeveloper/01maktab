@@ -65,7 +65,7 @@ export function MyWaitlistSection() {
                   <div className="relative rounded-3xl cursor-pointer h-102 border-0">
                     {photoUrl ? (
                       <Image
-                        quality={95} src={photoUrl}
+                        quality={100} src={photoUrl}
                         alt={courseTitle}
                         fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                         className="object-cover rounded-[20px] overflow-hidden"

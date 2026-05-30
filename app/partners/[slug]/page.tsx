@@ -125,7 +125,7 @@ export default function PartnerPage() {
             {partner.image ? (
               <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
                 <Image
-                  quality={95} src={getMediaUrl(partner.image)}
+                  quality={100} src={getMediaUrl(partner.image)}
                   alt={partner.name}
                   fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-cover"
@@ -135,7 +135,7 @@ export default function PartnerPage() {
             ) : (
               <div className="relative w-full max-w-sm aspect-square">
                 <Image
-                  quality={95} src={getMediaUrl(partner.logo)}
+                  quality={100} src={getMediaUrl(partner.logo)}
                   alt={partner.name}
                   fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-contain"
@@ -206,7 +206,7 @@ export default function PartnerPage() {
               return (
                 <div className="relative w-full aspect-[4/3] rounded-[24px] overflow-hidden mb-6">
                   <Image
-                    quality={95} src={getMediaUrl(blockImages[0])}
+                    quality={100} src={getMediaUrl(blockImages[0])}
                     alt={`${partner.name}`}
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover"

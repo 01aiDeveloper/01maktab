@@ -114,7 +114,7 @@ export function MentorCard({
             transition={{ duration: 0.25 }}
             className="absolute inset-0"
           >
-            <Image quality={95} src={thumbnail} alt={name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
+            <Image quality={100} src={thumbnail} alt={name} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
             <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-black/30" />
           </motion.div>
         )}

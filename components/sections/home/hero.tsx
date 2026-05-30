@@ -121,7 +121,7 @@ export function Hero() {
                   fill sizes="100vw"
                   className="object-cover object-[85%] md:object-right"
                   priority={index === 0}
-                  quality={85}
+                  quality={100}
                 />
                 {slide.isDark && <div className="absolute inset-0 bg-black/40" />}
               </div>
@@ -158,7 +158,7 @@ export function Hero() {
                         </span>
                         <div className="flex items-center">
                           <Image
-                            quality={95} src={slide.partnerLogo}
+                            quality={100} src={slide.partnerLogo}
                             alt={slide.partnerName ?? ''}
                             width={slide.partnerLogoWidth ?? 120}
                             height={slide.partnerLogoHeight ?? 40}
