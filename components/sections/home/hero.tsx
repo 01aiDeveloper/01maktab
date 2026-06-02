@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import { MainButton } from "@/components/ui/main-button";
+import { TickCircleSolid } from "@/components/ui/icons/badge-icons";
 import { useAuthStore } from "@/store/auth-store";
 
 type SlideMeta = {
@@ -54,6 +55,7 @@ const SLIDE_META: SlideMeta[] = [
 
 export function Hero() {
   const t = useTranslations("hero");
+  const tc = useTranslations("cards");
   const SLIDES = SLIDE_META.map((s) => ({
     ...s,
     title: t(`slides.${s.key}.title`),
@@ -128,6 +130,10 @@ export function Hero() {
 
               <div className="container relative z-10 h-full flex items-center px-4 md:px-6">
                 <div className="max-w-4xl w-full">
+                  <div className="mb-4 md:mb-6 inline-flex w-fit items-center gap-2 rounded-[22px] bg-[#16C759] px-4 h-[34px] text-white text-sm md:text-base font-medium tracking-[-0.02em] shadow-[0_5px_30px_rgba(22,199,89,0.4)]">
+                    <TickCircleSolid className="w-5 h-5" />
+                    {tc("statusAvailable")}
+                  </div>
                   <h2
                     className={`text-[36px] leading-[39px] tracking-[-0.05em] font-semibold md:text-6xl md:leading-[1.1] lg:text-[64px] lg:leading-[70px] text-balance ${
                       slide.isDark ? "text-white" : "text-foreground"

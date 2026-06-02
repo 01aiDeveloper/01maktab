@@ -8,20 +8,22 @@ import { useTranslations } from 'next-intl';
 import { CardSlashSolid, TickCircleSolid, ClockSolid, Profile2UserSolid } from '@/components/ui/icons/badge-icons';
 import { getMediaUrl } from '@/lib/utils';
 
-type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale';
+type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale' | 'available';
 
 const STATUS_STYLE: Record<CardStatus, { bg: string; text: string }> = {
   bought: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
   free: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
   waitlist: { bg: 'bg-[#3B5BFF]', text: 'text-white' },
   presale: { bg: 'bg-amber-500', text: 'text-white' },
+  available: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
 };
 
-const STATUS_KEY: Record<CardStatus, 'statusBought' | 'statusFree' | 'statusWaitlist' | 'statusPresale'> = {
+const STATUS_KEY: Record<CardStatus, 'statusBought' | 'statusFree' | 'statusWaitlist' | 'statusPresale' | 'statusAvailable'> = {
   bought: 'statusBought',
   free: 'statusFree',
   waitlist: 'statusWaitlist',
   presale: 'statusPresale',
+  available: 'statusAvailable',
 };
 
 function formatCount(count: number): string {
@@ -74,7 +76,7 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
             <div className={`inline-flex w-fit items-center gap-2 ${statusStyle.bg} ${statusStyle.text} px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold`}>
               {effectiveStatus === 'waitlist' || effectiveStatus === 'presale' ? (
                 <ClockSolid className="w-[18px] h-[18px]" />
-              ) : effectiveStatus === 'bought' ? (
+              ) : effectiveStatus === 'bought' || effectiveStatus === 'available' ? (
                 <TickCircleSolid className="w-[18px] h-[18px]" />
               ) : (
                 <CardSlashSolid className="w-[18px] h-[18px]" />

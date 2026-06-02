@@ -206,12 +206,12 @@ export function CatalogTabs() {
             const price = detail?.price ?? item.price;
             const isBought = hasPurchased ?? (user ? myItemIds[activeTab].has(item.id) : false);
             const isFree = pricingType === 'FREE' || price === 0;
-            const status: 'bought' | 'free' | 'waitlist' | 'presale' =
+            const status: 'bought' | 'free' | 'waitlist' | 'presale' | 'available' =
               isBought ? 'bought'
               : isFree ? 'free'
               : item.presalesEnabled ? 'presale'
               : item.waitlistEnabled ? 'waitlist'
-              : 'free';
+              : 'available';
 
             return (
               <div key={item.id} className="snap-start">
