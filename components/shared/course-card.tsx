@@ -26,7 +26,8 @@ export function CourseCard({
 }: CourseCardProps) {
   const courseSlug = slug || id?.toString() || "course"
   const rawStatus = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled })
-  const status = hideQueueStatus && (rawStatus === 'waitlist' || rawStatus === 'presale') ? null : rawStatus
+  const hidden = hideQueueStatus && (rawStatus === 'waitlist' || rawStatus === 'presale')
+  const status = !rawStatus || hidden ? 'available' : rawStatus
   const countNum = enrollmentCount ?? waitlistCount ?? 0
   const countKind: 'enrolled' | 'waitlist' = enrollmentCount ? 'enrolled' : 'waitlist'
   const [imgSrc, setImgSrc] = useState(imageUrl || "/placeholder.svg")
@@ -46,17 +47,10 @@ export function CourseCard({
       />
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
 
-      {status ? (
-        <div className="absolute top-4 left-4 z-10">
-          <StatusBadge status={status} />
-        </div>
-      ) : null}
-
-      {countNum > 0 ? (
-        <div className={`absolute top-4 z-10 ${status ? 'right-4' : 'left-4'}`}>
-          <EnrollmentBadge count={countNum} kind={countKind} />
-        </div>
-      ) : null}
+      <div className="absolute top-4 left-4 z-10 flex flex-col items-start gap-1.5">
+        <StatusBadge status={status} />
+        {countNum > 0 ? <EnrollmentBadge count={countNum} kind={countKind} /> : null}
+      </div>
 
       <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 md:p-8 lg:p-10 flex flex-col justify-center min-h-32 bg-white/20 backdrop-blur-[53.25px] max-h-[160px] rounded-t-xl sm:rounded-t-3xl">
         <div className="relative">
