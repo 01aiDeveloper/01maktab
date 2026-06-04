@@ -98,7 +98,7 @@ export function WaitlistSection({ courseId, enrollmentCount = 0, enabled }: Wait
           {/* Discount badge image — bottom-right */}
           <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:right-4 lg:right-6 z-10">
             <Image
-              quality={100} src="/images/skills/maxsusTaklif.png"
+              quality={90} src="/images/skills/maxsusTaklif.png"
               alt="Chegirma"
               width={220}
               height={220}

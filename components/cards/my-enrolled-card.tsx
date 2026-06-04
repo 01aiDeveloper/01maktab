@@ -36,7 +36,7 @@ export function MyEnrolledCard({
       <div className="relative rounded-3xl cursor-pointer h-102 border-0">
         {/* Full-cover image */}
         <Image
-          quality={100} src={imgSrc}
+          quality={90} src={imgSrc}
           alt={title}
           fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="object-cover rounded-[20px] overflow-hidden transition-transform duration-300"
@@ -73,7 +73,7 @@ export function MyEnrolledCard({
             }}
           >
             <Image
-              quality={100} src={iconSrc}
+              quality={90} src={iconSrc}
               alt="course icon"
               width={40}
               height={40}

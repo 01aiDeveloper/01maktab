@@ -79,7 +79,7 @@ export function EnrollmentCtaCountdown({
           {/* Media Preview Block */}
           <div className="relative w-full rounded-2xl lg:rounded-3xl overflow-hidden mb-6 lg:mb-8">
             <Image
-              quality={100} src="/images/courses/try-now.png"
+              quality={90} src="/images/courses/try-now.png"
               alt="Course preview"
               width={1920}
               height={1080}

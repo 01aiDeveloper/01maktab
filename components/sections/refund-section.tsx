@@ -34,7 +34,7 @@ export function RefundSection() {
             <div className="absolute inset-0 flex items-center justify-center p-12">
               <div className="relative w-full h-full">
                 <Image
-                  quality={100} src="/icons/professions/refund-icon.webp"
+                  quality={90} src="/icons/professions/refund-icon.webp"
                   alt="Investment return"
                   fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-contain"
@@ -129,7 +129,7 @@ export function RefundSection() {
               <div className="absolute inset-0 flex items-center justify-center p-12">
                 <div className="relative w-full h-full">
                   <Image
-                    quality={100} src="/icons/professions/refund-icon.webp"
+                    quality={90} src="/icons/professions/refund-icon.webp"
                     alt="Investment return"
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-contain"

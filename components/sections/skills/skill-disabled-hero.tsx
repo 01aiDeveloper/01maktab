@@ -52,7 +52,7 @@ export function SkillDisabledHero({
           >
             {courseImage && (
               <Image
-                quality={100} src={courseImage}
+                quality={90} src={courseImage}
                 alt={title}
                 fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                 className="object-cover grayscale-[30%] opacity-80"
@@ -90,7 +90,7 @@ export function SkillDisabledHero({
             {icon && (
               <div className="absolute top-6 right-6 w-12 h-12 lg:w-14 lg:h-14 bg-white/25 rounded-full flex items-center justify-center shadow-lg">
                 <Image
-                  quality={100} src={icon}
+                  quality={90} src={icon}
                   alt="icon"
                   width={28}
                   height={28}

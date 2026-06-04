@@ -84,7 +84,7 @@ export function TabAchievements() {
               >
                 {item.icon && (
                   <Image
-                    quality={100} src={getMediaUrl(item.icon)}
+                    quality={90} src={getMediaUrl(item.icon)}
                     alt={item.title}
                     width={66}
                     height={66}

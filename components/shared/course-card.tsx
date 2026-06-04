@@ -38,7 +38,7 @@ export function CourseCard({
         className="group relative w-full aspect-[654/430] overflow-hidden rounded-xl sm:rounded-[40px] shadow-sm bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]"
       >
       <Image
-        quality={100} src={imgSrc}
+        quality={90} src={imgSrc}
         alt={title}
         fill
         sizes="(max-width: 640px) 90vw, (max-width: 1024px) 55vw, 600px"
@@ -55,7 +55,7 @@ export function CourseCard({
       <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 md:p-8 lg:p-10 flex flex-col justify-center min-h-32 bg-white/20 backdrop-blur-[53.25px] max-h-[160px] rounded-t-xl sm:rounded-t-3xl">
         <div className="relative">
           <div className="absolute -top-2 right-0 opacity-80 group-hover:opacity-100 transition-opacity z-10">
-            <Image quality={100} src="/icons/main-arrow.svg" alt="arrow" width={25} height={25} unoptimized />
+            <Image quality={90} src="/icons/main-arrow.svg" alt="arrow" width={25} height={25} unoptimized />
           </div>
           <div className="pr-12">
             <h3 className="text-base sm:text-base md:text-lg lg:text-3xl font-bold text-white tracking-tight">{title}</h3>

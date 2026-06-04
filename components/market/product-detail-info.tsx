@@ -64,7 +64,7 @@ export function ProductDetailInfo({ product }: ProductDetailInfoProps) {
           {coinAvailable && (
             <span className="inline-flex items-center gap-2 text-xl sm:text-2xl lg:text-3xl font-semibold text-neutral-900">
               {formatSum(product.priceCoin)}
-              <Image quality={100} src="/images/market/VC.png" alt="VC" width={24} height={32} className="w-6 h-8 sm:w-7 sm:h-9" />
+              <Image quality={90} src="/images/market/VC.png" alt="VC" width={24} height={32} className="w-6 h-8 sm:w-7 sm:h-9" />
             </span>
           )}
         </div>

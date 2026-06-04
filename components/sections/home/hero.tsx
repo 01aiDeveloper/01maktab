@@ -123,7 +123,7 @@ export function Hero() {
                   fill sizes="100vw"
                   className="object-cover object-[85%] md:object-right"
                   priority={index === 0}
-                  quality={100}
+                  quality={90}
                 />
                 {slide.isDark && <div className="absolute inset-0 bg-black/40" />}
               </div>
@@ -164,7 +164,7 @@ export function Hero() {
                         </span>
                         <div className="flex items-center">
                           <Image
-                            quality={100} src={slide.partnerLogo}
+                            quality={90} src={slide.partnerLogo}
                             alt={slide.partnerName ?? ''}
                             width={slide.partnerLogoWidth ?? 120}
                             height={slide.partnerLogoHeight ?? 40}
@@ -177,7 +177,7 @@ export function Hero() {
                       <MainButton
                         variant="gradient"
                         size="xl"
-                        className="group h-13 md:h-15 lg:h-15 w-auto min-w-50 px-6 rounded-xl flex flex-row items-center"
+                        className="group h-[54px] md:h-15 lg:h-15 w-[193px] md:w-auto md:min-w-50 px-4 md:px-6 rounded-[10px] flex flex-row items-center justify-between md:justify-center"
                       >
                         {ctaLabel}
                         <ArrowRight className="h-5 w-5 md:h-6 md:w-6 inline ml-1" />

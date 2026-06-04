@@ -76,7 +76,7 @@ export function GraduatesSection() {
               <div className="hidden lg:grid lg:grid-cols-[280px_1fr] gap-6">
                 <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-gray-800">
                   <Image
-                    quality={100} src={getMediaUrl(graduate.photo)}
+                    quality={90} src={getMediaUrl(graduate.photo)}
                     alt={graduate.fullname}
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover"
@@ -107,7 +107,7 @@ export function GraduatesSection() {
               <div className="lg:hidden bg-[#1a1a1d] rounded-3xl overflow-hidden">
                 <div className="relative aspect-[3/4] w-full">
                   <Image
-                    quality={100} src={getMediaUrl(graduate.photo)}
+                    quality={90} src={getMediaUrl(graduate.photo)}
                     alt={graduate.fullname}
                     fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                     className="object-cover"

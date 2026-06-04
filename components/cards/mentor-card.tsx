@@ -59,7 +59,7 @@ export function MentorCard({
       )}>
         <div className="relative w-full h-full">
           <Image
-            quality={100} src={image}
+            quality={90} src={image}
             alt={name}
             fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover"
@@ -87,7 +87,7 @@ export function MentorCard({
         {/* Decorative Illustration - Bottom right corner (matn orqasida) */}
         <div className="absolute -bottom-4 sm:-bottom-6 right-0 w-24 h-24 sm:w-40 sm:h-40 opacity-90 pointer-events-none z-0">
           <Image
-            quality={100} src={decorationUrl}
+            quality={90} src={decorationUrl}
             alt="Decoration"
             fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-contain"

@@ -125,7 +125,7 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
             >
               {courseImage && (
                 <Image
-                  quality={100} src={courseImage}
+                  quality={90} src={courseImage}
                   alt={skill.title}
                   fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                   className="object-cover"
@@ -153,7 +153,7 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
                   <span className="text-white/70 text-xs">{t('createdWith')}</span>
                   <div className="bg-white rounded-lg px-3 py-1.5 flex items-center gap-2">
                     {partner.logo && (
-                      <Image quality={100} src={mediaUrl(partner.logo)} alt={partner.name} width={20} height={20} className="object-contain" />
+                      <Image quality={90} src={mediaUrl(partner.logo)} alt={partner.name} width={20} height={20} className="object-contain" />
                     )}
                     <span className="text-black text-xs font-bold">{partner.name}</span>
                   </div>
@@ -228,7 +228,7 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
                   <div className="bg-white rounded-2xl flex items-center justify-center aspect-square lg:aspect-auto lg:h-64 relative overflow-hidden p-8">
                     {partner.logo ? (
                       <Image
-                        quality={100} src={mediaUrl(partner.logo)}
+                        quality={90} src={mediaUrl(partner.logo)}
                         alt={partner.name}
                         fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                         className="object-contain p-8"

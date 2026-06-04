@@ -5,7 +5,8 @@
     "catalog": "Все курсы",
     "community": "Сообщество",
     "market": "Маркет",
-    "menu": "Меню"
+    "menu": "Меню",
+    "language": "Язык"
   },
   "guestHeader": {
     "promoTitle": "Профессия ML Engineer",

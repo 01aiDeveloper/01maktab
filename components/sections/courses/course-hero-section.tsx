@@ -97,14 +97,11 @@ export function CourseHeroSection({
             fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             className="object-cover object-top"
             priority
-            quality={100}
+            quality={90}
           />
 
-          {/* Readability overlay: chap tarafda matn uchun yorqin gradient */}
-          <div className="absolute inset-0 z-0 bg-gradient-to-r from-white/95 via-white/80 to-white/10" />
-
-          {/* Content Overlay */}
-          <div className="relative z-10 p-6 lg:p-12 flex flex-col justify-center h-full">
+          {/* Content Overlay — fonni oqartirmaymiz, matn o'qilishi text-shadow halo orqali */}
+          <div className="relative z-10 p-6 lg:p-12 flex flex-col justify-center h-full [text-shadow:0_1px_18px_rgba(255,255,255,0.9),0_1px_3px_rgba(255,255,255,0.8)]">
             {/* Back button */}
             <button onClick={goBack} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit cursor-pointer">
               <ArrowLeft className="w-4 h-4" />
@@ -175,7 +172,7 @@ export function CourseHeroSection({
                   >
                     {badge.icon && (
                       <Image
-                        quality={100} src={badge.icon.startsWith('http') ? badge.icon : `${baseMediaUrl}/${badge.icon}`}
+                        quality={90} src={badge.icon.startsWith('http') ? badge.icon : `${baseMediaUrl}/${badge.icon}`}
                         alt={badge.title}
                         width={18}
                         height={18}

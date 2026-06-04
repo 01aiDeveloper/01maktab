@@ -5,7 +5,8 @@
     "catalog": "Barcha Kurslar",
     "community": "Hamjamiyat",
     "market": "Market",
-    "menu": "Menyu"
+    "menu": "Menyu",
+    "language": "Til"
   },
   "guestHeader": {
     "promoTitle": "ML Engineer Kasbi",

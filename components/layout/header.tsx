@@ -152,7 +152,7 @@ export function Header() {
                 </div>
 
                 <div className="absolute left-0 top-0 inset-0 p-0 bg-[#f8f9fa]">
-                  <Image quality={100} src="/images/hero3.webp" alt="ML Engineer Promo" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover object-center " />
+                  <Image quality={90} src="/images/hero3.webp" alt="ML Engineer Promo" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover object-center " />
                 </div>
 
                 <div className="absolute bottom-4 md:bottom-6 right-4 md:right-6 w-10 h-10 md:w-12 md:h-12 bg-black/5 backdrop-blur-md rounded-full flex items-center justify-center border border-black/10 group-hover:bg-[#141414] group-hover:text-white transition-all duration-300">

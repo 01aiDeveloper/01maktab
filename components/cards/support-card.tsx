@@ -36,7 +36,7 @@ export function SupportCard({ title, subtitle, bullets, illustration }: SupportC
 
       {/* Decorative illustration - anchored to bottom-right */}
       <div className="absolute bottom-0 right-0 w-24 h-24 lg:w-36 lg:h-36">
-        <Image quality={100} src={illustration} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
+        <Image quality={90} src={illustration} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
       </div>
     </motion.div>
   );

@@ -97,11 +97,15 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block px-6 py-3 text-white hover:bg-white/10 border-b border-white/5 last:border-b-0 text-sm font-medium"
+                    className="block px-6 py-3 text-white hover:bg-white/10 border-b border-white/5 text-sm font-medium"
                   >
                     {link.label}
                   </Link>
                 ))}
+                <div className="px-6 py-3 flex items-center justify-between">
+                  <span className="text-sm font-medium text-white/70">{tNav("language")}</span>
+                  <LanguageSwitcher isDark />
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -132,7 +136,9 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
 
           {/* Auth Section - Right */}
           <div className="flex items-center gap-2 shrink-0">
-            <LanguageSwitcher isDark={!isDark} />
+            <span className="hidden lg:block">
+              <LanguageSwitcher isDark={!isDark} />
+            </span>
             {user && <NotificationPanel isDark={!isDark} />}
             {user ? (
               <div className="flex items-center gap-2 relative">

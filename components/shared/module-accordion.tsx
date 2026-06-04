@@ -162,7 +162,7 @@ export function ModuleAccordion({
           <div className="flex items-start gap-4">
             <div className="shrink-0">
               <Image
-                quality={100} src={moduleIconSrc}
+                quality={90} src={moduleIconSrc}
                 alt={moduleIconAlt}
                 width={44}
                 height={44}
@@ -223,7 +223,7 @@ export function ModuleAccordion({
               <div className="flex items-center gap-4 flex-1 min-w-0">
                 <Image
                   className="w-12 h-12 lg:w-14 lg:h-14 shrink-0"
-                  quality={100} src={moduleIconSrc}
+                  quality={90} src={moduleIconSrc}
                   alt={moduleIconAlt}
                   width={64}
                   height={64}
