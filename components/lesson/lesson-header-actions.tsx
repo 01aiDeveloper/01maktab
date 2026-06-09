@@ -52,16 +52,16 @@ export function LessonHeaderActions({
   return (
     <>
       <div className="sticky top-4 z-30 mb-6">
-        <div className="bg-white rounded-[23px] shadow-[0_2px_20px_rgba(0,0,0,0.06)] flex items-center justify-between pl-6 pr-2 py-2">
+        <div className="bg-white rounded-[23px] shadow-[0_2px_20px_rgba(0,0,0,0.06)] flex items-center justify-between gap-3 pl-4 sm:pl-6 pr-2 py-2">
           <Link
             href={backHref}
-            className="inline-flex items-center gap-2 text-foreground hover:opacity-70 transition-opacity text-sm font-medium"
+            className="inline-flex shrink-0 items-center gap-2 text-foreground hover:opacity-70 transition-opacity text-sm font-medium"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>{t('back')}</span>
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {isPublic && (
               <div className="hidden sm:flex items-center gap-1.5 bg-green-500 text-white px-3 py-1.5 rounded-full text-xs font-medium h-9">
                 <Image quality={90} src="/icons/free-lesson.svg" alt="" width={14} height={14} />
@@ -71,7 +71,7 @@ export function LessonHeaderActions({
 
             <button
               onClick={() => setModalOpen(true)}
-              className="inline-flex items-center gap-2 h-10 pl-3 pr-4 rounded-full bg-black text-white text-sm font-medium hover:opacity-90 transition-opacity"
+              className="inline-flex shrink-0 items-center gap-2 h-10 px-3 sm:pr-4 rounded-full bg-black text-white text-sm font-medium hover:opacity-90 transition-opacity"
               title={t('courseProgram')}
             >
               <Image
@@ -80,7 +80,7 @@ export function LessonHeaderActions({
                 width={18}
                 height={18}
               />
-              <span>{t('courseProgram')}</span>
+              <span className="hidden sm:inline">{t('courseProgram')}</span>
             </button>
 
             <button

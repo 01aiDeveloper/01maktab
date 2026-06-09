@@ -198,7 +198,7 @@ export function CatalogTabs() {
       ) : items.length === 0 ? (
         <NoData title={t('noItemsTitle')} description={t('noItemsDescription')} />
       ) : (
-        <div className="grid grid-flow-col grid-rows-2 auto-cols-[70%] overflow-x-auto snap-x snap-mandatory -mx-4 px-4 gap-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid-flow-row sm:grid-rows-none sm:auto-cols-auto sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:overflow-visible sm:mx-0 sm:px-0 sm:snap-none">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
           {items.map((item: CatalogItem) => {
             const detail = itemDetail[item.id];
             const hasPurchased = detail?.hasPurchased ?? item.hasPurchased;

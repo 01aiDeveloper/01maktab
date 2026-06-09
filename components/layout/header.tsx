@@ -3,10 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Equal, X, ArrowUpRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth-store';
@@ -77,29 +76,28 @@ export function Header() {
         className="bg-[#1a1a1a]/95 backdrop-blur-2xl rounded-[23px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden pointer-events-auto mx-auto"
       >
         {/* Header Top Bar */}
-        <div className="flex items-center justify-between px-4 md:px-3 py-2 h-16">
+        <div className="relative flex items-center justify-between px-4 md:px-3 py-2 h-16">
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:bg-white/10 cursor-pointer md:hover:bg-white rounded-xl px-2 md:px-3 h-10 flex items-center gap-1 md:gap-2"
+              className="text-white hover:bg-white/10 cursor-pointer md:hover:bg-white rounded-xl px-2 md:px-3 h-10 flex items-center gap-2"
             >
-              {isMenuOpen ? <X className="w-5 h-5 md:w-4 md:h-4" /> : <Menu className="w-5 h-5 md:w-4 md:h-4" />}
-              <span className="text-xs md:text-sm font-medium hidden sm:inline">{tNav('menu')}</span>
+              {isMenuOpen ? <X className="w-5 h-5" /> : <Equal className="w-6 h-6" strokeWidth={2.5} />}
+              <span className="text-[16px] leading-5 font-medium">{tNav('menu')}</span>
             </Button>
           </div>
 
-          <div className="flex items-center">
-            <span className="text-white font-bold tracking-tighter text-xl md:text-2xl">01AI</span>
+          <div className="absolute left-1/2 -translate-x-1/2 flex items-center">
+            <span className="text-white font-semibold tracking-tight text-[30.57px] leading-none">01AI</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <LanguageSwitcher isDark />
             {user ? (
-              <Link href="/profile" className="rounded-full bg-white p-1">
-                <Avatar className="h-9 w-9">
+              <Link href="/profile" className="rounded-full bg-white p-0.5">
+                <Avatar className="h-7 w-7">
                   <AvatarImage src={user?.photo || "/diverse-user-avatars.png"} />
-                  <AvatarFallback className="bg-gray-100 text-sm font-semibold text-gray-900">
+                  <AvatarFallback className="bg-gray-100 text-xs font-semibold text-gray-900">
                     {user?.firstname?.[0]?.toUpperCase() || "U"}
                     {user?.lastname?.[0]?.toUpperCase() || ""}
                   </AvatarFallback>
@@ -122,7 +120,7 @@ export function Header() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="py-4 md:py-6 px-3 md:px-5 pt-4 grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-6 md:gap-12 items-center"
+              className="py-4 md:py-6 px-3 md:px-5 pt-4 flex flex-col gap-4 md:gap-6"
             >
               {/* Links */}
               <div className="flex flex-col gap-4 md:gap-6">
@@ -145,20 +143,11 @@ export function Header() {
                 })}
               </div>
 
-              {/* Promo Card */}
-              <motion.div className="relative bg-white rounded-[24px] md:rounded-[32px] overflow-hidden group aspect-[4/3] md:aspect-auto md:h-[280px]">
-                <div className="absolute inset-0 p-4 flex flex-col justify-center z-10">
-                  <h3 className="text-[#141414] text-xl md:text-2xl lg:text-3xl font-black leading-tight max-w-[180px]">{tGuest('promoTitle')}</h3>
-                </div>
-
-                <div className="absolute left-0 top-0 inset-0 p-0 bg-[#f8f9fa]">
-                  <Image quality={90} src="/images/hero3.webp" alt="ML Engineer Promo" fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover object-center " />
-                </div>
-
-                <div className="absolute bottom-4 md:bottom-6 right-4 md:right-6 w-10 h-10 md:w-12 md:h-12 bg-black/5 backdrop-blur-md rounded-full flex items-center justify-center border border-black/10 group-hover:bg-[#141414] group-hover:text-white transition-all duration-300">
-                  <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6" />
-                </div>
-              </motion.div>
+              {/* Til tanlash — menyu ichida */}
+              <div className="flex items-center gap-3 pt-2 border-t border-white/10">
+                <span className="text-sm font-medium text-white/70">{tNav('language')}</span>
+                <LanguageSwitcher isDark />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

@@ -22,6 +22,7 @@ export function CourseHeader({ variant = 'dark' }: CourseHeaderProps) {
   const tUser = useTranslations("userMenu")
   const tCommon = useTranslations("common")
   const [isOpen, setIsOpen] = useState(false)
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
   const { user, logout } = useAuthStore()
   useMe()
 
@@ -52,7 +53,7 @@ export function CourseHeader({ variant = 'dark' }: CourseHeaderProps) {
       // className={`sticky top-0 z-50 w-full ${isDark ? 'bg-[#101010]' : 'bg-transparent'}`}
     >
       <div className="container mx-auto px-4 py-3">
-        <div className={`flex h-14 items-center justify-between px-6 rounded-[40px] border ${isDark ? ' bg-[#F4F4F6] border-gray-200' : 'bg-[#1a1a1a] border-white/10'}`}>
+        <div className={`relative flex h-14 items-center justify-between px-6 rounded-[40px] border ${isDark ? ' bg-[#F4F4F6] border-gray-200' : 'bg-[#1a1a1a] border-white/10'}`}>
           {/* Logo */}
           <Link href="/" className="flex items-center gap-1">
             <span className={`font-bold text-xl tracking-tight ${!isDark ? 'text-white' : 'text-[#18181A]'}`}>
@@ -79,15 +80,47 @@ export function CourseHeader({ variant = 'dark' }: CourseHeaderProps) {
 
           {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsMobileOpen(!isMobileOpen)}
             className="lg:hidden"
           >
-            {isOpen ? (
+            {isMobileOpen ? (
               <X className={`h-6 w-6 ${!isDark ? 'text-white' : 'text-[#18181A]'}`} />
             ) : (
               <Menu className={`h-6 w-6 ${!isDark ? 'text-white' : 'text-[#18181A]'}`} />
             )}
           </button>
+
+          {/* Mobile Menu Dropdown */}
+          <AnimatePresence>
+            {isMobileOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-[#1a1a1a] rounded-xl border border-white/10 overflow-hidden z-50"
+              >
+                {activeNavLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMobileOpen(false)}
+                    className="block px-6 py-3 text-white hover:bg-white/10 border-b border-white/5 text-sm font-medium"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                {!user && (
+                  <Link
+                    href="/login"
+                    onClick={() => setIsMobileOpen(false)}
+                    className="block px-6 py-3 text-white hover:bg-white/10 text-sm font-semibold"
+                  >
+                    {tCommon("login")}
+                  </Link>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Auth Section */}
           {user ? (
