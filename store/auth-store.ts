@@ -106,14 +106,23 @@ export const useAuthStore = create<AuthState>()(
         prompt: state.prompt,
       }),
       onRehydrateStorage: () => (state) => {
-        if (
-          process.env.NODE_ENV === "development" &&
-          state &&
-          !state.accessToken
-        ) {
-          const devToken = process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN
-          if (devToken) {
-            state.setTokens(devToken, "dev-refresh-token")
+        // Dev stage: .env tokenni doim majburlaymiz — eski/expired cookie token
+        // env'dagi yangi tokenni bloklamasin (faqat `!accessToken` sharti yetarli emas edi).
+        const devStage = process.env.NEXT_PUBLIC_DEV_STAGE === "true"
+        const devToken = process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN
+        const devRefresh = process.env.NEXT_PUBLIC_DEV_REFRESH_TOKEN
+        if (devStage && devToken && state) {
+          state.setTokens(devToken, devRefresh || "dev-refresh-token")
+          if (!state.user) {
+            state.setUser({
+              id: 10,
+              firstname: "Jasurbek",
+              lastname: "Xakimbekov",
+              phone: "998999847766",
+              coins: 2000,
+              gender: "MALE",
+              createdAt: "2026-04-15T09:27:57.264Z",
+            })
           }
         }
       },

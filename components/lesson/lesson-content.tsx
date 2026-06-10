@@ -212,7 +212,7 @@ export function LessonContent() {
         isEnrolled={isEnrolled}
       />
       <div className="bg-white rounded-2xl p-8 lg:p-12 mb-6">
-        <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+        <h1 className="font-suisse text-[28px] leading-[31px] lg:text-4xl lg:leading-tight font-semibold tracking-[-1.4px] capitalize text-[#18181A] mb-3">
           {t('lessonHeading', { order: lesson.orderId, title: lesson.title })}
         </h1>
         {lesson.description && (

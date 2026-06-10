@@ -155,7 +155,7 @@ export function Header() {
 
       {/* Tagline */}
       {!isMenuOpen && !scrolled && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-2 md:mt-4 text-center hidden md:block pointer-events-auto">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-2 md:mt-4 text-center block pointer-events-auto">
           <a
             href="https://mlcommunity.uz"
             target="_blank"

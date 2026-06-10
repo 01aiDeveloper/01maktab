@@ -161,7 +161,7 @@
     "name": "Ismingiz",
     "namePlaceholder": "Ism Familiya",
     "phone": "Telefoningiz",
-    "phonePlaceholder": "998 XX XXX XX XX"
+    "phonePlaceholder": "+998 XX XXX XX XX"
   },
   "market": {
     "comingSoonTitle": "Market –\ntez orada"
@@ -295,6 +295,10 @@
   "graduatesSection": {
     "title": "Bizning bitiruvchilar",
     "details": "Batafsil"
+  },
+  "skillsInstruments": {
+    "instruments": "Instrumentlar",
+    "skills": "Ko'nikmalar"
   },
   "presaleDisabled": {
     "notOnSale": "Sotuvga chiqmagan",

@@ -161,7 +161,7 @@
     "name": "Ваше имя",
     "namePlaceholder": "Имя Фамилия",
     "phone": "Ваш телефон",
-    "phonePlaceholder": "998 XX XXX XX XX"
+    "phonePlaceholder": "+998 XX XXX XX XX"
   },
   "market": {
     "comingSoonTitle": "Маркет –\nскоро"

@@ -50,7 +50,7 @@ export function StatusBadge({ status, size = 'md', className = '' }: StatusBadge
   const label = t(STATUS_KEY[status]);
   const sizeCls = size === 'sm'
     ? 'p-1.5 text-xs gap-1.5 tracking-[-0.05em] font-semibold'
-    : 'h-[38px] px-[17px] text-[20px] leading-[25px] tracking-[-0.05em] gap-2 font-[450]';
+    : 'h-[31px] px-[17px] text-[14px] leading-[25px] tracking-[-0.7px] gap-2 font-[450]';
   const iconCls = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
 
   const Icon =

@@ -100,10 +100,10 @@ export function CourseHeroSection({
             quality={90}
           />
 
-          {/* Content Overlay — fonni oqartirmaymiz, matn o'qilishi text-shadow halo orqali */}
-          <div className="relative z-10 p-6 lg:p-12 flex flex-col justify-center h-full [text-shadow:0_1px_18px_rgba(255,255,255,0.9),0_1px_3px_rgba(255,255,255,0.8)]">
+          {/* Content Overlay */}
+          <div className="relative z-10 p-6 lg:p-12 flex flex-col justify-center h-full">
             {/* Back button */}
-            <button onClick={goBack} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors w-fit cursor-pointer">
+            <button onClick={goBack} className="inline-flex items-center gap-2 text-white hover:text-white/80 mb-6 transition-colors w-fit cursor-pointer">
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm font-medium">{t('back')}</span>
             </button>

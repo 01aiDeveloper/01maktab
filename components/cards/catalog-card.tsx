@@ -13,7 +13,7 @@ type CardStatus = 'bought' | 'free' | 'waitlist' | 'presale' | 'available';
 const STATUS_STYLE: Record<CardStatus, { bg: string; text: string }> = {
   bought: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
   free: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
-  waitlist: { bg: 'bg-[#3B5BFF]', text: 'text-white' },
+  waitlist: { bg: 'bg-[#2A51E6]', text: 'text-white' },
   presale: { bg: 'bg-amber-500', text: 'text-white' },
   available: { bg: 'bg-[#1EBB4A]', text: 'text-white' },
 };
@@ -73,32 +73,32 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
         {/* Status badge — top left */}
         <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-10 flex flex-col items-start gap-1.5">
           {statusStyle && statusLabel && (
-            <div className={`inline-flex w-fit items-center gap-2 ${statusStyle.bg} ${statusStyle.text} px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold`}>
+            <div className={`inline-flex w-fit items-center gap-2 ${statusStyle.bg} ${statusStyle.text} h-[31px] px-[17px] rounded-[11px] text-[14px] leading-[25px] tracking-[-0.7px] font-[450]`}>
               {effectiveStatus === 'waitlist' || effectiveStatus === 'presale' ? (
-                <ClockSolid className="w-[18px] h-[18px]" />
+                <ClockSolid className="w-5 h-5" />
               ) : effectiveStatus === 'bought' || effectiveStatus === 'available' ? (
-                <TickCircleSolid className="w-[18px] h-[18px]" />
+                <TickCircleSolid className="w-5 h-5" />
               ) : (
-                <CardSlashSolid className="w-[18px] h-[18px]" />
+                <CardSlashSolid className="w-5 h-5" />
               )}
               {statusLabel}
             </div>
           )}
           {!statusStyle && badge && (
-            <div className="inline-flex w-fit items-center gap-2 bg-[#1EBB4A] text-white px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold">
-              <CardSlashSolid className="w-[18px] h-[18px]" />
+            <div className="inline-flex w-fit items-center gap-2 bg-[#1EBB4A] text-white h-[31px] px-[17px] rounded-[11px] text-[14px] leading-[25px] tracking-[-0.7px] font-[450]">
+              <CardSlashSolid className="w-5 h-5" />
               {badge}
             </div>
           )}
           {enrollmentCount != null && enrollmentCount > 0 && (
-            <div className="inline-flex w-fit items-center gap-2 bg-[#FAEF3B] text-black px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold">
-              <Profile2UserSolid className="w-[22px] h-[22px]" />
+            <div className="inline-flex w-fit items-center gap-2 bg-[#FFF000] text-[#18181A] h-[31px] px-[17px] rounded-[11px] text-[14px] leading-[25px] tracking-[-0.7px] font-[450]">
+              <Profile2UserSolid className="w-5 h-5" />
               {formatCount(enrollmentCount)} {t('enrolled')}
             </div>
           )}
           {!enrollmentCount && waitlistCount != null && waitlistCount > 0 && (
-            <div className="inline-flex w-fit items-center gap-2 bg-[#FAEF3B] text-black px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold">
-              <Profile2UserSolid className="w-[22px] h-[22px]" />
+            <div className="inline-flex w-fit items-center gap-2 bg-[#FFF000] text-[#18181A] h-[31px] px-[17px] rounded-[11px] text-[14px] leading-[25px] tracking-[-0.7px] font-[450]">
+              <Profile2UserSolid className="w-5 h-5" />
               {formatCount(waitlistCount)} {t('waiting')}
             </div>
           )}
@@ -106,19 +106,21 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
 
         {/* Icon circle — top right */}
         {icon && (
-          <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-10 w-8 h-8 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-[18px] bg-white/20 backdrop-blur-sm flex items-center justify-center">
-            <Image quality={90} src={getMediaUrl(icon) || '/placeholder.svg'} alt="" width={24} height={24} className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 object-contain" />
+          <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-10 w-10 h-10 sm:w-[45.6px] sm:h-[45.6px] rounded-[14.4px] bg-white/20 border border-white/[0.17] backdrop-blur-[8px] flex items-center justify-center">
+            <Image quality={90} src={getMediaUrl(icon) || '/placeholder.svg'} alt="" width={28} height={28} className="w-6 h-6 sm:w-7 sm:h-7 object-contain" />
           </div>
         )}
 
-        {/* Bottom info overlay */}
-        <div className="absolute z-10 rounded-[14px] sm:rounded-[18px] lg:rounded-[20px] flex items-end justify-between gap-2 p-3 sm:p-4 lg:p-5 bg-white bottom-0 left-0 right-0">
+        {/* Bottom info overlay — frosted */}
+        <div
+          className="absolute z-10 rounded-t-[20px] flex items-center justify-between gap-2 px-5 bottom-0 left-0 right-0 h-[104.8px] bg-white/80 backdrop-blur-[47.52px]"
+        >
           <div className="min-w-0">
-            <h3 className="text-[#1a1a1a] font-bold text-xs sm:text-base lg:text-lg leading-snug line-clamp-2">{title}</h3>
-            {mentorName && <p className="text-gray-400 text-[10px] sm:text-sm mt-0.5 sm:mt-1 truncate">{t('mentor')}: {mentorName}</p>}
+            <h3 className="text-[#18181A] font-semibold text-[19px] sm:text-[22.4px] leading-[1.05] tracking-[-1.12px] capitalize line-clamp-2">{title}</h3>
+            {mentorName && <p className="text-[#9F9F9F] text-[13px] sm:text-[16px] mt-1 truncate">{t('mentor')}: {mentorName}</p>}
           </div>
           <div className="shrink-0">
-            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-gray-400 group-hover:text-[#3B5BFF] transition-colors" />
+            <ArrowUpRight className="w-7 h-7 sm:w-8 sm:h-8 text-[#18181A] group-hover:text-[#3B5BFF] transition-colors" />
           </div>
         </div>
       </div>

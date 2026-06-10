@@ -123,14 +123,6 @@ export function Hero() {
                   priority={index === 0}
                   quality={90}
                 />
-                {/* Matn tomoni (chap) skrim — засвечивание oldini olish, kontrast kafolat */}
-                <div
-                  className={`absolute inset-0 ${
-                    slide.isDark
-                      ? "bg-gradient-to-r from-black/70 via-black/35 to-transparent"
-                      : "bg-gradient-to-r from-white/85 via-white/45 to-transparent"
-                  }`}
-                />
               </div>
 
               <div className="container relative z-10 h-full flex items-center px-4 md:px-6">
@@ -139,14 +131,24 @@ export function Hero() {
                     className={`text-[36px] leading-[39px] tracking-[-0.05em] font-semibold md:text-6xl md:leading-[1.1] lg:text-[64px] lg:leading-[70px] text-balance ${
                       slide.isDark ? "text-white" : "text-foreground"
                     }`}
+                    style={{
+                      textShadow: slide.isDark
+                        ? "0 2px 20px rgba(0,0,0,0.55), 0 0 1px rgba(0,0,0,0.4)"
+                        : "0 2px 20px rgba(255,255,255,0.9), 0 0 1px rgba(255,255,255,0.6)",
+                    }}
                   >
                     {slide.title}
                   </h2>
 
                   <p
                     className={`mt-4 md:mt-10 text-[16px] leading-[18px] tracking-[-0.05em] font-[450] md:text-xl md:leading-relaxed lg:text-2xl max-w-lg ${
-                      slide.isDark ? "text-white/80" : "text-foreground/80"
+                      slide.isDark ? "text-white/90" : "text-foreground/90"
                     }`}
+                    style={{
+                      textShadow: slide.isDark
+                        ? "0 2px 16px rgba(0,0,0,0.5)"
+                        : "0 2px 16px rgba(255,255,255,0.85)",
+                    }}
                   >
                     {slide.description}
                   </p>
@@ -154,13 +156,9 @@ export function Hero() {
                   <div className="mt-6 md:mt-14 flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-4 md:gap-6">
                     {slide.partnerLogo && (
                       <div
-                        className={`backdrop-blur-2xl rounded-xl px-4 md:px-6 h-13 md:h-15 w-48.25 md:w-auto border flex items-center gap-3 md:gap-4 ${
-                          slide.isDark
-                            ? "bg-white/10 border-white/20"
-                            : "bg-black/5 border-black/10"
-                        }`}
+                        className="backdrop-blur-md rounded-xl px-4 md:px-6 h-13 md:h-15 w-48.25 md:w-auto border border-white/50 bg-white/70 flex items-center gap-3 md:gap-4 shadow-[0_2px_16px_rgba(0,0,0,0.12)]"
                       >
-                        <span className={`text-[10px] md:text-[11px] font-bold uppercase tracking-wider leading-tight whitespace-pre-line ${slide.isDark ? 'text-white' : 'text-foreground'}`}>
+                        <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider leading-tight whitespace-pre-line text-foreground">
                           {t('createdWith')}
                         </span>
                         <div className="flex items-center">
@@ -185,27 +183,27 @@ export function Hero() {
                       </MainButton>
                     </Link>
                   </div>
+
+                  {/* Dots — Figma: button bilan masofa 53px */}
+                  <div className="mt-[53px] flex items-center gap-1 md:gap-2">
+                    {SLIDES.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          goToSlide(idx);
+                          startAutoplay();
+                        }}
+                        className={`h-1.5 md:h-2 rounded-full transition-all duration-500 ${
+                          selectedIndex === idx
+                            ? "w-12 md:w-20 bg-white"
+                            : "w-6 md:w-8 bg-white/30 hover:bg-white/50"
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Dots — overflow-hidden tashqarisida */}
-        <div className="absolute bottom-6 md:bottom-12 left-4 md:left-12 lg:left-24 z-20 flex items-center gap-1 md:gap-2">
-          {SLIDES.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => {
-                goToSlide(idx);
-                startAutoplay();
-              }}
-              className={`h-1.5 md:h-2 rounded-full transition-all duration-500 ${
-                selectedIndex === idx
-                  ? "w-12 md:w-20 bg-white"
-                  : "w-6 md:w-8 bg-white/30 hover:bg-white/50"
-              }`}
-            />
           ))}
         </div>
       </div>

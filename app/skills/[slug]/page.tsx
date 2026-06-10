@@ -13,13 +13,13 @@ import { MainButton } from "@/components/ui/main-button";
 import { Badge } from "@/components/ui/badge";
 import { ModuleAccordion } from "@/components/shared/module-accordion";
 import type { ModuleItem } from "@/components/shared/module-accordion";
-import { CourseHeader } from "@/components/course-header";
+import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { MentorCard } from "@/components/cards/mentor-card";
 import { useSkill } from "@/hooks/use-skill";
 import { useSkillModules } from "@/hooks/use-course-modules";
 import { useMySkills } from "@/hooks/use-my-courses";
-import { baseMediaUrl } from "@/lib/utils";
+import { baseMediaUrl, stripInlineFont } from "@/lib/utils";
 import type { ApiSkillModule } from "@/types/api";
 import { PageLoader } from "@/components/ui/page-loader";
 import { PageError } from "@/components/ui/page-error";
@@ -133,7 +133,7 @@ export default function SkillDetailPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f5f5f7]">
-        <CourseHeader variant="light" />
+        <SiteHeader variant="light" />
         <PageLoader />
       </div>
     );
@@ -142,7 +142,7 @@ export default function SkillDetailPage() {
   if (isError || !skill) {
     return (
       <div className="min-h-screen bg-[#f5f5f7]">
-        <CourseHeader variant="light" />
+        <SiteHeader variant="light" />
         <PageError />
         <SiteFooter />
       </div>
@@ -200,7 +200,7 @@ export default function SkillDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
-      <CourseHeader variant="light" />
+      <SiteHeader variant="light" />
 
       {/* Course Start Modal */}
       <CourseStartModal
@@ -285,12 +285,12 @@ export default function SkillDetailPage() {
                   <span>{t('back')}</span>
                 </button>
 
-                <h1 className="font-suisse text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
+                <h1 className="font-suisse text-[34px] md:text-4xl lg:text-5xl font-semibold text-[#18181a] leading-[1.05] tracking-[-1.7px] mb-7">
                   {skill.title}
                 </h1>
 
                 {skill.subtitle && (
-                  <p className="text-gray-500 text-sm lg:text-base leading-relaxed mb-6 line-clamp-10">
+                  <p className="text-[#9f9f9f] text-[16px] lg:text-base leading-[20px] tracking-[-0.8px] mb-8 line-clamp-10">
                     {skill.subtitle}
                   </p>
                 )}
@@ -378,15 +378,15 @@ export default function SkillDetailPage() {
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-                  className="bg-[#e8e8e8] rounded-[29px] lg:rounded-[40px] p-6 flex items-center gap-4"
+                  className="bg-[#e6e6e7] rounded-[29px] lg:rounded-[40px] p-[17px] lg:p-6 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-5"
                 >
-                  <div className="w-20 h-20 lg:w-36 lg:h-36 bg-white rounded-2xl flex items-center justify-center shrink-0">
+                  <div className="bg-white rounded-[24px] h-[172px] lg:h-36 lg:w-36 lg:shrink-0 flex items-center justify-center overflow-hidden">
                     {partner.logo ? (
                       <Image
                         quality={90} src={mediaUrl(partner.logo)}
                         alt={partner.name}
-                        width={80}
-                        height={80}
+                        width={134}
+                        height={140}
                         className="object-contain p-2"
                       />
                     ) : (
@@ -395,21 +395,21 @@ export default function SkillDetailPage() {
                       </span>
                     )}
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-suisse font-bold text-gray-900 text-lg lg:text-xl mb-2">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-suisse font-semibold text-[#18181a] text-[28px] lg:text-3xl leading-[1.1] tracking-[-1.4px] capitalize mb-[22px]">
                       {t('partnership', { name: partner.name })}
                     </h3>
-                    <p className="text-gray-600 text-xs lg:text-sm leading-relaxed mb-3">
+                    <p className="text-[#18181a] text-[16px] leading-[18px] tracking-[-0.8px] mb-6">
                       {partner.description}
                     </p>
                     <Link href={`/partners/${partner.id}`}>
                       <MainButton
                         variant="black"
                         size="sm"
-                        className="rounded-xl border-0 text-xs flex flex-row items-center"
+                        className="rounded-[10px] border-0 text-[16px] flex flex-row items-center"
                       >
                         {t('details')}
-                        <ArrowRight className="w-3 h-3 inline ml-1" />
+                        <ArrowRight className="w-4 h-4 inline ml-2" />
                       </MainButton>
                     </Link>
                   </div>
@@ -435,13 +435,13 @@ export default function SkillDetailPage() {
             transition={{ duration: 0.5 }}
             className="bg-white rounded-3xl p-8 lg:p-12"
           >
-            <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
+            <h2 className="font-suisse text-[36px] leading-[36px] lg:text-3xl lg:leading-tight font-semibold tracking-[-1.8px] text-[#18181a] mb-6">
               {t('learningTitle')}
             </h2>
             {skill.courseOutcomes ? (
               <div
-                className="prose prose-sm lg:prose-base max-w-none text-gray-600"
-                dangerouslySetInnerHTML={{ __html: skill.courseOutcomes }}
+                className="max-w-none text-[#18181A] [&_*]:text-[16px]! [&_*]:font-normal! [&_*]:leading-[21px]! [&_*]:tracking-[-0.8px]! [&_*]:text-[#18181A]! [&_strong]:font-semibold! [&_b]:font-semibold! [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mb-1 [&_p]:mb-2"
+                dangerouslySetInnerHTML={{ __html: stripInlineFont(skill.courseOutcomes) }}
               />
             ) : (
               <NoData title={t('infoNotAdded')} />
@@ -474,7 +474,7 @@ export default function SkillDetailPage() {
       {mentor && (
         <section id="mentor" className="w-full py-8">
           <div className="container mx-auto px-4">
-            <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">
+            <h2 className="font-suisse text-[36px] leading-[36px] lg:text-3xl lg:leading-tight font-semibold tracking-[-1.8px] text-[#18181a] mb-6">
               {t('mentorTitle')}
             </h2>
             <MentorCard
@@ -528,35 +528,36 @@ export default function SkillDetailPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="bg-[#1a1a1a] rounded-3xl p-8 lg:p-12 overflow-hidden"
+              className="bg-[#18181a] rounded-[29px] lg:rounded-3xl p-[17px] lg:p-12 overflow-hidden"
             >
-              <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+              <div className="flex flex-col lg:flex-row items-center justify-between gap-[30px] lg:gap-8">
                 <div className="flex-1 text-white">
-                  <h2 className="font-suisse text-2xl lg:text-4xl font-bold mb-4">
+                  <h2 className="font-suisse text-[28px] lg:text-4xl font-semibold leading-[1.1] tracking-[-1.4px] capitalize mb-[22px]">
                     {t('partnerWith', { name: partner.name })}
                   </h2>
-                  <p className="text-gray-300 text-sm lg:text-base leading-relaxed mb-6">
+                  <p className="text-white text-[16px] lg:text-base leading-[18px] tracking-[-0.8px] mb-[26px]">
                     {partner.description}
                   </p>
                   <Link href={`/partners/${partner.id}`}>
                     <MainButton
                       variant="white"
                       size="lg"
-                      className="rounded-xl h-11 text-sm flex flex-row items-center"
+                      className="rounded-[10px] h-11 text-[16px] flex flex-row items-center"
                     >
                       {t('details')}
-                      <ArrowRight className="w-4 h-4 inline ml-1" />
+                      <ArrowRight className="w-4 h-4 inline ml-2" />
                     </MainButton>
                   </Link>
                 </div>
                 <div className="w-full lg:w-80 shrink-0">
-                  <div className="bg-white rounded-2xl flex items-center justify-center aspect-square lg:aspect-auto lg:h-64 relative overflow-hidden">
+                  <div className="bg-white rounded-[24px] flex items-center justify-center h-[172px] lg:h-64 relative overflow-hidden">
                     {partner.logo ? (
                       <Image
                         quality={90} src={mediaUrl(partner.logo)}
                         alt={partner.name}
-                        fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                        className="object-cover"
+                        width={134}
+                        height={140}
+                        className="object-contain p-2"
                       />
                     ) : (
                       <span className="text-gray-600 font-bold text-xl">

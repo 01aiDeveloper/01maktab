@@ -91,7 +91,7 @@ export function CoursesSection() {
                 {displayCourses.map((course: any, index: number) => (
                   <div
                     key={course.id || index}
-                    className="flex-[0_0_90%] min-w-0 sm:flex-[0_0_75%] md:flex-[0_0_55%] lg:flex-[0_0_45%]"
+                    className="flex-[0_0_80%] min-w-0 sm:flex-[0_0_calc(50%-8px)] md:flex-[0_0_calc(33.333%-16px)] lg:flex-[0_0_calc(25%-24px)]"
                   >
                     <CourseCard {...course} hideQueueStatus />
                   </div>

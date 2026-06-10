@@ -35,35 +35,32 @@ export function CourseCard({
   return (
     <Link href={`/courses/${courseSlug}`}>
       <motion.div
-        className="group relative w-full aspect-[654/430] overflow-hidden rounded-xl sm:rounded-[40px] shadow-sm bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]"
+        whileHover={{ scale: 1.01, y: -1 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="group relative w-full aspect-3/4 overflow-hidden rounded-[23px] shadow-sm bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]"
       >
       <Image
         quality={90} src={imgSrc}
         alt={title}
         fill
-        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 55vw, 600px"
+        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 320px"
         className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
         onError={() => setImgSrc("/placeholder.svg")}
       />
-      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
 
-      <div className="absolute top-4 left-4 z-10 flex flex-col items-start gap-1.5">
-        <StatusBadge status={status} />
+      <div className="absolute top-2.5 left-2.5 right-2.5 z-10 flex items-start gap-2">
         {countNum > 0 ? <EnrollmentBadge count={countNum} kind={countKind} /> : null}
+        {status && status !== "available" ? <StatusBadge status={status} /> : null}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 md:p-8 lg:p-10 flex flex-col justify-center min-h-32 bg-white/20 backdrop-blur-[53.25px] max-h-[160px] rounded-t-xl sm:rounded-t-3xl">
-        <div className="relative">
-          <div className="absolute -top-2 right-0 opacity-80 group-hover:opacity-100 transition-opacity z-10">
-            <Image quality={90} src="/icons/main-arrow.svg" alt="arrow" width={25} height={25} unoptimized />
-          </div>
-          <div className="pr-12">
-            <h3 className="text-base sm:text-base md:text-lg lg:text-3xl font-bold text-white tracking-tight">{title}</h3>
-            <p className="mt-3 text-white/90 line-clamp-2 text-sm lg:text-base font-normal leading-relaxed max-w-[90%]">
-              {description}
-            </p>
-          </div>
+      <div className="absolute bottom-0 left-0 right-0 p-5 rounded-[23px] bg-[rgba(96,96,96,0.20)] backdrop-blur-[76px]">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-white text-[20px] font-semibold leading-[1.05] tracking-[-1px] capitalize">{title}</h3>
+          <Image quality={90} src="/icons/main-arrow.svg" alt="arrow" width={20} height={20} unoptimized className="shrink-0 mt-0.5 opacity-80 group-hover:opacity-100 transition-opacity" />
         </div>
+        <p className="mt-3 text-white text-[16px] font-[450] leading-[18px] tracking-[-0.8px] line-clamp-2">
+          {description}
+        </p>
       </div>
     </motion.div>
     </Link>

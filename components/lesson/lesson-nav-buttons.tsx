@@ -57,12 +57,12 @@ export function LessonNavButtons({
     : t('nextLesson');
   const isNextEnabled = !!(nextLesson || moduleTestPending || isCourseExamReady);
   return (
-    <div className={cn('flex items-center gap-3 justify-center', className)}>
+    <div className={cn('flex items-center gap-3', className)}>
       <button
         disabled={!prevLesson}
         onClick={onPrev}
         className={cn(
-          'h-9 px-16 rounded-[10px] border text-sm font-medium transition-colors',
+          'flex-1 min-w-0 h-9 px-4 rounded-[10px] border text-[13px] font-medium whitespace-nowrap transition-colors',
           prevLesson
             ? 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800'
             : 'border-gray-200 text-gray-400 opacity-40 cursor-not-allowed',
@@ -74,7 +74,7 @@ export function LessonNavButtons({
         disabled={!isNextEnabled}
         onClick={handleNext}
         className={cn(
-          'h-9 px-12 rounded-[10px] border text-sm font-medium transition-colors',
+          'flex-1 min-w-0 h-9 px-4 rounded-[10px] border text-[13px] font-medium whitespace-nowrap transition-colors',
           isNextEnabled
             ? isCurrentCompleted
               ? moduleTestPending || isCourseExamReady

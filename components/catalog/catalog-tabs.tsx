@@ -177,20 +177,23 @@ export function CatalogTabs() {
               key={tab.key}
               onClick={() => setTab(tab.key)}
               className={`relative flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
-                isActive ? 'text-[#1A1A1A]' : 'text-gray-400 hover:text-gray-600'
+                isActive ? 'text-[#18181A]' : 'text-[#CDCDCD] opacity-[0.58] hover:opacity-100'
               }`}
             >
               <Image quality={90} src={tab.icon} alt={tab.label} width={32} height={32} className={`w-8 h-8 object-contain ${!isActive ? 'grayscale opacity-50' : ''}`} />
               {tab.label}
               {isActive && (
-                <span className="absolute bottom-0 left-4 right-4 h-[2.5px] bg-[#3B5BFF] rounded-full" />
+                <span
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[137px] h-[3px] rounded-full"
+                  style={{ background: 'linear-gradient(178.7deg, rgb(42,81,230), rgb(101,133,255))' }}
+                />
               )}
             </button>
           );
         })}
       </div>
 
-      {/* Grid */}
+      {/* 2 qator — har biri alohida yonga scroll */}
       {loading ? (
         <div className="flex justify-center py-16">
           <div className="w-10 h-10 border-4 border-gray-200 border-t-[#3B5BFF] rounded-full animate-spin" />
@@ -198,35 +201,46 @@ export function CatalogTabs() {
       ) : items.length === 0 ? (
         <NoData title={t('noItemsTitle')} description={t('noItemsDescription')} />
       ) : (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
-          {items.map((item: CatalogItem) => {
-            const detail = itemDetail[item.id];
-            const hasPurchased = detail?.hasPurchased ?? item.hasPurchased;
-            const pricingType = detail?.pricingType ?? item.pricingType;
-            const price = detail?.price ?? item.price;
-            const isBought = hasPurchased ?? (user ? myItemIds[activeTab].has(item.id) : false);
-            const isFree = pricingType === 'FREE' || price === 0;
-            const status: 'bought' | 'free' | 'waitlist' | 'presale' | 'available' =
-              isBought ? 'bought'
-              : isFree ? 'free'
-              : item.presalesEnabled ? 'presale'
-              : item.waitlistEnabled ? 'waitlist'
-              : 'available';
-
+        <div className="flex flex-col gap-4">
+          {[0, 1].map((rowIdx) => {
+            const rowItems = items.filter((_, i) => i % 2 === rowIdx);
+            if (rowItems.length === 0) return null;
             return (
-              <div key={item.id} className="snap-start">
-                <CatalogCard
-                  id={item.id}
-                  slug={item.slug}
-                  title={item.title}
-                  image={getItemImage(item)}
-                  icon={item.icon}
-                  status={status}
-                  enrollmentCount={item.enrollmentCount}
-                  waitlistCount={item.waitlistCount}
-                  mentorName={mentorNames[item.id]}
-                  href={getItemHref(item)}
-                />
+              <div
+                key={rowIdx}
+                className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              >
+                {rowItems.map((item: CatalogItem) => {
+                  const detail = itemDetail[item.id];
+                  const hasPurchased = detail?.hasPurchased ?? item.hasPurchased;
+                  const pricingType = detail?.pricingType ?? item.pricingType;
+                  const price = detail?.price ?? item.price;
+                  const isBought = hasPurchased ?? (user ? myItemIds[activeTab].has(item.id) : false);
+                  const isFree = pricingType === 'FREE' || price === 0;
+                  const status: 'bought' | 'free' | 'waitlist' | 'presale' | 'available' =
+                    isBought ? 'bought'
+                    : isFree ? 'free'
+                    : item.presalesEnabled ? 'presale'
+                    : item.waitlistEnabled ? 'waitlist'
+                    : 'available';
+
+                  return (
+                    <div key={item.id} className="shrink-0 w-[300px] sm:w-[340px]">
+                      <CatalogCard
+                        id={item.id}
+                        slug={item.slug}
+                        title={item.title}
+                        image={getItemImage(item)}
+                        icon={item.icon}
+                        status={status}
+                        enrollmentCount={item.enrollmentCount}
+                        waitlistCount={item.waitlistCount}
+                        mentorName={mentorNames[item.id]}
+                        href={getItemHref(item)}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             );
           })}

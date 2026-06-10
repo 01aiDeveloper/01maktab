@@ -18,7 +18,7 @@ interface UniversalVideoPlayerProps {
 const COMPLETE_THRESHOLD = 0.9;
 const SEEK_TOLERANCE = 1; // seconds — allow tiny forward seek
 
-const PLYR_CONTROLS = ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen'] as const;
+const PLYR_CONTROLS = ['play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen', 'settings'] as const;
 
 // Extract YouTube video ID from any YouTube URL
 function getYouTubeId(url: string): string {
@@ -229,7 +229,17 @@ export function UniversalVideoPlayer({
         overflow: 'hidden',
         backgroundColor: '#000',
         position: 'relative',
-      }}
+        // Plyr ranglarini Figmaga moslash: ko'k accent o'rniga oq, toza control bar.
+        '--plyr-color-main': '#ffffff',
+        '--plyr-video-control-color': '#ffffff',
+        '--plyr-video-control-color-hover': '#ffffff',
+        '--plyr-video-control-background-hover': 'rgba(255,255,255,0.15)',
+        '--plyr-range-fill-background': '#ffffff',
+        '--plyr-range-thumb-background': '#ffffff',
+        '--plyr-video-progress-buffered-background': 'rgba(255,255,255,0.35)',
+        '--plyr-menu-background': 'rgba(0,0,0,0.85)',
+        '--plyr-menu-color': '#ffffff',
+      } as React.CSSProperties}
     >
       {/* Loading overlay */}
       {loading && !error && (

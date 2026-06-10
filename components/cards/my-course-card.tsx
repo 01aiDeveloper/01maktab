@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Layers, BookMarked, Play, Pause } from 'lucide-react';
+import { Folder, FileText, Pause } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getMediaUrl } from '@/lib/utils';
 import type { MyCourseItem } from '@/hooks/use-my-courses';
@@ -33,43 +33,44 @@ export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
           <div className="absolute inset-0 rounded-[20px] bg-gray-200" />
         )}
 
-        {/* Top badges: Module + Dars */}
-        <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
-          {item.moduleTitle && (
-            <span className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white text-[11px] font-medium px-2.5 py-1 rounded-lg">
-              <Layers className="w-3 h-3" />
-              {item.moduleTitle}
+        {/* Top row: pills (chapda, sig'masa wrap) + icon (o'ngda) */}
+        <div className="absolute top-2.5 left-2.5 right-2.5 z-10 flex items-start justify-between gap-2">
+          <div className="flex flex-wrap items-start gap-2 min-w-0">
+            {item.moduleTitle && (
+              <span className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-[8px] border border-white/[0.17] text-white text-[13px] font-medium tracking-[-0.4px] px-3 h-[31px] rounded-[11px] max-w-full min-w-0">
+                <Folder className="w-4 h-4 shrink-0" />
+                <span className="truncate min-w-0">{item.moduleTitle}</span>
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-[8px] border border-white/[0.17] text-white text-[13px] font-medium tracking-[-0.4px] px-3 h-[31px] rounded-[11px] whitespace-nowrap">
+              <FileText className="w-4 h-4 shrink-0" />
+              {t('lessonProgress', { done: item.completedLessons, total: item.totalLessons })}
             </span>
-          )}
-          <span className="flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white text-[11px] font-medium px-2.5 py-1 rounded-lg">
-            <BookMarked className="w-3 h-3" />
-            {t('lessonProgress', { done: item.completedLessons, total: item.totalLessons })}
-          </span>
-        </div>
-
-        {/* Icon — top right */}
-        {iconUrl && (
-          <div
-            className="absolute top-3 right-3 z-10 flex items-center justify-center"
-            style={{
-              width: '57px',
-              height: '57px',
-              background: 'rgba(255, 255, 255, 0.2)',
-              border: '0.581633px solid rgba(255, 255, 255, 0.17)',
-              backdropFilter: 'blur(9.68418px)',
-              borderRadius: '18px',
-              padding: '8px',
-            }}
-          >
-            <Image
-              quality={90} src={iconUrl}
-              alt="course icon"
-              width={40}
-              height={40}
-              className="w-full h-full object-contain"
-            />
           </div>
-        )}
+
+          {iconUrl && (
+            <div
+              className="shrink-0 flex items-center justify-center"
+              style={{
+                width: '48px',
+                height: '48px',
+                background: 'rgba(255, 255, 255, 0.2)',
+                border: '0.581633px solid rgba(255, 255, 255, 0.17)',
+                backdropFilter: 'blur(8px)',
+                borderRadius: '15px',
+                padding: '8px',
+              }}
+            >
+              <Image
+                quality={90} src={iconUrl}
+                alt="course icon"
+                width={32}
+                height={32}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          )}
+        </div>
 
         {/* Bottom info box — catalog-card bilan bir xil */}
         <div

@@ -13,7 +13,7 @@ import { Subtitle } from '@/components/ui/subtitle';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { FAQAccordion } from '@/components/shared/faq-accordion';
-import { CourseHeader } from '@/components/course-header';
+import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MentorCard } from '@/components/cards/mentor-card';
 import { ProgramBenefits } from '@/components/sections/program-benefits';
@@ -33,7 +33,7 @@ import type { ModuleItem } from '@/components/shared/module-accordion';
 import { useProfession } from '@/hooks/use-profession';
 import { useProfessionModules } from '@/hooks/use-course-modules';
 import { useMyProfessions } from '@/hooks/use-my-courses';
-import { baseMediaUrl } from '@/lib/utils';
+import { baseMediaUrl, stripInlineFont } from '@/lib/utils';
 import type { ApiCourseModule } from '@/types/api';
 import { useSmartBack } from '@/hooks/use-smart-back';
 import { PageLoader } from '@/components/ui/page-loader';
@@ -205,7 +205,7 @@ export default function ProfessionPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#101010]">
-        <CourseHeader variant="dark" />
+        <SiteHeader variant="dark" />
         <PageLoader />
       </div>
     );
@@ -214,7 +214,7 @@ export default function ProfessionPage() {
   if (isError || !profession) {
     return (
       <div className="min-h-screen bg-[#101010]">
-        <CourseHeader variant="dark" />
+        <SiteHeader variant="dark" />
         <PageError />
         <SiteFooter variant="dark" />
       </div>
@@ -253,7 +253,7 @@ export default function ProfessionPage() {
 
   return (
     <div className="min-h-screen bg-[#101010]">
-      <CourseHeader variant="dark" />
+      <SiteHeader variant="dark" />
       <main>
         {/* Hero Section */}
         <section id="nima-organasiz" className="w-full">
@@ -397,11 +397,11 @@ export default function ProfessionPage() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="bg-white rounded-3xl p-8 lg:p-12"
             >
-              <h2 className="font-suisse text-2xl lg:text-3xl font-bold mb-4 text-[#18181A]">{profession.title}</h2>
+              <h2 className="font-suisse text-[36px] leading-[36px] lg:text-3xl lg:leading-tight font-semibold tracking-[-1.8px] mb-6 text-[#18181A]">{profession.title}</h2>
               {profession.description && (
                 <div
-                  className="text-gray-600 text-sm lg:text-base leading-relaxed prose prose-sm max-w-none"
-                  dangerouslySetInnerHTML={{ __html: profession.description }}
+                  className="max-w-none text-[#18181A] [&_*]:text-[16px]! [&_*]:font-normal! [&_*]:leading-[21px]! [&_*]:tracking-[-0.8px]! [&_*]:text-[#18181A]! [&_strong]:font-semibold! [&_b]:font-semibold! [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mb-1 [&_p]:mb-2"
+                  dangerouslySetInnerHTML={{ __html: stripInlineFont(profession.description) }}
                 />
               )}
             </motion.div>
@@ -419,7 +419,7 @@ export default function ProfessionPage() {
         {mentor && (
           <section id="mentor" className="w-full py-8">
             <div className="container mx-auto px-4">
-              <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-white mb-6">{t('courseMentor')}</h2>
+              <h2 className="font-suisse text-[36px] leading-[36px] lg:text-3xl lg:leading-tight font-semibold tracking-[-1.8px] text-white mb-6">{t('courseMentor')}</h2>
               <MentorCard
                 name={mentor.fullname}
                 role={mentor.position}

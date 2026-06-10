@@ -24,8 +24,8 @@ export function EnrollmentBadge({ count, kind = 'waitlist', className = '' }: En
   const label = kind === 'enrolled' ? t('enrolled') : t('waiting');
 
   return (
-    <div className={`inline-flex w-fit items-center gap-2 bg-[#FAEF3B] text-black px-[14px] py-2 rounded-[12px] text-[18px] leading-[22px] tracking-[-0.05em] font-semibold ${className}`}>
-      <Profile2UserSolid className="w-[22px] h-[22px]" />
+    <div className={`inline-flex w-fit items-center justify-center gap-2 bg-[#FFF000] text-[#18181A] px-[17px] h-[31px] rounded-[11px] text-[14px] leading-[25px] tracking-[-0.7px] font-[450] whitespace-nowrap ${className}`}>
+      <Profile2UserSolid className="w-5 h-5 shrink-0" />
       <span>{formatCount(count)} {label}</span>
     </div>
   );

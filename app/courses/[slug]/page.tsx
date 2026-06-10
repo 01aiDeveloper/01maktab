@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import api from '@/lib/api';
-import { CourseHeader } from '@/components/course-header';
+import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MentorCard } from '@/components/cards/mentor-card';
 import { ModuleAccordion } from '@/components/shared/module-accordion';
@@ -150,7 +150,7 @@ export default function CoursePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#f5f5f7]">
-        <CourseHeader variant="light" />
+        <SiteHeader variant="light" />
         <PageLoader />
       </div>
     );
@@ -159,7 +159,7 @@ export default function CoursePage() {
   if (isError || !course) {
     return (
       <div className="min-h-screen bg-[#f5f5f7]">
-        <CourseHeader variant="light" />
+        <SiteHeader variant="light" />
         <PageError />
         <SiteFooter />
       </div>
@@ -214,7 +214,7 @@ export default function CoursePage() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
-      <CourseHeader variant="light" />
+      <SiteHeader variant="light" />
 
       {/* Hero Section */}
       <CourseHeroSection
@@ -278,7 +278,7 @@ export default function CoursePage() {
       {/* Full Curriculum Section */}
       <section id="kurs-dasturi" className="w-full py-8">
         <div className="container mx-auto px-4">
-          <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-2">{t('fullProgram')}</h2>
+          <h2 className="font-suisse text-[36px] leading-[36px] lg:text-3xl lg:leading-tight font-semibold tracking-[-1.8px] text-[#18181a] mb-2">{t('fullProgram')}</h2>
           <p className="text-gray-500 mb-6">
             {t('modulesLessons', { modules: course.modules.length, lessons: totalLessons })}
           </p>
@@ -306,7 +306,7 @@ export default function CoursePage() {
       {mentor && (
         <section id="mentor" className="w-full py-8">
           <div className="container mx-auto px-4">
-            <h2 className="font-suisse text-2xl lg:text-3xl font-bold text-gray-900 mb-6">{t('courseMentor')}</h2>
+            <h2 className="font-suisse text-[36px] leading-[36px] lg:text-3xl lg:leading-tight font-semibold tracking-[-1.8px] text-[#18181a] mb-6">{t('courseMentor')}</h2>
             <MentorCard
               name={mentor.fullname}
               role={mentor.position}
