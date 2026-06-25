@@ -268,6 +268,7 @@
     "unknownCourse": "Курс",
     "removeFromWaitlist": "Убрать из списка",
     "removeWaitlistConfirm": "Убрать этот курс из списка ожидания?",
+    "removeWaitlistError": "Не удалось убрать. Попробуйте снова.",
     "noCoursesMessage": "Здесь пока пусто — начните добавлять курсы",
     "noCoursesDescription": "Перейти к списку курсов",
     "noCoursesButton": "Смотреть курсы",
@@ -326,7 +327,9 @@
     "free": "Бесплатно",
     "notification": "Получите уведомление",
     "discountTitle": "Скидка 10% для первых",
-    "joinWaitlist": "Записаться в лист ожидания"
+    "joinWaitlist": "Записаться в лист ожидания",
+    "joined": "Вы в списке",
+    "errorJoin": "Произошла ошибка. Попробуйте снова."
   },
   "enrollmentCountdown": {
     "title": "Начните карьеру сегодня",

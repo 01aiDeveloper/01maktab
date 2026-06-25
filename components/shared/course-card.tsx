@@ -11,7 +11,7 @@ interface CourseCardProps extends StatusFlags {
   id?: number | string
   slug?: string
   title: string
-  description: string
+  description?: string
   imageUrl: string
   enrollmentCount?: number
   waitlistCount?: number
@@ -19,7 +19,7 @@ interface CourseCardProps extends StatusFlags {
 }
 
 export function CourseCard({
-  id, slug, title, description, imageUrl,
+  id, slug, title, imageUrl,
   enrollmentCount, waitlistCount,
   hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled,
   hideQueueStatus,
@@ -53,14 +53,11 @@ export function CourseCard({
         {status && status !== "available" ? <StatusBadge status={status} /> : null}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-5 rounded-[23px] bg-[rgba(96,96,96,0.20)] backdrop-blur-[76px]">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-white text-[20px] font-semibold leading-[1.05] tracking-[-1px] capitalize">{title}</h3>
-          <Image quality={90} src="/icons/main-arrow.svg" alt="arrow" width={20} height={20} unoptimized className="shrink-0 mt-0.5 opacity-80 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute bottom-0 left-0 right-0 px-5 py-4 rounded-[23px] bg-[rgba(96,96,96,0.20)] backdrop-blur-[76px]">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-white text-[20px] font-semibold leading-[1.1] tracking-[-1px] capitalize">{title}</h3>
+          <Image quality={90} src="/icons/main-arrow.svg" alt="arrow" width={20} height={20} unoptimized className="shrink-0 opacity-80 group-hover:opacity-100 transition-opacity" />
         </div>
-        <p className="mt-3 text-white text-[16px] font-[450] leading-[18px] tracking-[-0.8px] line-clamp-2">
-          {description}
-        </p>
       </div>
     </motion.div>
     </Link>

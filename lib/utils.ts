@@ -14,6 +14,13 @@ export function stripInlineFont(html?: string): string {
 
 export const baseMediaUrl = 'https://maktab01-dev-files.s3.eu-north-1.amazonaws.com';
 
+// Joriy locale'ni NEXT_LOCALE cookie'dan o'qish (client). Default: 'uz'.
+export const getClientLocale = (): string => {
+  if (typeof document === 'undefined') return 'uz';
+  const match = document.cookie.match(/(?:^|;\s*)NEXT_LOCALE=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : 'uz';
+};
+
 export const getMediaUrl = (path?: string): string => {
   if (path && !path.startsWith('http')) {
     return `${baseMediaUrl}/${path}`;

@@ -146,6 +146,10 @@ export interface ApiCourse {
   enrollmentCount: number;
   presalesEnabled?: boolean;
   waitlistEnabled?: boolean;
+  isInWaitlist?: boolean;
+  hasPurchased?: boolean;
+  preSales?: ApiPresale | null;
+  waitlistCount?: number;
 }
 
 // ─── Profession (public detail) ───────────────────────────────────────────────
@@ -174,6 +178,10 @@ export interface ApiProfession {
   enrollmentCount: number;
   presalesEnabled?: boolean;
   waitlistEnabled?: boolean;
+  isInWaitlist?: boolean;
+  hasPurchased?: boolean;
+  preSales?: ApiPresale | null;
+  waitlistCount?: number;
 }
 
 // ─── Module list (authenticated) ─────────────────────────────────────────────
@@ -228,19 +236,17 @@ export interface ApiCourseModules {
 // ─── Presale ─────────────────────────────────────────────────────────────────
 
 export interface ApiPresale {
-  id: number;
-  courseId: number;
-  originalPrice: number;
-  presalePrice: number;
-  discountPercent: number;
-  enrolledCount: number;
-  isActive: boolean;
-  startDate: string | null;
+  preSalesPrice: number;
+  discountType: 'PERCENT' | 'FIXED';
+  discountValue: number;
   endDate: string | null;
-  /** Optional max pre-sales slots (0/null = no limit) */
-  limit?: number | null;
-  /** Server-computed remaining slots (only when limit > 0) */
-  limitRemaining?: number | null;
+  /** Max pre-sales slots (null = no limit) */
+  limit: number | null;
+  banner: string | null;
+  /** Marketing offset added to soldCount/waitlistCount */
+  counterOffset?: number;
+  /** counterOffset + real enrolled count */
+  soldCount: number;
 }
 
 // ─── Waitlist ────────────────────────────────────────────────────────────────

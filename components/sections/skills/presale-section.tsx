@@ -8,9 +8,9 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { MainButton } from '@/components/ui/main-button';
 import { useAuthStore } from '@/store/auth-store';
-import { usePresale } from '@/hooks/use-presale';
 import { useJoinWaitlist } from '@/hooks/use-waitlist';
 import api from '@/lib/api';
+import type { ApiPresale } from '@/types/api';
 
 function useCountdown(endDate: string | null | undefined) {
   const [now, setNow] = useState(() => Date.now());
@@ -36,7 +36,10 @@ interface PresaleSectionProps {
   courseType?: 'skill' | 'course' | 'profession';
   promocodeId?: number;
   onCabinetClick?: () => void;
-  enabled?: boolean;
+  /** Embedded presale from the course detail (only present when active) */
+  presale?: ApiPresale | null;
+  /** Base course price, shown struck-through */
+  originalPrice?: number;
 }
 
 function formatPrice(price: number) {
@@ -63,30 +66,31 @@ export function PresaleSection({
   courseType = 'skill',
   promocodeId,
   onCabinetClick,
-  enabled,
+  presale,
+  originalPrice = 0,
 }: PresaleSectionProps) {
   const t = useTranslations('presale');
   const router = useRouter();
   const { user } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
-  const { data: presale, isLoading: presaleLoading } = usePresale(enabled ? courseId : undefined);
   const joinWaitlist = useJoinWaitlist();
   const countdown = useCountdown(presale?.endDate);
 
-  if (!enabled) return null;
-  if (presaleLoading || !presale || !presale.isActive) return null;
+  // Backend only embeds preSales when the presale is active
+  if (!presale) return null;
 
-  const {
-    originalPrice,
-    presalePrice,
-    discountPercent,
-    enrolledCount,
-    limit,
-    limitRemaining,
-  } = presale;
+  const presalePrice = presale.preSalesPrice;
+  const enrolledCount = presale.soldCount;
+  const limit = presale.limit;
+  const discountPercent =
+    presale.discountType === 'PERCENT'
+      ? Math.round(presale.discountValue)
+      : originalPrice > 0
+        ? Math.round((1 - presalePrice / originalPrice) * 100)
+        : 0;
   const hasLimit = typeof limit === 'number' && limit > 0;
-  const remaining = typeof limitRemaining === 'number' ? limitRemaining : null;
+  const remaining = hasLimit ? Math.max(0, (limit as number) - enrolledCount) : null;
   const showCountdown = countdown && !countdown.expired;
   const countdownLabel = countdown
     ? countdown.days > 0
@@ -174,7 +178,7 @@ export function PresaleSection({
               {hasLimit && remaining !== null && (
                 <div className="inline-flex items-center gap-2 bg-[#FFE500] text-black rounded-full px-4 py-2 text-sm font-semibold">
                   <Flame className="w-4 h-4" />
-                  <span>{t('slotsRemaining', { remaining, total: limit })}</span>
+                  <span>{t('slotsRemaining', { remaining, total: limit as number })}</span>
                 </div>
               )}
             </div>

@@ -34,7 +34,6 @@ import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { useAuthStore } from '@/store/auth-store';
 import { PresaleSection } from '@/components/sections/skills/presale-section';
-import { PresaleDisabledSection } from '@/components/sections/skills/presale-disabled-section';
 import { WaitlistSection } from '@/components/sections/skills/waitlist-section';
 import { useCourseBadges } from '@/hooks/use-course-badges';
 
@@ -238,9 +237,8 @@ export default function CoursePage() {
       />
 
       {/* Presale Section */}
-      <PresaleSection courseId={course.id} courseType="course" enabled={course.presalesEnabled} />
-      <PresaleDisabledSection courseId={course.id} enabled={course.presalesEnabled} />
-      <WaitlistSection courseId={course.id} enrollmentCount={course.enrollmentCount} enabled={course.waitlistEnabled} />
+      <PresaleSection courseId={course.id} courseType="course" presale={course.preSales} originalPrice={course.price} isPurchased={isPurchased} />
+      <WaitlistSection courseId={course.id} enrollmentCount={course.enrollmentCount} enabled={course.waitlistEnabled} isInWaitlist={course.isInWaitlist} hasPresale={!!course.preSales} />
 
       {/* Course Description Section */}
       <CourseDescriptionSection title={course.title} description={course.description} />

@@ -26,7 +26,6 @@ import { PageError } from "@/components/ui/page-error";
 import { NoData } from "@/components/ui/no-data";
 import { useAuthStore } from "@/store/auth-store";
 import { PresaleSection } from "@/components/sections/skills/presale-section";
-import { PresaleDisabledSection } from "@/components/sections/skills/presale-disabled-section";
 import { WaitlistSection } from "@/components/sections/skills/waitlist-section";
 import { useCourseBadges } from "@/hooks/use-course-badges";
 import { CourseStartModal } from "@/components/modals/course-start-modal";
@@ -169,7 +168,7 @@ export default function SkillDetailPage() {
   const completedCount = skillModules?.progress?.completedLessonsCount ?? 0;
   const totalCount = skillModules?.progress?.totalLessonsCount ?? 0;
   const hasStarted = isAddedToProfile && completedCount > 0;
-  const presaleActive = !!skill.preSales?.isActive;
+  const presaleActive = !!skill.preSales;
   const isInWaitlist = !!skill.isInWaitlist;
 
   const handleLessonClick = (
@@ -422,9 +421,8 @@ export default function SkillDetailPage() {
 
 
       {/* Presale Section */}
-      <PresaleSection courseId={skill?.id} courseType="skill" enabled={skill?.presalesEnabled} />
-      <PresaleDisabledSection courseId={skill?.id} enabled={skill?.presalesEnabled} />
-      <WaitlistSection courseId={skill?.id} enrollmentCount={skill?.enrollmentCount} enabled={skill?.waitlistEnabled} />
+      <PresaleSection courseId={skill?.id} courseType="skill" presale={skill?.preSales} originalPrice={skill?.price} isPurchased={isPurchased} />
+      <WaitlistSection courseId={skill?.id} enrollmentCount={skill?.enrollmentCount} enabled={skill?.waitlistEnabled} isInWaitlist={skill?.isInWaitlist} hasPresale={!!skill?.preSales} />
 
       <section className="w-full py-8">
         <div className="container mx-auto px-4">

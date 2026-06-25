@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { ArrowRight, Users, Check, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -7,36 +8,40 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { MainButton } from '@/components/ui/main-button';
 import { useAuthStore } from '@/store/auth-store';
-import { usePresale } from '@/hooks/use-presale';
 import { useJoinWaitlist } from '@/hooks/use-waitlist';
 
 interface WaitlistSectionProps {
   courseId?: number;
   enrollmentCount?: number;
   enabled?: boolean;
+  isInWaitlist?: boolean;
+  /** Hide the waitlist CTA when an active presale is running */
+  hasPresale?: boolean;
 }
 
-export function WaitlistSection({ courseId, enrollmentCount = 0, enabled }: WaitlistSectionProps) {
+export function WaitlistSection({ courseId, enrollmentCount = 0, enabled, isInWaitlist, hasPresale }: WaitlistSectionProps) {
   const t = useTranslations('waitlist');
   const router = useRouter();
   const { user } = useAuthStore();
-  const { data: presale, isLoading: presaleLoading } = usePresale(enabled ? courseId : undefined);
   const joinWaitlist = useJoinWaitlist();
+  const [joined, setJoined] = useState(!!isInWaitlist);
+  const [error, setError] = useState(false);
 
-  if (!enabled) return null;
-  if (presaleLoading || presale) return null;
+  if (!enabled || hasPresale) return null;
 
   const handleWaitlist = async () => {
     if (!user) {
       router.push('/login');
       return;
     }
-    if (!courseId) return;
+    if (!courseId || joined) return;
+    setError(false);
     try {
       await joinWaitlist.mutateAsync(courseId);
+      setJoined(true);
       router.push('/classroom');
     } catch {
-      // Already in waitlist or error
+      setError(true);
     }
   };
 
@@ -84,14 +89,26 @@ export function WaitlistSection({ courseId, enrollmentCount = 0, enabled }: Wait
                 size="md"
                 className="rounded-xl flex flex-row items-center text-sm"
                 onClick={handleWaitlist}
-                disabled={joinWaitlist.isPending}
+                disabled={joinWaitlist.isPending || joined}
               >
                 {joinWaitlist.isPending && (
                   <Loader2 className="w-4 h-4 animate-spin inline mr-1" />
                 )}
-                {t('joinWaitlist')}
-                <ArrowRight className="w-4 h-4 inline ml-1" />
+                {joined ? (
+                  <>
+                    <Check className="w-4 h-4 inline mr-1" />
+                    {t('joined')}
+                  </>
+                ) : (
+                  <>
+                    {t('joinWaitlist')}
+                    <ArrowRight className="w-4 h-4 inline ml-1" />
+                  </>
+                )}
               </MainButton>
+              {error && (
+                <p className="mt-2 text-sm text-white/90">{t('errorJoin')}</p>
+              )}
             </div>
           </div>
 

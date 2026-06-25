@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { MainTitle } from "@/components/ui/main-title";
 import { Subtitle } from "@/components/ui/subtitle";
-import { getMediaUrl } from "@/lib/utils";
+import { getMediaUrl, getClientLocale } from "@/lib/utils";
 import type { Partner } from "@/types/api.types";
 import { useEffect, useState } from "react";
 
@@ -49,6 +49,7 @@ export function PartnersSection({
       try {
         const response = await fetch(
           `${API_BASE_URL}/partner/public?pageSize=20`,
+          { headers: { "Accept-Language": getClientLocale() } },
         );
         const data = await response.json();
         setPartners(data?.data?.data || []);

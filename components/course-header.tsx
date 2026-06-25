@@ -11,6 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useAuthStore } from "@/store/auth-store"
 import { useMe } from "@/hooks/use-me"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { MenuFeaturedCard } from "@/components/shared/menu-featured-card"
 
 interface CourseHeaderProps {
   variant?: 'light' | 'dark'
@@ -118,6 +119,9 @@ export function CourseHeader({ variant = 'dark' }: CourseHeaderProps) {
                     {tCommon("login")}
                   </Link>
                 )}
+                <div className="px-4 pb-4 pt-2">
+                  <MenuFeaturedCard onNavigate={() => setIsMobileOpen(false)} />
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

@@ -12,6 +12,7 @@ import { useAuthStore } from "@/store/auth-store"
 import { useMe } from "@/hooks/use-me"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { NotificationPanel } from "@/components/shared/notification-panel"
+import { MenuFeaturedCard } from "@/components/shared/menu-featured-card"
 
 function VibecoinBadge({ amount, isDark }: { amount: number; isDark: boolean }) {
   const formatted = new Intl.NumberFormat("ru-RU").format(amount)
@@ -105,6 +106,9 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
                 <div className="px-6 py-3 flex items-center justify-between">
                   <span className="text-sm font-medium text-white/70">{tNav("language")}</span>
                   <LanguageSwitcher isDark />
+                </div>
+                <div className="px-4 pb-4 pt-1">
+                  <MenuFeaturedCard onNavigate={() => setIsMobileMenuOpen(false)} />
                 </div>
               </motion.div>
             )}

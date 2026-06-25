@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
-import { getMediaUrl } from '@/lib/utils';
+import { getMediaUrl, getClientLocale } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import type { Partner } from '@/types/api.types';
@@ -52,7 +52,9 @@ export default function PartnerPage() {
   useEffect(() => {
     async function fetchPartner() {
       try {
-        const response = await fetch(`${API_BASE_URL}/partner/${partnerId}`);
+        const response = await fetch(`${API_BASE_URL}/partner/${partnerId}`, {
+          headers: { 'Accept-Language': getClientLocale() },
+        });
         if (!response.ok) {
           setError(true);
           return;

@@ -11,6 +11,7 @@ import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth-store';
 import { useMe } from '@/hooks/use-me';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { MenuFeaturedCard } from '@/components/shared/menu-featured-card';
 
 interface MenuItem {
   label: string;
@@ -93,6 +94,7 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-2">
+            <LanguageSwitcher isDark />
             {user ? (
               <Link href="/profile" className="rounded-full bg-white p-0.5">
                 <Avatar className="h-7 w-7">
@@ -120,34 +122,36 @@ export function Header() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="py-4 md:py-6 px-3 md:px-5 pt-4 flex flex-col gap-4 md:gap-6"
+              className="py-4 md:py-6 px-3 md:px-5 pt-4 flex flex-col md:flex-row md:items-stretch gap-4 md:gap-6"
             >
-              {/* Links */}
-              <div className="flex flex-col gap-4 md:gap-6">
-                {menuItems.map((item) => {
-                  const active = isActiveItem(item.href);
-                  return (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`text-lg md:text-xl lg:text-2xl font-bold transition-colors text-left w-fit ${
-                        active
-                          ? 'text-white/60 underline underline-offset-[6px] decoration-white/60'
-                          : 'text-white hover:text-[#3b66f5]'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
+              {/* Chap ustun: linklar + til */}
+              <div className="flex flex-col gap-4 md:gap-6 md:flex-1 md:justify-between">
+                <div className="flex flex-col gap-4 md:gap-6">
+                  {menuItems.map((item) => {
+                    const active = isActiveItem(item.href);
+                    return (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={`text-lg md:text-xl lg:text-2xl font-bold transition-colors text-left w-fit ${
+                          active
+                            ? 'text-white/60 underline underline-offset-[6px] decoration-white/60'
+                            : 'text-white hover:text-[#3b66f5]'
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* Til tanlash — menyu ichida */}
-              <div className="flex items-center gap-3 pt-2 border-t border-white/10">
-                <span className="text-sm font-medium text-white/70">{tNav('language')}</span>
-                <LanguageSwitcher isDark />
-              </div>
+              {/* O'ng ustun: featured card */}
+              <MenuFeaturedCard
+                onNavigate={() => setIsMenuOpen(false)}
+                className="w-full md:w-56 shrink-0"
+              />
             </motion.div>
           )}
         </AnimatePresence>

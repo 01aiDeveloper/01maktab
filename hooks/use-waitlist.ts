@@ -25,17 +25,3 @@ export function useJoinWaitlist() {
     },
   });
 }
-
-export function useLeaveWaitlist() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (courseId: number) => {
-      const res = await api.delete<ApiResponse<{ ok: boolean }>>(`/course/${courseId}/waitlist`);
-      return res.data.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['my-waitlist'] });
-    },
-  });
-}

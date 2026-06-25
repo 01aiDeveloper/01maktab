@@ -14,20 +14,26 @@ import { StatsSection } from "@/components/sections/home/stats-section";
 import { ContactSection } from "@/components/sections/home/contact-section";
 import { SiteFooter } from "@/components/layout/site-footer";
 import type { Partner, Career, Skill } from "@/types/api.types";
+import { getUserLocale } from "@/i18n/locale";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "https://app-dev.01ai.uz/api/v1";
 
 export default async function GuestHomePage() {
+  const locale = await getUserLocale();
+  const headers = { "Accept-Language": locale };
   // Fetch all public data in parallel using Next.js fetch with caching
   const [partnersRes, careersRes, skillsRes] = await Promise.all([
     fetch(`${API_BASE_URL}/partner/public?pageSize=20`, {
+      headers,
       next: { revalidate: 3600 }, // Cache for 1 hour
     }),
     fetch(`${API_BASE_URL}/course/public?format=PROFESSION`, {
+      headers,
       next: { revalidate: 3600 },
     }),
     fetch(`${API_BASE_URL}/course/public?format=SKILL`, {
+      headers,
       next: { revalidate: 3600 },
     }),
   ]);

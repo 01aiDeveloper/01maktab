@@ -66,9 +66,6 @@ export function PresaleQueuePage({ courseSlug, backHref = '/classroom' }: Presal
   const queueNumber = waitlistEntry?.queueNumber ?? 0;
 
   const modules: ModuleItem[] = skill.modules.map(toModuleItem);
-  if (modules.length > 0 && !openModule) {
-    // will set on next render
-  }
 
   const partner = skill.partners[0] ?? null;
   const mentor = skill.mentor;

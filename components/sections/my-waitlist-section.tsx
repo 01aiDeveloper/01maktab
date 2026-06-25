@@ -1,13 +1,12 @@
 "use client"
 
-import type { MouseEvent } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
-import { ArrowUpRight, Loader2, X } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
-import { useMyWaitlist, useLeaveWaitlist } from "@/hooks/use-waitlist"
+import { useMyWaitlist } from "@/hooks/use-waitlist"
 import { baseMediaUrl } from "@/lib/utils"
 import { StatusBadge } from "@/components/ui/status-badge"
 
@@ -20,15 +19,7 @@ function mediaUrl(path: string | null | undefined): string {
 export function MyWaitlistSection() {
   const t = useTranslations("userHome")
   const { data: entries, isLoading } = useMyWaitlist()
-  const leaveWaitlist = useLeaveWaitlist()
   const [emblaRef] = useEmblaCarousel({ loop: false, align: "start", slidesToScroll: 1 })
-
-  const handleRemove = (e: MouseEvent, courseId: number) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (!window.confirm(t("removeWaitlistConfirm"))) return
-    leaveWaitlist.mutate(courseId)
-  }
 
   if (isLoading || !entries || entries.length === 0) return null
 
@@ -77,21 +68,6 @@ export function MyWaitlistSection() {
                     <div className="absolute top-3 right-3 z-10">
                       <StatusBadge status="waitlist" size="sm" />
                     </div>
-
-                    <button
-                      type="button"
-                      onClick={(e) => handleRemove(e, entry.id)}
-                      disabled={leaveWaitlist.isPending}
-                      aria-label={t("removeFromWaitlist")}
-                      title={t("removeFromWaitlist")}
-                      className="absolute top-3 left-3 z-10 inline-flex items-center justify-center w-8 h-8 rounded-full bg-black/55 text-white hover:bg-black/75 transition-colors disabled:opacity-50 opacity-0 group-hover:opacity-100"
-                    >
-                      {leaveWaitlist.isPending && leaveWaitlist.variables === entry.id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <X className="w-4 h-4" />
-                      )}
-                    </button>
 
                     <div
                       className="absolute z-10 rounded-[20px] flex items-center justify-between gap-2 px-4 bg-white"

@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import { getClientLocale } from "@/lib/utils";
 
 // Get API base URL from environment variable
 const API_BASE_URL =
@@ -32,6 +33,8 @@ const getAuthStore = async () => {
 // Request interceptor - Add auth token to requests
 api.interceptors.request.use(
   async (config) => {
+    config.headers["Accept-Language"] = getClientLocale();
+
     // In dev stage, use the dev access token directly
     if (IS_DEV_STAGE && DEV_ACCESS_TOKEN) {
       config.headers.Authorization = `Bearer ${DEV_ACCESS_TOKEN}`;

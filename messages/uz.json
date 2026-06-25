@@ -268,6 +268,7 @@
     "unknownCourse": "Kurs",
     "removeFromWaitlist": "Ro'yxatdan chiqarish",
     "removeWaitlistConfirm": "Bu kursni kutish ro'yxatidan o'chirasizmi?",
+    "removeWaitlistError": "O'chirishda xatolik yuz berdi. Qayta urinib ko'ring.",
     "noCoursesMessage": "Bu yer hozircha bo'sh, kurslar qo'shishni boshlang",
     "noCoursesDescription": "Kurslar ro'yxatiga o'ting",
     "noCoursesButton": "Kurslarni ko'rish",
@@ -326,7 +327,9 @@
     "free": "Bepul",
     "notification": "Xabarnoma olasiz",
     "discountTitle": "Birinchilar uchun 10% chegirma",
-    "joinWaitlist": "Kutish ro'yxatiga kirish"
+    "joinWaitlist": "Kutish ro'yxatiga kirish",
+    "joined": "Siz ro'yxatdasiz",
+    "errorJoin": "Xatolik yuz berdi. Qayta urinib ko'ring."
   },
   "enrollmentCountdown": {
     "title": "Karyerangizni bugun boshlang",
