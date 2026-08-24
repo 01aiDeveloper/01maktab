@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useSmartBack } from '@/hooks/use-smart-back';
+import { useSmartBack } from '@/hooks/common/use-smart-back';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { EventHero } from '@/components/events/event-hero';

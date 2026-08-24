@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { useSmartBack } from '@/hooks/use-smart-back';
+import { useSmartBack } from '@/hooks/common/use-smart-back';
 import { ProductColorPicker } from './product-color-picker';
 import { ProductSizePicker } from './product-size-picker';
 import {

@@ -1,14 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import api from '@/lib/api';
-import type { ApiResponse, ApiCourse } from '@/types/api';
+import { queryKeys } from '@/constants/query-keys';
+import { courseApi } from '@/services/react-query/course';
 
 export function useCourse(id: string | number) {
   return useQuery({
-    queryKey: ['course', String(id)],
-    queryFn: async () => {
-      const res = await api.get<ApiResponse<ApiCourse>>(`/course/${id}/public`);
-      return res.data.data;
-    },
+    queryKey: queryKeys.course.detail(id),
+    queryFn: () => courseApi.getCourse(id),
     enabled: !!id,
   });
 }

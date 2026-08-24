@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { StepIndicator } from './step-indicator';
-import { useUpdateProfile } from '@/hooks/use-update-profile';
+import { useUpdateProfile } from '@/hooks/mutations/use-update-profile';
 
 interface UserInfo {
   firstName: string;

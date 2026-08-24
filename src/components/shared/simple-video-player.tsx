@@ -68,8 +68,8 @@ export default function SimpleVideoPlayer({
           ],
           autoplay,
           muted,
-          loop,
-          ratio: null, // Let it be responsive
+          loop: { active: loop },
+          ratio: undefined, // Let it be responsive
         });
 
         // Set the video source
@@ -118,7 +118,7 @@ export default function SimpleVideoPlayer({
           ],
           autoplay,
           muted,
-          loop,
+          loop: { active: loop },
         });
 
         // Set video source

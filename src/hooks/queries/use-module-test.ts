@@ -1,25 +1,26 @@
 import { useQuery, useQueries } from '@tanstack/react-query';
-import api from '@/lib/api';
-import { useAuthStore } from '@/store/auth-store';
+import { useAuth } from '@/hooks/common/use-auth';
+import { queryKeys } from '@/constants/query-keys';
+import { learningApi } from '@/services/react-query/learning';
 
 export interface TestOption {
-  id: number;
+  id: string;
   text: string;
   image: string | null;
 }
 
 export interface TestQuestion {
-  id: number;
+  id: string;
   text: string;
-  type: 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE';
+  type: 'SINGLE' | 'MULTIPLE' | 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE';
   points: number;
-  orderId: number;
+  orderIndex?: number;
   image: string | null;
   options: TestOption[];
 }
 
 export interface ModuleTest {
-  id: number;
+  id: string;
   name: string;
   passingPercentage: number;
   maxAttempts: number;
@@ -30,11 +31,8 @@ export interface ModuleTest {
 
 export function useModuleTest(moduleId: string | number | undefined) {
   return useQuery<ModuleTest>({
-    queryKey: ['module-test', String(moduleId)],
-    queryFn: async () => {
-      const res = await api.get(`/test/module/${moduleId}`);
-      return res.data?.data ?? res.data;
-    },
+    queryKey: queryKeys.lesson.moduleTest(moduleId ?? ''),
+    queryFn: () => learningApi.getModuleTest(moduleId!),
     enabled: !!moduleId,
     staleTime: 1000 * 60 * 5,
   });
@@ -44,23 +42,20 @@ export function useModuleTest(moduleId: string | number | undefined) {
  * Fetch questionsCount for multiple modules in parallel.
  * Returns a map: moduleId → questionsCount
  */
-export function useModuleTestCounts(moduleIds: number[]) {
-  const { accessToken } = useAuthStore();
+export function useModuleTestCounts(moduleIds: string[]) {
+  const { accessToken } = useAuth();
 
   const results = useQueries({
     queries: moduleIds.map((id) => ({
-      queryKey: ['module-test', String(id)],
-      queryFn: async () => {
-        const res = await api.get(`/test/module/${id}`);
-        return res.data?.data ?? res.data;
-      },
+      queryKey: queryKeys.lesson.moduleTest(id),
+      queryFn: () => learningApi.getModuleTest(id),
       enabled: !!accessToken,
       staleTime: 1000 * 60 * 5,
       retry: false,
     })),
   });
 
-  const counts = new Map<number, number>();
+  const counts = new Map<string, number>();
   moduleIds.forEach((id, i) => {
     const data = results[i]?.data as ModuleTest | undefined;
     if (data?.questionsCount != null) {

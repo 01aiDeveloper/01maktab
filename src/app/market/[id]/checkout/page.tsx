@@ -7,9 +7,9 @@ import { SiteFooter } from '@/components/layout/site-footer';
 import { StepConfirmInfo } from '@/components/payment/step-confirm-info';
 import { CheckoutStepPayment } from '@/components/market/checkout-step-payment';
 import { CheckoutStepSuccess } from '@/components/market/checkout-step-success';
-import { useAuthStore } from '@/store/auth-store';
-import { useProfile } from '@/hooks/use-profile';
-import { useMarketProduct } from '@/hooks/use-market';
+import { useAuth } from '@/hooks/common/use-auth';
+import { useProfile } from '@/hooks/queries/use-profile';
+import { useMarketProduct } from '@/hooks/queries/use-market';
 import { PageLoader } from '@/components/ui/page-loader';
 
 function CheckoutContent() {
@@ -19,7 +19,7 @@ function CheckoutContent() {
   const productId = params.id as string;
 
   const { data: profileData } = useProfile();
-  const storeUser = useAuthStore((state) => state.user);
+  const storeUser = useAuth((state) => state.user);
   const user = profileData ?? storeUser;
 
   const { data: product, isLoading } = useMarketProduct(productId);

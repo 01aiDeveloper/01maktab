@@ -6,7 +6,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { GraduateCarouselCard } from '@/components/cards/graduate-carousel-card';
-import api from '@/lib/api';
+import { graduateApi } from '@/services/react-query/graduate';
 import { getMediaUrl } from '@/lib/utils';
 
 type Graduate = {
@@ -37,10 +37,7 @@ export function GraduatesSection() {
   useEffect(() => {
     const fetchGraduates = async () => {
       try {
-        const response = await api.get('/graduate/public', {
-          params: { pageSize: 20 },
-        });
-        const data = response.data?.data?.data || response.data?.data || [];
+        const data = await graduateApi.getList(20);
         if (Array.isArray(data)) {
           setGraduates(data);
         }

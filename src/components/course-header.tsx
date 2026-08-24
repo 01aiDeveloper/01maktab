@@ -8,8 +8,8 @@ import { useTranslations } from "next-intl"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useAuthStore } from "@/store/auth-store"
-import { useMe } from "@/hooks/use-me"
+import { useAuth } from "@/hooks/common/use-auth"
+import { useMe } from "@/hooks/queries/use-me"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { MenuFeaturedCard } from "@/components/shared/menu-featured-card"
 
@@ -24,7 +24,7 @@ export function CourseHeader({ variant = 'dark' }: CourseHeaderProps) {
   const tCommon = useTranslations("common")
   const [isOpen, setIsOpen] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
-  const { user, logout } = useAuthStore()
+  const { user, logout } = useAuth()
   useMe()
 
   const isDark = variant === 'dark'

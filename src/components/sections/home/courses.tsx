@@ -6,16 +6,15 @@ import { useTranslations } from "next-intl"
 import { MainTitle } from "@/components/ui/main-title"
 import { Subtitle } from "@/components/ui/subtitle"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
-import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
-import { courseService } from "@/services/course.service"
-import { useApi } from "@/hooks/use-api"
+import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
+import { useCatalog } from "@/hooks/queries/use-catalog"
 import { getMediaUrl } from "@/lib/utils"
 import { NoData } from "@/components/shared/no-data"
-import { useAuthStore } from "@/store/auth-store"
+import { useAuth } from "@/hooks/common/use-auth"
 
 export function CoursesSection() {
   const t = useTranslations("courses")
-  const { user } = useAuthStore()
+  const { user } = useAuth()
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     loop: false,
@@ -26,12 +25,7 @@ export function CoursesSection() {
     useCarouselNavigation(emblaApi)
 
   // Fetch courses from API
-  const { data: coursesData, loading, error } = useApi(
-    () => courseService.getCourses({ format: "COURSE", pageSize: 10, asClient: !!user }),
-    { autoFetch: true }
-  )
-
-  const courses = coursesData?.data?.data || []
+  const { data: courses = [], isLoading: loading, error } = useCatalog("course", Boolean(user), 10)
 
   // Transform API data to component format
   const displayCourses = courses.map((course: any) => ({
@@ -80,7 +74,7 @@ export function CoursesSection() {
           </div>
         ) : error ? (
           <div className="text-center py-20">
-            <p className="text-red-500">{error}</p>
+            <p className="text-red-500">{error.message}</p>
           </div>
         ) : courses.length === 0 ? (
           <NoData message={t("noDataMessage")} description={t("noDataDescription")} />

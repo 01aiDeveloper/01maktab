@@ -45,7 +45,7 @@ export function ProductPaymentTabs({
           !coinAvailable && 'opacity-40 cursor-not-allowed',
         )}
       >
-        Оплатить VC'ами
+        Оплатить VC&apos;ами
       </button>
     </div>
   );

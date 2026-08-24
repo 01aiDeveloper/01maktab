@@ -2,13 +2,13 @@
 
 import React, { useState, useCallback } from "react"
 import { useTranslations } from "next-intl"
-import api from "@/lib/api"
-import { useAuthStore } from "@/store/auth-store"
+import { authApi } from "@/services/react-query/auth"
+import { useAuth } from "@/hooks/common/use-auth"
 import TelegramLoginButton from "@/components/auth/telegram-login-button"
 
 function LoginContent() {
   const t = useTranslations("login")
-  const { setTokens, setUser } = useAuthStore()
+  const { setTokens, setUser } = useAuth()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -27,14 +27,14 @@ function LoginContent() {
 
 
     try {
-      const response = await api.post("/auth/telegram/login", user)
+      const data = await authApi.telegramLogin(user)
 
-      if (response.data?.data) {
-        const { accessToken, refreshToken, prompt } = response.data.data
+      if (data) {
+        const { accessToken, refreshToken, prompt } = data
         setTokens(accessToken, refreshToken, prompt)
 
-        if (response.data.data.user) {
-          setUser(response.data.data.user)
+        if (data.user) {
+          setUser(data.user)
         }
       }
 

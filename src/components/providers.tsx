@@ -1,26 +1,15 @@
-'use client';
+"use client"
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState } from 'react';
+import StoreProvider from "@/providers/StoreProvider"
+import TanstackQueryProvider from "@/providers/TanstackQueryProvider"
+import NotificationStreamProvider from "@/providers/NotificationStreamProvider"
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 5 * 60 * 1000, // 5 minut cache
-            gcTime: 10 * 60 * 1000, // 10 minut garbage collection
-            refetchOnWindowFocus: false,
-            retry: 1,
-          },
-        },
-      })
-  );
-
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
-  );
+    <StoreProvider>
+      <TanstackQueryProvider>
+        <NotificationStreamProvider>{children}</NotificationStreamProvider>
+      </TanstackQueryProvider>
+    </StoreProvider>
+  )
 }

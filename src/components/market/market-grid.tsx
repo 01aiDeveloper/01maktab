@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { MarketProductCard } from '@/components/cards/market-product-card';
-import { useMarketProducts } from '@/hooks/use-market';
+import { useMarketProducts } from '@/hooks/queries/use-market';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function MarketGrid() {
@@ -23,7 +23,7 @@ export function MarketGrid() {
   if (isError || !data) {
     return (
       <section className="container py-2">
-        <p className="text-center text-neutral-500">Mahsulotlarni yuklab bo'lmadi.</p>
+        <p className="text-center text-neutral-500">Mahsulotlarni yuklab bo&apos;lmadi.</p>
       </section>
     );
   }

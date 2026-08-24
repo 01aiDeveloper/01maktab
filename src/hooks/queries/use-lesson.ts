@@ -1,15 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import api from '@/lib/api';
-import type { ApiResponse } from '@/types/api';
-import type { Lesson } from '@/types/lesson';
+import { queryKeys } from '@/constants/query-keys';
+import { learningApi } from '@/services/react-query/learning';
 
 export function useLesson(id: string | number) {
   return useQuery({
-    queryKey: ['lesson', String(id)],
-    queryFn: async () => {
-      const res = await api.get<ApiResponse<Lesson>>(`/lesson/${id}`);
-      return res.data.data;
-    },
+    queryKey: queryKeys.lesson.detail(id),
+    queryFn: () => learningApi.getLesson(id),
     enabled: !!id,
     retry: (failureCount, error: any) => {
       // 401 da retry qilmaymiz

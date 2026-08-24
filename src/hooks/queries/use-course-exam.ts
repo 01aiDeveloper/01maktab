@@ -1,16 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import api from '@/lib/api';
-import type { ModuleTest } from '@/hooks/use-module-test';
+import type { ModuleTest } from '@/hooks/queries/use-module-test';
+import { queryKeys } from '@/constants/query-keys';
+import { courseApi } from '@/services/react-query/course';
 
 export type CourseExam = ModuleTest;
 
 export function useCourseExam(courseId: string | number | undefined) {
   return useQuery<CourseExam>({
-    queryKey: ['course-exam', String(courseId)],
-    queryFn: async () => {
-      const res = await api.get(`/exam/course/${courseId}`);
-      return res.data?.data ?? res.data;
-    },
+    queryKey: queryKeys.course.exam(courseId ?? ''),
+    queryFn: () => courseApi.getExam(courseId!),
     enabled: !!courseId,
     staleTime: 1000 * 60 * 5,
   });

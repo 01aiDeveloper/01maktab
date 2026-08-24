@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, User, LogOut, Menu, X, Info, Trophy, Award, CreditCard, Monitor } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { useAuthStore } from "@/store/auth-store"
-import { useMe } from "@/hooks/use-me"
+import { useAuth } from "@/hooks/common/use-auth"
+import { useMe } from "@/hooks/queries/use-me"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { NotificationPanel } from "@/components/shared/notification-panel"
 import { MenuFeaturedCard } from "@/components/shared/menu-featured-card"
@@ -54,7 +54,7 @@ export function SiteHeader({ variant = 'dark' }: SiteHeaderProps) {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false)
-  const { user, logout } = useAuthStore()
+  const { user, logout } = useAuth()
   useMe()
   const pathname = usePathname()
 

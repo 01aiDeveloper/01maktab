@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import api from '@/lib/api';
+import { queryKeys } from '@/constants/query-keys';
+import { courseApi, type CourseKind } from '@/services/react-query/course';
 
 interface CoursePublicInfo {
   id: number;
@@ -16,18 +17,8 @@ interface CoursePublicInfo {
 
 export function useCourseInfo(courseId: string | number | undefined, courseType: string = 'course') {
   return useQuery<CoursePublicInfo>({
-    queryKey: ['course-info', courseType, courseId],
-    queryFn: async () => {
-      const endpoint =
-        courseType === 'skill'
-          ? `/skill/${courseId}/public/info`
-          : courseType === 'profession'
-          ? `/profession/${courseId}/public/info`
-          : `/course/${courseId}/public/info`;
-
-      const res = await api.get(endpoint);
-      return res.data?.data ?? res.data;
-    },
+    queryKey: queryKeys.course.info(courseType, courseId ?? ''),
+    queryFn: () => courseApi.getPublicInfo(courseType as CourseKind, courseId!),
     enabled: !!courseId,
     staleTime: 1000 * 60 * 5,
   });

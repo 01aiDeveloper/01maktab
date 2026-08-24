@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useSmartBack } from '@/hooks/use-smart-back';
+import { useSmartBack } from '@/hooks/common/use-smart-back';
 
 export function ProfileHero() {
   const t = useTranslations('profile');

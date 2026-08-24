@@ -9,7 +9,10 @@ import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
 import { MainButton } from '@/components/ui/main-button';
 import { EnrollmentBadge } from '@/components/ui/enrollment-badge';
-import type { Career } from '@/types/api.types';
+import type { Career } from '@/types/common';
+import type { ComponentProps } from 'react';
+
+type MainButtonVariant = ComponentProps<typeof MainButton>['variant'];
 
 const STATIC_IMAGES = ['/images/hero4.jpg', '/images/hero6.jpg'];
 const STATIC_TITLE_KEYS = ['dataAnalyst', 'mlEngineer'] as const;
@@ -35,7 +38,7 @@ export function CareersSection({ careers: apiCareers }: CareersSectionProps) {
         title: titleKey ? t(`staticTitles.${titleKey}`) : career.name,
         cardColor: index % 2 === 0 ? 'bg-[#111111]' : 'bg-gray-100',
         textColor: index % 2 === 0 ? 'text-white' : 'text-black',
-        buttonVariant: (index % 2 === 0 ? 'gradient' : 'black'),
+        buttonVariant: (index % 2 === 0 ? 'gradient' : 'black') as MainButtonVariant,
         titleClassName: index === 1 ? '!lg:text-[55px]' : '',
         imageUrl: STATIC_IMAGES[index] || '/placeholder.svg',
         slug: career.slug || career.name.toLowerCase().replace(/\s+/g, '-'),

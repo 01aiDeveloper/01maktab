@@ -6,7 +6,7 @@ import { EventCard } from "@/components/shared/event-card"
 import { MainTitle } from "@/components/ui/main-title"
 import { Subtitle } from "@/components/ui/subtitle"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
-import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
+import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
 
 const EVENT_META = [
   { title: "ML Contest", category: "ML Contest", locked: true, imageUrl: "/images/event.webp" },

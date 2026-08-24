@@ -5,12 +5,12 @@ import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { useUpdateProfile } from '@/hooks/use-update-profile';
+import { useUpdateProfile } from '@/hooks/mutations/use-update-profile';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { REGIONS } from '@/constants/regions';
+import { useRegions } from '@/hooks/queries/use-address';
 import { Search } from 'lucide-react';
 
 const DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1));
@@ -36,6 +36,7 @@ interface ProfileSetupModalProps {
 const inputCls = 'h-12.5! rounded-[10px] border-gray-200 text-sm text-gray-900';
 
 export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
+  const { data: regions = [] } = useRegions();
   const t = useTranslations('profileSetup');
   const { updateProfile, isLoading: isSubmitting, error, setError } = useUpdateProfile();
 
@@ -244,9 +245,9 @@ export function ProfileSetupModal({ isOpen, onClose }: ProfileSetupModalProps) {
                       <SelectValue placeholder={t('regionPlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
-                      {REGIONS.map((r) => (
-                        <SelectItem key={r.value} value={r.value}>
-                          {r.label}
+                      {regions.map((region) => (
+                        <SelectItem key={region.id} value={region.region}>
+                          {region.region}
                         </SelectItem>
                       ))}
                     </SelectContent>

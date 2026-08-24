@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import api from '@/lib/api';
+import { userApi } from '@/services/react-query/user';
 import { NoData } from '@/components/ui/no-data';
 import { MyCertificateCard } from '@/components/cards/my-certificate-card';
 import { CustomPagination } from '@/components/ui/custom-pagination';
-import type { ApiResponse, PaginatedResponse, CourseCertificate } from '@/types/api.types';
+import type { PaginatedResponse, CourseCertificate } from '@/types/common';
 
 const PAGE_SIZE = 12;
 
@@ -15,18 +15,13 @@ export function TabCertificates() {
   const t = useTranslations('profile');
   const [page, setPage] = useState(1);
 
-  const { data, isLoading } = useQuery<ApiResponse<PaginatedResponse<CourseCertificate>>>({
+  const { data, isLoading } = useQuery<PaginatedResponse<CourseCertificate>>({
     queryKey: ['my-certificates', page],
-    queryFn: async () => {
-      const res = await api.get('/course-certificate/my', {
-        params: { pageNumber: page, pageSize: PAGE_SIZE },
-      });
-      return res.data;
-    },
+    queryFn: () => userApi.getCertificates(page, PAGE_SIZE),
   });
 
-  const items = data?.data?.data ?? [];
-  const pagination = data?.data?.meta?.pagination;
+  const items = data?.data ?? [];
+  const pagination = data?.meta?.pagination;
   const pageCount = pagination?.pageCount ?? 1;
 
   if (isLoading) {

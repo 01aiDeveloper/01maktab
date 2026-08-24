@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
-import { useSmartBack } from '@/hooks/use-smart-back';
+import { useSmartBack } from '@/hooks/common/use-smart-back';
 
 // NOTE: Market section vaqtincha yopiq. Original render saqlangan, kerak bo'lganda qaytariladi:
 // import { MarketHero } from '@/components/market/market-hero';

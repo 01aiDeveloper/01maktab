@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { ArrowLeft, ArrowRight, Clock, BarChart3 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useSmartBack } from '@/hooks/use-smart-back';
+import { useSmartBack } from '@/hooks/common/use-smart-back';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { MainButton } from '@/components/ui/main-button';

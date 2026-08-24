@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useAuthStore } from '@/store/auth-store';
+import { useAuth } from '@/hooks/common/use-auth';
 import type { MarketProduct, ProductStatus } from '@/types/market';
 
 interface MarketProductCardProps {
@@ -34,7 +34,7 @@ const CoinIcon = ({ className }: { className?: string }) => (
 );
 
 export function MarketProductCard({ product }: MarketProductCardProps) {
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const userCoins = user?.coins ?? 0;
   const isCoinOnly = product.status === 'COIN_ONLY';
   const insufficient = isCoinOnly && userCoins < product.priceCoin;

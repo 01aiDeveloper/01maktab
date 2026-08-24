@@ -4,11 +4,11 @@ import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { useTranslations } from "next-intl"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
-import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
+import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
 import { MyCourseCard } from "@/components/cards/my-course-card"
 import { NoData } from "@/components/shared/no-data"
 import { PageLoader } from "@/components/ui/page-loader"
-import { useMyCourses } from "@/hooks/use-my-courses"
+import { useMyCourses } from "@/hooks/queries/use-my-courses"
 
 export function MyCoursesSection() {
   const t = useTranslations("userHome")

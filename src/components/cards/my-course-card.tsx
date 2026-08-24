@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Folder, FileText, Pause } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { getMediaUrl } from '@/lib/utils';
-import type { MyCourseItem } from '@/hooks/use-my-courses';
+import type { MyCourseItem } from '@/hooks/queries/use-my-courses';
 
 interface MyCourseCardProps {
   item: MyCourseItem;

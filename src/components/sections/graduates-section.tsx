@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
-import api from '@/lib/api';
+import { graduateApi } from '@/services/react-query/graduate';
 import { getMediaUrl } from '@/lib/utils';
 
 type Graduate = {
@@ -26,10 +26,7 @@ export function GraduatesSection() {
   useEffect(() => {
     const fetchGraduates = async () => {
       try {
-        const response = await api.get('/graduate/public', {
-          params: { pageSize: 20 },
-        });
-        const all: Graduate[] = response.data?.data?.data || response.data?.data || [];
+        const all = (await graduateApi.getList(20)) as Graduate[];
         // Take last 2 graduates
         setGraduates(all.slice(-2));
       } catch (error) {

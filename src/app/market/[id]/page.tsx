@@ -8,7 +8,7 @@ import { SiteFooter } from '@/components/layout/site-footer';
 import { ProductDetailInfo } from '@/components/market/product-detail-info';
 import { ProductDetailGallery } from '@/components/market/product-detail-gallery';
 import { RelatedProductsCarousel } from '@/components/market/related-products-carousel';
-import { useMarketProduct, useMarketProducts } from '@/hooks/use-market';
+import { useMarketProduct, useMarketProducts } from '@/hooks/queries/use-market';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProductDetailPage() {

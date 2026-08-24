@@ -5,24 +5,24 @@ import Image from 'next/image';
 import { Pencil } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useAuthStore } from '@/store/auth-store';
-import { useUpdateProfile } from '@/hooks/use-update-profile';
-import { useUploadFile } from '@/hooks/use-upload-file';
+import { useAuth } from '@/hooks/common/use-auth';
+import { useUpdateProfile } from '@/hooks/mutations/use-update-profile';
+import { useUploadFile } from '@/hooks/mutations/use-upload-file';
 import { getMediaUrl } from '@/lib/utils';
-import api from '@/lib/api';
+import { userApi } from '@/services/react-query/user';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Search, CalendarIcon } from 'lucide-react';
-import { REGIONS } from '@/constants/regions';
+import { useRegions } from '@/hooks/queries/use-address';
 import { format } from 'date-fns';
 import { SuccessModal } from '@/components/ui/success-modal';
 
 export function TabPersonalInfo() {
   const t = useTranslations('profile');
-  const user = useAuthStore((state) => state.user);
+  const user = useAuth((state) => state.user);
   const { updateProfile, isLoading: saving } = useUpdateProfile();
   const { uploadFile, isUploading } = useUploadFile();
   const router = useRouter();
@@ -32,6 +32,7 @@ export function TabPersonalInfo() {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [successOpen, setSuccessOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { data: regions = [] } = useRegions();
 
   const setEditing = (value: boolean) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -86,7 +87,7 @@ export function TabPersonalInfo() {
     return date.toLocaleDateString('ru-RU');
   };
 
-  const { setUser } = useAuthStore();
+  const { setUser } = useAuth();
 
   const handleSave = async () => {
     try {
@@ -104,8 +105,8 @@ export function TabPersonalInfo() {
         region: form.region || undefined,
         ...(avatarUrl ? { photo: avatarUrl } : {}),
       });
-      const res = await api.get('/user/me');
-      if (res.data?.data) setUser(res.data.data);
+      const refreshedUser = await userApi.getMe();
+      if (refreshedUser) setUser(refreshedUser);
       setAvatarFile(null);
       setEditing(false);
       setSuccessOpen(true);
@@ -169,9 +170,9 @@ export function TabPersonalInfo() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {REGIONS.map((region) => (
-                    <SelectItem key={region.value} value={region.value}>
-                      {region.label}
+                  {regions.map((region) => (
+                    <SelectItem key={region.id} value={region.region}>
+                      {region.region}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -279,7 +280,9 @@ export function TabPersonalInfo() {
           </div>
           <div>
             <p className="text-xs text-gray-600 mb-1">{t('region')}</p>
-            <p className="text-sm font-medium text-gray-900">{REGIONS.find((r) => r.value === user?.region)?.label || '—'}</p>
+            <p className="text-sm font-medium text-gray-900">
+              {regions.find((region) => region.region === user?.region || region.id === user?.region)?.region || user?.region || '—'}
+            </p>
           </div>
           <div>
             <p className="text-xs text-gray-600 mb-1">{t('lastname')}</p>

@@ -1,14 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import api from '@/lib/api';
-import type { ApiResponse, ApiSkill } from '@/types/api';
+import { courseApi } from '@/services/react-query/course';
 
 export function useSkill(id: string | number) {
   return useQuery({
     queryKey: ['skill', String(id)],
-    queryFn: async () => {
-      const res = await api.get<ApiResponse<ApiSkill>>(`/course/skill/${id}/public`);
-      return res.data.data;
-    },
+    queryFn: () => courseApi.getSkill(id),
     enabled: !!id,
   });
 }

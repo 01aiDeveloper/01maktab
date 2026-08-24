@@ -15,10 +15,10 @@ import { GraduateCarouselCard } from '@/components/cards/graduate-carousel-card'
 import { CarouselNavigation } from '@/components/ui/carousel-navigation';
 import { GraduateStory, GraduateStoryCard } from '@/types/story';
 import { getMediaUrl } from '@/lib/utils';
-import api from '@/lib/api';
+import { graduateApi } from '@/services/react-query/graduate';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
-import { useSmartBack } from '@/hooks/use-smart-back';
+import { useSmartBack } from '@/hooks/common/use-smart-back';
 
 export default function GraduateStoryPage() {
   const t = useTranslations('graduatePage');
@@ -43,19 +43,15 @@ export default function GraduateStoryPage() {
         setLoading(true);
         setError(false);
 
-        const response = await api.get(`/graduate/public/${params.id}`);
-        if (response.data?.data) {
-          setStory(response.data.data);
+        const storyData = await graduateApi.getOne(String(params.id));
+        if (storyData) {
+          setStory(storyData);
         } else {
           setError(true);
         }
 
-        const othersResponse = await api.get('/graduate/public', {
-          params: { pageSize: 8 },
-        });
-
-        if (othersResponse.data?.data) {
-          const allStories = othersResponse.data?.data?.data || othersResponse.data?.data || [];
+        const allStories = await graduateApi.getList(8);
+        if (allStories) {
           const filteredStories = allStories.filter((s: GraduateStoryCard) => s.id !== Number(params.id));
           setOtherStories(filteredStories);
         }

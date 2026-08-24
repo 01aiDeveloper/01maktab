@@ -7,11 +7,11 @@ import { useTranslations } from "next-intl"
 import { SkillCard } from "@/components/cards/skill-card"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { MainTitle } from "@/components/ui/main-title"
-import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
+import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
 import { Subtitle } from "@/components/ui/subtitle"
 import { NoData } from "@/components/shared/no-data"
 import { getMediaUrl } from "@/lib/utils"
-import type { Skill } from "@/types/api.types"
+import type { Skill } from "@/types/common"
 
 interface SkillsSectionProps {
   skills: Skill[]

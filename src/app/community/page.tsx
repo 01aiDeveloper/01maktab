@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
-import { useSmartBack } from '@/hooks/use-smart-back';
+import { useSmartBack } from '@/hooks/common/use-smart-back';
 
 export default function CommunityPage() {
   const t = useTranslations('community');

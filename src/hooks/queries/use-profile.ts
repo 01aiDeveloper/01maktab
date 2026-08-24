@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import api from '@/lib/api';
-import { useAuthStore } from '@/store/auth-store';
+import { useAuth } from '@/hooks/common/use-auth';
+import { queryKeys } from '@/constants/query-keys';
+import { userApi } from '@/services/react-query/user';
 
 interface ProfileData {
   id?: number;
@@ -16,14 +17,13 @@ interface ProfileData {
 }
 
 export function useProfile() {
-  const setUser = useAuthStore((state) => state.setUser);
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const setUser = useAuth((state) => state.setUser);
+  const isAuthenticated = useAuth((state) => state.isAuthenticated);
 
   return useQuery<ProfileData>({
-    queryKey: ['profile', 'me'],
+    queryKey: queryKeys.auth.me,
     queryFn: async () => {
-      const res = await api.get('/user/me');
-      const data: ProfileData = res.data?.data ?? res.data;
+      const data: ProfileData = await userApi.getMe();
       setUser(data);
       return data;
     },

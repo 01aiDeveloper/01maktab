@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { MainTitle } from "@/components/ui/main-title";
 import { Subtitle } from "@/components/ui/subtitle";
 import { getMediaUrl, getClientLocale } from "@/lib/utils";
-import type { Partner } from "@/types/api.types";
+import type { Partner } from "@/types/common";
 import { useEffect, useState } from "react";
 
 const API_BASE_URL =

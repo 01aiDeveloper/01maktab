@@ -11,8 +11,8 @@ interface MentorCardProps {
   name: string;
   role: string;
   imageUrl: string;
-  videoType: VideoType;
-  videoSrc: string;
+  videoType?: VideoType;
+  videoSrc?: string;
 }
 
 const extractYouTubeId = (url: string): string | null => {
@@ -33,8 +33,8 @@ export function MentorCard({
   name,
   role,
   imageUrl,
-  videoType,
-  videoSrc,
+  videoType = "video",
+  videoSrc = "",
 }: MentorCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -42,9 +42,10 @@ export function MentorCard({
   const [showControls, setShowControls] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const controlsTimer = useRef<NodeJS.Timeout>();
+  const controlsTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  const videoId = videoType === "youtube" ? extractYouTubeId(videoSrc) : null;
+  const hasVideo = Boolean(videoSrc);
+  const videoId = videoType === "youtube" && hasVideo ? extractYouTubeId(videoSrc) : null;
   const thumbnail = videoId
     ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
     : imageUrl;
@@ -66,6 +67,7 @@ export function MentorCard({
 
   const togglePlay = (e?: React.MouseEvent) => {
     e?.stopPropagation();
+    if (!hasVideo) return;
     if (videoType === "youtube" && iframeRef.current) {
       const cmd = isPlaying ? "pauseVideo" : "playVideo";
       iframeRef.current.contentWindow?.postMessage(
@@ -74,7 +76,8 @@ export function MentorCard({
       );
       setIsPlaying(!isPlaying);
     } else if (videoRef.current) {
-      isPlaying ? videoRef.current.pause() : videoRef.current.play();
+      if (isPlaying) videoRef.current.pause();
+      else void videoRef.current.play();
       setIsPlaying(!isPlaying);
     }
     showControlsTemporarily();
@@ -99,10 +102,10 @@ export function MentorCard({
     <motion.div
       whileHover={{ y: -6 }}
       transition={{ duration: 0.25 }}
-      onClick={togglePlay}
+      onClick={hasVideo ? togglePlay : undefined}
       onMouseMove={() => isPlaying && showControlsTemporarily()}
       onMouseLeave={() => setShowControls(false)}
-      className="relative overflow-hidden rounded-[25px] bg-black cursor-pointer select-none"
+      className={`relative overflow-hidden rounded-[25px] bg-black select-none ${hasVideo ? "cursor-pointer" : "cursor-default"}`}
       style={{ width: "310px", height: "410px" }}
     >
       {/* Thumbnail */}
@@ -121,7 +124,7 @@ export function MentorCard({
       </AnimatePresence>
 
       {/* Video layer */}
-      <div
+      {hasVideo && <div
         className={`absolute inset-0 transition-opacity duration-300 ${isPlaying ? "opacity-100" : "opacity-0 pointer-events-none"}`}
       >
         {videoType === "youtube" && videoId ? (
@@ -154,10 +157,10 @@ export function MentorCard({
             onEnded={() => setIsPlaying(false)}
           />
         )}
-      </div>
+      </div>}
 
       {/* Play tugmasi */}
-      {!isPlaying && (
+      {!isPlaying && hasVideo && (
         <div className="absolute inset-0 flex items-center justify-center z-10">
           <motion.button
             onClick={togglePlay}

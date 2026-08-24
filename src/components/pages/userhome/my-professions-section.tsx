@@ -3,7 +3,7 @@
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
-import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
+import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
 import { MyEnrolledCard } from "@/components/cards/my-enrolled-card"
 
 const professions = [

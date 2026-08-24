@@ -14,14 +14,14 @@ import { HomeGraduatesSection } from '@/components/sections/home/home-graduates-
 import { StatsSection } from '@/components/sections/home/stats-section';
 
 import { ProfileSetupModal } from '@/components/auth/profile-setup-modal';
-import { useAuthStore } from '@/store/auth-store';
+import { useAuth } from '@/hooks/common/use-auth';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MainButton } from '@/components/ui/main-button';
-import api from '@/lib/api';
+import { userApi } from '@/services/react-query/user';
 
 export default function PrivateHomePage() {
   const t = useTranslations('userHome');
-  const { user, setUser, isAuthenticated } = useAuthStore();
+  const { user, setUser, isAuthenticated } = useAuth();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   // Fetch user data from API and check if profile is complete
@@ -32,9 +32,8 @@ export default function PrivateHomePage() {
       }
 
       try {
-        const response = await api.get('/user/me');
-        if (response.data?.data) {
-          const userData = response.data.data;
+        const userData = await userApi.getMe();
+        if (userData) {
           setUser(userData);
 
           // Agar user firstname yoki lastname bo'lmasa, modal ochiladi

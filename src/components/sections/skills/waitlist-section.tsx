@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { MainButton } from '@/components/ui/main-button';
-import { useAuthStore } from '@/store/auth-store';
-import { useJoinWaitlist } from '@/hooks/use-waitlist';
+import { useAuth } from '@/hooks/common/use-auth';
+import { useJoinWaitlist } from '@/hooks/mutations/use-waitlist';
 
 interface WaitlistSectionProps {
   courseId?: number;
@@ -22,7 +22,7 @@ interface WaitlistSectionProps {
 export function WaitlistSection({ courseId, enrollmentCount = 0, enabled, isInWaitlist, hasPresale }: WaitlistSectionProps) {
   const t = useTranslations('waitlist');
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const joinWaitlist = useJoinWaitlist();
   const [joined, setJoined] = useState(!!isInWaitlist);
   const [error, setError] = useState(false);

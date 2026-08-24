@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
-import api from '@/lib/api';
+import { courseApi } from '@/services/react-query/course';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { MentorCard } from '@/components/cards/mentor-card';
@@ -24,18 +24,18 @@ import { CertificateSection } from '@/components/sections/courses/certificate-se
 import { EnrollmentCTASection } from '@/components/sections/courses/enrollment-cta-section';
 import { HomeGraduatesSection } from '@/components/sections/home/home-graduates-section';
 import { PartnersSection } from '@/components/sections/home/partners';
-import { useCourse } from '@/hooks/use-course';
-import { useCourseModules } from '@/hooks/use-course-modules';
-import { useMyCourses } from '@/hooks/use-my-courses';
+import { useCourse } from '@/hooks/queries/use-course';
+import { useCourseModules } from '@/hooks/queries/use-course-modules';
+import { useMyCourses } from '@/hooks/queries/use-my-courses';
 import { baseMediaUrl } from '@/lib/utils';
 import { pickResumeLesson } from '@/lib/lesson-utils';
 import type { ApiCourseModule, ApiProject } from '@/types/api';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
-import { useAuthStore } from '@/store/auth-store';
+import { useAuth } from '@/hooks/common/use-auth';
 import { PresaleSection } from '@/components/sections/skills/presale-section';
 import { WaitlistSection } from '@/components/sections/skills/waitlist-section';
-import { useCourseBadges } from '@/hooks/use-course-badges';
+import { useCourseBadges } from '@/hooks/queries/use-course-badges';
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -104,7 +104,7 @@ export default function CoursePage() {
     { id: '6', question: t('faqs.q6'), answer: t('faqs.a6') },
   ];
 
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const { data: course, isLoading, isError } = useCourse(slug);
   const { data: courseModules } = useCourseModules(course?.id);
   const { data: courseBadges } = useCourseBadges(course?.id);
@@ -123,7 +123,7 @@ export default function CoursePage() {
       const alreadyAdded = !!course.hasPurchased || !!myCourses?.some((c) => String(c.id) === String(course.id));
       if (!alreadyAdded) {
         try {
-          await api.post(`/course/${course.id}/enroll`);
+          await courseApi.enroll(course.id);
         } catch (err: unknown) {
           const status = (err as { response?: { status?: number } })?.response?.status;
           if (status === 400 && course.pricingType !== 'FREE') {
@@ -246,7 +246,13 @@ export default function CoursePage() {
 
       {/* Learning Outcomes Section */}
       <div id="nima-organasiz">
-        <LearningOutcomesSection courseOutcomes={course?.courseOutcomes || ""} />
+        <LearningOutcomesSection
+          courseOutcomes={
+            Array.isArray(course.courseOutcomes)
+              ? course.courseOutcomes.map((outcome) => `${outcome.title}: ${outcome.description}`).join('\n')
+              : course.courseOutcomes || ''
+          }
+        />
       </div>
 
       {/* Skills and Instruments Section */}

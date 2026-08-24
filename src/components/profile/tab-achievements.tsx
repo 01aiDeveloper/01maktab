@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { getMediaUrl } from '@/lib/utils';
-import api from '@/lib/api';
+import { userApi } from '@/services/react-query/user';
 import { NoData } from '@/components/ui/no-data';
-import type { ApiResponse, PaginatedResponse, CourseBadge } from '@/types/api.types';
+import type { PaginatedResponse, CourseBadge } from '@/types/common';
 import { MainTitle } from '../ui/main-title';
 import { CustomPagination } from '@/components/ui/custom-pagination';
 
@@ -17,21 +17,16 @@ export function TabAchievements() {
   const t = useTranslations('profile');
   const [page, setPage] = useState(1);
 
-  const { data, isLoading } = useQuery<ApiResponse<PaginatedResponse<CourseBadge>>>({
+  const { data, isLoading } = useQuery<PaginatedResponse<CourseBadge>>({
     queryKey: ['my-badges', page],
-    queryFn: async () => {
-      const res = await api.get('/course-badge/my', {
-        params: { pageNumber: page, pageSize: PAGE_SIZE },
-      });
-      return res.data;
-    },
+    queryFn: () => userApi.getAchievements(page, PAGE_SIZE),
   });
 
-  const allItems = data?.data?.data ?? [];
+  const allItems = data?.data ?? [];
   // Faqat real olingan (claimed) badge'larni ko'rsatamiz — backend qaytargan
   // template/test badge'larni (isClaimed=false, kulrang) yashiramiz.
   const items = allItems.filter((item) => item.isClaimed);
-  const pagination = data?.data?.meta?.pagination;
+  const pagination = data?.meta?.pagination;
   const pageCount = pagination?.pageCount ?? 1;
 
   if (isLoading) {

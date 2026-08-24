@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { useUpdateProfile } from '@/hooks/use-update-profile';
+import { useUpdateProfile } from '@/hooks/mutations/use-update-profile';
 
 interface ProfileSetupProps {
   onBack: () => void;
@@ -53,23 +53,6 @@ export function ProfileSetup({ onBack, onComplete, isModal }: ProfileSetupProps)
       // error is handled inside hook
     }
   };
-
-  const regions = [
-    'Toshkent shahri',
-    'Toshkent viloyati',
-    'Andijon',
-    'Buxoro',
-    "Farg'ona",
-    'Jizzax',
-    'Xorazm',
-    'Namangan',
-    'Navoiy',
-    'Qashqadaryo',
-    'Samarqand',
-    'Sirdaryo',
-    'Surxondaryo',
-    "Qoraqalpog'iston Respublikasi",
-  ];
 
   const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString());
   const months = [t('months.1'), t('months.2'), t('months.3'), t('months.4'), t('months.5'), t('months.6'), t('months.7'), t('months.8'), t('months.9'), t('months.10'), t('months.11'), t('months.12')];

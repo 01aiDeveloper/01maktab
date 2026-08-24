@@ -6,10 +6,11 @@ import { useQuery, useQueries } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { CatalogCard } from '@/components/cards/catalog-card';
 import { NoData } from '@/components/ui/no-data';
-import { useAuthStore } from '@/store/auth-store';
-import { useMyCourses, useMySkills, useMyProfessions } from '@/hooks/use-my-courses';
-import api from '@/lib/api';
+import { useAuth } from '@/hooks/common/use-auth';
+import { useMyCourses, useMySkills, useMyProfessions } from '@/hooks/queries/use-my-courses';
 import { getMediaUrl } from '@/lib/utils';
+import { catalogApi } from '@/services/react-query/catalog';
+import type { CourseKind } from '@/services/react-query/course';
 
 type TabKey = 'skills' | 'courses' | 'professions';
 
@@ -39,10 +40,10 @@ interface CatalogItem {
   hasPurchased?: boolean;
 }
 
-const detailPaths: Record<TabKey, (id: number) => string> = {
-  skills: (id) => `/course/skill/${id}/public`,
-  courses: (id) => `/course/${id}/public`,
-  professions: (id) => `/course/profession/${id}/public`,
+const courseKinds: Record<TabKey, CourseKind> = {
+  skills: 'skill',
+  courses: 'course',
+  professions: 'profession',
 };
 
 export function CatalogTabs() {
@@ -50,7 +51,7 @@ export function CatalogTabs() {
   const TABS = TAB_META.map((tab) => ({ ...tab, label: t(tab.labelKey) }));
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user } = useAuthStore();
+  const { user } = useAuth();
 
   const { data: myCourses } = useMyCourses();
   const { data: mySkills } = useMySkills();
@@ -65,33 +66,16 @@ export function CatalogTabs() {
   const tabParam = searchParams.get('tab') as TabKey | null;
   const activeTab: TabKey = tabParam && TABS.some((t) => t.key === tabParam) ? tabParam : 'skills';
 
-  const formats: Record<TabKey, string> = {
-    skills: 'SKILL',
-    courses: 'COURSE',
-    professions: 'PROFESSION',
-  };
-
-  const listEndpoint = user ? '/course/client' : '/course/public';
-
   const { data: items = [], isLoading: loading } = useQuery<CatalogItem[]>({
     queryKey: ['catalog', activeTab, user ? 'client' : 'public'],
-    queryFn: async () => {
-      const response = await api.get(listEndpoint, {
-        params: { format: formats[activeTab], pageSize: 20 },
-      });
-      const data = response.data?.data?.data || response.data?.data || [];
-      return Array.isArray(data) ? data : [];
-    },
+    queryFn: () => catalogApi.getList(courseKinds[activeTab], Boolean(user)),
   });
 
   // /course/client cardImage/photo'ni qaytarmaydi — public listdan id->{cardImage,photo} map olamiz
   const { data: publicImageMap = {} } = useQuery<Record<number, { cardImage?: string; photo?: string }>>({
     queryKey: ['catalog-image', activeTab],
     queryFn: async () => {
-      const response = await api.get('/course/public', {
-        params: { format: formats[activeTab], pageSize: 20 },
-      });
-      const data = response.data?.data?.data || response.data?.data || [];
+      const data = await catalogApi.getList(courseKinds[activeTab]);
       const map: Record<number, { cardImage?: string; photo?: string }> = {};
       if (Array.isArray(data)) {
         for (const item of data) {
@@ -113,8 +97,7 @@ export function CatalogTabs() {
     queries: items.map((item) => ({
       queryKey: ['catalog-detail', activeTab, item.id],
       queryFn: async () => {
-        const res = await api.get(detailPaths[activeTab](item.id));
-        const data = res.data?.data;
+        const data = await catalogApi.getDetail(courseKinds[activeTab], item.id);
         return {
           id: item.id,
           mentorName: data?.mentor?.fullname || null,

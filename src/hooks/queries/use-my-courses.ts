@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import api from '@/lib/api';
-import type { ApiResponse } from '@/types/api';
+import { queryKeys } from '@/constants/query-keys';
+import { courseApi } from '@/services/react-query/course';
 
 export interface MyCourseItem {
   id: number;
@@ -24,30 +24,21 @@ export interface MyCourseItem {
 
 export function useMyCourses() {
   return useQuery({
-    queryKey: ['my-courses'],
-    queryFn: async () => {
-      const res = await api.get<ApiResponse<MyCourseItem[]>>('/course/my/courses');
-      return res.data.data;
-    },
+    queryKey: queryKeys.course.mine('courses'),
+    queryFn: () => courseApi.getMine<MyCourseItem>('courses'),
   });
 }
 
 export function useMySkills() {
   return useQuery({
-    queryKey: ['my-skills'],
-    queryFn: async () => {
-      const res = await api.get<ApiResponse<MyCourseItem[]>>('/course/my/skills');
-      return res.data.data;
-    },
+    queryKey: queryKeys.course.mine('skills'),
+    queryFn: () => courseApi.getMine<MyCourseItem>('skills'),
   });
 }
 
 export function useMyProfessions() {
   return useQuery({
-    queryKey: ['my-professions'],
-    queryFn: async () => {
-      const res = await api.get<ApiResponse<MyCourseItem[]>>('/course/my/professions');
-      return res.data.data;
-    },
+    queryKey: queryKeys.course.mine('professions'),
+    queryFn: () => courseApi.getMine<MyCourseItem>('professions'),
   });
 }

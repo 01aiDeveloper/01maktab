@@ -32,13 +32,15 @@ export function detectVideoType(url: string): 'YOU_TUBE' | 'BUNNY_STREAM' | 'UNK
 type Orderable = {
   order?: number;
   orderId?: number;
+  orderIndex?: number;
   title?: string;
-  id?: number;
+  id?: number | string;
 };
 
 function extractOrder(item: Orderable): number {
   if (typeof item.order === 'number') return item.order;
   if (typeof item.orderId === 'number') return item.orderId;
+  if (typeof item.orderIndex === 'number') return item.orderIndex;
   if (item.title) {
     // "Lesson 1: ..." / "Dars 1. ..." / "Module 2: ..." patterns
     const m = item.title.match(/^(?:Lesson|Dars|Module|Modul|Glava|Bob)\s*(\d+)/i);
@@ -47,7 +49,7 @@ function extractOrder(item: Orderable): number {
     const n = item.title.match(/^(\d+)/);
     if (n) return Number(n[1]);
   }
-  return item.id ?? 0;
+  return typeof item.id === 'number' ? item.id : 0;
 }
 
 export function sortByOrder<T>(items: T[]): T[] {

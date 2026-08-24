@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import api from "@/lib/api";
+import { courseApi } from "@/services/react-query/course";
 import { Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { MainButton } from "@/components/ui/main-button";
@@ -16,20 +16,20 @@ import type { ModuleItem } from "@/components/shared/module-accordion";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { MentorCard } from "@/components/cards/mentor-card";
-import { useSkill } from "@/hooks/use-skill";
-import { useSkillModules } from "@/hooks/use-course-modules";
-import { useMySkills } from "@/hooks/use-my-courses";
+import { useSkill } from "@/hooks/queries/use-skill";
+import { useSkillModules } from "@/hooks/queries/use-course-modules";
+import { useMySkills } from "@/hooks/queries/use-my-courses";
 import { baseMediaUrl, stripInlineFont } from "@/lib/utils";
 import type { ApiSkillModule } from "@/types/api";
 import { PageLoader } from "@/components/ui/page-loader";
 import { PageError } from "@/components/ui/page-error";
 import { NoData } from "@/components/ui/no-data";
-import { useAuthStore } from "@/store/auth-store";
+import { useAuth } from "@/hooks/common/use-auth";
 import { PresaleSection } from "@/components/sections/skills/presale-section";
 import { WaitlistSection } from "@/components/sections/skills/waitlist-section";
-import { useCourseBadges } from "@/hooks/use-course-badges";
+import { useCourseBadges } from "@/hooks/queries/use-course-badges";
 import { CourseStartModal } from "@/components/modals/course-start-modal";
-import { useSmartBack } from "@/hooks/use-smart-back";
+import { useSmartBack } from "@/hooks/common/use-smart-back";
 import { pickResumeLesson } from "@/lib/lesson-utils";
 
 
@@ -78,7 +78,7 @@ export default function SkillDetailPage() {
   const slug = params?.slug as string;
   const goBack = useSmartBack('/catalog?tab=skills');
 
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const { data: skill, isLoading, isError } = useSkill(slug);
   const { data: skillModules } = useSkillModules(skill?.id);
   const { data: mySkills } = useMySkills();
@@ -108,7 +108,7 @@ export default function SkillDetailPage() {
       const alreadyAdded = !!skill.hasPurchased || !!skill.isEnrolled || !!mySkills?.some((c) => String(c.id) === String(skill.id));
       if (!alreadyAdded) {
         try {
-          await api.post(`/course/${skill.id}/enroll`);
+          await courseApi.enroll(skill.id);
         } catch (err: unknown) {
           const status = (err as { response?: { status?: number } })?.response?.status;
           if (status === 400 && skill.pricingType !== 'FREE') {

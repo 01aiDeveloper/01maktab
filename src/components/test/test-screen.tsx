@@ -7,8 +7,8 @@ import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import { cn, getMediaUrl } from '@/lib/utils';
 import { sortByOrder } from '@/lib/lesson-utils';
-import type { ModuleTest, TestQuestion } from '@/hooks/use-module-test';
-import api from '@/lib/api';
+import type { ModuleTest, TestQuestion } from '@/hooks/queries/use-module-test';
+import { learningApi } from '@/services/react-query/learning';
 import { TestResultModal, type ResultMode } from './test-result-modal';
 
 interface TestScreenProps {
@@ -35,7 +35,7 @@ interface SubmitResult {
 }
 
 type Screen = 'start' | 'quiz';
-type Answers = Map<number, number[]>;
+type Answers = Map<string, string[]>;
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -69,7 +69,7 @@ export function TestScreen({
   const questions = sortByOrder(test.questions ?? []);
   const currentQuestion: TestQuestion | undefined = questions[currentIndex];
   const isLast = currentIndex === questions.length - 1;
-  const selectedIds = answers.get(currentQuestion?.id ?? -1) ?? [];
+  const selectedIds = answers.get(currentQuestion?.id ?? '') ?? [];
   const hasAnswer = selectedIds.length > 0;
   const noQuestions = questions.length === 0;
 
@@ -92,11 +92,7 @@ export function TestScreen({
         })),
       };
       const finalUrl = submitUrl ?? `/test/module/${moduleId}/submit`;
-      console.log('[TestSubmit] POST', finalUrl, 'mode:', mode);
-      const res = await api.post(finalUrl, payload);
-      console.log('[TestSubmit] status:', res.status, 'raw data:', res.data);
-      const data = res.data?.data ?? res.data;
-      console.log('[TestSubmit] unwrapped:', data, 'isPassed:', data.isPassed);
+      const data = await learningApi.submitTest(finalUrl, payload);
       setResult({
         isPassed: data.isPassed,
         correctAnswers: data.correctAnswers ?? 0,
@@ -114,10 +110,10 @@ export function TestScreen({
     }
   }, [answers, questions, moduleId, submitUrl, queryClient]);
 
-  const toggleOption = (questionId: number, optionId: number, type: 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE') => {
+  const toggleOption = (questionId: string, optionId: string, type: TestQuestion['type']) => {
     setAnswers((prev) => {
       const next = new Map(prev);
-      if (type === 'SINGLE_CHOICE') {
+      if (type === 'SINGLE' || type === 'SINGLE_CHOICE') {
         next.set(questionId, [optionId]);
       } else {
         const cur = next.get(questionId) ?? [];
@@ -249,7 +245,7 @@ export function TestScreen({
         <div className="space-y-3 mb-8">
           {currentQuestion.options.map((option, optIdx) => {
             const isSelected = selectedIds.includes(option.id);
-            const isSingle = currentQuestion.type === 'SINGLE_CHOICE';
+            const isSingle = currentQuestion.type === 'SINGLE' || currentQuestion.type === 'SINGLE_CHOICE';
 
             if (isSingle) {
               // SINGLE_CHOICE — radio style

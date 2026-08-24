@@ -14,7 +14,7 @@ export function StoryBlocksRenderer({ blocks }: StoryBlocksRendererProps) {
   if (!blocks || blocks.length === 0) {
     return (
       <div className="bg-gray-50 rounded-3xl p-8 text-center">
-        <p className="text-gray-500">Ma'lumot yo'q</p>
+        <p className="text-gray-500">Ma&apos;lumot yo&apos;q</p>
       </div>
     );
   }

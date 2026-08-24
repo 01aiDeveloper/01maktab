@@ -6,7 +6,7 @@ export interface ApiPartner {
   logo: string;
   description: string;
   website: string;
-  blocks?: import('@/types/api.types').ContentBlock[];
+  blocks?: import('@/types/common').ContentBlock[];
 }
 
 export interface ApiMentor {
@@ -273,10 +273,10 @@ export type PromocodeTargetType = 'course' | 'subscription';
 export type PromocodeDiscountType = 'PERCENT' | 'FIXED' | 'PRE_SALES';
 
 export interface ApiPromocodeCheck {
-  id: number;
+  promocodeId: string;
   code: string;
   type?: PromocodeTargetType;
-  targetId?: number;
+  targetId?: string;
   discountType: PromocodeDiscountType;
   discountValue?: number;
   discountAmount?: number;

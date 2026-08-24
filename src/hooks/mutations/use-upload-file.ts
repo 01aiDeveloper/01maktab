@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import api from '@/lib/api';
+import { fileApi } from '@/services/react-query/file';
 
 export function useUploadFile() {
   const [isUploading, setIsUploading] = useState(false);
@@ -7,12 +7,7 @@ export function useUploadFile() {
   const uploadFile = async (file: File): Promise<string> => {
     setIsUploading(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await api.post('/file', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      return res.data?.data?.data as string;
+      return fileApi.upload(file);
     } finally {
       setIsUploading(false);
     }

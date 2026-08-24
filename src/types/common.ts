@@ -1,10 +1,3 @@
-// Generic API Response Types
-export interface ApiResponse<T> {
-  statusCode: number
-  message: string
-  data: T
-}
-
 export interface PaginatedResponse<T> {
   data: T[]
   meta: PaginationMeta

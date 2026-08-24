@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Users, BookCheck, Award, Briefcase, Loader2, Flame } from 'lucide-react';
-import api from '@/lib/api';
+import { courseApi } from '@/services/react-query/course';
 import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
 import { Button } from '@/components/ui/button';
@@ -30,15 +30,15 @@ import { EnrollmentCtaCountdown } from '@/components/sections/enrollment-cta-cou
 import { PartnersSection } from '@/components/sections/home/partners';
 import { ModuleAccordion } from '@/components/shared/module-accordion';
 import type { ModuleItem } from '@/components/shared/module-accordion';
-import { useProfession } from '@/hooks/use-profession';
-import { useProfessionModules } from '@/hooks/use-course-modules';
-import { useMyProfessions } from '@/hooks/use-my-courses';
+import { useProfession } from '@/hooks/queries/use-profession';
+import { useProfessionModules } from '@/hooks/queries/use-course-modules';
+import { useMyProfessions } from '@/hooks/queries/use-my-courses';
 import { baseMediaUrl, stripInlineFont } from '@/lib/utils';
 import type { ApiCourseModule } from '@/types/api';
-import { useSmartBack } from '@/hooks/use-smart-back';
+import { useSmartBack } from '@/hooks/common/use-smart-back';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
-import { useAuthStore } from '@/store/auth-store';
+import { useAuth } from '@/hooks/common/use-auth';
 import { PresaleSection } from '@/components/sections/skills/presale-section';
 import { WaitlistSection } from '@/components/sections/skills/waitlist-section';
 import { pickResumeLesson } from '@/lib/lesson-utils';
@@ -160,7 +160,7 @@ export default function ProfessionPage() {
     { id: '6', question: tCourse('faqs.q6'), answer: tCourse('faqs.a6') },
   ];
 
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const { data: profession, isLoading, isError } = useProfession(slug);
   const { data: professionModules } = useProfessionModules(profession?.id);
   const { data: myProfessions } = useMyProfessions();
@@ -178,7 +178,7 @@ export default function ProfessionPage() {
       const alreadyAdded = !!profession.hasPurchased || !!myProfessions?.some((c) => String(c.id) === String(profession.id));
       if (!alreadyAdded) {
         try {
-          await api.post(`/course/${profession.id}/enroll`);
+          await courseApi.enroll(profession.id);
         } catch (err: unknown) {
           const status = (err as { response?: { status?: number } })?.response?.status;
           if (status === 400 && profession.pricingType !== 'FREE') {
@@ -288,7 +288,7 @@ export default function ProfessionPage() {
 
                 {/* Subtitle */}
                 {profession.subtitle && (
-                  <Subtitle  size="base" className="mb-8 max-w-xl line-clamp-8">
+                  <Subtitle size="md" className="mb-8 max-w-xl line-clamp-8">
                     {profession.subtitle}
                   </Subtitle>
                 )}

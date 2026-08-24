@@ -13,7 +13,7 @@ import { HomeGraduatesSection } from "@/components/sections/home/home-graduates-
 import { StatsSection } from "@/components/sections/home/stats-section";
 import { ContactSection } from "@/components/sections/home/contact-section";
 import { SiteFooter } from "@/components/layout/site-footer";
-import type { Partner, Career, Skill } from "@/types/api.types";
+import type { Partner, Career, Skill } from "@/types/common";
 import { getUserLocale } from "@/i18n/locale";
 
 const API_BASE_URL =
@@ -70,7 +70,7 @@ export default async function GuestHomePage() {
     <main className="min-h-screen">
       <Header />
       <Hero />
-      {/* <MentorsSection /> */}
+      <MentorsSection />
       <CoursesSection />
       <CareersSection careers={careers} />
       <SkillsSection skills={skills} />

@@ -9,9 +9,9 @@ import { SiteFooter } from '@/components/layout/site-footer';
 import { getMediaUrl, getClientLocale } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import type { Partner } from '@/types/api.types';
+import type { Partner } from '@/types/common';
 import { ImageGroupGallery } from '@/components/story/image-group-gallery';
-import { useSmartBack } from '@/hooks/use-smart-back';
+import { useSmartBack } from '@/hooks/common/use-smart-back';
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'https://app-dev.01ai.uz/api/v1';

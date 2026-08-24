@@ -9,7 +9,7 @@ import { GraduateCarouselCard } from '@/components/cards/graduate-carousel-card'
 import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
 import { CarouselNavigation } from '@/components/ui/carousel-navigation';
-import api from '@/lib/api';
+import { graduateApi } from '@/services/react-query/graduate';
 import { getMediaUrl } from '@/lib/utils';
 
 type Graduate = {
@@ -48,12 +48,7 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
     const fetchGraduates = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/graduate/public', {
-          params: { pageSize: 20 }
-        });
-
-        // API returns nested data: response.data.data.data
-        const graduatesData = response.data?.data?.data || response.data?.data || [];
+        const graduatesData = await graduateApi.getList(20);
 
         if (Array.isArray(graduatesData)) {
           setGraduates(graduatesData);

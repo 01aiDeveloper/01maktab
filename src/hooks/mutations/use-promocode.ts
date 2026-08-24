@@ -1,29 +1,17 @@
 import { useMutation } from '@tanstack/react-query';
-import api from '@/lib/api';
-import type {
-  ApiResponse,
-  ApiPromocodeCheck,
-  PromocodeTargetType,
-} from '@/types/api';
+import type { PromocodeTargetType } from '@/types/api';
+import { commerceApi } from '@/services/react-query/commerce';
 
 interface CheckPromocodeArgs {
   code: string;
-  targetId: number;
+  targetId: string;
   price: number;
   type?: PromocodeTargetType;
 }
 
 export function useCheckPromocode() {
   return useMutation({
-    mutationFn: async ({ code, targetId, price, type = 'course' }: CheckPromocodeArgs) => {
-      const res = await api.post<ApiResponse<ApiPromocodeCheck>>('/promocode/check', {
-        code,
-        targetId,
-        price,
-        type,
-      });
-      return res.data.data;
-    },
+    mutationFn: (payload: CheckPromocodeArgs) => commerceApi.checkPromocode(payload),
   });
 }
 

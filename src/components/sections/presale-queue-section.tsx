@@ -11,8 +11,8 @@ import { ModuleAccordion } from '@/components/shared/module-accordion';
 import type { ModuleItem } from '@/components/shared/module-accordion';
 import { MentorCard } from '@/components/cards/mentor-card';
 import { PageLoader } from '@/components/ui/page-loader';
-import { useSkill } from '@/hooks/use-skill';
-import { useMyWaitlist } from '@/hooks/use-waitlist';
+import { useSkill } from '@/hooks/queries/use-skill';
+import { useMyWaitlist } from '@/hooks/mutations/use-waitlist';
 import { baseMediaUrl } from '@/lib/utils';
 import type { ApiSkillModule } from '@/types/api';
 

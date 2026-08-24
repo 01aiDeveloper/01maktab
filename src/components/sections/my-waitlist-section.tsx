@@ -6,7 +6,7 @@ import { ArrowUpRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useTranslations } from "next-intl"
-import { useMyWaitlist } from "@/hooks/use-waitlist"
+import { useMyWaitlist } from "@/hooks/mutations/use-waitlist"
 import { baseMediaUrl } from "@/lib/utils"
 import { StatusBadge } from "@/components/ui/status-badge"
 

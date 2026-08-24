@@ -1,14 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '@/lib/api';
-import type { ApiResponse, ApiWaitlistEntry } from '@/types/api';
+import { queryKeys } from '@/constants/query-keys';
+import { waitlistApi } from '@/services/react-query/waitlist';
 
 export function useMyWaitlist() {
   return useQuery({
-    queryKey: ['my-waitlist'],
-    queryFn: async () => {
-      const res = await api.get<ApiResponse<ApiWaitlistEntry[]>>('/course/my/waitlist');
-      return res.data.data;
-    },
+    queryKey: queryKeys.waitlist.mine,
+    queryFn: waitlistApi.getMine,
   });
 }
 
@@ -16,12 +13,9 @@ export function useJoinWaitlist() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (courseId: number) => {
-      const res = await api.post<ApiResponse<ApiWaitlistEntry>>(`/course/${courseId}/waitlist`);
-      return res.data.data;
-    },
+    mutationFn: waitlistApi.join,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['my-waitlist'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.waitlist.mine });
     },
   });
 }

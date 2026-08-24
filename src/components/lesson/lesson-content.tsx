@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import type { AxiosError } from 'axios';
+import { getApiErrorStatus } from '@/lib/api-error';
 import { LessonHeaderActions } from '@/components/lesson/lesson-header-actions';
 import { LessonNavButtons } from '@/components/lesson/lesson-nav-buttons';
 import { LessonLockedModal } from '@/components/lesson/lesson-locked-modal';
@@ -12,12 +12,12 @@ import { LessonBlockRenderer } from '@/components/lesson/lesson-block-renderer';
 import { AuthRequiredCard } from '@/components/lesson/auth-required-card';
 import { sortByOrder, pickResumeLesson } from '@/lib/lesson-utils';
 import { useQueryClient } from '@tanstack/react-query';
-import { useLesson } from '@/hooks/use-lesson';
-import { useCourseModules, useSkillModules, useProfessionModules } from '@/hooks/use-course-modules';
-import { useMyCourses, useMySkills, useMyProfessions } from '@/hooks/use-my-courses';
+import { useLesson } from '@/hooks/queries/use-lesson';
+import { useCourseModules, useSkillModules, useProfessionModules } from '@/hooks/queries/use-course-modules';
+import { useMyCourses, useMySkills, useMyProfessions } from '@/hooks/queries/use-my-courses';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
-import api from '@/lib/api';
+import { learningApi } from '@/services/react-query/learning';
 
 // ─── Re-exported types (used by lesson-header-actions) ───────────────────────
 
@@ -103,12 +103,9 @@ export function LessonContent() {
 
   const handleLessonComplete = useCallback(async (id: string) => {
     try {
-      console.log('[LessonComplete] POST /lesson/' + id + '/complete');
-      const res = await api.post(`/lesson/${id}/complete`);
-      console.log('[LessonComplete] status:', res.status, 'data:', res.data);
+      await learningApi.completeLesson(id);
       await queryClient.invalidateQueries({ queryKey: ['modules', courseType, courseId] });
       await queryClient.refetchQueries({ queryKey: ['modules', courseType, courseId] });
-      console.log('[LessonComplete] modules refetched');
     } catch (err: any) {
       console.error('[LessonComplete] error:', err?.response?.status, err?.response?.data || err?.message);
     }
@@ -185,7 +182,7 @@ export function LessonContent() {
   if (isLoading || modulesLoading) return <PageLoader />;
 
   // 401 → auth required
-  const status = (error as AxiosError)?.response?.status;
+  const status = getApiErrorStatus(error);
   if (status === 401) return <AuthRequiredCard />;
 
   if (isError || !lesson) {

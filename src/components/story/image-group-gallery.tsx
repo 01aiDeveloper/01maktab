@@ -14,10 +14,6 @@ export function ImageGroupGallery({ images }: ImageGroupGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  if (!images || images.length === 0) {
-    return null;
-  }
-
   const openLightbox = (index: number) => {
     setCurrentIndex(index);
     setLightboxOpen(true);
@@ -46,6 +42,10 @@ export function ImageGroupGallery({ images }: ImageGroupGalleryProps) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [lightboxOpen, currentIndex]);
+
+  if (!images || images.length === 0) {
+    return null;
+  }
 
   return (
     <>

@@ -5,22 +5,21 @@ import Image from 'next/image';
 import { Check, Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { StepIndicator } from './step-indicator';
-import { useCheckPromocode } from '@/hooks/use-promocode';
-import api from '@/lib/api';
-import type { ApiResponse, ApiPaymentResponse } from '@/types/api';
+import { useCheckPromocode } from '@/hooks/mutations/use-promocode';
+import { commerceApi } from '@/services/react-query/commerce';
 
 interface StepPaymentMethodProps {
-  courseId: number;
+  courseId: string;
   coursePrice: number;
   discountedPrice?: number;
   discountPercent?: number;
   onNext: () => void;
   onBack: () => void;
-  promocodeId?: number;
-  onPromocodeApplied?: (data: { discountedPrice: number; promocodeId: number }) => void;
+  promocodeId?: string;
+  onPromocodeApplied?: (data: { discountedPrice: number; promocodeId: string }) => void;
 }
 
-type PaymentProvider = 'click' | 'payme' | 'uzum';
+type PaymentProvider = 'click' | 'payme';
 
 export function StepPaymentMethod({
   courseId,
@@ -80,7 +79,7 @@ export function StepPaymentMethod({
       }
 
       setPromoStatus('success');
-      onPromocodeApplied?.({ discountedPrice: newPrice, promocodeId: result.id });
+      onPromocodeApplied?.({ discountedPrice: newPrice, promocodeId: result.promocodeId });
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response?.status;
       const apiMsg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
@@ -96,21 +95,14 @@ export function StepPaymentMethod({
   };
 
   const handlePay = async () => {
-    if (paymentProvider === 'uzum') {
-      onNext();
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
     try {
-      const body: { courseId: number; promocodeId?: number } = { courseId };
+      const body: { courseId: string; promocodeId?: string } = { courseId };
       if (promocodeId) body.promocodeId = promocodeId;
 
-      const endpoint = paymentProvider === 'click' ? '/click/course' : '/payme/course';
-      const res = await api.post<ApiResponse<ApiPaymentResponse>>(endpoint, body);
-      const data = res.data.data;
+      const data = await commerceApi.createCoursePayment(paymentProvider, body);
 
       // Bepul kurs (presale 100% chegirma yoki FREE pricingType) — link talab qilmaydi
       if (data.free) {
@@ -118,11 +110,8 @@ export function StepPaymentMethod({
         return;
       }
 
-      const link = paymentProvider === 'click'
-        ? `https://my.click.uz/services/pay/${data.link}`
-        : data.link;
-
-      window.location.href = link;
+      if (!data.link) throw new Error('Payment provider did not return a link');
+      window.location.href = data.link;
     } catch (err) {
       console.error('Payment error:', err);
       setError(t('paymentError'));
@@ -218,7 +207,7 @@ export function StepPaymentMethod({
       {/* Payment Providers */}
       <h3 className="text-lg font-bold text-gray-900 text-center mb-4">{t('paymentMethod')}</h3>
       <div className="flex justify-center gap-3 mb-8">
-        {(['click', 'payme', 'uzum'] as PaymentProvider[]).map((provider) => (
+        {(['click', 'payme'] as PaymentProvider[]).map((provider) => (
           <button
             key={provider}
             onClick={() => setPaymentProvider(provider)}

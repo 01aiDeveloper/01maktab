@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Download } from 'lucide-react';
 import { getMediaUrl } from '@/lib/utils';
-import type { CourseCertificate } from '@/types/api.types';
+import type { CourseCertificate } from '@/types/common';
 
 interface MyCertificateCardProps {
   item: CourseCertificate;

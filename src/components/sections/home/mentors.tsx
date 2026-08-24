@@ -9,33 +9,15 @@ import { MainTitle } from "@/components/ui/main-title";
 import { MentorCard } from "@/components/shared/mentor-card";
 import useEmblaCarousel from "embla-carousel-react";
 import { CarouselNavigation } from "@/components/ui/carousel-navigation";
-import { useCarouselNavigation } from "@/hooks/use-carousel-navigation";
-
-const MENTOR_BASE = [
-  {
-    name: "Anvar Karimov",
-    imageUrl: "/images/image.png",
-    videoType: "youtube" as const,
-    videoSrc: "https://youtube.com/shorts/e11wbC04l1o?si=YKV-M_9nv2OETGDH",
-  },
-  {
-    name: "Nilufar Sadikova",
-    imageUrl: "/images/image.png",
-    videoType: "youtube" as const,
-    videoSrc: "https://youtube.com/shorts/e11wbC04l1o?si=YKV-M_9nv2OETGDH",
-  },
-  {
-    name: "Shaxzod Bek",
-    imageUrl: "/images/image.png",
-    videoType: "youtube" as const,
-    videoSrc: "https://youtube.com/shorts/e11wbC04l1o?si=YKV-M_9nv2OETGDH",
-  },
-];
+import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation";
+import { useMentors } from "@/hooks/queries/use-mentors";
+import { getMediaUrl } from "@/lib/utils";
 
 export function MentorsSection() {
   const t = useTranslations("mentors");
   const tCommon = useTranslations("common");
-  const MENTORS = MENTOR_BASE.map((m) => ({ ...m, role: t("role") }));
+  const { data, isLoading } = useMentors(1, 10);
+  const mentors = data?.data ?? [];
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     loop: false,
@@ -57,13 +39,17 @@ export function MentorsSection() {
           <div className="md:hidden">
             <div className="overflow-hidden" ref={emblaRef}>
               <div className="flex gap-4">
-                {MENTORS.map((mentor, index) => (
+                {mentors.map((mentor) => (
                   <div
-                    key={index}
+                    key={mentor.id}
                     className="flex-none"
                     style={{ width: "310px" }}
                   >
-                    <MentorCard {...mentor} />
+                    <MentorCard
+                      name={mentor.fullname || ""}
+                      role={mentor.position || ""}
+                      imageUrl={getMediaUrl(mentor.photo) || "/placeholder.svg"}
+                    />
                   </div>
                 ))}
               </div>
@@ -71,15 +57,19 @@ export function MentorsSection() {
           </div>
 
           <div className="hidden md:flex justify-evenly gap-6">
-            {MENTORS.map((mentor, index) => (
-              <div key={index} style={{ width: "310px" }}>
-                <MentorCard {...mentor} />
+            {mentors.map((mentor) => (
+              <div key={mentor.id} style={{ width: "310px" }}>
+                <MentorCard
+                  name={mentor.fullname || ""}
+                  role={mentor.position || ""}
+                  imageUrl={getMediaUrl(mentor.photo) || "/placeholder.svg"}
+                />
               </div>
             ))}
           </div>
         </div>
 
-        <motion.div
+        {!isLoading && mentors.length > 0 && <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -96,7 +86,7 @@ export function MentorsSection() {
               <ArrowRight className="h-6 w-6 inline ml-1" />
             </MainButton>
           </Link>
-        </motion.div>
+        </motion.div>}
       </div>
     </section>
   );

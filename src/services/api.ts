@@ -1,7 +1,7 @@
-"use client";
-
 import axios from "axios";
 import { getClientLocale } from "@/lib/utils";
+import { clearAuth, setTokens } from "@/store/features/auth/auth-slice";
+import { store } from "@/store/store";
 
 // Get API base URL from environment variable
 const API_BASE_URL =
@@ -18,21 +18,9 @@ const api = axios.create({
   },
 });
 
-// Lazy import to avoid server-side issues
-let authStorePromise: Promise<typeof import("@/store/auth-store")> | null =
-  null;
-
-const getAuthStore = async () => {
-  if (typeof window === "undefined") return null;
-  if (!authStorePromise) {
-    authStorePromise = import("@/store/auth-store");
-  }
-  return authStorePromise;
-};
-
 // Request interceptor - Add auth token to requests
 api.interceptors.request.use(
-  async (config) => {
+  (config) => {
     config.headers["Accept-Language"] = getClientLocale();
 
     // In dev stage, use the dev access token directly
@@ -42,12 +30,9 @@ api.interceptors.request.use(
     }
 
     if (typeof window !== "undefined") {
-      const authModule = await getAuthStore();
-      if (authModule) {
-        const token = authModule.useAuthStore.getState().accessToken;
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
-        }
+      const token = store.getState().auth.accessToken;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
       }
     }
     return config;
@@ -69,12 +54,9 @@ api.interceptors.response.use(
 
       try {
         if (typeof window !== "undefined") {
-          const authModule = await getAuthStore();
-          if (authModule) {
-            const refreshToken =
-              authModule.useAuthStore.getState().refreshToken;
+          const refreshToken = store.getState().auth.refreshToken;
 
-            if (refreshToken) {
+          if (refreshToken) {
               // Call refresh token endpoint
               const response = await axios.post(
                 `${API_BASE_URL}/auth/refresh`,
@@ -85,23 +67,17 @@ api.interceptors.response.use(
                 response.data.data;
 
               // Update tokens in store
-              authModule.useAuthStore
-                .getState()
-                .setTokens(accessToken, newRefreshToken);
+              store.dispatch(setTokens({ accessToken, refreshToken: newRefreshToken }));
 
               // Retry original request with new token
               originalRequest.headers.Authorization = `Bearer ${accessToken}`;
               return api(originalRequest);
-            }
           }
         }
       } catch (refreshError) {
         // If refresh fails, logout user (skip redirect in dev stage)
         if (typeof window !== "undefined" && !IS_DEV_STAGE) {
-          const authModule = await getAuthStore();
-          if (authModule) {
-            authModule.useAuthStore.getState().clearAuth();
-          }
+          store.dispatch(clearAuth());
           window.location.href = "/login";
         }
         return Promise.reject(refreshError);

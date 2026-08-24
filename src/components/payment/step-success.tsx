@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, Check, Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import api from '@/lib/api';
+import { courseApi, type CourseKind } from '@/services/react-query/course';
 
 interface StepSuccessProps {
   courseId: string;
@@ -29,15 +29,13 @@ export function StepSuccess({ courseId }: StepSuccessProps) {
     const enroll = async () => {
       try {
         // Kursga yozilish
-        await api.post(`/course/${courseId}/enroll`);
+        await courseApi.enroll(courseId);
 
         // Birinchi modul va darsni olish
-        const endpoint = getModuleEndpoint(courseType, courseId);
-        const res = await api.get(endpoint);
-        const data = res.data?.data ?? res.data ?? {};
+        const data = await courseApi.getModules(courseType as CourseKind, courseId);
         const modules: Array<{
           id: number;
-          lessons?: Array<{ id: number }>;
+          lessons?: Array<{ id: number }> | null;
         }> = data.modules ?? data ?? [];
 
         const firstModule = modules[0];

@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { TestScreen } from '@/components/test/test-screen';
-import { useModuleTest } from '@/hooks/use-module-test';
+import { useModuleTest } from '@/hooks/queries/use-module-test';
 import { PageLoader } from '@/components/ui/page-loader';
 import { PageError } from '@/components/ui/page-error';
 import { buildLessonUrl } from '@/components/lesson/lesson-content';

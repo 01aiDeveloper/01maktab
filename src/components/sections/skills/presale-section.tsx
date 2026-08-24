@@ -7,9 +7,9 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { MainButton } from '@/components/ui/main-button';
-import { useAuthStore } from '@/store/auth-store';
-import { useJoinWaitlist } from '@/hooks/use-waitlist';
-import api from '@/lib/api';
+import { useAuth } from '@/hooks/common/use-auth';
+import { useJoinWaitlist } from '@/hooks/mutations/use-waitlist';
+import { commerceApi } from '@/services/react-query/commerce';
 import type { ApiPresale } from '@/types/api';
 
 function useCountdown(endDate: string | null | undefined) {
@@ -34,7 +34,7 @@ interface PresaleSectionProps {
   isPurchased?: boolean;
   courseId?: number;
   courseType?: 'skill' | 'course' | 'profession';
-  promocodeId?: number;
+  promocodeId?: string;
   onCabinetClick?: () => void;
   /** Embedded presale from the course detail (only present when active) */
   presale?: ApiPresale | null;
@@ -46,7 +46,6 @@ function formatPrice(price: number) {
   return price.toLocaleString('uz-UZ').replace(/,/g, ' ');
 }
 
-import type { ApiResponse, ApiPaymentResponse } from '@/types/api';
 
 function DiscountBadge() {
   return (
@@ -71,7 +70,7 @@ export function PresaleSection({
 }: PresaleSectionProps) {
   const t = useTranslations('presale');
   const router = useRouter();
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const joinWaitlist = useJoinWaitlist();
@@ -109,19 +108,16 @@ export function PresaleSection({
 
     setLoading(true);
     try {
-      const body: { courseId: number; promocodeId?: number } = { courseId };
+      const body: { courseId: string; promocodeId?: string } = { courseId: String(courseId) };
       if (promocodeId) body.promocodeId = promocodeId;
 
-      const res = await api.post<ApiResponse<ApiPaymentResponse>>('/click/course', body);
-      const data = res.data.data;
+      const data = await commerceApi.createCoursePayment('click', body);
       if (data.free) {
         router.push(`/classroom?welcome=${courseId}`);
         return;
       }
-      const link = data.link.startsWith('http')
-        ? data.link
-        : `https://my.click.uz/services/pay/${data.link}`;
-      window.location.href = link;
+      if (!data.link) throw new Error('Payment provider did not return a link');
+      window.location.href = data.link;
     } catch {
       router.push(
         `/payment/${courseId}?courseType=${courseType}&discountedPrice=${presalePrice}&discountPercent=${discountPercent}`,

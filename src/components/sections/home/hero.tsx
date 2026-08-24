@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 import { MainButton } from "@/components/ui/main-button";
-import { useAuthStore } from "@/store/auth-store";
+import { useAuth } from "@/hooks/common/use-auth";
 
 type SlideMeta = {
   id: number;
@@ -62,8 +62,8 @@ export function Hero() {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [isAnimating, setIsAnimating] = React.useState(false);
   const intervalRef = React.useRef<ReturnType<typeof setInterval> | null>(null);
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const accessToken = useAuthStore((s) => s.accessToken);
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
+  const accessToken = useAuth((s) => s.accessToken);
   const [hydrated, setHydrated] = React.useState(false);
   React.useEffect(() => {
     setHydrated(true);
@@ -175,7 +175,7 @@ export function Hero() {
                     <Link href={ctaHref}>
                       <MainButton
                         variant="gradient"
-                        size="xl"
+                        size="lg"
                         className="group h-[54px] md:h-15 lg:h-15 w-[193px] md:w-auto md:min-w-50 px-4 md:px-6 rounded-[10px] flex flex-row items-center justify-between md:justify-center"
                       >
                         {ctaLabel}

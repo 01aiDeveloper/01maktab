@@ -2,9 +2,9 @@
 import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
-import { useCarouselNavigation } from "@/hooks/use-carousel-navigation"
+import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
 import { MyEnrolledCard } from "@/components/cards/my-enrolled-card"
-import { useMyCourses } from "@/hooks/use-my-courses"
+import { useMyCourses } from "@/hooks/queries/use-my-courses"
 import { PageLoader } from "@/components/ui/page-loader"
 import { NoData } from "@/components/shared/no-data"
 

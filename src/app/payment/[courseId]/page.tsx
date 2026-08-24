@@ -8,11 +8,11 @@ import { StepConfirmInfo } from '@/components/payment/step-confirm-info';
 import { StepPaymentMethod } from '@/components/payment/step-payment-method';
 import { StepSuccess } from '@/components/payment/step-success';
 import { StepPresaleSuccess } from '@/components/payment/step-presale-success';
-import { useAuthStore } from '@/store/auth-store';
-import { useProfile } from '@/hooks/use-profile';
-import { useCourseInfo } from '@/hooks/use-course-info';
+import { useAuth } from '@/hooks/common/use-auth';
+import { useProfile } from '@/hooks/queries/use-profile';
+import { useCourseInfo } from '@/hooks/queries/use-course-info';
 import { PageLoader } from '@/components/ui/page-loader';
-import { useSmartBack } from '@/hooks/use-smart-back';
+import { useSmartBack } from '@/hooks/common/use-smart-back';
 
 function PaymentContent() {
   const params = useParams();
@@ -22,7 +22,7 @@ function PaymentContent() {
   const goBack = useSmartBack(`/courses/${courseId}`);
 
   const { data: profileData } = useProfile();
-  const storeUser = useAuthStore((state) => state.user);
+  const storeUser = useAuth((state) => state.user);
   const user = profileData ?? storeUser;
 
   const courseType = searchParams.get('courseType') ?? 'course';
@@ -41,7 +41,7 @@ function PaymentContent() {
 
   // Promo kod orqali o'zgargan narx va promocode ID
   const [promoDiscountedPrice, setPromoDiscountedPrice] = useState<number | undefined>(undefined);
-  const [promocodeId, setPromocodeId] = useState<number | undefined>(undefined);
+  const [promocodeId, setPromocodeId] = useState<string | undefined>(undefined);
 
   const discountedPrice = promoDiscountedPrice ?? urlDiscountedPrice;
   const discountPercent = urlDiscountPercent;
@@ -83,7 +83,7 @@ function PaymentContent() {
 
       {currentStep === 2 && (
         <StepPaymentMethod
-          courseId={Number(courseId)}
+          courseId={courseId}
           coursePrice={coursePrice}
           discountedPrice={discountedPrice}
           discountPercent={discountPercent}

@@ -6,7 +6,7 @@ import { Send, Instagram, Linkedin, Globe } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useAuthStore } from '@/store/auth-store';
+import { useAuth } from '@/hooks/common/use-auth';
 
 const linkMeta = [
   { key: 'classroom' as const, href: '/classroom' },
@@ -52,7 +52,7 @@ export function SiteFooter({ variant = 'light' }: SiteFooterProps) {
   const tNav = useTranslations('nav');
   const tFooter = useTranslations('footer');
   const [hoveredLogoIndex, setHoveredLogoIndex] = useState<number | null>(null);
-  const { user } = useAuthStore();
+  const { user } = useAuth();
   const footerLinks = linkMeta.map((l) => ({ label: tNav(l.key), href: l.href }));
   const pathname = usePathname();
   const [currentTab, setCurrentTab] = useState<string | null>(null);

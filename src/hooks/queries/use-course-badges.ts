@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import api from '@/lib/api';
+import { queryKeys } from '@/constants/query-keys';
+import { courseApi } from '@/services/react-query/course';
 
 export interface CourseBadgeItem {
   id: number;
@@ -10,12 +11,8 @@ export interface CourseBadgeItem {
 
 export function useCourseBadges(courseId: number | undefined) {
   return useQuery({
-    queryKey: ['course-badges', courseId],
-    queryFn: async () => {
-      const res = await api.get(`/course-badge`, { params: { courseId } });
-      const items = res.data?.data?.data ?? res.data?.data ?? [];
-      return items as CourseBadgeItem[];
-    },
+    queryKey: queryKeys.course.badges(courseId ?? 0),
+    queryFn: () => courseApi.getBadges(courseId!) as Promise<CourseBadgeItem[]>,
     enabled: !!courseId,
   });
 }

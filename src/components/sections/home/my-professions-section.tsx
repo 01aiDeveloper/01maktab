@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { motion } from "framer-motion";
-import axios from "axios";
+import { catalogApi } from "@/services/react-query/catalog";
 import { ProfessionCard } from "@/components/cards/profession-card";
 import { CarouselNavigation } from "@/components/ui/carousel-navigation";
-import { useCarouselNavigation } from "@/hooks/use-carousel-navigation";
+import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation";
 import { getMediaUrl } from "@/lib/utils";
 
 interface Profession {
@@ -19,9 +19,6 @@ interface Profession {
   cardImage?: string | null;
   icon: string | null;
 }
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://app-dev.01ai.uz/api/v1";
 
 export function MyProfessionsSection() {
   const [professions, setProfessions] = useState<any[]>([]);
@@ -39,11 +36,9 @@ export function MyProfessionsSection() {
   useEffect(() => {
     const fetchProfessions = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/course/public?format=PROFESSION`,
-        );
-        if (response.data?.data?.data && response.data.data.data.length > 0) {
-          const apiProfessions = response.data.data.data.map(
+        const data = await catalogApi.getList("profession");
+        if (data.length > 0) {
+          const apiProfessions = data.map(
             (prof: Profession) => ({
               id: prof.id,
               image: getMediaUrl(prof.cardImage || prof.photo),

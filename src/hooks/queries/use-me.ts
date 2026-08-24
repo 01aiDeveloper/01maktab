@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
-import api from '@/lib/api'
-import { useAuthStore } from '@/store/auth-store'
+import { useAuth } from '@/hooks/common/use-auth'
+import { queryKeys } from '@/constants/query-keys'
+import { userApi } from '@/services/react-query/user'
 
 export function useMe() {
-  const { accessToken, user, setUser } = useAuthStore()
+  const { accessToken, user, setUser } = useAuth()
 
   return useQuery({
-    queryKey: ['me'],
+    queryKey: queryKeys.auth.me,
     queryFn: async () => {
-      const res = await api.get('/user/me')
-      const data = res.data?.data
+      const data = await userApi.getMe()
       if (data) setUser(data)
       return data
     },
