@@ -175,16 +175,16 @@ export default function ProfessionPage() {
     if (!profession) return;
     setStartLoading(true);
     try {
-      const alreadyAdded = !!profession.hasPurchased || !!myProfessions?.some((c) => String(c.id) === String(profession.id));
+      const alreadyAdded = !!profession.hasPurchased || !!profession.isEnrolled || !!myProfessions?.some((c) => String(c.id) === String(profession.id));
       if (!alreadyAdded) {
+        if (profession.pricingType !== 'FREE') {
+          router.push(`/payment/${profession.id}?courseType=profession`);
+          return;
+        }
         try {
-          await courseApi.enroll(profession.id);
+          await courseApi.applyProfession(profession.id);
         } catch (err: unknown) {
-          const status = (err as { response?: { status?: number } })?.response?.status;
-          if (status === 400 && profession.pricingType !== 'FREE') {
-            router.push(`/payment/${profession.id}?courseType=profession`);
-            return;
-          }
+          console.error('Failed to apply for profession:', err);
         }
       }
       const target = pickResumeLesson(professionModules?.modules, professionModules?.progress);

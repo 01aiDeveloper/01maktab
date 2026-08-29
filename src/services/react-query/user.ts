@@ -30,7 +30,7 @@ export const userApi = {
     return response.data?.data ?? response.data
   },
   async getAchievements(pageNumber = 1, pageSize = 10) {
-    const response = await api.get("/course-badge/user", { params: { pageNumber, pageSize } })
+    const response = await api.get("/course-badge/my", { params: { pageNumber, pageSize } })
     return response.data?.data ?? response.data
   },
 }

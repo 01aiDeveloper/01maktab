@@ -7,14 +7,11 @@ import { useTranslations } from 'next-intl';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { getMediaUrl, getClientLocale } from '@/lib/utils';
-import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import type { Partner } from '@/types/common';
 import { ImageGroupGallery } from '@/components/story/image-group-gallery';
 import { useSmartBack } from '@/hooks/common/use-smart-back';
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'https://app-dev.01ai.uz/api/v1';
+import { usePartner } from '@/hooks/queries/use-partners';
 
 /** Extract all image URLs from ContentBlock[] */
 function extractBlockImages(blocks: unknown): string[] {
@@ -45,38 +42,7 @@ export default function PartnerPage() {
   const partnerId = params.slug as string;
   const goBack = useSmartBack('/');
 
-  const [partner, setPartner] = useState<Partner | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    async function fetchPartner() {
-      try {
-        const response = await fetch(`${API_BASE_URL}/partner/${partnerId}`, {
-          headers: { 'Accept-Language': getClientLocale() },
-        });
-        if (!response.ok) {
-          setError(true);
-          return;
-        }
-        const result = await response.json();
-        const data = result?.data;
-        if (data) {
-          setPartner(data);
-        } else {
-          setError(true);
-        }
-      } catch {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    if (partnerId) {
-      fetchPartner();
-    }
-  }, [partnerId]);
+  const { data: partner, isLoading: loading, isError: error } = usePartner(partnerId);
 
   if (loading) {
     return (

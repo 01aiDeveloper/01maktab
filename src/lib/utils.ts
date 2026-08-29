@@ -12,7 +12,10 @@ export function stripInlineFont(html?: string): string {
   return html.replace(/font-(weight|family|size)\s*:\s*[^;"']*;?/gi, '');
 }
 
-export const baseMediaUrl = 'https://maktab01-dev-files.s3.eu-north-1.amazonaws.com';
+export const baseMediaUrl =
+  process.env.NEXT_PUBLIC_UPLOAD_URL ||
+  process.env.REACT_APP_UPLOAD_URL ||
+  'https://maktab01-dev-files.s3.eu-north-1.amazonaws.com';
 
 // Joriy locale'ni NEXT_LOCALE cookie'dan o'qish (client). Default: 'uz'.
 export const getClientLocale = (): string => {

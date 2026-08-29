@@ -2,38 +2,20 @@ import { useQuery, useQueries } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/common/use-auth';
 import { queryKeys } from '@/constants/query-keys';
 import { learningApi } from '@/services/react-query/learning';
+import type {
+  ApiTestOption as TestOption,
+  ApiTestQuestion as TestQuestion,
+  ApiModuleTestResponse as ModuleTest,
+} from '@/types/api';
 
-export interface TestOption {
-  id: string;
-  text: string;
-  image: string | null;
-}
-
-export interface TestQuestion {
-  id: string;
-  text: string;
-  type: 'SINGLE' | 'MULTIPLE' | 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE';
-  points: number;
-  orderIndex?: number;
-  image: string | null;
-  options: TestOption[];
-}
-
-export interface ModuleTest {
-  id: string;
-  name: string;
-  passingPercentage: number;
-  maxAttempts: number;
-  timeLimit: number;
-  questionsCount: number;
-  questions: TestQuestion[];
-}
+export type { TestOption, TestQuestion, ModuleTest };
 
 export function useModuleTest(moduleId: string | number | undefined) {
+  const { accessToken } = useAuth();
   return useQuery<ModuleTest>({
     queryKey: queryKeys.lesson.moduleTest(moduleId ?? ''),
     queryFn: () => learningApi.getModuleTest(moduleId!),
-    enabled: !!moduleId,
+    enabled: !!moduleId && !!accessToken,
     staleTime: 1000 * 60 * 5,
   });
 }

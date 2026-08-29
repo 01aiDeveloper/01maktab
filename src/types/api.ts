@@ -38,6 +38,7 @@ export interface ApiCertificate {
   id: number;
   title: string;
   template: string;
+  thumbnail?: string;
   description: string;
 }
 
@@ -48,12 +49,13 @@ export interface ApiGraduate {
   photo: string;
 }
 
-// ─── Skill (public detail) ────────────────────────────────────────────────────
+// ─── Skill (public & client detail) ──────────────────────────────────────────
 
 export interface ApiSkillLesson {
   id: number;
   title: string;
   isPublic: boolean;
+  isCompleted?: boolean;
 }
 
 export interface ApiSkillTest {
@@ -99,7 +101,7 @@ export interface ApiSkill {
   waitlistEnabled?: boolean;
 }
 
-// ─── Course (public detail) ───────────────────────────────────────────────────
+// ─── Course (public & client detail) ─────────────────────────────────────────
 
 export interface ApiCourseLesson {
   id: number;
@@ -148,11 +150,12 @@ export interface ApiCourse {
   waitlistEnabled?: boolean;
   isInWaitlist?: boolean;
   hasPurchased?: boolean;
+  isEnrolled?: boolean;
   preSales?: ApiPresale | null;
   waitlistCount?: number;
 }
 
-// ─── Profession (public detail) ───────────────────────────────────────────────
+// ─── Profession (public & client detail) ─────────────────────────────────────
 
 export interface ApiProfession {
   id: number;
@@ -180,11 +183,12 @@ export interface ApiProfession {
   waitlistEnabled?: boolean;
   isInWaitlist?: boolean;
   hasPurchased?: boolean;
+  isEnrolled?: boolean;
   preSales?: ApiPresale | null;
   waitlistCount?: number;
 }
 
-// ─── Module list (authenticated) ─────────────────────────────────────────────
+// ─── Module list with student progress (authenticated) ────────────────────────
 
 export interface ApiModuleLesson {
   id: number;
@@ -211,6 +215,7 @@ export interface ApiModule {
 
 export interface ApiModuleProgress {
   moduleTitile: string | null;
+  moduleTitle?: string | null;
   completedLessonsCount: number;
   totalLessonsCount: number;
 }
@@ -294,6 +299,63 @@ export interface ApiPaymentResponse {
   discountType: PromocodeDiscountType | null;
   discountAmount: number;
 }
+
+// ─── Subscription Plan (Public) ──────────────────────────────────────────────
+
+export interface ApiSubscriptionPlan {
+  id: string | number;
+  title: string;
+  price: number;
+  duration: number;
+  description?: string;
+}
+
+// ─── Test & Exam DTOs ───────────────────────────────────────────────────────
+
+export interface ApiTestOption {
+  id: string;
+  text: string;
+  image: string | null;
+}
+
+export interface ApiTestQuestion {
+  id: string;
+  text: string;
+  type: 'SINGLE' | 'MULTIPLE' | 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE';
+  points: number;
+  orderIndex?: number;
+  image: string | null;
+  options: ApiTestOption[];
+}
+
+export interface ApiExamResponse {
+  id: string;
+  name: string;
+  passingPercentage: number;
+  maxAttempts: number;
+  timeLimit: number;
+  questionsCount: number;
+  questions: ApiTestQuestion[];
+}
+
+export interface ApiSubmitExamPayload {
+  answers: {
+    questionId: string;
+    selectedOptionIds: string[];
+  }[];
+}
+
+export interface ApiSubmitExamResponse {
+  percentage: number;
+  isPassed: boolean;
+  questionsCount: number;
+  correctAnswers: number;
+  maxPoints: number;
+  earnedPoints: number;
+}
+
+export interface ApiModuleTestResponse extends ApiExamResponse {}
+export interface ApiSubmitTestResponse extends ApiSubmitExamResponse {}
 
 // ─── Generic API response wrapper ────────────────────────────────────────────
 

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '@/hooks/common/use-auth';
 import { queryKeys } from '@/constants/query-keys';
 import { courseApi } from '@/services/react-query/course';
 
@@ -7,12 +8,14 @@ export interface CourseBadgeItem {
   title: string;
   icon: string;
   description: string;
+  isClaimed?: boolean;
 }
 
-export function useCourseBadges(courseId: number | undefined) {
+export function useCourseBadges(courseId?: number | string) {
+  const { accessToken } = useAuth();
   return useQuery({
-    queryKey: queryKeys.course.badges(courseId ?? 0),
-    queryFn: () => courseApi.getBadges(courseId!) as Promise<CourseBadgeItem[]>,
-    enabled: !!courseId,
+    queryKey: queryKeys.course.badges(courseId ?? 'my'),
+    queryFn: () => courseApi.getBadges() as Promise<CourseBadgeItem[]>,
+    enabled: !!accessToken,
   });
 }

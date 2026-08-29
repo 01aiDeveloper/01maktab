@@ -6,12 +6,10 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { MainTitle } from "@/components/ui/main-title";
 import { Subtitle } from "@/components/ui/subtitle";
-import { getMediaUrl, getClientLocale } from "@/lib/utils";
+import { getMediaUrl } from "@/lib/utils";
 import type { Partner } from "@/types/common";
-import { useEffect, useState } from "react";
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://app-dev.01ai.uz/api/v1";
+import { useState } from "react";
+import { usePartners } from "@/hooks/queries/use-partners";
 
 interface PartnersSectionProps {
   partners?: Partner[];
@@ -27,8 +25,9 @@ export function PartnersSection({
   showSubtitle = true,
 }: PartnersSectionProps) {
   const t = useTranslations("partners");
-  const [partners, setPartners] = useState<Partner[]>(partnersProp ?? []);
-  const [loading, setLoading] = useState(!partnersProp);
+  const { data: fetchedPartners = [], isLoading } = usePartners(20);
+  const partners = partnersProp ?? fetchedPartners;
+  const loading = partnersProp ? false : isLoading;
 
   const isDark = variant === "dark";
   const sectionBg = isDark ? "bg-[#101010]" : "bg-[#FFFFFF]";
@@ -37,32 +36,6 @@ export function PartnersSection({
   const cardBorderColor = isDark ? "border-[#282828]" : "border-[#F4F4F6]";
   const titleColor = isDark ? "#FFFFFF" : "#18181A";
   const borderColor = isDark ? "border-gray-800" : "border-gray-100";
-
-  useEffect(() => {
-    if (partnersProp) {
-      setPartners(partnersProp);
-      setLoading(false);
-      return;
-    }
-
-    async function fetchPartners() {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/partner/public?pageSize=20`,
-          { headers: { "Accept-Language": getClientLocale() } },
-        );
-        const data = await response.json();
-        setPartners(data?.data?.data || []);
-      } catch (error) {
-        console.error("Failed to fetch partners:", error);
-        setPartners([]);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchPartners();
-  }, [partnersProp]);
 
   const cardWidth = 412 + 24; // card + gap
   const totalWidth = partners.length * cardWidth;
@@ -114,7 +87,7 @@ export function PartnersSection({
             onMouseLeave={() => setIsPaused(false)}
           >
             {[...partners, ...partners, ...partners].map((partner, index) => {
-              const isLocalLogo = partner.logo.startsWith("/");
+              const isLocalLogo = partner.logo?.startsWith("/");
               const logoSrc = isLocalLogo
                 ? partner.logo
                 : useMediaUrl
