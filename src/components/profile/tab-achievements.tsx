@@ -1,0 +1,102 @@
+'use client';
+
+import { useState } from 'react';
+import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { getMediaUrl } from '@/lib/utils';
+import { userApi } from '@/services/react-query/user';
+import { NoData } from '@/components/ui/no-data';
+import type { PaginatedResponse, CourseBadge } from '@/types/common';
+import { MainTitle } from '../ui/main-title';
+import { CustomPagination } from '@/components/ui/custom-pagination';
+
+const PAGE_SIZE = 8;
+
+export function TabAchievements() {
+  const t = useTranslations('profile');
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading } = useQuery<PaginatedResponse<CourseBadge>>({
+    queryKey: ['my-badges', page],
+    queryFn: () => userApi.getAchievements(page, PAGE_SIZE),
+  });
+
+  const allItems = data?.data ?? [];
+  // Faqat real olingan (claimed) badge'larni ko'rsatamiz — backend qaytargan
+  // template/test badge'larni (isClaimed=false, kulrang) yashiramiz.
+  const items = allItems.filter((item) => item.isClaimed);
+  const pagination = data?.meta?.pagination;
+  const pageCount = pagination?.pageCount ?? 1;
+
+  if (isLoading) {
+    return (
+      <div className="pb-8">
+        <div className="flex justify-center py-16">
+          <div className="w-10 h-10 border-4 border-gray-200 border-t-[#3B5BFF] rounded-full animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <div className="pb-8">
+        <div className="bg-white rounded-[22px] shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+          <NoData title={t('noBadgesTitle')} description={t('noBadgesDescription')} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pb-8">
+      <MainTitle className="text-xl font-bold text-gray-900 mb-4">{t('skills')}</MainTitle>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        {items.map((item) => (
+          <div
+            key={item.id}
+            className="relative flex flex-col items-center px-2  justify-center rounded-[25px] overflow-hidden"
+            style={{
+              aspectRatio: '315/430',
+              background: item.isClaimed
+                ? 'linear-gradient(180deg, #2A51E6 0%, #5C7EFD 100%)'
+                : '#CDCDCD',
+            }}
+          >
+            <div className="flex flex-col items-center gap-[38px]">
+              {/* Icon Container */}
+              <div
+                className="flex items-center justify-center rounded-[34px] overflow-hidden flex-shrink-0"
+                style={{
+                  width: 108,
+                  height: 108,
+                  background: 'rgba(255,255,255,0.2)',
+                  border: '1.1px solid rgba(255,255,255,0.17)',
+                  backdropFilter: 'blur(18.35px)',
+                }}
+              >
+                {item.icon && (
+                  <Image
+                    quality={90} src={getMediaUrl(item.icon)}
+                    alt={item.title}
+                    width={66}
+                    height={66}
+                    className="object-contain"
+                  />
+                )}
+              </div>
+
+              <span className="font-suisse font-semibold  text-[49.41px] leading-[51.47px] tracking-[-0.05em] text-center uppercase text-white">
+                {item.title}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <CustomPagination page={page} pageCount={pageCount} onPageChange={setPage} />
+    </div>
+  );
+}

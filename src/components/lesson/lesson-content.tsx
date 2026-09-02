@@ -1,0 +1,257 @@
+'use client';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { getApiErrorStatus } from '@/lib/api-error';
+import { LessonHeaderActions } from '@/components/lesson/lesson-header-actions';
+import { LessonNavButtons } from '@/components/lesson/lesson-nav-buttons';
+import { LessonLockedModal } from '@/components/lesson/lesson-locked-modal';
+import { UniversalVideoPlayer } from '@/components/lesson/universal-video-player';
+import { LessonBlockRenderer } from '@/components/lesson/lesson-block-renderer';
+import { AuthRequiredCard } from '@/components/lesson/auth-required-card';
+import { sortByOrder, pickResumeLesson } from '@/lib/lesson-utils';
+import { useQueryClient } from '@tanstack/react-query';
+import { useLesson } from '@/hooks/queries/use-lesson';
+import { useCourseModules, useSkillModules, useProfessionModules } from '@/hooks/queries/use-course-modules';
+import { useMyCourses, useMySkills, useMyProfessions } from '@/hooks/queries/use-my-courses';
+import { PageLoader } from '@/components/ui/page-loader';
+import { PageError } from '@/components/ui/page-error';
+import { learningApi } from '@/services/react-query/learning';
+
+// ─── Re-exported types (used by lesson-header-actions) ───────────────────────
+
+export type CourseType = 'course' | 'skill' | 'profession';
+export type { ApiModule as CourseModule, ApiModuleLesson as ModuleLesson } from '@/types/api';
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+export function buildLessonUrl(
+  moduleId: number,
+  lessonId: number,
+  courseType: string,
+  courseId: string,
+): string {
+  const params = new URLSearchParams({ lessonId: String(lessonId), courseType, courseId });
+  return `/module/${moduleId}?${params.toString()}`;
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
+export function LessonContent() {
+  const t = useTranslations('lesson');
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const [lockedModalOpen, setLockedModalOpen] = useState(false);
+
+  const lessonId = searchParams.get('lessonId') ?? '';
+  const courseType = (searchParams.get('courseType') ?? 'course') as 'course' | 'skill' | 'profession';
+  const courseId = searchParams.get('courseId') ?? '';
+
+  const {
+    data: lesson,
+    isLoading,
+    isError,
+    error,
+  } = useLesson(lessonId);
+
+  const courseModules = useCourseModules(courseType === 'course' ? courseId : undefined);
+  const skillModules = useSkillModules(courseType === 'skill' ? courseId : undefined);
+  const professionModules = useProfessionModules(courseType === 'profession' ? courseId : undefined);
+
+  const { data: myCourses } = useMyCourses();
+  const { data: mySkills } = useMySkills();
+  const { data: myProfessions } = useMyProfessions();
+
+  const modulesLoading =
+    courseType === 'skill' ? skillModules.isLoading :
+    courseType === 'profession' ? professionModules.isLoading :
+    courseModules.isLoading;
+
+  const courseData =
+    courseType === 'skill' ? skillModules.data :
+    courseType === 'profession' ? professionModules.data :
+    courseModules.data;
+
+  const modules = sortByOrder(courseData?.modules ?? []);
+
+  const myList =
+    courseType === 'skill' ? mySkills :
+    courseType === 'profession' ? myProfessions :
+    myCourses;
+  const isFreeCourse = (courseData as any)?.pricingType === 'FREE';
+  const isPurchased = !!myList?.some((c) => String(c.id) === String(courseId));
+  const isEnrolled = isFreeCourse || isPurchased;
+
+  // Flat list of all lessons for prev/next navigation (order-sorted)
+  const flatLessons = modules.flatMap((m) =>
+    sortByOrder(m.lessons ?? []).map((l) => ({ ...l, moduleId: m.id, moduleTitle: m.title }))
+  );
+
+  const goToLesson = useCallback(
+    (targetModuleId: number, targetLessonId: number) => {
+      const target = flatLessons.find((l) => l.id === targetLessonId);
+      if (target && !target.isPublic && !isEnrolled) {
+        setLockedModalOpen(true);
+        return;
+      }
+      router.push(buildLessonUrl(targetModuleId, targetLessonId, courseType, courseId));
+    },
+    [router, courseType, courseId, flatLessons, isEnrolled],
+  );
+
+  const handleLessonComplete = useCallback(async (id: string) => {
+    try {
+      await learningApi.completeLesson(id);
+      await queryClient.invalidateQueries({ queryKey: ['modules', courseType, courseId] });
+      await queryClient.refetchQueries({ queryKey: ['modules', courseType, courseId] });
+    } catch (err: any) {
+      console.error('[LessonComplete] error:', err?.response?.status, err?.response?.data || err?.message);
+    }
+  }, [queryClient, courseType, courseId]);
+
+  const currentIndex = flatLessons.findIndex((l) => String(l.id) === String(lessonId));
+  const currentLesson = currentIndex >= 0 ? flatLessons[currentIndex] : null;
+  const prevLesson = currentIndex > 0 ? flatLessons[currentIndex - 1] : null;
+  const nextLesson =
+    currentIndex >= 0 && currentIndex < flatLessons.length - 1 ? flatLessons[currentIndex + 1] : null;
+
+  // Videosi yo'q darslar avtomatik complete (gate yo'q).
+  const hasVideo = !!lesson?.videos && lesson.videos.length > 0;
+  const isCurrentCompleted =
+    !hasVideo || !!lesson?.isCompleted || !!currentLesson?.isCompleted;
+
+  // Videosi yo'q darsda backend'ga complete signalini bir marta yuborib qo'yamiz.
+  const autoCompleteFiredRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!lesson || hasVideo) return;
+    if (lesson.isCompleted || currentLesson?.isCompleted) return;
+    if (autoCompleteFiredRef.current.has(lessonId)) return;
+    autoCompleteFiredRef.current.add(lessonId);
+    handleLessonComplete(lessonId);
+  }, [lesson, hasVideo, currentLesson?.isCompleted, lessonId, handleLessonComplete]);
+
+  // Module test gating: when on the last lesson of a module that has an unpassed test
+  const currentModule = currentLesson ? modules.find((m) => m.id === currentLesson.moduleId) : null;
+  const currentModuleLessonsSorted = currentModule ? sortByOrder(currentModule.lessons ?? []) : [];
+  const isLastLessonOfModule = !!(
+    currentModule && currentLesson &&
+    currentModuleLessonsSorted.length > 0 &&
+    currentModuleLessonsSorted[currentModuleLessonsSorted.length - 1].id === currentLesson.id
+  );
+  const moduleTest = currentModule?.test ?? null;
+  const moduleTestNotPassed = !!moduleTest && moduleTest.isPassed !== true;
+  const moduleTestPending = isLastLessonOfModule && moduleTestNotPassed && moduleTest
+    ? { moduleId: currentModule!.id, testId: moduleTest.id }
+    : null;
+
+  // Course exam gating: last lesson of last module + all module tests passed (or no tests)
+  const isLastModule = !!(currentModule && modules[modules.length - 1]?.id === currentModule.id);
+  const allModuleTestsPassed = modules.every((m) => !m.test || m.test.isPassed === true);
+  const isCourseExamReady = isLastLessonOfModule && isLastModule && allModuleTestsPassed && !moduleTestPending;
+
+  const goToModuleTest = useCallback(() => {
+    if (!moduleTestPending) return;
+    const params = new URLSearchParams({ courseType, courseId });
+    if (lessonId) params.set('lessonId', lessonId);
+    if (nextLesson) {
+      params.set('nextLessonId', String(nextLesson.id));
+      params.set('nextModuleId', String(nextLesson.moduleId));
+    }
+    router.push(`/test/${moduleTestPending.moduleId}?${params.toString()}`);
+  }, [moduleTestPending, courseType, courseId, lessonId, nextLesson, router]);
+
+  const goToCourseExam = useCallback(() => {
+    const params = new URLSearchParams({ courseType, courseId });
+    router.push(`/exam/${courseId}?${params.toString()}`);
+  }, [courseType, courseId, router]);
+
+  // Auto-navigate when lessonId is missing: find first uncompleted lesson, or last lesson if all completed
+  useEffect(() => {
+    if (lessonId || modulesLoading || flatLessons.length === 0) return;
+
+    const target = pickResumeLesson(modules, (courseData as any)?.progress);
+    if (!target) return;
+
+    router.replace(buildLessonUrl(target.moduleId, target.id, courseType, courseId));
+  }, [lessonId, modulesLoading, flatLessons, modules, courseData, courseType, courseId, router]);
+
+  if (!lessonId) return <PageLoader />;
+
+  if (isLoading || modulesLoading) return <PageLoader />;
+
+  // 401 → auth required
+  const status = getApiErrorStatus(error);
+  if (status === 401) return <AuthRequiredCard />;
+
+  if (isError || !lesson) {
+    return <PageError title={t('lessonNotFound')} description={t('lessonNotFoundDesc')} showBack={false} />;
+  }
+
+  return (
+    <>
+      <LessonHeaderActions
+        isPublic={lesson.isPublic && !isEnrolled}
+        modules={modules}
+        currentLessonId={Number(lessonId)}
+        courseType={courseType}
+        courseId={courseId}
+        prevLesson={prevLesson}
+        nextLesson={nextLesson}
+        onLessonSelect={(targetModuleId, targetLessonId) => goToLesson(targetModuleId, targetLessonId)}
+        isCurrentCompleted={isCurrentCompleted}
+        onLockedNext={() => setLockedModalOpen(true)}
+        hasModuleTestPending={!!moduleTestPending}
+        onModuleTest={goToModuleTest}
+        isCourseExamReady={isCourseExamReady}
+        onCourseExam={goToCourseExam}
+        isEnrolled={isEnrolled}
+      />
+      <div className="bg-white rounded-2xl p-8 lg:p-12 mb-6">
+        <h1 className="font-suisse text-[28px] leading-[31px] lg:text-4xl lg:leading-tight font-semibold tracking-[-1.4px] capitalize text-[#18181A] mb-3">
+          {t('lessonHeading', { order: lesson.orderId, title: lesson.title })}
+        </h1>
+        {lesson.description && (
+          <p className="text-muted-foreground mb-8">{lesson.description}</p>
+        )}
+
+        {lesson.videos && lesson.videos.length > 0 && (
+          <div className="space-y-6 mb-8">
+            {sortByOrder(lesson.videos).map((video, index) => (
+              <UniversalVideoPlayer
+                key={video.id}
+                sourceUrl={video.link}
+                sourceType={video.linkType}
+                isFirst={index === 0}
+                preventSkip={index === 0 && !isCurrentCompleted}
+                onComplete={index === 0 && !isCurrentCompleted ? () => handleLessonComplete(lessonId) : undefined}
+              />
+            ))}
+          </div>
+        )}
+
+        {lesson.blocks && lesson.blocks.length > 0 && <LessonBlockRenderer blocks={lesson.blocks} />}
+
+        {/* Bottom prev/next navigation */}
+        <LessonNavButtons
+          prevLesson={prevLesson}
+          nextLesson={nextLesson}
+          onPrev={() => prevLesson && goToLesson(prevLesson.moduleId, prevLesson.id)}
+          onNext={() => nextLesson && goToLesson(nextLesson.moduleId, nextLesson.id)}
+          isCurrentCompleted={isCurrentCompleted}
+          onLockedNext={() => setLockedModalOpen(true)}
+          moduleTestPending={moduleTestPending}
+          onModuleTest={goToModuleTest}
+          isCourseExamReady={isCourseExamReady}
+          onCourseExam={goToCourseExam}
+          className="mt-10 pt-8 border-t border-gray-100"
+        />
+      </div>
+
+      <LessonLockedModal open={lockedModalOpen} onClose={() => setLockedModalOpen(false)} />
+
+      <div className="h-12" />
+    </>
+  );
+}
