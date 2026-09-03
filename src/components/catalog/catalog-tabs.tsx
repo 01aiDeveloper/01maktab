@@ -6,6 +6,7 @@ import { useQuery, useQueries } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { CatalogCard } from '@/components/cards/catalog-card';
 import { NoData } from '@/components/ui/no-data';
+import { CustomPagination } from '@/components/ui/custom-pagination';
 import { useAuth } from '@/hooks/common/use-auth';
 import { useMyCourses, useMySkills, useMyProfessions } from '@/hooks/queries/use-my-courses';
 import { getMediaUrl } from '@/lib/utils';
@@ -65,17 +66,22 @@ export function CatalogTabs() {
 
   const tabParam = searchParams.get('tab') as TabKey | null;
   const activeTab: TabKey = tabParam && TABS.some((t) => t.key === tabParam) ? tabParam : 'skills';
+  const requestedPage = Math.max(1, Number(searchParams.get('page')) || 1);
+  const pageSize = 12;
 
-  const { data: items = [], isLoading: loading } = useQuery<CatalogItem[]>({
-    queryKey: ['catalog', activeTab, user ? 'client' : 'public'],
-    queryFn: () => catalogApi.getList(courseKinds[activeTab], Boolean(user)),
+  const { data: catalog, isLoading: loading } = useQuery({
+    queryKey: ['catalog', activeTab, user ? 'client' : 'public', pageSize, requestedPage],
+    queryFn: () => catalogApi.getList(courseKinds[activeTab], Boolean(user), pageSize, requestedPage),
   });
+  const items = (catalog?.data ?? []) as CatalogItem[];
+  const pageCount = catalog?.meta?.pagination?.pageCount ?? 1;
 
   // /course/client cardImage/photo'ni qaytarmaydi — public listdan id->{cardImage,photo} map olamiz
   const { data: publicImageMap = {} } = useQuery<Record<number, { cardImage?: string; photo?: string }>>({
     queryKey: ['catalog-image', activeTab],
     queryFn: async () => {
-      const data = await catalogApi.getList(courseKinds[activeTab]);
+      const response = await catalogApi.getList(courseKinds[activeTab], false, 100, 1);
+      const data = response.data as CatalogItem[];
       const map: Record<number, { cardImage?: string; photo?: string }> = {};
       if (Array.isArray(data)) {
         for (const item of data) {
@@ -130,7 +136,12 @@ export function CatalogTabs() {
   });
 
   const setTab = (tab: TabKey) => {
-    router.push(`/catalog?tab=${tab}`, { scroll: false });
+    router.push(`/catalog?tab=${tab}&page=1`, { scroll: false });
+  };
+
+  const setPage = (page: number) => {
+    router.push(`/catalog?tab=${activeTab}&page=${page}`, { scroll: false });
+    document.getElementById('catalog-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const getItemHref = (item: CatalogItem) => {
@@ -176,7 +187,7 @@ export function CatalogTabs() {
         })}
       </div>
 
-      {/* 2 qator — har biri alohida yonga scroll */}
+      {/* Server-side paginated catalog grid */}
       {loading ? (
         <div className="flex justify-center py-16">
           <div className="w-10 h-10 border-4 border-gray-200 border-t-[#3B5BFF] rounded-full animate-spin" />
@@ -184,16 +195,9 @@ export function CatalogTabs() {
       ) : items.length === 0 ? (
         <NoData title={t('noItemsTitle')} description={t('noItemsDescription')} />
       ) : (
-        <div className="flex flex-col gap-4">
-          {[0, 1].map((rowIdx) => {
-            const rowItems = items.filter((_, i) => i % 2 === rowIdx);
-            if (rowItems.length === 0) return null;
-            return (
-              <div
-                key={rowIdx}
-                className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-              >
-                {rowItems.map((item: CatalogItem) => {
+        <div id="catalog-results" className="scroll-mt-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {items.map((item: CatalogItem) => {
                   const detail = itemDetail[item.id];
                   const hasPurchased = detail?.hasPurchased ?? item.hasPurchased;
                   const pricingType = detail?.pricingType ?? item.pricingType;
@@ -208,7 +212,7 @@ export function CatalogTabs() {
                     : 'available';
 
                   return (
-                    <div key={item.id} className="shrink-0 w-[300px] sm:w-[340px]">
+                    <div key={item.id} className="min-w-0">
                       <CatalogCard
                         id={item.id}
                         slug={item.slug}
@@ -224,9 +228,8 @@ export function CatalogTabs() {
                     </div>
                   );
                 })}
-              </div>
-            );
-          })}
+          </div>
+          <CustomPagination page={requestedPage} pageCount={pageCount} onPageChange={setPage} />
         </div>
       )}
     </section>

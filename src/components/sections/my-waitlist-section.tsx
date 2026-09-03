@@ -1,6 +1,5 @@
 "use client"
 
-import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { ArrowUpRight } from "lucide-react"
 import Image from "next/image"
@@ -9,6 +8,7 @@ import { useTranslations } from "next-intl"
 import { useMyWaitlist } from "@/hooks/mutations/use-waitlist"
 import { baseMediaUrl } from "@/lib/utils"
 import { StatusBadge } from "@/components/ui/status-badge"
+import { PaginatedGrid } from '@/components/ui/paginated-grid'
 
 function mediaUrl(path: string | null | undefined): string {
   if (!path) return ""
@@ -19,7 +19,6 @@ function mediaUrl(path: string | null | undefined): string {
 export function MyWaitlistSection() {
   const t = useTranslations("userHome")
   const { data: entries, isLoading } = useMyWaitlist()
-  const [emblaRef] = useEmblaCarousel({ loop: false, align: "start", slidesToScroll: 1 })
 
   if (isLoading || !entries || entries.length === 0) return null
 
@@ -35,9 +34,8 @@ export function MyWaitlistSection() {
         <h2 className="text-2xl font-bold text-foreground">{t("myWaitlist")}</h2>
       </div>
 
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-3">
-          {entries.map((entry) => {
+      <PaginatedGrid items={entries} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {(entry) => {
             const courseTitle = entry.title || entry.name || t("unknownCourse")
             const detailHref =
               entry.format === "SKILL"
@@ -50,10 +48,18 @@ export function MyWaitlistSection() {
             return (
               <div
                 key={entry.id}
-                className="flex-[0_0_85%] sm:flex-[0_0_calc(50%-8px)] lg:flex-[0_0_calc(33.333%-12px)] min-w-0"
+                className="min-w-0"
               >
                 <Link href={detailHref} className="block group">
-                  <div className="relative rounded-3xl cursor-pointer h-102 border-0">
+                  <motion.div
+                    initial={{ opacity: 0, y: 24, scale: 0.97 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true, amount: 0.18 }}
+                    whileHover={{ y: -7, scale: 1.015 }}
+                    whileTap={{ scale: 0.985 }}
+                    transition={{ duration: 0.45, ease: "easeOut" }}
+                    className="relative rounded-3xl cursor-pointer h-102 border-0 shadow-[0_10px_24px_rgba(24,38,86,0.08)]"
+                  >
                     {photoUrl ? (
                       <Image
                         quality={90} src={photoUrl}
@@ -87,13 +93,12 @@ export function MyWaitlistSection() {
                         <ArrowUpRight className="w-4 h-4 text-white" />
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 </Link>
               </div>
             )
-          })}
-        </div>
-      </div>
+          }}
+      </PaginatedGrid>
     </motion.section>
   )
 }

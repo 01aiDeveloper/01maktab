@@ -22,10 +22,9 @@ export function TabAchievements() {
     queryFn: () => userApi.getAchievements(page, PAGE_SIZE),
   });
 
-  const allItems = data?.data ?? [];
-  // Faqat real olingan (claimed) badge'larni ko'rsatamiz — backend qaytargan
-  // template/test badge'larni (isClaimed=false, kulrang) yashiramiz.
-  const items = allItems.filter((item) => item.isClaimed);
+  // Keep the backend's page count and rendered rows in sync. Unclaimed badges
+  // already have a distinct visual state below, so they must not be filtered here.
+  const items = data?.data ?? [];
   const pagination = data?.meta?.pagination;
   const pageCount = pagination?.pageCount ?? 1;
 

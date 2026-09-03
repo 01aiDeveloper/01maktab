@@ -1,17 +1,15 @@
 "use client"
 
-import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { useTranslations } from "next-intl"
 
 import { SkillCard } from "@/components/cards/skill-card"
-import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { MainTitle } from "@/components/ui/main-title"
-import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
 import { Subtitle } from "@/components/ui/subtitle"
 import { NoData } from "@/components/shared/no-data"
 import { getMediaUrl } from "@/lib/utils"
 import type { Skill } from "@/types/common"
+import { PaginatedGrid } from '@/components/ui/paginated-grid'
 
 interface SkillsSectionProps {
   skills: Skill[]
@@ -19,15 +17,6 @@ interface SkillsSectionProps {
 
 export function SkillsSection({ skills }: SkillsSectionProps) {
   const t = useTranslations("skills")
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
-    align: "start",
-    slidesToScroll: 1,
-  })
-
-  const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } =
-    useCarouselNavigation(emblaApi)
-
   if (skills.length === 0) {
     return (
       <section id="skillar" className="py-8 container">
@@ -64,13 +53,9 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
         {t("subtitle")}
       </Subtitle>
 
-      <div className="overflow-hidden py-3 -my-3" ref={emblaRef}>
-        <div className="flex gap-3">
-          {skills.map((skill) => (
-            <div
-              key={skill.id}
-              className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_calc(50%-6px)] md:flex-[0_0_calc(33.333%-8px)] lg:flex-[0_0_calc(25%-9px)]"
-            >
+      <PaginatedGrid items={skills} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 py-3 -my-3">
+          {(skill) => (
+            <div key={skill.id}>
               <SkillCard
                 id={skill.id}
                 image={getMediaUrl(skill.cardImage || skill.photo)}
@@ -86,20 +71,8 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
                 hideQueueStatus
               />
             </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex justify-center mt-6">
-        <CarouselNavigation
-          onPrevClick={scrollPrev}
-          onNextClick={scrollNext}
-          canScrollPrev={canScrollPrev}
-          canScrollNext={canScrollNext}
-          variant="gray"
-          size="md"
-        />
-      </div>
+          )}
+      </PaginatedGrid>
     </motion.section>
   )
 }

@@ -26,7 +26,7 @@ export function GraduatesSection() {
   useEffect(() => {
     const fetchGraduates = async () => {
       try {
-        const all = (await graduateApi.getList(20)) as Graduate[];
+        const all = (await graduateApi.getList(20)).data as Graduate[];
         // Take last 2 graduates
         setGraduates(all.slice(-2));
       } catch (error) {
