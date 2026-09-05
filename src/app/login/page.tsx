@@ -86,6 +86,8 @@ function LoginContent() {
 
             <div className="mt-9 flex min-h-12 min-w-[220px] items-center justify-center rounded-2xl border border-[#dce3f5] bg-[#f8faff] px-5 py-3 shadow-sm transition hover:border-[#aebfff] hover:shadow-md">
               <TelegramLoginButton onAuth={handleTelegramAuth} />
+            <div className="mt-9 flex min-h-12 min-w-[220px] items-center justify-center rounded-2xl border border-[#dce3f5] bg-[#f8faff] px-5 py-3 shadow-sm transition hover:border-[#aebfff] hover:shadow-md [color-scheme:only_light]">
+              <TelegramLoginButton onAuth={handleTelegramAuth} bgColor="#f8faff" />
             </div>
 
             {isLoading && <p className="mt-4 text-sm text-[#18181A]/45">{t("loading")}</p>}
