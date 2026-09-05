@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface EventCardProps {
   title: string;
@@ -20,25 +20,36 @@ export function EventCard({
   date,
   subtitle,
 }: EventCardProps) {
+  const reduceMotion = useReducedMotion();
   if (locked) {
     return (
       <motion.div
-        whileHover={{ y: -10 }}
-        className="group relative aspect-[372/508] w-full overflow-hidden rounded-[40px] bg-gray-100"
+        initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
+        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, amount: 0.18 }}
+        whileHover={reduceMotion ? undefined : { y: -7, scale: 1.015 }}
+        whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+        className="group relative aspect-[372/508] w-full overflow-hidden rounded-[40px] bg-gray-100 shadow-[0_10px_24px_rgba(24,38,86,0.08)]"
       >
         <Image
           quality={90} src={imageUrl || "/placeholder.svg"}
           alt={title}
           fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          className="object-cover blur-[6px] scale-110"
+          className="object-cover blur-[6px] scale-110 transition-transform duration-700 ease-out group-hover:scale-[1.16]"
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/30 transition-colors duration-500 group-hover:bg-black/20" />
 
         {/* Lock icon + text centered */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-          <div className="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-white/20 backdrop-blur-[5.64px]">
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.7 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, scale: 1 }}
+            transition={{ delay: 0.12, duration: 0.35, ease: "easeOut" }}
+            className="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-white/20 backdrop-blur-[5.64px]"
+          >
             <Image
               quality={90} src="/icons/lock.svg"
               alt="lock"
@@ -46,10 +57,15 @@ export function EventCard({
               height={24}
               unoptimized
             />
-          </div>
-          <h3 className="text-white font-semibold text-[54px] leading-[77px] tracking-[-0.05em] capitalize text-center px-4">
+          </motion.div>
+          <motion.h3
+            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.4, ease: "easeOut" }}
+            className="text-white font-semibold text-[54px] leading-[77px] tracking-[-0.05em] capitalize text-center px-4"
+          >
             {title}
-          </h3>
+          </motion.h3>
           {subtitle && (
             <p className="text-white/70 font-semibold text-sm md:text-base leading-snug text-center px-6">
               {subtitle}
@@ -63,14 +79,19 @@ export function EventCard({
   // Original unlocked card
   return (
     <motion.div
-      whileHover={{ y: -10 }}
-      className="group relative aspect-[372/508] w-full overflow-hidden rounded-[40px] bg-gray-100"
+      initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.18 }}
+      whileHover={reduceMotion ? undefined : { y: -7, scale: 1.015 }}
+      whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
+      className="group relative aspect-[372/508] w-full overflow-hidden rounded-[40px] bg-gray-100 shadow-[0_10px_24px_rgba(24,38,86,0.08)]"
     >
       <Image
         quality={90} src={imageUrl || "/placeholder.svg"}
         alt={title}
         fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
       />
 
       {/* Overlay */}

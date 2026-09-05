@@ -1,26 +1,16 @@
 "use client"
 
-import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { useTranslations } from "next-intl"
-import { CarouselNavigation } from "@/components/ui/carousel-navigation"
-import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
 import { MyCourseCard } from "@/components/cards/my-course-card"
 import { NoData } from "@/components/shared/no-data"
 import { PageLoader } from "@/components/ui/page-loader"
 import { useMyCourses } from "@/hooks/queries/use-my-courses"
+import { PaginatedGrid } from '@/components/ui/paginated-grid'
 
 export function MyCoursesSection() {
   const t = useTranslations("userHome")
   const { data: courses, isLoading } = useMyCourses()
-
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
-    align: "start",
-    slidesToScroll: 1,
-  })
-
-  // const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } = useCarouselNavigation(emblaApi)
 
   if (isLoading) {
     return (
@@ -58,25 +48,13 @@ export function MyCoursesSection() {
         <h2 className="text-2xl font-bold text-foreground">{t("myCourses")}</h2>
       </div>
 
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4">
-          {courses.map((course) => (
-            <div key={course.id} className="flex-[0_0_85%] sm:flex-[0_0_calc(50%-8px)] lg:flex-[0_0_calc(33.333%-12px)] min-w-0">
+      <PaginatedGrid items={courses} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {(course) => (
+            <div key={course.id} className="min-w-0">
               <MyCourseCard item={course} href={`/courses/${course.id}`} />
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* <div className="flex justify-center mt-6">
-        <CarouselNavigation
-          onPrevClick={scrollPrev}
-          onNextClick={scrollNext}
-          canScrollPrev={canScrollPrev}
-          canScrollNext={canScrollNext}
-          variant="light"
-        />
-      </div> */}
+          )}
+      </PaginatedGrid>
     </motion.section>
   )
 }

@@ -7,24 +7,18 @@ import { ArrowRight } from "lucide-react";
 import { MainButton } from "@/components/ui/main-button";
 import { MainTitle } from "@/components/ui/main-title";
 import { MentorCard } from "@/components/shared/mentor-card";
-import useEmblaCarousel from "embla-carousel-react";
-import { CarouselNavigation } from "@/components/ui/carousel-navigation";
-import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation";
 import { useMentors } from "@/hooks/queries/use-mentors";
 import { getMediaUrl } from "@/lib/utils";
+import { useState } from 'react';
+import { CustomPagination } from '@/components/ui/custom-pagination';
 
 export function MentorsSection() {
   const t = useTranslations("mentors");
   const tCommon = useTranslations("common");
-  const { data, isLoading } = useMentors(1, 10);
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useMentors(page, 12);
   const mentors = data?.data ?? [];
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: "start",
-    loop: false,
-  });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } =
-    useCarouselNavigation(emblaApi as any);
+  const pageCount = data?.meta?.pagination?.pageCount ?? 1;
 
   return (
     <section className="relative w-full bg-base-dark overflow-hidden rounded-b-[70px] sm:rounded-b-[160px] md:rounded-b-[328px] min-h-screen flex flex-col justify-center py-10 sm:py-18">
@@ -36,29 +30,9 @@ export function MentorsSection() {
         </div>
 
         <div className="mt-10">
-          <div className="md:hidden">
-            <div className="overflow-hidden" ref={emblaRef}>
-              <div className="flex gap-4">
-                {mentors.map((mentor) => (
-                  <div
-                    key={mentor.id}
-                    className="flex-none"
-                    style={{ width: "310px" }}
-                  >
-                    <MentorCard
-                      name={mentor.fullname || ""}
-                      role={mentor.position || ""}
-                      imageUrl={getMediaUrl(mentor.photo) || "/placeholder.svg"}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="hidden md:flex justify-evenly gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-6">
             {mentors.map((mentor) => (
-              <div key={mentor.id} style={{ width: "310px" }}>
+              <div key={mentor.id} className="w-full max-w-[310px]">
                 <MentorCard
                   name={mentor.fullname || ""}
                   role={mentor.position || ""}
@@ -67,6 +41,7 @@ export function MentorsSection() {
               </div>
             ))}
           </div>
+          <CustomPagination page={page} pageCount={pageCount} onPageChange={setPage} />
         </div>
 
         {!isLoading && mentors.length > 0 && <motion.div

@@ -1,5 +1,7 @@
 import api from "@/services/api"
 import type { CourseKind } from "@/services/react-query/course"
+import type { PaginatedResponse } from '@/types/common'
+import { unwrapPaginatedData } from '@/types/api-contracts'
 
 const formats = {
   skill: "SKILL",
@@ -12,8 +14,7 @@ export const catalogApi = {
     const response = await api.get(authenticated ? "/course/client" : "/course/public", {
       params: { format: formats[kind], pageSize, pageNumber },
     })
-    const data = response.data?.data?.data ?? response.data?.data ?? []
-    return Array.isArray(data) ? data : []
+    return unwrapPaginatedData<unknown>(response.data) as PaginatedResponse<unknown>
   },
   async getDetail(kind: CourseKind, id: string | number, authenticated = false) {
     const mode = authenticated ? "client" : "public"

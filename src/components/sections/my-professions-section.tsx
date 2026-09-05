@@ -1,26 +1,16 @@
 "use client"
 
-import useEmblaCarousel from "embla-carousel-react"
 import { motion } from "framer-motion"
 import { useTranslations } from "next-intl"
 import { MyCourseCard } from "@/components/cards/my-course-card"
-import { CarouselNavigation } from "@/components/ui/carousel-navigation"
-import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
 import { NoData } from "@/components/shared/no-data"
 import { PageLoader } from "@/components/ui/page-loader"
 import { useMyProfessions } from "@/hooks/queries/use-my-courses"
+import { PaginatedGrid } from '@/components/ui/paginated-grid'
 
 export function MyProfessionsSection() {
   const t = useTranslations("userHome")
   const { data: professions, isLoading } = useMyProfessions()
-
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
-    align: "start",
-    slidesToScroll: 1,
-  })
-
-  const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } = useCarouselNavigation(emblaApi)
 
   if (isLoading) {
     return (
@@ -58,25 +48,13 @@ export function MyProfessionsSection() {
         <h2 className="text-2xl font-bold text-foreground">{t("myProfessions")}</h2>
       </div>
 
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4">
-          {professions.map((profession) => (
-            <div key={profession.id} className="flex-[0_0_85%] sm:flex-[0_0_calc(50%-8px)] lg:flex-[0_0_calc(33.333%-12px)] min-w-0">
+      <PaginatedGrid items={professions} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {(profession) => (
+            <div key={profession.id} className="min-w-0">
               <MyCourseCard item={profession} href={`/professions/${profession.id}`} dark />
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* <div className="flex justify-center mt-6"> 
-        <CarouselNavigation
-          onPrevClick={scrollPrev}
-          onNextClick={scrollNext}
-          canScrollPrev={canScrollPrev}
-          canScrollNext={canScrollNext}
-          variant="dark"
-        />
-      </div> */}
+          )}
+      </PaginatedGrid>
     </motion.section>
   )
 }

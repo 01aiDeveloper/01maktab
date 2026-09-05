@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { EnrollmentBadge } from "@/components/ui/enrollment-badge"
 import { StatusBadge, resolveStatus, type StatusFlags } from "@/components/ui/status-badge"
 
@@ -24,6 +24,7 @@ export function CourseCard({
   hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled,
   hideQueueStatus,
 }: CourseCardProps) {
+  const reduceMotion = useReducedMotion()
   const courseSlug = slug || id?.toString() || "course"
   const rawStatus = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled })
   const hidden = hideQueueStatus && (rawStatus === 'waitlist' || rawStatus === 'presale')
@@ -35,9 +36,13 @@ export function CourseCard({
   return (
     <Link href={`/courses/${courseSlug}`}>
       <motion.div
-        whileHover={{ scale: 1.01, y: -1 }}
-        transition={{ type: "spring", stiffness: 300 }}
-        className="group relative w-full aspect-3/4 overflow-hidden rounded-[23px] shadow-sm bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]"
+        initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
+        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, amount: 0.18 }}
+        whileHover={reduceMotion ? undefined : { y: -7, scale: 1.015 }}
+        whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+        className="group relative w-full aspect-3/4 overflow-hidden rounded-[23px] shadow-[0_10px_24px_rgba(24,38,86,0.08)] bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]"
       >
       <Image
         quality={90} src={imgSrc}

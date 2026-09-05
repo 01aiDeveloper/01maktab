@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Folder, FileText, Pause } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { getMediaUrl } from '@/lib/utils';
 import type { MyCourseItem } from '@/hooks/queries/use-my-courses';
@@ -15,19 +16,28 @@ interface MyCourseCardProps {
 
 export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
   const t = useTranslations('cards');
+  const reduceMotion = useReducedMotion();
   const photoUrl = getMediaUrl(item.cardImage || item.photo);
   const iconUrl = item.icon ? getMediaUrl(item.icon) : null;
 
   return (
     <Link href={href} className="block group">
-      <div className="relative rounded-3xl cursor-pointer h-102 border-0">
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
+        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, amount: 0.18 }}
+        whileHover={reduceMotion ? undefined : { y: -7, scale: 1.015 }}
+        whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+        className="relative rounded-3xl cursor-pointer h-102 border-0 shadow-[0_10px_24px_rgba(24,38,86,0.08)]"
+      >
         {/* Full-cover image */}
         {photoUrl ? (
           <Image
             quality={90} src={photoUrl}
             alt={item.title || item.name}
             fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-            className="object-cover rounded-[20px] overflow-hidden transition-transform duration-300 "
+            className="object-cover rounded-[20px] overflow-hidden transition-transform duration-700 ease-out group-hover:scale-105"
           />
         ) : (
           <div className="absolute inset-0 rounded-[20px] bg-gray-200" />
@@ -73,7 +83,7 @@ export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
         </div>
 
         {/* Bottom info box — catalog-card bilan bir xil */}
-        <div
+        <motion.div
           className="absolute z-10 rounded-[20px] flex items-center justify-between gap-2 px-4"
           style={{
             bottom: '-4px',
@@ -82,6 +92,9 @@ export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
             height: '126px',
             background: dark ? '#1a1a1a' : '#ffffff',
           }}
+          initial={reduceMotion ? false : { y: 14, opacity: 0.86 }}
+          whileHover={reduceMotion ? undefined : { y: 0, opacity: 1 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
         >
           <div className="min-w-0">
             <h3 className="font-bold text-base leading-snug line-clamp-2" style={{ color: dark ? '#ffffff' : '#1a1a1a' }}>
@@ -100,8 +113,8 @@ export function MyCourseCard({ item, href, dark = false }: MyCourseCardProps) {
           >
             <Pause className="w-4 h-4" style={{ color: dark ? '#1a1a1a' : '#ffffff' }} />
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </Link>
   );
 }

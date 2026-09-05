@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@/components/ui/pagination';
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink } from '@/components/ui/pagination';
 
 interface CustomPaginationProps {
   page: number;
@@ -11,6 +11,12 @@ interface CustomPaginationProps {
 
 export function CustomPagination({ page, pageCount, onPageChange }: CustomPaginationProps) {
   if (pageCount <= 1) return null;
+
+  const pages = pageCount <= 7
+    ? Array.from({ length: pageCount }, (_, index) => index + 1)
+    : Array.from(new Set([1, 2, page - 1, page, page + 1, pageCount - 1, pageCount]))
+        .filter((value) => value >= 1 && value <= pageCount)
+        .sort((a, b) => a - b);
 
   return (
     <Pagination className="mt-6">
@@ -23,12 +29,17 @@ export function CustomPagination({ page, pageCount, onPageChange }: CustomPagina
             <ChevronLeftIcon className="size-4" />
           </PaginationLink>
         </PaginationItem>
-        {Array.from({ length: pageCount }, (_, i) => i + 1).map((p) => (
-          <PaginationItem key={p}>
-            <PaginationLink isActive={p === page} onClick={() => onPageChange(p)} className="cursor-pointer">
-              {p}
-            </PaginationLink>
-          </PaginationItem>
+        {pages.map((p, index) => (
+          <>
+            {index > 0 && p - pages[index - 1] > 1 && (
+              <PaginationItem key={`ellipsis-${p}`}><PaginationEllipsis /></PaginationItem>
+            )}
+            <PaginationItem key={p}>
+              <PaginationLink isActive={p === page} onClick={() => onPageChange(p)} className="cursor-pointer">
+                {p}
+              </PaginationLink>
+            </PaginationItem>
+          </>
         ))}
         <PaginationItem>
           <PaginationLink

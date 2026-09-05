@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -8,8 +7,8 @@ import { MainTitle } from "@/components/ui/main-title";
 import { Subtitle } from "@/components/ui/subtitle";
 import { getMediaUrl } from "@/lib/utils";
 import type { Partner } from "@/types/common";
-import { useState } from "react";
 import { usePartners } from "@/hooks/queries/use-partners";
+import { PaginatedGrid } from '@/components/ui/paginated-grid';
 
 interface PartnersSectionProps {
   partners?: Partner[];
@@ -25,8 +24,8 @@ export function PartnersSection({
   showSubtitle = true,
 }: PartnersSectionProps) {
   const t = useTranslations("partners");
-  const { data: fetchedPartners = [], isLoading } = usePartners(20);
-  const partners = partnersProp ?? fetchedPartners;
+  const { data: fetchedResponse, isLoading } = usePartners(100);
+  const partners = partnersProp ?? fetchedResponse?.data ?? [];
   const loading = partnersProp ? false : isLoading;
 
   const isDark = variant === "dark";
@@ -36,10 +35,6 @@ export function PartnersSection({
   const cardBorderColor = isDark ? "border-[#282828]" : "border-[#F4F4F6]";
   const titleColor = isDark ? "#FFFFFF" : "#18181A";
   const borderColor = isDark ? "border-gray-800" : "border-gray-100";
-
-  const cardWidth = 412 + 24; // card + gap
-  const totalWidth = partners.length * cardWidth;
-  const [isPaused, setIsPaused] = useState(false);
 
   // Agar yuklanayotgan bo'lsa yoki ma'lumot bo'lmasa, hech narsa ko'rsatmaydi
   if (loading || !partners || partners.length === 0) {
@@ -69,24 +64,9 @@ export function PartnersSection({
         </div>
       </div>
 
-      <div className="mt-20 w-full overflow-hidden space-y-6">
-        {/* Row 1: scrolls left */}
-        <div className="overflow-hidden">
-          <motion.div
-            className="flex gap-6 px-6"
-            animate={isPaused ? undefined : { x: ["0px", `${-totalWidth}px`] }}
-            transition={{
-              x: {
-                repeat: Infinity,
-                duration: partners.length * 6,
-                ease: "linear",
-              },
-            }}
-            style={{ width: "max-content" }}
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-          >
-            {[...partners, ...partners, ...partners].map((partner, index) => {
+      <div className="container mt-12">
+          <PaginatedGrid items={partners} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {(partner) => {
               const isLocalLogo = partner.logo?.startsWith("/");
               const logoSrc = isLocalLogo
                 ? partner.logo
@@ -96,7 +76,7 @@ export function PartnersSection({
               const cardClass = `group relative flex h-[203px] w-[412px] shrink-0 items-center justify-center rounded-[16px] border-[3px] ${cardBorderColor} ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"}`;
               return (
                 <Link
-                  key={`row1-${partner.id}-${index}`}
+                  key={partner.id}
                   href={`/partners/${partner.id}`}
                   className={cardClass}
                 >
@@ -113,10 +93,8 @@ export function PartnersSection({
                   />
                 </Link>
               );
-            })}
-          </motion.div>
-        </div>
-
+            }}
+          </PaginatedGrid>
       </div>
     </section>
   );

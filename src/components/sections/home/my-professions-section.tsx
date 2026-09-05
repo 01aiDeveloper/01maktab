@@ -36,7 +36,7 @@ export function MyProfessionsSection() {
   useEffect(() => {
     const fetchProfessions = async () => {
       try {
-        const data = await catalogApi.getList("profession");
+        const data = (await catalogApi.getList("profession")).data as Profession[];
         if (data.length > 0) {
           const apiProfessions = data.map(
             (prof: Profession) => ({

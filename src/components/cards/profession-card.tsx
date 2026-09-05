@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -14,7 +14,8 @@ interface ProfessionCardProps {
   progress: string
 }
 
-export function ProfessionCard({ id, image, title, instructor, progress }: ProfessionCardProps) {
+export function ProfessionCard({ image, title, instructor, progress }: ProfessionCardProps) {
+  const reduceMotion = useReducedMotion()
   // Generate slug from title - handle special characters and spaces
   const slug = title
     .toLowerCase()
@@ -26,8 +27,12 @@ export function ProfessionCard({ id, image, title, instructor, progress }: Profe
   
   return (
     <motion.div
-      whileHover={{ scale: 1.02, y: -4 }}
-      transition={{ type: "spring", stiffness: 300 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.18 }}
+      whileHover={reduceMotion ? undefined : { scale: 1.015, y: -7 }}
+      whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
       className="relative overflow-hidden rounded-2xl aspect-[16/10] min-w-[280px] cursor-pointer group"
     >
       <Image

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { getMediaUrl } from '@/lib/utils';
 import { EnrollmentBadge } from '@/components/ui/enrollment-badge';
 import { StatusBadge, resolveStatus, type StatusFlags } from '@/components/ui/status-badge';
@@ -27,6 +27,7 @@ export function SkillCard({
   hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled,
   hideQueueStatus,
 }: SkillCardProps) {
+  const reduceMotion = useReducedMotion();
   const rawStatus = resolveStatus({ hasPurchased, pricingType, price, presalesEnabled, waitlistEnabled });
   const status = hideQueueStatus ? null : rawStatus;
   const countNum = enrollmentCount ?? waitlistCount ?? 0;
@@ -38,8 +39,12 @@ export function SkillCard({
   return (
     <Link href={linkHref}>
       <motion.div
-        whileHover={{ scale: 1.01, y: -1 }}
-        transition={{ type: 'spring', stiffness: 300 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
+        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, amount: 0.18 }}
+        whileHover={reduceMotion ? undefined : { y: -7, scale: 1.015 }}
+        whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
         className="relative overflow-hidden rounded-[20px] aspect-3/4 min-w-[160px] cursor-pointer group bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F]"
       >
         <Image

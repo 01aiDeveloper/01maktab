@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import Image from 'next/image';
-import useEmblaCarousel from 'embla-carousel-react';
 import { useTranslations } from 'next-intl';
 import { StoryModal, STORIES } from './feature-cards-modal';
-import { CarouselNavigation } from './ui/carousel-navigation';
+import { PaginatedGrid } from './ui/paginated-grid';
 
 const FEATURE_CARD_META = [
   {
@@ -64,39 +63,15 @@ export function FeatureCards() {
   const t = useTranslations('featureCards');
   const featureCards = FEATURE_CARD_META.map((c) => ({ ...c, title: t(c.titleKey) }));
   const [activeStoryId, setActiveStoryId] = useState<number | null>(null);
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: true,
-    align: 'start',
-    breakpoints: {
-      '(min-width: 1024px)': { active: false },
-    },
-  });
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(true);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
-  }, [emblaApi, onSelect]);
-
   const activeStory = activeStoryId !== null ? (STORIES.find((s) => s.id === activeStoryId) ?? null) : null;
 
   return (
     <>
       <section className="w-full py-4">
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="container">
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-4 lg:grid lg:grid-cols-4 py-4">
-              {featureCards.map((card) => (
-                <motion.div key={card.id} variants={cardVariants} className="flex-[0_0_80%] min-w-0 sm:flex-[0_0_calc(50%-8px)] lg:flex-none">
+          <PaginatedGrid items={featureCards} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 py-4">
+              {(card) => (
+                <motion.div key={card.id} variants={cardVariants} className="min-w-0">
                   <motion.button
                     onClick={() => setActiveStoryId(card.id)}
                     whileHover={{ scale: 1.02, y: -2 }}
@@ -149,21 +124,8 @@ export function FeatureCards() {
                     </div>
                   </motion.button>
                 </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Navigation - only on mobile/tablet */}
-          <div className="flex items-center justify-center mt-4 ">
-            <CarouselNavigation
-              onPrevClick={() => emblaApi?.scrollPrev()}
-              onNextClick={() => emblaApi?.scrollNext()}
-              canScrollPrev={canScrollPrev}
-              canScrollNext={canScrollNext}
-              variant="gray"
-              size="md"
-            />
-          </div>
+              )}
+          </PaginatedGrid>
         </motion.div>
       </section>
 

@@ -50,7 +50,7 @@ export default function GraduateStoryPage() {
           setError(true);
         }
 
-        const allStories = await graduateApi.getList(8);
+        const allStories = (await graduateApi.getList(8)).data;
         if (allStories) {
           const filteredStories = allStories.filter((s: GraduateStoryCard) => s.id !== Number(params.id));
           setOtherStories(filteredStories);

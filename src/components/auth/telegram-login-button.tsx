@@ -43,7 +43,7 @@ export default function TelegramLoginButton({ botUsername = "O1AI_Contact_Bot", 
       delete (window as any).onTelegramAuth
       script.remove()
     }
-  }, [onAuth])
+  }, [botUsername, onAuth])
 
   return <div ref={containerRef} />
 }

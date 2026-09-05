@@ -1,16 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { GraduateCarouselCard } from '@/components/cards/graduate-carousel-card';
 import { MainTitle } from '@/components/ui/main-title';
 import { Subtitle } from '@/components/ui/subtitle';
-import { CarouselNavigation } from '@/components/ui/carousel-navigation';
 import { graduateApi } from '@/services/react-query/graduate';
 import { getMediaUrl } from '@/lib/utils';
+import { PaginatedGrid } from '@/components/ui/paginated-grid';
 
 type Graduate = {
   id: number;
@@ -20,42 +19,18 @@ type Graduate = {
   position: string;
 };
 
-type GraduatesSectionProps = {
-  rows?: 1 | 2;
-};
+type GraduatesSectionProps = { rows?: 1 | 2 };
 
-export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
+export function HomeGraduatesSection({ rows: _rows = 2 }: GraduatesSectionProps) {
   const t = useTranslations('graduates');
   const [graduates, setGraduates] = useState<Graduate[]>([]);
   const [loading, setLoading] = useState(true);
-  const [emblaRef1, emblaApi1] = useEmblaCarousel({
-    loop: true,
-    align: 'start',
-    dragFree: true,
-  });
-  const [emblaRef2, emblaApi2] = useEmblaCarousel({
-    loop: true,
-    align: 'start',
-    dragFree: true,
-  });
-  // Mobile: single row carousel with all graduates
-  const [emblaRefMobile, emblaApiMobile] = useEmblaCarousel({
-    loop: true,
-    align: 'start',
-    dragFree: true,
-  });
   useEffect(() => {
     const fetchGraduates = async () => {
       try {
         setLoading(true);
-        const graduatesData = await graduateApi.getList(20);
-
-        if (Array.isArray(graduatesData)) {
-          setGraduates(graduatesData);
-        } else {
-          console.error('Graduates data is not an array:', graduatesData);
-          setGraduates([]);
-        }
+        const response = await graduateApi.getList(100, 1);
+        setGraduates(response.data as Graduate[]);
       } catch (error) {
         console.error('Failed to fetch graduates:', error);
         setGraduates([]);
@@ -66,35 +41,6 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
 
     fetchGraduates();
   }, []);
-
-  // Desktop: sync both carousels
-  const scrollPrev = useCallback(() => {
-    emblaApi1?.scrollPrev();
-    if (rows === 2) {
-      emblaApi2?.scrollPrev();
-    }
-  }, [emblaApi1, emblaApi2, rows]);
-
-  const scrollNext = useCallback(() => {
-    emblaApi1?.scrollNext();
-    if (rows === 2) {
-      emblaApi2?.scrollNext();
-    }
-  }, [emblaApi1, emblaApi2, rows]);
-
-  // Mobile: single carousel
-  const scrollPrevMobile = useCallback(() => {
-    emblaApiMobile?.scrollPrev();
-  }, [emblaApiMobile]);
-
-  const scrollNextMobile = useCallback(() => {
-    emblaApiMobile?.scrollNext();
-  }, [emblaApiMobile]);
-
-  // Split graduates into two rows (row1 gets all if rows=1)
-  const midpoint = Math.ceil(graduates.length / 2);
-  const graduatesRow1 = rows === 1 ? graduates : graduates.slice(0, midpoint);
-  const graduatesRow2 = rows === 1 ? [] : graduates.slice(midpoint);
 
   if (loading) {
     return (
@@ -150,94 +96,13 @@ export function HomeGraduatesSection({ rows = 2 }: GraduatesSectionProps) {
           {t('subtitle')}
         </Subtitle>
 
-        {/* Mobile: single row slider */}
-        <div className="md:hidden">
-          <div className="overflow-hidden" ref={emblaRefMobile}>
-            <div className="flex">
-              {graduates.map((graduate) => (
-                <div
-                  key={graduate.id}
-                  className="flex-[0_0_83.33%] min-w-0 sm:flex-[0_0_50%] px-1.5"
-                >
-                  <Link href={`/graduates/${graduate.id}`}>
-                    <GraduateCarouselCard
-                      name={graduate.fullname}
-                      company={graduate.company}
-                      position={graduate.position}
-                      image={getMediaUrl(graduate.photo)}
-                    />
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-center justify-center mt-8">
-            <CarouselNavigation
-              onPrevClick={scrollPrevMobile}
-              onNextClick={scrollNextMobile}
-              canScrollPrev
-              canScrollNext
-              variant="gray"
-              size="md"
-            />
-          </div>
-        </div>
-
-        {/* Desktop: two rows */}
-        <div className="hidden md:block space-y-4">
-          <div className="overflow-hidden" ref={emblaRef1}>
-            <div className="flex">
-              {graduatesRow1.map((graduate) => (
-                <div
-                  key={graduate.id}
-                  className="flex-[0_0_33.333%] lg:flex-[0_0_25%] min-w-0 px-2"
-                >
-                  <Link href={`/graduates/${graduate.id}`}>
-                    <GraduateCarouselCard
-                      name={graduate.fullname}
-                      company={graduate.company}
-                      position={graduate.position}
-                      image={getMediaUrl(graduate.photo)}
-                    />
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {rows === 2 && graduatesRow2.length > 0 && (
-            <div className="overflow-hidden" ref={emblaRef2}>
-              <div className="flex">
-                {graduatesRow2.map((graduate) => (
-                  <div
-                    key={graduate.id}
-                    className="flex-[0_0_33.333%] lg:flex-[0_0_25%] min-w-0 px-2"
-                  >
-                    <Link href={`/graduates/${graduate.id}`}>
-                      <GraduateCarouselCard
-                        name={graduate.fullname}
-                        company={graduate.company}
-                        position={graduate.position}
-                        image={getMediaUrl(graduate.photo)}
-                      />
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
+        <PaginatedGrid items={graduates} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {(graduate) => (
+            <Link key={graduate.id} href={`/graduates/${graduate.id}`}>
+              <GraduateCarouselCard name={graduate.fullname} company={graduate.company} position={graduate.position} image={getMediaUrl(graduate.photo)} />
+            </Link>
           )}
-
-          <div className="flex items-center justify-center mt-8">
-            <CarouselNavigation
-              onPrevClick={scrollPrev}
-              onNextClick={scrollNext}
-              canScrollPrev
-              canScrollNext
-              variant="gray"
-              size="md"
-            />
-          </div>
-        </div>
+        </PaginatedGrid>
       </div>
     </motion.section>
   );
