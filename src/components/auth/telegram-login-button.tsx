@@ -25,7 +25,6 @@ declare global {
   }
 }
 
-export default function TelegramLoginButton({ botUsername = "O1AI_Contact_Bot", onAuth }: TelegramLoginButtonProps) {
 export default function TelegramLoginButton({
   botUsername = "O1AI_Contact_Bot",
   onAuth,
@@ -72,7 +71,6 @@ export default function TelegramLoginButton({
     script.setAttribute("data-onauth", "onTelegramAuth(user)")
     script.setAttribute("data-request-access", "write")
 
-    containerRef.current?.appendChild(script)
     container.appendChild(script)
 
     const timer = setInterval(() => {
@@ -86,15 +84,12 @@ export default function TelegramLoginButton({
       clearInterval(timer)
       observer.disconnect()
       delete (window as any).onTelegramAuth
-      script.remove()
       if (container) {
         container.innerHTML = ""
       }
     }
-  }, [botUsername, onAuth])
   }, [botUsername, onAuth, bgColor])
 
-  return <div ref={containerRef} />
   return (
     <div
       ref={containerRef}

@@ -24,13 +24,13 @@ export function EventCard({
   if (locked) {
     return (
       <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
-        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
-        viewport={{ once: true, amount: 0.18 }}
-        whileHover={reduceMotion ? undefined : { y: -7, scale: 1.015 }}
-        whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+        initial={{ opacity: 0, y: 24, scale: 0.98 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, amount: 0.1 }}
+        whileHover={{ y: -8, scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.45, ease: "easeOut" }}
-        className="group relative aspect-[372/508] w-full overflow-hidden rounded-[40px] bg-gray-100 shadow-[0_10px_24px_rgba(24,38,86,0.08)]"
+        className="group relative aspect-[372/508] w-full overflow-hidden rounded-[40px] bg-gray-100 shadow-[0_10px_24px_rgba(24,38,86,0.08)] hover:shadow-[0_20px_35px_rgba(24,38,86,0.18)] transition-all duration-300"
       >
         <Image
           quality={90} src={imageUrl || "/placeholder.svg"}
@@ -79,19 +79,19 @@ export function EventCard({
   // Original unlocked card
   return (
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.18 }}
-      whileHover={reduceMotion ? undefined : { y: -7, scale: 1.015 }}
-      whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+      initial={{ opacity: 0, y: 24, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.1 }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
-      className="group relative aspect-[372/508] w-full overflow-hidden rounded-[40px] bg-gray-100 shadow-[0_10px_24px_rgba(24,38,86,0.08)]"
+      className="group relative aspect-[372/508] w-full overflow-hidden rounded-[40px] bg-gray-100 shadow-[0_10px_24px_rgba(24,38,86,0.08)] hover:shadow-[0_20px_35px_rgba(24,38,86,0.18)] transition-all duration-300"
     >
       <Image
         quality={90} src={imageUrl || "/placeholder.svg"}
         alt={title}
         fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
       />
 
       {/* Overlay */}
@@ -111,7 +111,7 @@ export function EventCard({
 
       {/* Top Right - Arrow Button */}
       <div className="absolute top-6 right-5 z-10">
-        <div className="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-white/20 backdrop-blur-[5.64px]">
+        <div className="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-white/20 backdrop-blur-[5.64px] transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1">
           <Image
             quality={90} src="/icons/main-arrow.svg"
             alt="arrow"

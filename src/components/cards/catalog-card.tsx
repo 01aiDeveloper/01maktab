@@ -62,13 +62,13 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
   return (
     <Link href={href} className="block group">
       <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
-        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
-        viewport={{ once: true, amount: 0.18 }}
-        whileHover={reduceMotion ? undefined : { y: -7, scale: 1.015 }}
-        whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+        initial={{ opacity: 0, y: 24, scale: 0.98 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, amount: 0.1 }}
+        whileHover={{ y: -8, scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.45, ease: 'easeOut' }}
-        className="relative rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] cursor-pointer aspect-[425/512] overflow-hidden bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F] shadow-[0_10px_24px_rgba(24,38,86,0.08)]"
+        className="relative rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] cursor-pointer aspect-[425/512] overflow-hidden bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F] shadow-[0_10px_24px_rgba(24,38,86,0.08)] hover:shadow-[0_20px_35px_rgba(24,38,86,0.18)] transition-all duration-300"
       >
         {/* Full-cover image */}
         <Image
@@ -76,7 +76,7 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
           alt={title}
           fill
           sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 280px"
-          className="object-cover object-center rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-cover object-center rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] transition-transform duration-500 ease-out group-hover:scale-105"
           onError={() => setImgSrc('/placeholder.svg')}
         />
 
@@ -124,15 +124,15 @@ export function CatalogCard({ title, image, badge, status, enrollmentCount, wait
         {/* Bottom info overlay — frosted */}
         <motion.div
           className="absolute z-10 rounded-t-[20px] flex items-center justify-between gap-2 px-5 bottom-0 left-0 right-0 h-[104.8px] bg-white/80 backdrop-blur-[47.52px]"
-          initial={reduceMotion ? false : { y: 14, opacity: 0.86 }}
-          whileHover={reduceMotion ? undefined : { y: 0, opacity: 1 }}
+          initial={{ y: 10, opacity: 0.9 }}
+          whileHover={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
         >
           <div className="min-w-0">
             <h3 className="text-[#18181A] font-semibold text-[19px] sm:text-[22.4px] leading-[1.05] tracking-[-1.12px] capitalize line-clamp-2">{title}</h3>
             {mentorName && <p className="text-[#9F9F9F] text-[13px] sm:text-[16px] mt-1 truncate">{t('mentor')}: {mentorName}</p>}
           </div>
-          <div className="shrink-0">
+          <div className="shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1">
             <ArrowUpRight className="w-7 h-7 sm:w-8 sm:h-8 text-[#18181A] group-hover:text-[#3B5BFF] transition-colors" />
           </div>
         </motion.div>
