@@ -122,12 +122,10 @@ export function Header() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="py-4 md:py-6 px-3 md:px-5 pt-4 flex flex-col md:flex-row md:items-stretch gap-4 md:gap-6"
+              className="py-4 md:py-6 px-3 md:px-5 pt-4 flex flex-col md:flex-row md:items-center gap-4 md:gap-5"
             >
-              {/* Chap ustun: linklar + til */}
-              <div className="flex flex-col gap-4 md:gap-6 md:flex-1 md:justify-between">
-                <div className="flex flex-col gap-4 md:gap-6">
-                  {menuItems.map((item) => {
+              <div className="flex flex-col gap-4 md:gap-6 md:flex-1">
+                {menuItems.map((item) => {
                     const active = isActiveItem(item.href);
                     return (
                       <Link
@@ -144,13 +142,11 @@ export function Header() {
                       </Link>
                     );
                   })}
-                </div>
               </div>
 
-              {/* O'ng ustun: featured card */}
               <MenuFeaturedCard
                 onNavigate={() => setIsMenuOpen(false)}
-                className="w-full md:w-56 shrink-0"
+                className="w-full md:w-[280px] shrink-0"
               />
             </motion.div>
           )}
