@@ -25,7 +25,12 @@ export function PartnersSection({
 }: PartnersSectionProps) {
   const t = useTranslations("partners");
   const { data: fetchedResponse, isLoading } = usePartners(100);
-  const partners = partnersProp ?? fetchedResponse?.data ?? [];
+  const rawPartners = partnersProp ?? fetchedResponse?.data ?? [];
+  const partners = rawPartners.filter((partner) => {
+    const name = partner.name?.toLowerCase() ?? "";
+    const logo = partner.logo?.toLowerCase() ?? "";
+    return !name.includes("ucell") && !logo.includes("ucell");
+  });
   const loading = partnersProp ? false : isLoading;
 
   const isDark = variant === "dark";

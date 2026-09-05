@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/common/use-auth";
 
 type SlideMeta = {
   id: number;
-  key: "ucellDemo" | "aiCreator" | "aiStartup";
+  key: "aiCreator" | "aiStartup";
   bgColor: string;
   image: string;
   textColor: string;
@@ -37,18 +37,6 @@ const SLIDE_META: SlideMeta[] = [
     image: "/images/AIStartUp.jpg",
     textColor: "text-white",
     isDark: true,
-  },
-  {
-    id: 3,
-    key: "ucellDemo",
-    bgColor: "bg-[#C9C2FF]",
-    image: "/images/bannerUcell.png",
-    textColor: "text-foreground",
-    isDark: false,
-    partnerLogo: "/images/partners/Ucell.png",
-    partnerName: "Ucell",
-    partnerLogoWidth: 80,
-    partnerLogoHeight: 28,
   },
 ];
 
