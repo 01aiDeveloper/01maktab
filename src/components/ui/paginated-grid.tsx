@@ -17,7 +17,6 @@ export function PaginatedGrid<T>({ items, className, children }: PaginatedGridPr
 
   return (
     <>
-      <div className={className}>{visibleItems.map(children)}</div>
       <AnimatePresence mode="wait">
         <motion.div
           key={page}
