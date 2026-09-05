@@ -58,9 +58,8 @@ function LoginContent() {
         <div className="grid w-full overflow-hidden rounded-[32px] border border-white/80 bg-white/65 shadow-[0_30px_90px_rgba(55,74,145,0.18)] backdrop-blur-xl lg:grid-cols-[0.9fr_1.1fr]">
           <div className="hidden flex-col justify-between bg-[#172451] p-10 text-white lg:flex xl:p-14">
             <div>
-              <div className="mb-20 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-sm font-black text-[#172451]">01</span>
-                <span className="text-2xl font-bold tracking-[-0.06em]">01AI</span>
+              <div className="mb-20">
+                <span className="text-4xl font-bold tracking-[-0.06em]">01AI</span>
               </div>
               <p className="mb-5 text-sm font-medium uppercase tracking-[0.2em] text-white/45">Learning, reimagined</p>
               <h2 className="max-w-sm text-4xl font-semibold leading-[1.05] tracking-[-0.06em] xl:text-5xl">
@@ -74,12 +73,8 @@ function LoginContent() {
           </div>
 
           <section className="flex min-h-[580px] flex-col items-center justify-center px-6 py-12 text-center sm:px-12">
-            <div className="mb-10 flex items-center gap-2 lg:hidden">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#172451] text-xs font-black text-white">01</span>
-              <span className="text-2xl font-bold tracking-[-0.06em]">01AI</span>
-            </div>
-            <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-[22px] bg-gradient-to-br from-[#2a51e6] to-[#7d91ff] shadow-[0_12px_30px_rgba(42,81,230,0.3)]">
-              <span className="text-2xl font-black tracking-tight text-white select-none">01</span>
+            <div className="mb-8">
+              <span className="text-5xl font-black tracking-[-0.06em] text-[#2a51e6] select-none">01AI</span>
             </div>
             <h1 className="max-w-md text-3xl font-bold tracking-[-0.05em] sm:text-4xl">{t("title")}</h1>
             <p className="mt-4 max-w-sm text-[15px] leading-6 text-[#18181A]/55">{t("subtitle")}</p>
