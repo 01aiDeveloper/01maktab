@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "01AI",
   description: "01AI",
   generator: "01AI",
+  other: {
+    "color-scheme": "only light",
+  },
   icons: {
     icon: [
       {
@@ -38,6 +41,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <head>
+        <meta name="color-scheme" content="only light" />
         {/* {process.env.NODE_ENV === "production" && (
           <script
             dangerouslySetInnerHTML={{

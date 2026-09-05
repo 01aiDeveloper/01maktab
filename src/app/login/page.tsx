@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { authApi } from "@/services/react-query/auth"
 import { useAuth } from "@/hooks/common/use-auth"
 import TelegramLoginButton from "@/components/auth/telegram-login-button"
-import { ArrowUpRight, Check, ShieldCheck } from "lucide-react"
+import { Check, ShieldCheck } from "lucide-react"
 
 function LoginContent() {
   const t = useTranslations("login")
@@ -79,13 +79,13 @@ function LoginContent() {
               <span className="text-2xl font-bold tracking-[-0.06em]">01AI</span>
             </div>
             <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-[22px] bg-gradient-to-br from-[#2a51e6] to-[#7d91ff] shadow-[0_12px_30px_rgba(42,81,230,0.3)]">
-              <ArrowUpRight className="h-8 w-8 text-white" strokeWidth={1.8} />
+              <span className="text-2xl font-black tracking-tight text-white select-none">01</span>
             </div>
             <h1 className="max-w-md text-3xl font-bold tracking-[-0.05em] sm:text-4xl">{t("title")}</h1>
             <p className="mt-4 max-w-sm text-[15px] leading-6 text-[#18181A]/55">{t("subtitle")}</p>
 
-            <div className="mt-9 flex min-h-12 min-w-[220px] items-center justify-center rounded-2xl border border-[#dce3f5] bg-[#f8faff] px-5 py-3 shadow-sm transition hover:border-[#aebfff] hover:shadow-md">
-              <TelegramLoginButton onAuth={handleTelegramAuth} />
+            <div className="mt-9 flex min-h-12 min-w-[220px] items-center justify-center rounded-2xl border border-[#dce3f5] bg-[#f8faff] px-5 py-3 shadow-sm transition hover:border-[#aebfff] hover:shadow-md [color-scheme:only_light]">
+              <TelegramLoginButton onAuth={handleTelegramAuth} bgColor="#f8faff" />
             </div>
 
             {isLoading && <p className="mt-4 text-sm text-[#18181A]/45">{t("loading")}</p>}

@@ -1,6 +1,7 @@
 "use client"
 
 import { CourseCard } from "@/components/shared/course-card"
+import { motion } from "framer-motion"
 import { useTranslations } from "next-intl"
 import { MainTitle } from "@/components/ui/main-title"
 import { Subtitle } from "@/components/ui/subtitle"
@@ -28,6 +29,7 @@ export function CoursesSection() {
     price: course.price,
     pricingType: course.pricingType,
     enrollmentCount: course.enrollmentCount,
+
     waitlistCount: course.waitlistCount,
     hasPurchased: course.hasPurchased,
     presalesEnabled: course.presalesEnabled,
@@ -35,7 +37,14 @@ export function CoursesSection() {
   }))
 
   return (
-    <section id="kurslar" className="flex flex-col justify-center py-12 md:py-16">
+    <motion.section
+      id="kurslar"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.08 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className="flex flex-col justify-center py-12 md:py-16"
+    >
       <div className="mx-auto w-full max-w-7xl px-4 md:px-8 lg:px-12">
         <div className="text-center">
           <MainTitle
@@ -72,12 +81,12 @@ export function CoursesSection() {
           <PaginatedGrid items={displayCourses} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 items-stretch">
             {(course: any, index) => (
               <div key={course.id || index} className="min-w-0 w-full">
-                <CourseCard {...course} hideQueueStatus />
+                <CourseCard {...course} index={index} hideQueueStatus />
               </div>
             )}
           </PaginatedGrid>
         )}
       </div>
-    </section>
+    </motion.section>
   )
 }

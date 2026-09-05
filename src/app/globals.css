@@ -53,6 +53,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  color-scheme: only light;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -333,4 +334,13 @@
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Telegram login widget iframe background & color scheme fix */
+.telegram-login-wrapper,
+.telegram-login-wrapper iframe,
+iframe[id^="telegram-login-"] {
+  color-scheme: only light !important;
+  background-color: var(--tg-bg, #f8faff) !important;
+  background: var(--tg-bg, #f8faff) !important;
 }
