@@ -1,0 +1,37 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "01-user-pannel",
+  "account_id": "6d5cba7f944d4e573dde4054124e7821",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-09-10",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "preview_urls": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "01-user-pannel"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_INC_CACHE_KV",
+      "id": "442bb648dd0847d9a338f82f5ea866a4"
+    }
+  ],
+  "vars": {
+    "NEXT_PUBLIC_API_BASE_URL": "https://app-dev.01ai.uz/api/v1",
+    "NEXT_PUBLIC_UPLOAD_URL": "https://maktab01-dev-files.s3.eu-north-1.amazonaws.com"
+  }
+}

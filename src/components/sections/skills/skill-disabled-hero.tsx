@@ -43,12 +43,12 @@ export function SkillDisabledHero({
   return (
     <section className="w-full py-6">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_464px] gap-4 lg:h-[673px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_464px] gap-4 lg:items-start">
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
-            className="bg-linear-to-br from-[#5d7bf5] via-[#5b6ef5] to-[#7c71f4] rounded-[29px] lg:rounded-[40px] overflow-hidden relative h-80 w-full lg:h-full lg:w-[464px] order-first lg:order-last"
+            className="bg-linear-to-br from-[#5d7bf5] via-[#5b6ef5] to-[#7c71f4] rounded-[29px] lg:rounded-[40px] overflow-hidden relative h-80 w-full lg:h-[673px] lg:w-[464px] order-first lg:order-last"
           >
             {courseImage && (
               <Image
@@ -101,12 +101,12 @@ export function SkillDisabledHero({
             )}
           </motion.div>
 
-          <div className="flex flex-col gap-4 order-last lg:order-first min-h-0 lg:h-full">
+          <div className="flex flex-col gap-4 order-last lg:order-first min-h-0">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-8 flex flex-col relative overflow-hidden lg:flex-1 lg:min-h-0"
+              className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-7 flex flex-col relative overflow-hidden w-full"
             >
               <button
                 onClick={goBack}
@@ -116,12 +116,12 @@ export function SkillDisabledHero({
                 <span>{t('back')}</span>
               </button>
 
-              <h1 className="font-suisse text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
+              <h1 className="font-suisse text-[28px] md:text-4xl lg:text-[40px] font-bold text-gray-900 leading-tight mb-4">
                 {title}
               </h1>
 
               {subtitle && (
-                <p className="text-gray-500 text-sm lg:text-base leading-relaxed mb-6 line-clamp-10">
+                <p className="text-gray-500 text-sm lg:text-base leading-relaxed mb-5 line-clamp-4">
                   {subtitle}
                 </p>
               )}

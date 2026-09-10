@@ -13,6 +13,8 @@ interface CoursePublicInfo {
   price: number;
   pricingType: string;
   decorImage: string | null;
+  waitlistEnabled?: boolean;
+  presalesEnabled?: boolean;
 }
 
 export function useCourseInfo(courseId: string | number | undefined, courseType: string = 'course') {

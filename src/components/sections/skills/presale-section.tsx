@@ -135,7 +135,6 @@ export function PresaleSection({
     if (!courseId) return;
     try {
       await joinWaitlist.mutateAsync(courseId);
-      router.push('/classroom');
     } catch {
       // Already in waitlist or error
     }

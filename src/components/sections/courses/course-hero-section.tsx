@@ -44,6 +44,10 @@ interface CourseHeroSectionProps {
   badges?: CourseBadgeDisplay[];
   isAddedToProfile?: boolean;
   isFree?: boolean;
+  waitlistEnabled?: boolean;
+  isInWaitlist?: boolean;
+  onJoinWaitlist?: () => void;
+  joinWaitlistLoading?: boolean;
 }
 
 export function CourseHeroSection({
@@ -64,9 +68,14 @@ export function CourseHeroSection({
   badges = [],
   isAddedToProfile = false,
   isFree = false,
+  waitlistEnabled = false,
+  isInWaitlist = false,
+  onJoinWaitlist,
+  joinWaitlistLoading = false,
 }: CourseHeroSectionProps) {
   const t = useTranslations('courseHero');
   const tSkill = useTranslations('skillDetail');
+  const tWaitlist = useTranslations('waitlist');
   const goBack = useSmartBack('/catalog?tab=courses');
   const completedCount = progress?.completedLessonsCount ?? 0;
   const totalCount = progress?.totalLessonsCount ?? 0;
@@ -74,8 +83,12 @@ export function CourseHeroSection({
   const progressPercent = hasStarted && totalCount > 0
     ? Math.round((completedCount / totalCount) * 100)
     : 0;
-  const buttonLabel = startLoading
+  const waitlistOnly = waitlistEnabled && !isAddedToProfile;
+  const ctaLoading = waitlistOnly ? joinWaitlistLoading : startLoading;
+  const buttonLabel = ctaLoading
     ? t('loading')
+    : waitlistOnly
+    ? (isInWaitlist ? tSkill('inWaitlist') : tWaitlist('joinWaitlist'))
     : !isAddedToProfile && !isFree
     ? tSkill('buy')
     : hasStarted
@@ -149,13 +162,13 @@ export function CourseHeroSection({
                 </div>
               ) : null}
               <MainButton
-                variant="gradient"
+                variant={waitlistOnly && isInWaitlist ? "outline" : "gradient"}
                 size="md"
-                icon={startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowRight className="w-5 h-5" />}
+                icon={ctaLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : waitlistOnly && isInWaitlist ? undefined : <ArrowRight className="w-5 h-5" />}
                 iconPosition="right"
-                className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5]"
-                onClick={onStart}
-                disabled={startLoading}
+                className={`bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] ${waitlistOnly && isInWaitlist ? "opacity-70 cursor-not-allowed" : ""}`}
+                onClick={waitlistOnly ? onJoinWaitlist : onStart}
+                disabled={ctaLoading || (waitlistOnly && isInWaitlist)}
               >
                 {buttonLabel}
               </MainButton>

@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
@@ -45,6 +45,19 @@ function PaymentContent() {
 
   const discountedPrice = promoDiscountedPrice ?? urlDiscountedPrice;
   const discountPercent = urlDiscountPercent;
+
+  useEffect(() => {
+    if (!courseInfo) return;
+    const waitlistOnly = courseInfo.waitlistEnabled && !courseInfo.presalesEnabled && !urlDiscountedPrice;
+    if (!waitlistOnly) return;
+    const path =
+      courseType === 'skill'
+        ? `/skills/${courseId}`
+        : courseType === 'profession'
+        ? `/professions/${courseId}`
+        : `/courses/${courseId}`;
+    router.replace(path);
+  }, [courseInfo, courseType, courseId, router, urlDiscountedPrice]);
 
   const userInfo = {
     firstName: searchParams.get('firstName') ?? user?.firstname ?? '',

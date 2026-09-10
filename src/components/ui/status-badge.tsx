@@ -31,9 +31,9 @@ export interface StatusFlags {
 
 export function resolveStatus(f: StatusFlags): CardStatus | null {
   if (f.hasPurchased) return 'bought';
-  if (f.pricingType === 'FREE' || f.price === 0) return 'free';
   if (f.presalesEnabled) return 'presale';
   if (f.waitlistEnabled) return 'waitlist';
+  if (f.pricingType === 'FREE' || f.price === 0) return 'free';
   if (f.pricingType === 'PAID') return 'available';
   return null;
 }

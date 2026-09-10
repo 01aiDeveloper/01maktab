@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, Users, Check, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -27,6 +27,10 @@ export function WaitlistSection({ courseId, enrollmentCount = 0, enabled, isInWa
   const [joined, setJoined] = useState(!!isInWaitlist);
   const [error, setError] = useState(false);
 
+  useEffect(() => {
+    setJoined(!!isInWaitlist);
+  }, [isInWaitlist]);
+
   if (!enabled || hasPresale) return null;
 
   const handleWaitlist = async () => {
@@ -39,7 +43,6 @@ export function WaitlistSection({ courseId, enrollmentCount = 0, enabled, isInWa
     try {
       await joinWaitlist.mutateAsync(courseId);
       setJoined(true);
-      router.push('/classroom');
     } catch {
       setError(true);
     }

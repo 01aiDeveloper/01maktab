@@ -16,6 +16,11 @@ export function useJoinWaitlist() {
     mutationFn: waitlistApi.join,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.waitlist.mine });
+      queryClient.invalidateQueries({ queryKey: ['skill'] });
+      queryClient.invalidateQueries({ queryKey: ['course'] });
+      queryClient.invalidateQueries({ queryKey: ['profession'] });
+      queryClient.invalidateQueries({ queryKey: ['catalog'] });
+      queryClient.invalidateQueries({ queryKey: ['course-info'] });
     },
   });
 }
