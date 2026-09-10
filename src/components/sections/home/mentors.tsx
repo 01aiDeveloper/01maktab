@@ -19,9 +19,17 @@ export function MentorsSection() {
   const { data, isLoading } = useMentors(page, 12);
   const mentors = data?.data ?? [];
   const pageCount = data?.meta?.pagination?.pageCount ?? 1;
+  const hasMentors = mentors.length > 0;
+  const isEmpty = !isLoading && !hasMentors;
 
   return (
-    <section className="relative w-full bg-base-dark overflow-hidden rounded-b-[70px] sm:rounded-b-[160px] md:rounded-b-[328px] min-h-screen flex flex-col justify-center py-10 sm:py-18">
+    <section
+      className={
+        isEmpty
+          ? "relative w-full bg-base-dark overflow-hidden rounded-b-[40px] sm:rounded-b-[64px] md:rounded-b-[80px] flex flex-col justify-center py-16 sm:py-20 md:py-24"
+          : "relative w-full bg-base-dark overflow-hidden rounded-b-[70px] sm:rounded-b-[160px] md:rounded-b-[328px] min-h-screen flex flex-col justify-center py-10 sm:py-18"
+      }
+    >
       <div className="container">
         <div className="mx-auto max-w-[1296px] text-center">
           <MainTitle align="center" color="white" animated>
@@ -29,39 +37,45 @@ export function MentorsSection() {
           </MainTitle>
         </div>
 
-        <div className="mt-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-6">
-            {mentors.map((mentor) => (
-              <div key={mentor.id} className="w-full max-w-[310px]">
-                <MentorCard
-                  name={mentor.fullname || ""}
-                  role={mentor.position || ""}
-                  imageUrl={getMediaUrl(mentor.photo) || "/placeholder.svg"}
-                />
+        {hasMentors ? (
+          <>
+            <div className="mt-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-6">
+                {mentors.map((mentor) => (
+                  <div key={mentor.id} className="w-full max-w-[310px]">
+                    <MentorCard
+                      name={mentor.fullname || ""}
+                      role={mentor.position || ""}
+                      imageUrl={getMediaUrl(mentor.photo) || "/placeholder.svg"}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <CustomPagination page={page} pageCount={pageCount} onPageChange={setPage} />
-        </div>
+              <CustomPagination page={page} pageCount={pageCount} onPageChange={setPage} />
+            </div>
 
-        {!isLoading && mentors.length > 0 && <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-10 flex justify-center"
-        >
-          <Link href="/login">
-            <MainButton
-              variant="gradient"
-              size="default"
-              className="group w-60 h-13.5 rounded-[10px] px-4 py-3.75 flex flex-row items-center"
-            >
-              {tCommon("startFree")}
-              <ArrowRight className="h-6 w-6 inline ml-1" />
-            </MainButton>
-          </Link>
-        </motion.div>}
+            {!isLoading && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="mt-10 flex justify-center"
+              >
+                <Link href="/login">
+                  <MainButton
+                    variant="gradient"
+                    size="default"
+                    className="group w-60 h-13.5 rounded-[10px] px-4 py-3.75 flex flex-row items-center"
+                  >
+                    {tCommon("startFree")}
+                    <ArrowRight className="h-6 w-6 inline ml-1" />
+                  </MainButton>
+                </Link>
+              </motion.div>
+            )}
+          </>
+        ) : null}
       </div>
     </section>
   );
