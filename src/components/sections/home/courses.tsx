@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { CourseCard } from "@/components/shared/course-card"
 import { motion } from "framer-motion"
@@ -11,8 +11,7 @@ import { useCatalog } from "@/hooks/queries/use-catalog"
 import { getMediaUrl } from "@/lib/utils"
 import { NoData } from "@/components/shared/no-data"
 import { useAuth } from "@/hooks/common/use-auth"
-import { CarouselNavigation } from "@/components/ui/carousel-navigation"
-import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
+import { CustomPagination } from "@/components/ui/custom-pagination"
 
 export function CoursesSection() {
   const t = useTranslations("courses")
@@ -27,12 +26,30 @@ export function CoursesSection() {
     containScroll: "trimSnaps",
   })
 
-  const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } =
-    useCarouselNavigation(emblaApi)
+  const [page, setPage] = useState(1)
+  const [pageCount, setPageCount] = useState(1)
+
+  const syncPagination = useCallback(() => {
+    if (!emblaApi) return
+    setPage(emblaApi.selectedScrollSnap() + 1)
+    setPageCount(emblaApi.scrollSnapList().length)
+  }, [emblaApi])
 
   useEffect(() => {
-    emblaApi?.reInit()
-  }, [emblaApi, courses.length])
+    if (!emblaApi) return
+    emblaApi.reInit()
+    syncPagination()
+    emblaApi.on("select", syncPagination)
+    emblaApi.on("reInit", syncPagination)
+    return () => {
+      emblaApi.off("select", syncPagination)
+      emblaApi.off("reInit", syncPagination)
+    }
+  }, [emblaApi, courses.length, syncPagination])
+
+  const handlePageChange = useCallback((nextPage: number) => {
+    emblaApi?.scrollTo(nextPage - 1)
+  }, [emblaApi])
 
   const displayCourses = courses.map((course: any) => ({
     id: course.id,
@@ -49,8 +66,6 @@ export function CoursesSection() {
     presalesEnabled: course.presalesEnabled,
     waitlistEnabled: course.waitlistEnabled,
   }))
-
-  const showNav = displayCourses.length > 1
 
   return (
     <motion.section
@@ -108,17 +123,11 @@ export function CoursesSection() {
               </div>
             </div>
 
-            {showNav ? (
-              <div className="flex justify-center mt-6 md:mt-8">
-                <CarouselNavigation
-                  onPrevClick={scrollPrev}
-                  onNextClick={scrollNext}
-                  canScrollPrev={canScrollPrev}
-                  canScrollNext={canScrollNext}
-                  variant="light"
-                />
-              </div>
-            ) : null}
+            <CustomPagination
+              page={page}
+              pageCount={pageCount}
+              onPageChange={handlePageChange}
+            />
           </>
         )}
       </div>
