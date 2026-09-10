@@ -38,7 +38,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.08 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="py-10 md:py-14 container"
+      className="pt-10 md:pt-14 pb-16 md:pb-24 container"
     >
       <MainTitle align="center" className="mt-4 md:mt-6 lg:mt-8" animated>
         {t("title")}
