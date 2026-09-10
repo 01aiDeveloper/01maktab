@@ -341,6 +341,6 @@
 .telegram-login-wrapper iframe,
 iframe[id^="telegram-login-"] {
   color-scheme: only light !important;
-  background-color: var(--tg-bg, #f8faff) !important;
-  background: var(--tg-bg, #f8faff) !important;
+  background-color: var(--tg-bg, #ffffff) !important;
+  background: var(--tg-bg, #ffffff) !important;
 }

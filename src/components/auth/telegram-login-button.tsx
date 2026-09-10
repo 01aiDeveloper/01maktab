@@ -28,7 +28,7 @@ declare global {
 export default function TelegramLoginButton({
   botUsername = "O1AI_Contact_Bot",
   onAuth,
-  bgColor = "#f8faff",
+  bgColor = "#ffffff",
   className = "",
 }: TelegramLoginButtonProps) {
   const containerRef = useRef<HTMLDivElement>(null)

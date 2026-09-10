@@ -95,7 +95,7 @@ export function CoursesSection() {
           <NoData message={t("noDataMessage")} description={t("noDataDescription")} />
         ) : (
           <>
-            <div className="overflow-hidden" ref={emblaRef}>
+            <div className="overflow-hidden pt-6 pb-8 -my-3" ref={emblaRef}>
               <div className="flex gap-4 md:gap-5">
                 {displayCourses.map((course: any, index: number) => (
                   <div

@@ -37,11 +37,11 @@ export function CourseCard({
   return (
     <Link href={`/courses/${courseSlug}`} className="block group h-full">
       <motion.div
-        initial={{ opacity: 0, y: 24, scale: 0.98 }}
-        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
-        whileHover={{ y: -6, scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
+        whileHover={{ y: -6 }}
+        whileTap={{ y: -2 }}
         transition={{
           duration: 0.45,
           ease: [0.25, 0.1, 0.25, 1],
