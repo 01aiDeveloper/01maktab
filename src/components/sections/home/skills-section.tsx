@@ -38,7 +38,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.08 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="pt-10 md:pt-14 pb-16 md:pb-24 container"
+      className="pt-10 md:pt-14 pb-24 md:pb-32 container"
     >
       <MainTitle align="center" className="mt-4 md:mt-6 lg:mt-8" animated>
         {t("title")}
@@ -53,7 +53,11 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
         {t("subtitle")}
       </Subtitle>
 
-      <PaginatedGrid items={skills} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 py-3 -my-3 items-stretch">
+      <PaginatedGrid
+        items={skills}
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 py-3 -my-3 items-stretch"
+        navClassName="pb-6 md:pb-8"
+      >
         {(skill, index) => (
           <div key={skill.id || index} className="min-w-0 w-full">
             <SkillCard
