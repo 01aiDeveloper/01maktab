@@ -47,14 +47,14 @@ export function CourseCard({
           ease: [0.25, 0.1, 0.25, 1],
           delay: index != null ? (index % 4) * 0.08 : 0,
         }}
-        className="relative w-full aspect-[16/9] overflow-hidden rounded-[24px] md:rounded-[32px] shadow-[0_10px_24px_rgba(24,38,86,0.08)] hover:shadow-[0_20px_35px_rgba(24,38,86,0.16)] bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F] cursor-pointer transition-shadow duration-300"
+        className="relative w-full aspect-[654/430] overflow-hidden rounded-[24px] md:rounded-[32px] shadow-[0_10px_24px_rgba(24,38,86,0.08)] hover:shadow-[0_20px_35px_rgba(24,38,86,0.16)] bg-gradient-to-br from-[#3B5BFF] to-[#2A3F8F] cursor-pointer transition-shadow duration-300"
       >
         <Image
           quality={90}
           src={imgSrc}
           alt={title}
           fill
-          sizes="(max-width: 768px) 90vw, (max-width: 1280px) 50vw, 640px"
+          sizes="(max-width: 768px) 90vw, 654px"
           className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
           onError={() => setImgSrc("/placeholder.svg")}
         />
