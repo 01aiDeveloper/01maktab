@@ -7,7 +7,6 @@ export const waitlistApi = {
     return response.data.data
   },
   async join(courseId: string | number) {
-    const response = await api.post<ApiResponse<ApiWaitlistEntry>>(`/course/${courseId}/waitlist`)
-    return response.data.data
+    await api.post(`/course/${courseId}/waitlist`)
   },
 }

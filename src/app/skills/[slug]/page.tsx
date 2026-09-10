@@ -24,12 +24,13 @@ import type { ApiSkillModule } from "@/types/api";
 import { PageLoader } from "@/components/ui/page-loader";
 import { PageError } from "@/components/ui/page-error";
 import { NoData } from "@/components/ui/no-data";
-import { useAuth } from "@/hooks/common/use-auth";
+import { useJoinWaitlist } from "@/hooks/mutations/use-waitlist";
 import { PresaleSection } from "@/components/sections/skills/presale-section";
 import { WaitlistSection } from "@/components/sections/skills/waitlist-section";
 import { useCourseBadges } from "@/hooks/queries/use-course-badges";
 import { CourseStartModal } from "@/components/modals/course-start-modal";
 import { useSmartBack } from "@/hooks/common/use-smart-back";
+import { useAuth } from "@/hooks/common/use-auth";
 import { pickResumeLesson } from "@/lib/lesson-utils";
 
 
@@ -73,6 +74,7 @@ function toModuleItem(m: ApiSkillModule, isEnrolled = false): ModuleItem {
 
 export default function SkillDetailPage() {
   const t = useTranslations('skillDetail');
+  const tWaitlist = useTranslations('waitlist');
   const params = useParams();
   const router = useRouter();
   const slug = params?.slug as string;
@@ -83,6 +85,7 @@ export default function SkillDetailPage() {
   const { data: skillModules } = useSkillModules(skill?.id);
   const { data: mySkills } = useMySkills();
   const { data: skillBadges } = useCourseBadges(skill?.id);
+  const joinWaitlist = useJoinWaitlist();
   const [openModule, setOpenModule] = useState<string>("");
   const [startLoading, setStartLoading] = useState(false);
   const [showStartModal, setShowStartModal] = useState(false);
@@ -103,6 +106,7 @@ export default function SkillDetailPage() {
       return;
     }
     if (!skill) return;
+    if (skill.waitlistEnabled && !skill.preSales) return;
     setStartLoading(true);
     try {
       const alreadyAdded = !!skill.hasPurchased || !!skill.isEnrolled || !!mySkills?.some((c) => String(c.id) === String(skill.id));
@@ -124,6 +128,19 @@ export default function SkillDetailPage() {
   }, [user, skill, mySkills, router, goToFirstLesson]);
 
   const handleStartCourse = goToFirstLesson;
+
+  const handleJoinWaitlist = useCallback(async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+    if (!skill || skill.isInWaitlist) return;
+    try {
+      await joinWaitlist.mutateAsync(skill.id);
+    } catch {
+      // WaitlistSection and query invalidation surface the result
+    }
+  }, [user, skill, joinWaitlist, router]);
 
   if (skill && !openModule && skill.modules.length > 0) {
     setOpenModule(String(skill.modules[0].id));
@@ -170,6 +187,7 @@ export default function SkillDetailPage() {
   const hasStarted = isAddedToProfile && completedCount > 0;
   const presaleActive = !!skill.preSales;
   const isInWaitlist = !!skill.isInWaitlist;
+  const waitlistOnly = !!skill.waitlistEnabled && !isAddedToProfile && !presaleActive;
 
   const handleLessonClick = (
     lesson: { id: string | number; isFree?: boolean },
@@ -177,6 +195,7 @@ export default function SkillDetailPage() {
   ) => {
     if (!user) { router.push('/login'); return; }
     if (!isAddedToProfile) {
+      if (skill.waitlistEnabled && !presaleActive) return;
       if (isFree) {
         handleStart();
         return;
@@ -211,13 +230,13 @@ export default function SkillDetailPage() {
       {/* Hero Section */}
       <section id="nima-organasiz" className="w-full py-6">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_464px] gap-4 lg:h-[673px]">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_464px] gap-4 lg:items-start">
             {/* Image Card — first on mobile, right on desktop */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-              className="bg-linear-to-br from-[#5d7bf5] via-[#5b6ef5] to-[#7c71f4] rounded-[29px] lg:rounded-[40px] overflow-hidden relative h-80 w-full lg:h-full lg:w-[464px] order-first lg:order-last"
+              className="bg-linear-to-br from-[#5d7bf5] via-[#5b6ef5] to-[#7c71f4] rounded-[29px] lg:rounded-[40px] overflow-hidden relative h-80 w-full lg:h-[673px] lg:w-[464px] order-first lg:order-last"
             >
               {courseImage && (
                 <Image
@@ -268,28 +287,28 @@ export default function SkillDetailPage() {
             </motion.div>
 
             {/* Left Column — text content + partner */}
-            <div className="flex flex-col gap-4 order-last lg:order-first min-h-0 lg:h-full">
+            <div className="flex flex-col gap-4 order-last lg:order-first min-h-0">
               {/* Text Card */}
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-8 flex flex-col relative overflow-hidden lg:flex-1 lg:min-h-0"
+                className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-7 flex flex-col relative overflow-hidden w-full"
               >
                 <button
                   onClick={goBack}
-                  className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-6 transition-colors w-fit cursor-pointer"
+                  className="hidden lg:inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-4 transition-colors w-fit cursor-pointer"
                 >
                   <ArrowLeft className="h-4 w-4" />
                   <span>{t('back')}</span>
                 </button>
 
-                <h1 className="font-suisse text-[34px] md:text-4xl lg:text-5xl font-semibold text-[#18181a] leading-[1.05] tracking-[-1.7px] mb-7">
+                <h1 className="font-suisse text-[28px] md:text-4xl lg:text-[40px] font-semibold text-[#18181a] leading-[1.05] tracking-[-1.7px] mb-4">
                   {skill.title}
                 </h1>
 
                 {skill.subtitle && (
-                  <p className="text-[#9f9f9f] text-[16px] lg:text-base leading-[20px] tracking-[-0.8px] mb-8 line-clamp-10">
+                  <p className="text-[#9f9f9f] text-[16px] lg:text-base leading-[20px] tracking-[-0.8px] mb-5 line-clamp-4">
                     {skill.subtitle}
                   </p>
                 )}
@@ -309,14 +328,20 @@ export default function SkillDetailPage() {
                       <ArrowRight className="w-4 h-4 inline ml-1" />
                     )}
                   </MainButton>
-                ) : isInWaitlist ? (
+                ) : waitlistOnly ? (
                   <MainButton
-                    variant="outline"
+                    variant={isInWaitlist ? "outline" : "gradient"}
                     size="md"
-                    className="rounded-xl w-fit flex flex-row items-center opacity-70 cursor-not-allowed"
-                    disabled
+                    className={`rounded-xl w-fit flex flex-row items-center ${isInWaitlist ? "opacity-70 cursor-not-allowed" : ""}`}
+                    onClick={handleJoinWaitlist}
+                    disabled={joinWaitlist.isPending || isInWaitlist}
                   >
-                    {t('inWaitlist')}
+                    {joinWaitlist.isPending ? t('loading') : isInWaitlist ? t('inWaitlist') : tWaitlist('joinWaitlist')}
+                    {joinWaitlist.isPending ? (
+                      <Loader2 className="w-4 h-4 animate-spin inline ml-1" />
+                    ) : isInWaitlist ? null : (
+                      <ArrowRight className="w-4 h-4 inline ml-1" />
+                    )}
                   </MainButton>
                 ) : !isAddedToProfile && !isFree ? (
                   <MainButton
@@ -495,22 +520,24 @@ export default function SkillDetailPage() {
       <section className="w-full py-8">
         <div className="container mx-auto px-4 flex justify-center">
           <MainButton
-            variant="gradient"
+            variant={waitlistOnly && isInWaitlist ? "outline" : "gradient"}
             size="lg"
-            className="bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-2xl w-full max-w-[70%] h-16 text-lg font-semibold flex flex-row items-center"
-            onClick={handleStart}
-            disabled={startLoading}
+            className={`bg-[#5d7bf5] hover:from-[#4c6ae4] hover:to-[#5d7bf5] rounded-2xl w-full max-w-[70%] h-16 text-lg font-semibold flex flex-row items-center ${waitlistOnly && isInWaitlist ? "opacity-70 cursor-not-allowed" : ""}`}
+            onClick={waitlistOnly ? handleJoinWaitlist : handleStart}
+            disabled={(waitlistOnly ? joinWaitlist.isPending : startLoading) || (waitlistOnly && isInWaitlist)}
           >
-            {startLoading
+            {(waitlistOnly ? joinWaitlist.isPending : startLoading)
               ? t('loading')
+              : waitlistOnly
+              ? (isInWaitlist ? t('inWaitlist') : tWaitlist('joinWaitlist'))
               : !isAddedToProfile && !isFree
               ? t('buy')
               : hasStarted
               ? t('continueLesson')
               : t('startNow')}
-            {startLoading ? (
+            {(waitlistOnly ? joinWaitlist.isPending : startLoading) ? (
               <Loader2 className="w-5 h-5 animate-spin inline ml-1" />
-            ) : (
+            ) : waitlistOnly && isInWaitlist ? null : (
               <ArrowRight className="w-5 h-5 inline ml-1" />
             )}
           </MainButton>

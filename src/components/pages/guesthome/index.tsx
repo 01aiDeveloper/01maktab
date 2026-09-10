@@ -44,14 +44,18 @@ export default async function GuestHomePage() {
   let skills: Skill[] = [];
 
   try {
-    const partnersData = await partnersRes.json();
+    const partnersData = (await partnersRes.json()) as {
+      data?: { data?: Partner[] };
+    };
     partners = partnersData?.data?.data || [];
   } catch (error) {
     console.error("Failed to parse partners:", error);
   }
 
   try {
-    const careersData = await careersRes.json();
+    const careersData = (await careersRes.json()) as {
+      data?: { data?: Career[] };
+    };
     careers = careersData?.data?.data || [];
     // console.log('[GuestHomePage] Fetched careers raw count:', careers.length);
     // console.table(careers.map((c: any) => ({ id: c.id, name: c.name })));
@@ -60,7 +64,9 @@ export default async function GuestHomePage() {
   }
 
   try {
-    const skillsData = await skillsRes.json();
+    const skillsData = (await skillsRes.json()) as {
+      data?: { data?: Skill[] };
+    };
     skills = skillsData?.data?.data || [];
   } catch (error) {
     console.error("Failed to parse skills:", error);

@@ -42,6 +42,7 @@ import { useAuth } from '@/hooks/common/use-auth';
 import { PresaleSection } from '@/components/sections/skills/presale-section';
 import { WaitlistSection } from '@/components/sections/skills/waitlist-section';
 import { pickResumeLesson } from '@/lib/lesson-utils';
+import { useJoinWaitlist } from '@/hooks/mutations/use-waitlist';
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -78,6 +79,7 @@ const FEATURE_KEYS = ['duration', 'refund', 'certificates', 'internship'] as con
 
 export default function ProfessionPage() {
   const t = useTranslations('professionDetail');
+  const tWaitlist = useTranslations('waitlist');
   const tCourse = useTranslations('courseDetail');
   const params = useParams();
   const router = useRouter();
@@ -164,6 +166,7 @@ export default function ProfessionPage() {
   const { data: profession, isLoading, isError } = useProfession(slug);
   const { data: professionModules } = useProfessionModules(profession?.id);
   const { data: myProfessions } = useMyProfessions();
+  const joinWaitlist = useJoinWaitlist();
   const [openModule, setOpenModule] = useState<string>('');
   const [startLoading, setStartLoading] = useState(false);
 
@@ -173,6 +176,7 @@ export default function ProfessionPage() {
       return;
     }
     if (!profession) return;
+    if (profession.waitlistEnabled && !profession.preSales) return;
     setStartLoading(true);
     try {
       const alreadyAdded = !!profession.hasPurchased || !!profession.isEnrolled || !!myProfessions?.some((c) => String(c.id) === String(profession.id));
@@ -231,10 +235,26 @@ export default function ProfessionPage() {
   const completedCount = professionModules?.progress?.completedLessonsCount ?? 0;
   const totalCount = professionModules?.progress?.totalLessonsCount ?? 0;
   const hasStarted = isAddedToProfile && completedCount > 0;
+  const waitlistOnly = !!profession.waitlistEnabled && !isAddedToProfile && !profession.preSales;
+  const isInWaitlist = !!profession.isInWaitlist;
+
+  const handleJoinWaitlist = async () => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    if (isInWaitlist) return;
+    try {
+      await joinWaitlist.mutateAsync(profession.id);
+    } catch {
+      // query invalidation updates the CTA
+    }
+  };
 
   const handleLessonClick = (lesson: { id: string | number; isFree?: boolean }, ctx: { module: ModuleItem }) => {
     if (!user) { router.push('/login'); return; }
     if (!isAddedToProfile) {
+      if (waitlistOnly) return;
       if (isFree) {
         handleStart();
         return;
@@ -315,12 +335,14 @@ export default function ProfessionPage() {
                 <Button
                   size="lg"
                   className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-4 h-auto text-base font-medium w-fit mb-8 flex items-center gap-2"
-                  onClick={handleStart}
-                  disabled={startLoading}
+                  onClick={waitlistOnly ? handleJoinWaitlist : handleStart}
+                  disabled={startLoading || joinWaitlist.isPending || (waitlistOnly && isInWaitlist)}
                 >
-                  {startLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowLeft className="w-5 h-5 rotate-180" />}
-                  {startLoading
+                  {startLoading || joinWaitlist.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowLeft className="w-5 h-5 rotate-180" />}
+                  {startLoading || joinWaitlist.isPending
                     ? t('loading')
+                    : waitlistOnly
+                    ? (isInWaitlist ? tWaitlist('joined') : tWaitlist('joinWaitlist'))
                     : !isAddedToProfile && !isFree
                     ? t('start')
                     : hasStarted
@@ -485,10 +507,10 @@ export default function ProfessionPage() {
         <FAQAccordion variant="dark" faqs={staticFaqs} />
 
         {/* Payment Options Section */}
-        <PaymentOptionsSection />
+        {!waitlistOnly && <PaymentOptionsSection />}
 
         {/* Enrollment CTA with Countdown */}
-        <EnrollmentCtaCountdown />
+        {!waitlistOnly && <EnrollmentCtaCountdown />}
       </main>
       <SiteFooter variant="dark" />
     </div>

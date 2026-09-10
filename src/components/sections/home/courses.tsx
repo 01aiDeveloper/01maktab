@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { CourseCard } from "@/components/shared/course-card"
 import { motion } from "framer-motion"
@@ -13,6 +12,7 @@ import { NoData } from "@/components/shared/no-data"
 import { useAuth } from "@/hooks/common/use-auth"
 import { CarouselNavigation } from "@/components/ui/carousel-navigation"
 import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation"
+import { useCarouselFitsView } from "@/hooks/common/use-carousel-fits-view"
 
 export function CoursesSection() {
   const t = useTranslations("courses")
@@ -22,17 +22,14 @@ export function CoursesSection() {
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
-    align: "start",
+    align: "center",
     slidesToScroll: 1,
     containScroll: "trimSnaps",
   })
 
   const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } =
     useCarouselNavigation(emblaApi)
-
-  useEffect(() => {
-    emblaApi?.reInit()
-  }, [emblaApi, courses.length])
+  const fitsInView = useCarouselFitsView(emblaApi, courses.length)
 
   const displayCourses = courses.map((course: any) => ({
     id: course.id,
@@ -50,7 +47,7 @@ export function CoursesSection() {
     waitlistEnabled: course.waitlistEnabled,
   }))
 
-  const showNav = displayCourses.length > 1
+  const showNav = canScrollPrev || canScrollNext
 
   return (
     <motion.section
@@ -96,7 +93,13 @@ export function CoursesSection() {
         ) : (
           <>
             <div className="overflow-hidden pt-6 pb-8 -my-3" ref={emblaRef}>
-              <div className="flex gap-4 md:gap-5 pl-4 md:pl-8 lg:pl-[max(3rem,calc((100vw-80rem)/2+3rem))] pr-4 md:pr-8">
+              <div
+                className={
+                  fitsInView
+                    ? "flex justify-center gap-4 md:gap-5 px-4 md:px-8 lg:px-12"
+                    : "flex justify-start gap-4 md:gap-5 pl-4 md:pl-8 lg:pl-[max(3rem,calc((100vw-80rem)/2+3rem))] pr-4 md:pr-8"
+                }
+              >
                 {displayCourses.map((course: any, index: number) => (
                   <div
                     key={course.id || index}

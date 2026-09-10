@@ -36,6 +36,7 @@ import { useAuth } from '@/hooks/common/use-auth';
 import { PresaleSection } from '@/components/sections/skills/presale-section';
 import { WaitlistSection } from '@/components/sections/skills/waitlist-section';
 import { useCourseBadges } from '@/hooks/queries/use-course-badges';
+import { useJoinWaitlist } from '@/hooks/mutations/use-waitlist';
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -109,6 +110,7 @@ export default function CoursePage() {
   const { data: courseModules } = useCourseModules(course?.id);
   const { data: courseBadges } = useCourseBadges(course?.id);
   const { data: myCourses } = useMyCourses();
+  const joinWaitlist = useJoinWaitlist();
   const [openModule, setOpenModule] = useState<string>('');
   const [startLoading, setStartLoading] = useState(false);
 
@@ -118,6 +120,7 @@ export default function CoursePage() {
       return;
     }
     if (!course) return;
+    if (course.waitlistEnabled && !course.preSales) return;
     setStartLoading(true);
     try {
       const alreadyAdded = !!course.hasPurchased || !!myCourses?.some((c) => String(c.id) === String(course.id));
@@ -196,6 +199,7 @@ export default function CoursePage() {
   const handleLessonClick = (lesson: { id: string | number; isFree?: boolean }, ctx: { module: ModuleItem }) => {
     if (!user) { router.push('/login'); return; }
     if (!isAddedToProfile) {
+      if (course.waitlistEnabled && !course.preSales) return;
       if (isFree) {
         handleStart();
         return;
@@ -209,6 +213,19 @@ export default function CoursePage() {
   const handleTestClick = (_test: { id?: string; title: string }, ctx: { module: ModuleItem }) => {
     const params = new URLSearchParams({ courseType: 'course', courseId: String(course.id) });
     router.push(`/test/${ctx.module.id}?${params.toString()}`);
+  };
+
+  const handleJoinWaitlist = async () => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    if (course.isInWaitlist) return;
+    try {
+      await joinWaitlist.mutateAsync(course.id);
+    } catch {
+      // invalidation + waitlist section handle errors
+    }
   };
 
   return (
@@ -234,6 +251,10 @@ export default function CoursePage() {
         badges={courseBadges ?? []}
         isAddedToProfile={isAddedToProfile}
         isFree={isFree}
+        waitlistEnabled={!!course.waitlistEnabled && !course.preSales}
+        isInWaitlist={course.isInWaitlist}
+        onJoinWaitlist={handleJoinWaitlist}
+        joinWaitlistLoading={joinWaitlist.isPending}
       />
 
       {/* Presale Section */}
@@ -338,8 +359,8 @@ export default function CoursePage() {
       {/* FAQ Section */}
       <FAQAccordion variant="light" faqs={staticFaqs} />
 
-      {/* Final CTA Section */}
-      <EnrollmentCTASection />
+      {/* Final CTA Section — waitlist courses use WaitlistSection instead of enroll/buy */}
+      {!(course.waitlistEnabled && !course.preSales && !isAddedToProfile) && <EnrollmentCTASection />}
 
       <SiteFooter />
     </div>
