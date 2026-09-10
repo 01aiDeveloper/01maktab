@@ -82,7 +82,7 @@ export function CoursesSection() {
         </div>
       </div>
 
-      <div className="mt-10 md:mt-14 w-full max-w-7xl mx-auto px-4 md:px-8">
+      <div className="mt-10 md:mt-14 w-full">
         {loading ? (
           <div className="flex justify-center items-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
@@ -96,11 +96,11 @@ export function CoursesSection() {
         ) : (
           <>
             <div className="overflow-hidden pt-6 pb-8 -my-3" ref={emblaRef}>
-              <div className="flex gap-4 md:gap-5">
+              <div className="flex gap-4 md:gap-5 pl-4 md:pl-8 lg:pl-[max(3rem,calc((100vw-80rem)/2+3rem))] pr-4 md:pr-8">
                 {displayCourses.map((course: any, index: number) => (
                   <div
                     key={course.id || index}
-                    className="min-w-0 flex-[0_0_88%] sm:flex-[0_0_70%] md:flex-[0_0_calc(50%-10px)]"
+                    className="min-w-0 flex-[0_0_min(654px,calc(100vw-2.5rem))]"
                   >
                     <CourseCard {...course} index={index} hideQueueStatus />
                   </div>
