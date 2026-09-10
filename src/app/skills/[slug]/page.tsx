@@ -211,19 +211,19 @@ export default function SkillDetailPage() {
       {/* Hero Section */}
       <section id="nima-organasiz" className="w-full py-6">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_464px] gap-4 lg:h-[673px]">
             {/* Image Card — first on mobile, right on desktop */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-              className="bg-linear-to-br from-[#5d7bf5] via-[#5b6ef5] to-[#7c71f4] rounded-[29px] lg:rounded-[40px] overflow-hidden relative h-80 lg:h-full order-first lg:order-last"
+              className="bg-linear-to-br from-[#5d7bf5] via-[#5b6ef5] to-[#7c71f4] rounded-[29px] lg:rounded-[40px] overflow-hidden relative h-80 w-full lg:h-full lg:w-[464px] order-first lg:order-last"
             >
               {courseImage && (
                 <Image
                   quality={90} src={courseImage}
                   alt={skill.title}
-                  fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  fill sizes="(max-width: 1024px) 100vw, 464px"
                   className="object-cover"
                   priority
                 />
@@ -268,13 +268,13 @@ export default function SkillDetailPage() {
             </motion.div>
 
             {/* Left Column — text content + partner */}
-            <div className="flex flex-col gap-4 lg:col-span-2 order-last lg:order-first">
+            <div className="flex flex-col gap-4 order-last lg:order-first min-h-0 lg:h-full">
               {/* Text Card */}
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-8 flex flex-col relative overflow-hidden"
+                className="bg-white rounded-[29px] lg:rounded-[40px] p-6 lg:p-8 flex flex-col relative overflow-hidden lg:flex-1 lg:min-h-0"
               >
                 <button
                   onClick={goBack}

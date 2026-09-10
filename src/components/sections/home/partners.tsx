@@ -1,14 +1,17 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import useEmblaCarousel from "embla-carousel-react";
 import { MainTitle } from "@/components/ui/main-title";
 import { Subtitle } from "@/components/ui/subtitle";
+import { CarouselNavigation } from "@/components/ui/carousel-navigation";
+import { useCarouselNavigation } from "@/hooks/common/use-carousel-navigation";
 import { getMediaUrl } from "@/lib/utils";
 import type { Partner } from "@/types/common";
 import { usePartners } from "@/hooks/queries/use-partners";
-import { PaginatedGrid } from '@/components/ui/paginated-grid';
 
 interface PartnersSectionProps {
   partners?: Partner[];
@@ -33,73 +36,108 @@ export function PartnersSection({
   });
   const loading = partnersProp ? false : isLoading;
 
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: false,
+    align: "start",
+    slidesToScroll: 1,
+    containScroll: "trimSnaps",
+  });
+
+  const { canScrollPrev, canScrollNext, scrollPrev, scrollNext } =
+    useCarouselNavigation(emblaApi);
+
+  useEffect(() => {
+    emblaApi?.reInit();
+  }, [emblaApi, partners.length]);
+
   const isDark = variant === "dark";
-  const sectionBg = isDark ? "bg-[#101010]" : "bg-[#FFFFFF]";
   const cardBg = isDark ? "bg-[#282828]" : "bg-[#F4F4F6]";
   const cardHoverBg = isDark ? "hover:bg-[#F4F4F6]" : "hover:bg-white";
   const cardBorderColor = isDark ? "border-[#282828]" : "border-[#F4F4F6]";
   const titleColor = isDark ? "#FFFFFF" : "#18181A";
-  const borderColor = isDark ? "border-gray-800" : "border-gray-100";
+  const showNav = partners.length > 1;
 
-  // Agar yuklanayotgan bo'lsa yoki ma'lumot bo'lmasa, hech narsa ko'rsatmaydi
   if (loading || !partners || partners.length === 0) {
     return null;
   }
 
   return (
     <section
-      className={`${sectionBg} pb-20 mx-auto w-full rounded-[28px] md:rounded-[40px] py-24 text-center border ${borderColor} ${isDark ? "" : "shadow-sm"} overflow-hidden`}
+      className={
+        isDark
+          ? "w-full bg-[#101010] rounded-[28px] md:rounded-[40px] pt-12 md:pt-16 pb-14 md:pb-16 text-center border border-gray-800 overflow-hidden"
+          : "w-full bg-white pt-10 md:pt-14 pb-12 md:pb-16 text-center"
+      }
     >
-      <div className="container">
-        <div className="px-4">
-          <MainTitle align="center" textColor={titleColor} animated>
-            {t("title")}
-          </MainTitle>
-          {showSubtitle && (
-            <Subtitle
-              align="center"
-              textColor={isDark ? "rgb(156, 163, 175)" : ""}
-              className="mx-auto mt-4 md:mt-6 max-w-2xl "
-              animated
-              animationDelay={0.1}
-            >
-              {t("subtitle")}
-            </Subtitle>
-          )}
-        </div>
+      <div className="mx-auto w-full max-w-7xl px-4 md:px-8 lg:px-12">
+        <MainTitle align="center" textColor={titleColor} animated>
+          {t("title")}
+        </MainTitle>
+        {showSubtitle && (
+          <Subtitle
+            align="center"
+            textColor={isDark ? "rgb(156, 163, 175)" : ""}
+            className="mx-auto mt-3 md:mt-4 max-w-2xl"
+            animated
+            animationDelay={0.1}
+          >
+            {t("subtitle")}
+          </Subtitle>
+        )}
       </div>
 
-      <div className="container mt-12">
-          <PaginatedGrid items={partners} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(partner) => {
+      <div className="mt-8 md:mt-10 w-full">
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-4 md:gap-5 pl-4 md:pl-8 lg:pl-[max(3rem,calc((100vw-80rem)/2+3rem))] pr-4 md:pr-8">
+            {partners.map((partner) => {
               const isLocalLogo = partner.logo?.startsWith("/");
               const logoSrc = isLocalLogo
                 ? partner.logo
                 : useMediaUrl
                   ? getMediaUrl(partner.logo)
                   : partner.logo;
-              const cardClass = `group relative flex h-[203px] w-[412px] shrink-0 items-center justify-center rounded-[16px] border-[3px] ${cardBorderColor} ${cardBg} ${cardHoverBg} p-10 transition-all ${isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"}`;
+
               return (
-                <Link
+                <div
                   key={partner.id}
-                  href={`/partners/${partner.id}`}
-                  className={cardClass}
+                  className="min-w-0 flex-[0_0_min(412px,calc(100vw-3rem))]"
                 >
-                  <Image
-                    quality={90} src={logoSrc}
-                    alt={partner.name}
-                    width={180}
-                    height={80}
-                    className={`object-contain transition-all duration-300 ${
-                      isDark
-                        ? "brightness-0 invert group-hover:brightness-100 group-hover:invert-0"
-                        : "brightness-50 group-hover:brightness-100"
+                  <Link
+                    href={`/partners/${partner.id}`}
+                    className={`group relative flex h-[180px] md:h-[203px] w-full items-center justify-center rounded-[16px] border-[3px] ${cardBorderColor} ${cardBg} ${cardHoverBg} p-8 md:p-10 transition-all ${
+                      isDark ? "" : "hover:shadow-xl hover:shadow-gray-200/50"
                     }`}
-                  />
-                </Link>
+                  >
+                    <Image
+                      quality={90}
+                      src={logoSrc}
+                      alt={partner.name}
+                      width={180}
+                      height={80}
+                      className={`object-contain transition-all duration-300 ${
+                        isDark
+                          ? "brightness-0 invert group-hover:brightness-100 group-hover:invert-0"
+                          : "brightness-50 group-hover:brightness-100"
+                      }`}
+                    />
+                  </Link>
+                </div>
               );
-            }}
-          </PaginatedGrid>
+            })}
+          </div>
+        </div>
+
+        {showNav ? (
+          <div className="flex justify-center mt-6 md:mt-8">
+            <CarouselNavigation
+              onPrevClick={scrollPrev}
+              onNextClick={scrollNext}
+              canScrollPrev={canScrollPrev}
+              canScrollNext={canScrollNext}
+              variant={isDark ? "dark" : "light"}
+            />
+          </div>
+        ) : null}
       </div>
     </section>
   );
