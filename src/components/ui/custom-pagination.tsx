@@ -1,6 +1,5 @@
 'use client';
 
-import { Fragment } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink } from '@/components/ui/pagination';
 
@@ -31,16 +30,16 @@ export function CustomPagination({ page, pageCount, onPageChange }: CustomPagina
           </PaginationLink>
         </PaginationItem>
         {pages.map((p, index) => (
-          <Fragment key={p}>
+          <>
             {index > 0 && p - pages[index - 1] > 1 && (
-              <PaginationItem><PaginationEllipsis /></PaginationItem>
+              <PaginationItem key={`ellipsis-${p}`}><PaginationEllipsis /></PaginationItem>
             )}
-            <PaginationItem>
+            <PaginationItem key={p}>
               <PaginationLink isActive={p === page} onClick={() => onPageChange(p)} className="cursor-pointer">
                 {p}
               </PaginationLink>
             </PaginationItem>
-          </Fragment>
+          </>
         ))}
         <PaginationItem>
           <PaginationLink
