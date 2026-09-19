@@ -29,6 +29,7 @@ import { PresaleSection } from "@/components/sections/skills/presale-section";
 import { WaitlistSection } from "@/components/sections/skills/waitlist-section";
 import { useCourseBadges } from "@/hooks/queries/use-course-badges";
 import { CourseStartModal } from "@/components/modals/course-start-modal";
+import { SuccessModal } from "@/components/ui/success-modal";
 import { useSmartBack } from "@/hooks/common/use-smart-back";
 import { useAuth } from "@/hooks/common/use-auth";
 import { pickResumeLesson } from "@/lib/lesson-utils";
@@ -40,6 +41,14 @@ function mediaUrl(path: string | null | undefined): string {
   if (!path) return "";
   if (path.startsWith("http")) return path;
   return `${baseMediaUrl}/${path}`;
+}
+
+function isWaitlistOpen(skill: {
+  waitlistEnabled?: boolean;
+  waitlistCount?: number;
+  preSales?: unknown;
+}) {
+  return (!!skill.waitlistEnabled || (skill.waitlistCount ?? 0) > 0) && !skill.preSales;
 }
 
 function getDifficultyKey(difficulty: string): 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | null {
@@ -89,6 +98,7 @@ export default function SkillDetailPage() {
   const [openModule, setOpenModule] = useState<string>("");
   const [startLoading, setStartLoading] = useState(false);
   const [showStartModal, setShowStartModal] = useState(false);
+  const [showWaitlistSuccess, setShowWaitlistSuccess] = useState(false);
 
   const goToFirstLesson = useCallback(() => {
     if (!skill || !skillModules) return;
@@ -106,7 +116,7 @@ export default function SkillDetailPage() {
       return;
     }
     if (!skill) return;
-    if (skill.waitlistEnabled && !skill.preSales) return;
+    if (isWaitlistOpen(skill)) return;
     setStartLoading(true);
     try {
       const alreadyAdded = !!skill.hasPurchased || !!skill.isEnrolled || !!mySkills?.some((c) => String(c.id) === String(skill.id));
@@ -137,6 +147,7 @@ export default function SkillDetailPage() {
     if (!skill || skill.isInWaitlist) return;
     try {
       await joinWaitlist.mutateAsync(skill.id);
+      setShowWaitlistSuccess(true);
     } catch {
       // WaitlistSection and query invalidation surface the result
     }
@@ -187,7 +198,8 @@ export default function SkillDetailPage() {
   const hasStarted = isAddedToProfile && completedCount > 0;
   const presaleActive = !!skill.preSales;
   const isInWaitlist = !!skill.isInWaitlist;
-  const waitlistOnly = !!skill.waitlistEnabled && !isAddedToProfile && !presaleActive;
+  const waitlistOpen = !!skill.waitlistEnabled || (skill.waitlistCount ?? 0) > 0;
+  const waitlistOnly = waitlistOpen && !isAddedToProfile && !presaleActive;
 
   const handleLessonClick = (
     lesson: { id: string | number; isFree?: boolean },
@@ -195,7 +207,7 @@ export default function SkillDetailPage() {
   ) => {
     if (!user) { router.push('/login'); return; }
     if (!isAddedToProfile) {
-      if (skill.waitlistEnabled && !presaleActive) return;
+      if (waitlistOpen && !presaleActive) return;
       if (isFree) {
         handleStart();
         return;
@@ -225,6 +237,11 @@ export default function SkillDetailPage() {
         open={showStartModal}
         onClose={() => setShowStartModal(false)}
         onStartCourse={handleStartCourse}
+      />
+      <SuccessModal
+        open={showWaitlistSuccess}
+        onClose={() => setShowWaitlistSuccess(false)}
+        title={tWaitlist('joinedSuccess')}
       />
 
       {/* Hero Section */}
@@ -447,7 +464,7 @@ export default function SkillDetailPage() {
 
       {/* Presale Section */}
       <PresaleSection courseId={skill?.id} courseType="skill" presale={skill?.preSales} originalPrice={skill?.price} isPurchased={isPurchased} />
-      <WaitlistSection courseId={skill?.id} enrollmentCount={skill?.enrollmentCount} enabled={skill?.waitlistEnabled} isInWaitlist={skill?.isInWaitlist} hasPresale={!!skill?.preSales} />
+      <WaitlistSection courseId={skill?.id} enrollmentCount={skill?.enrollmentCount} enabled={waitlistOpen} isInWaitlist={skill?.isInWaitlist} hasPresale={!!skill?.preSales} />
 
       <section className="w-full py-8">
         <div className="container mx-auto px-4">

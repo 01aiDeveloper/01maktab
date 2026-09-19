@@ -206,8 +206,8 @@ export function CatalogTabs() {
                   const isFree = pricingType === 'FREE' || price === 0;
                   const status: 'bought' | 'free' | 'waitlist' | 'presale' | 'available' =
                     isBought ? 'bought'
+                    : item.waitlistEnabled && !item.presalesEnabled ? 'waitlist'
                     : item.presalesEnabled ? 'presale'
-                    : item.waitlistEnabled ? 'waitlist'
                     : isFree ? 'free'
                     : 'available';
 

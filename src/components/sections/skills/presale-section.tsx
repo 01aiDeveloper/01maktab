@@ -9,7 +9,6 @@ import Image from 'next/image';
 import { MainButton } from '@/components/ui/main-button';
 import { useAuth } from '@/hooks/common/use-auth';
 import { useJoinWaitlist } from '@/hooks/mutations/use-waitlist';
-import { commerceApi } from '@/services/react-query/commerce';
 import type { ApiPresale } from '@/types/api';
 
 function useCountdown(endDate: string | null | undefined) {
@@ -99,7 +98,7 @@ export function PresaleSection({
         : t('endsInMinutes', { minutes: countdown.minutes })
     : null;
 
-  const handlePresale = async () => {
+  const handlePresale = () => {
     if (!user) {
       router.push('/login');
       return;
@@ -107,24 +106,10 @@ export function PresaleSection({
     if (!courseId) return;
 
     setLoading(true);
-    try {
-      const body: { courseId: string; promocodeId?: string } = { courseId: String(courseId) };
-      if (promocodeId) body.promocodeId = promocodeId;
-
-      const data = await commerceApi.createCoursePayment('click', body);
-      if (data.free) {
-        router.push(`/classroom?welcome=${courseId}`);
-        return;
-      }
-      if (!data.link) throw new Error('Payment provider did not return a link');
-      window.location.href = data.link;
-    } catch {
-      router.push(
-        `/payment/${courseId}?courseType=${courseType}&discountedPrice=${presalePrice}&discountPercent=${discountPercent}`,
-      );
-    } finally {
-      setLoading(false);
-    }
+    router.push(
+      `/payment/${courseId}?courseType=${courseType}&flow=presale&discountedPrice=${presalePrice}&discountPercent=${discountPercent}`,
+    );
+    setLoading(false);
   };
 
   const handleWaitlist = async () => {

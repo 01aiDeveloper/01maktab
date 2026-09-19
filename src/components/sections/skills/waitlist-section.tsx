@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { MainButton } from '@/components/ui/main-button';
 import { useAuth } from '@/hooks/common/use-auth';
 import { useJoinWaitlist } from '@/hooks/mutations/use-waitlist';
+import { SuccessModal } from '@/components/ui/success-modal';
 
 interface WaitlistSectionProps {
   courseId?: number;
@@ -26,6 +27,7 @@ export function WaitlistSection({ courseId, enrollmentCount = 0, enabled, isInWa
   const joinWaitlist = useJoinWaitlist();
   const [joined, setJoined] = useState(!!isInWaitlist);
   const [error, setError] = useState(false);
+  const [showJoinedSuccess, setShowJoinedSuccess] = useState(false);
 
   useEffect(() => {
     setJoined(!!isInWaitlist);
@@ -43,6 +45,7 @@ export function WaitlistSection({ courseId, enrollmentCount = 0, enabled, isInWa
     try {
       await joinWaitlist.mutateAsync(courseId);
       setJoined(true);
+      setShowJoinedSuccess(true);
     } catch {
       setError(true);
     }
@@ -50,6 +53,11 @@ export function WaitlistSection({ courseId, enrollmentCount = 0, enabled, isInWa
 
   return (
     <section className="w-full py-4">
+      <SuccessModal
+        open={showJoinedSuccess}
+        onClose={() => setShowJoinedSuccess(false)}
+        title={t('joinedSuccess')}
+      />
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
