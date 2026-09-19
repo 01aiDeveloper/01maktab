@@ -329,6 +329,7 @@
     "discountTitle": "Birinchilar uchun 10% chegirma",
     "joinWaitlist": "Kutish ro'yxatiga kirish",
     "joined": "Siz ro'yxatdasiz",
+    "joinedSuccess": "Kutish ro'yxatiga qo'shildingiz!",
     "errorJoin": "Xatolik yuz berdi. Qayta urinib ko'ring."
   },
   "enrollmentCountdown": {

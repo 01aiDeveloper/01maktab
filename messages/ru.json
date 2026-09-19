@@ -329,6 +329,7 @@
     "discountTitle": "Скидка 10% для первых",
     "joinWaitlist": "Записаться в лист ожидания",
     "joined": "Вы в списке",
+    "joinedSuccess": "Вы добавлены в лист ожидания!",
     "errorJoin": "Произошла ошибка. Попробуйте снова."
   },
   "enrollmentCountdown": {

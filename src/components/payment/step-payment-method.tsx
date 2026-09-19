@@ -7,13 +7,18 @@ import { useTranslations } from 'next-intl';
 import { StepIndicator } from './step-indicator';
 import { useCheckPromocode } from '@/hooks/mutations/use-promocode';
 import { commerceApi } from '@/services/react-query/commerce';
+import { getApiErrorMessage } from '@/lib/api-error';
+import type { ApiPaymentResponse } from '@/types/api';
 
 interface StepPaymentMethodProps {
   courseId: string;
-  coursePrice: number;
+  /** Full catalog price (strikethrough). */
+  listPrice: number;
+  /** Base price for payment / promocode (pre-sales price when active). */
+  basePrice: number;
   discountedPrice?: number;
   discountPercent?: number;
-  onNext: () => void;
+  onNext: (result?: ApiPaymentResponse) => void;
   onBack: () => void;
   promocodeId?: string;
   onPromocodeApplied?: (data: { discountedPrice: number; promocodeId: string }) => void;
@@ -23,7 +28,8 @@ type PaymentProvider = 'click' | 'payme';
 
 export function StepPaymentMethod({
   courseId,
-  coursePrice,
+  listPrice,
+  basePrice,
   discountedPrice,
   discountPercent,
   onNext,
@@ -36,14 +42,14 @@ export function StepPaymentMethod({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Promo kod state
   const [promoCode, setPromoCode] = useState('');
   const [promoStatus, setPromoStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [promoError, setPromoError] = useState('');
   const checkPromocode = useCheckPromocode();
 
-  const finalPrice = discountedPrice ?? coursePrice;
-  const hasDiscount = discountedPrice !== undefined && discountedPrice < coursePrice;
+  const displayListPrice = listPrice > 0 ? listPrice : basePrice;
+  const finalPrice = discountedPrice ?? basePrice;
+  const hasDiscount = finalPrice < displayListPrice;
 
   const fmt = (price: number) => price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
@@ -57,39 +63,36 @@ export function StepPaymentMethod({
       const result = await checkPromocode.mutateAsync({
         code: promoCode.trim(),
         targetId: courseId,
-        price: coursePrice,
+        price: basePrice,
         type: 'course',
       });
 
-      let newPrice = coursePrice;
+      let newPrice = basePrice;
       if (typeof result.finalPrice === 'number') {
         newPrice = result.finalPrice;
       } else if (typeof result.discountAmount === 'number') {
-        newPrice = Math.max(0, coursePrice - result.discountAmount);
+        newPrice = Math.max(0, basePrice - result.discountAmount);
       } else if (
         result.discountType === 'PERCENT' &&
         typeof result.discountValue === 'number'
       ) {
-        newPrice = Math.round(coursePrice * (1 - result.discountValue / 100));
+        newPrice = Math.round(basePrice * (1 - result.discountValue / 100));
       } else if (
         result.discountType === 'FIXED' &&
         typeof result.discountValue === 'number'
       ) {
-        newPrice = Math.max(0, coursePrice - result.discountValue);
+        newPrice = Math.max(0, basePrice - result.discountValue);
       }
 
       setPromoStatus('success');
       onPromocodeApplied?.({ discountedPrice: newPrice, promocodeId: result.promocodeId });
     } catch (err: unknown) {
       const status = (err as { response?: { status?: number } })?.response?.status;
-      const apiMsg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
       setPromoStatus('error');
       if (status === 404) {
         setPromoError(t('promoNotFound'));
-      } else if (apiMsg) {
-        setPromoError(typeof apiMsg === 'string' ? apiMsg : t('promoInvalid'));
       } else {
-        setPromoError(t('promoInvalid'));
+        setPromoError(getApiErrorMessage(err, t('promoInvalid')));
       }
     }
   };
@@ -104,9 +107,8 @@ export function StepPaymentMethod({
 
       const data = await commerceApi.createCoursePayment(paymentProvider, body);
 
-      // Bepul kurs (presale 100% chegirma yoki FREE pricingType) — link talab qilmaydi
       if (data.free) {
-        onNext();
+        onNext(data);
         return;
       }
 
@@ -114,7 +116,7 @@ export function StepPaymentMethod({
       window.location.href = data.link;
     } catch (err) {
       console.error('Payment error:', err);
-      setError(t('paymentError'));
+      setError(getApiErrorMessage(err, t('paymentError')));
     } finally {
       setLoading(false);
     }
@@ -128,32 +130,30 @@ export function StepPaymentMethod({
         {t('step2Title')}
       </h2>
 
-      {/* Price Display — Figma style */}
       <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
         {hasDiscount ? (
           <>
             <span className="text-gray-400 text-lg line-through decoration-2">
-              {fmt(coursePrice)} {t('currencySom')}
+              {fmt(displayListPrice)} {t('currencySom')}
             </span>
             <span className="text-gray-400 text-lg">&rarr;</span>
             <span className="bg-[#E8F5E9] text-[#2E7D32] text-xl sm:text-2xl font-bold px-4 py-1.5 rounded-xl">
               {fmt(finalPrice)} {t('currencySom')}
             </span>
-            {discountPercent && (
+            {discountPercent ? (
               <span className="bg-[#FFF3E0] text-[#E65100] text-sm font-bold px-3 py-1 rounded-lg">
                 -{discountPercent}%
               </span>
-            )}
+            ) : null}
           </>
         ) : (
           <div className="flex items-center justify-between w-full bg-gray-50 rounded-2xl px-6 py-4">
             <span className="text-gray-500 text-base font-medium">{t('coursePrice')}</span>
-            <span className="text-gray-900 text-xl sm:text-2xl font-bold">{fmt(coursePrice)} so&apos;m</span>
+            <span className="text-gray-900 text-xl sm:text-2xl font-bold">{fmt(finalPrice)} so&apos;m</span>
           </div>
         )}
       </div>
 
-      {/* Promo kod */}
       <div className="mb-6">
         <label className="block text-sm text-gray-500 mb-1.5">{t('promoLabel')}</label>
         <div className="flex gap-2">
@@ -204,7 +204,6 @@ export function StepPaymentMethod({
         )}
       </div>
 
-      {/* Payment Providers */}
       <h3 className="text-lg font-bold text-gray-900 text-center mb-4">{t('paymentMethod')}</h3>
       <div className="flex justify-center gap-3 mb-8">
         {(['click', 'payme'] as PaymentProvider[]).map((provider) => (
@@ -218,7 +217,8 @@ export function StepPaymentMethod({
             }`}
           >
             <Image
-              quality={90} src={`/icons/payment/${provider}.svg`}
+              quality={90}
+              src={`/icons/payment/${provider}.svg`}
               alt={provider}
               width={72}
               height={28}
@@ -228,12 +228,10 @@ export function StepPaymentMethod({
         ))}
       </div>
 
-      {/* Error message */}
       {error && (
         <p className="text-red-500 text-sm text-center mb-4">{error}</p>
       )}
 
-      {/* Buttons — mobile: ko'k yuqorida */}
       <div className="flex flex-col-reverse sm:flex-row gap-3">
         <button
           onClick={onBack}

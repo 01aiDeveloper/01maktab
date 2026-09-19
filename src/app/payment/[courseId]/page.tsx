@@ -10,63 +10,68 @@ import { StepSuccess } from '@/components/payment/step-success';
 import { StepPresaleSuccess } from '@/components/payment/step-presale-success';
 import { useAuth } from '@/hooks/common/use-auth';
 import { useProfile } from '@/hooks/queries/use-profile';
-import { useCourseInfo } from '@/hooks/queries/use-course-info';
+import {
+  courseDetailBackPath,
+  getPaymentBasePrice,
+  isWaitlistOnlyPurchaseBlocked,
+  useCourseInfo,
+} from '@/hooks/queries/use-course-info';
 import { PageLoader } from '@/components/ui/page-loader';
+import { PageError } from '@/components/ui/page-error';
 import { useSmartBack } from '@/hooks/common/use-smart-back';
+import type { ApiPaymentResponse } from '@/types/api';
 
 function PaymentContent() {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
   const courseId = params.courseId as string;
-  const goBack = useSmartBack(`/courses/${courseId}`);
+
+  const courseType = searchParams.get('courseType') ?? 'course';
+  const detailPath = courseDetailBackPath(courseType, courseId);
+  const goBack = useSmartBack(detailPath);
 
   const { data: profileData } = useProfile();
   const storeUser = useAuth((state) => state.user);
   const user = profileData ?? storeUser;
 
-  const courseType = searchParams.get('courseType') ?? 'course';
-  const { data: courseInfo, isLoading: courseLoading } = useCourseInfo(courseId, courseType);
+  const { data: courseInfo, isLoading: courseLoading, isError: courseError } = useCourseInfo(courseId, courseType);
 
   const stepParam = searchParams.get('step');
   const currentStep = stepParam ? parseInt(stepParam, 10) : 1;
 
-  // Presale discounted price from URL
   const discountedPriceParam = searchParams.get('discountedPrice');
   const urlDiscountedPrice = discountedPriceParam ? parseInt(discountedPriceParam, 10) : undefined;
 
-  // Discount percent from URL (presale)
   const discountPercentParam = searchParams.get('discountPercent');
   const urlDiscountPercent = discountPercentParam ? parseInt(discountPercentParam, 10) : undefined;
 
-  // Promo kod orqali o'zgargan narx va promocode ID
+  const isPresaleFlow =
+    searchParams.get('flow') === 'presale' || Boolean(courseInfo?.preSales);
+
   const [promoDiscountedPrice, setPromoDiscountedPrice] = useState<number | undefined>(undefined);
   const [promocodeId, setPromocodeId] = useState<string | undefined>(undefined);
+  const [paymentResult, setPaymentResult] = useState<ApiPaymentResponse | null>(null);
 
-  const discountedPrice = promoDiscountedPrice ?? urlDiscountedPrice;
+  const listPrice = courseInfo?.price ?? 0;
+  const basePrice = courseInfo ? getPaymentBasePrice(courseInfo) : listPrice;
+  const discountedPrice = promoDiscountedPrice ?? urlDiscountedPrice ?? (basePrice < listPrice ? basePrice : undefined);
   const discountPercent = urlDiscountPercent;
 
   useEffect(() => {
     if (!courseInfo) return;
-    const waitlistOnly = courseInfo.waitlistEnabled && !courseInfo.presalesEnabled && !urlDiscountedPrice;
-    if (!waitlistOnly) return;
-    const path =
-      courseType === 'skill'
-        ? `/skills/${courseId}`
-        : courseType === 'profession'
-        ? `/professions/${courseId}`
-        : `/courses/${courseId}`;
-    router.replace(path);
-  }, [courseInfo, courseType, courseId, router, urlDiscountedPrice]);
+    if (isWaitlistOnlyPurchaseBlocked(courseInfo) && !urlDiscountedPrice && searchParams.get('flow') !== 'presale') {
+      router.replace(detailPath);
+    }
+  }, [courseInfo, detailPath, router, urlDiscountedPrice, searchParams]);
 
   const userInfo = {
     firstName: searchParams.get('firstName') ?? user?.firstname ?? '',
-    lastName:  searchParams.get('lastName')  ?? user?.lastname  ?? '',
-    phone:     searchParams.get('phone')     ?? String(user?.phone ?? ''),
-    email:     searchParams.get('email')     ?? user?.email     ?? '',
+    lastName: searchParams.get('lastName') ?? user?.lastname ?? '',
+    phone: searchParams.get('phone') ?? String(user?.phone ?? ''),
+    email: searchParams.get('email') ?? user?.email ?? '',
   };
 
-  const coursePrice = courseInfo?.price ?? 0;
   const courseName = courseInfo?.title ?? courseInfo?.name ?? '';
 
   if (courseLoading) {
@@ -77,12 +82,24 @@ function PaymentContent() {
     );
   }
 
+  if (courseError || !courseInfo) {
+    return (
+      <div className="bg-white rounded-[28px] p-12 shadow-[0_2px_20px_rgba(0,0,0,0.06)]">
+        <PageError />
+      </div>
+    );
+  }
+
   const goToStep = (step: number, extra?: Record<string, string>) => {
     const next = new URLSearchParams(searchParams.toString());
     next.set('step', String(step));
     if (extra) Object.entries(extra).forEach(([k, v]) => next.set(k, v));
     router.push(`/payment/${courseId}?${next.toString()}`, { scroll: false });
   };
+
+  const showPresaleSuccess =
+    paymentResult?.discountType === 'PRE_SALES' ||
+    (paymentResult?.free === true && isPresaleFlow);
 
   return (
     <div className="bg-white rounded-[28px] p-8 sm:p-10 lg:p-12 shadow-[0_2px_20px_rgba(0,0,0,0.06)]">
@@ -97,11 +114,15 @@ function PaymentContent() {
       {currentStep === 2 && (
         <StepPaymentMethod
           courseId={courseId}
-          coursePrice={coursePrice}
+          listPrice={listPrice}
+          basePrice={basePrice}
           discountedPrice={discountedPrice}
           discountPercent={discountPercent}
           promocodeId={promocodeId}
-          onNext={() => goToStep(3)}
+          onNext={(result) => {
+            setPaymentResult(result ?? null);
+            goToStep(3);
+          }}
           onBack={() => goToStep(1)}
           onPromocodeApplied={(data) => {
             setPromoDiscountedPrice(data.discountedPrice);
@@ -110,13 +131,12 @@ function PaymentContent() {
         />
       )}
 
-      {currentStep === 3 && (
-        discountedPrice ? (
+      {currentStep === 3 &&
+        (showPresaleSuccess ? (
           <StepPresaleSuccess courseName={courseName} />
         ) : (
           <StepSuccess courseId={courseId} />
-        )
-      )}
+        ))}
     </div>
   );
 }
@@ -128,11 +148,13 @@ export default function PaymentPage() {
 
       <main className="min-h-screen bg-[#f0f0f0] flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-[560px]">
-          <Suspense fallback={
-            <div className="bg-white rounded-[28px] p-12 shadow-[0_2px_20px_rgba(0,0,0,0.06)] flex justify-center">
-              <PageLoader />
-            </div>
-          }>
+          <Suspense
+            fallback={
+              <div className="bg-white rounded-[28px] p-12 shadow-[0_2px_20px_rgba(0,0,0,0.06)] flex justify-center">
+                <PageLoader />
+              </div>
+            }
+          >
             <PaymentContent />
           </Suspense>
         </div>
